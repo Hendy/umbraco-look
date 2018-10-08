@@ -45,74 +45,89 @@ namespace Our.Umbraco.Look.Services
         /// <param name="e"></param>
         internal static void Index(IPublishedContent publishedContent, IndexingNodeDataEventArgs e)
         {
-            try
+            if (LookService.Instance.TextIndexer != null)
             {
-                var text = LookService.Instance.TextIndexer(publishedContent);
-
-                if (text != null)
+                try
                 {
-                    e.Fields[LookService.TextField] = text;
+                    var text = LookService.Instance.TextIndexer(publishedContent);
+
+                    if (text != null)
+                    {
+                        e.Fields[LookService.TextField] = text;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.WarnWithException(typeof(LookService), "Error in text indexer", exception);
                 }
             }
-            catch (Exception exception)
-            {
-                LogHelper.WarnWithException(typeof(LookService), "Error in text indexer", exception);
-            }
 
-            try
+            if (LookService.Instance.TagIndexer != null)
             {
-                var tags = LookService.Instance.TagIndexer(publishedContent);
-
-                if (tags != null)
+                try
                 {
-                    e.Fields[LookService.TagsField] = string.Join(" ", tags.Where(x => !string.IsNullOrWhiteSpace(x)));
+                    var tags = LookService.Instance.TagIndexer(publishedContent);
+
+                    if (tags != null)
+                    {
+                        e.Fields[LookService.TagsField] = string.Join(" ", tags.Where(x => !string.IsNullOrWhiteSpace(x)));
+                    }
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.WarnWithException(typeof(LookService), "Error in tag indexer", exception);
                 }
             }
-            catch (Exception exception)
-            {
-                LogHelper.WarnWithException(typeof(LookService), "Error in tag indexer", exception);
-            }
 
-            try
+            if (LookService.Instance.DateIndexer != null)
             {
-                var date = LookService.Instance.DateIndexer(publishedContent);
-
-                if (date.HasValue)
+                try
                 {
-                    e.Fields[LookService.DateField] = date.Value.Ticks.ToString();
+                    var date = LookService.Instance.DateIndexer(publishedContent);
+
+                    if (date.HasValue)
+                    {
+                        e.Fields[LookService.DateField] = date.Value.Ticks.ToString();
+                    }
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.WarnWithException(typeof(LookService), "Error in date indexer", exception);
                 }
             }
-            catch (Exception exception)
-            {
-                LogHelper.WarnWithException(typeof(LookService), "Error in date indexer", exception);
-            }
 
-            try
+            if (LookService.Instance.NameIndexer != null)
             {
-                var name = LookService.Instance.NameIndexer(publishedContent);
-
-                if (name != null)
+                try
                 {
-                    e.Fields[LookService.NameField] = name;
+                    var name = LookService.Instance.NameIndexer(publishedContent);
+
+                    if (name != null)
+                    {
+                        e.Fields[LookService.NameField] = name;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.WarnWithException(typeof(LookService), "Error in name indexer", exception);
                 }
             }
-            catch (Exception exception)
-            {
-                LogHelper.WarnWithException(typeof(LookService), "Error in name indexer", exception);
-            }
 
-            try
+            if (LookService.Instance.LocationIndexer != null)
             {
-                var location = LookService.Instance.LocationIndexer(publishedContent);
-
-                if (location != null)
+                try
                 {
-                    e.Fields[LookService.LocationField] = location.ToString();
+                    var location = LookService.Instance.LocationIndexer(publishedContent);
+
+                    if (location != null)
+                    {
+                        e.Fields[LookService.LocationField] = location.ToString();
+                    }
                 }
-            }
-            catch (Exception exception)
-            {
-                LogHelper.WarnWithException(typeof(LookService), "Error in location indexer", exception);
+                catch (Exception exception)
+                {
+                    LogHelper.WarnWithException(typeof(LookService), "Error in location indexer", exception);
+                }
             }
         }
 
