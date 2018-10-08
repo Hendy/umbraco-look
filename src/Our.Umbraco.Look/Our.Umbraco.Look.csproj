@@ -48,8 +48,8 @@
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\LocationQuery.cs" />
     <Compile Include="Models\NodeQuery.cs" />
-    <Compile Include="Models\SearchMatch.cs" />
-    <Compile Include="Models\SearchQuery.cs" />
+    <Compile Include="Models\LookResult.cs" />
+    <Compile Include="Models\LookQuery.cs" />
     <Compile Include="Models\SortOn.cs" />
     <Compile Include="Models\TagQuery.cs" />
     <Compile Include="Models\TextQuery.cs" />
