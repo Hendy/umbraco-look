@@ -3,7 +3,7 @@ using System.Web;
 
 namespace Our.Umbraco.Look.Models
 {
-    public class LookResult
+    public class SearchMatch
     {
         /// <summary>
         /// Required - represents the Umbraco (content, media or member) Id of the matched item
