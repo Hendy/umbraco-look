@@ -13,7 +13,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Optional - (as requires additional lucene queries for each result)
         /// </summary>
-        //public IHtmlString Highlight { get; internal set; }
+        public IHtmlString Highlight { get; internal set; }
 
         public string Text { get; internal set; }
 
