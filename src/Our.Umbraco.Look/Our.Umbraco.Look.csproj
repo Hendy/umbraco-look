@@ -41,10 +41,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IEnumerableWithTotal.cs" />
+    <Compile Include="Models\Distance.cs" />
+    <Compile Include="Models\DistanceUnit.cs" />
+    <Compile Include="Models\EnumerableWithTotal.cs" />
+    <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\LocationQuery.cs" />
+    <Compile Include="Models\NodeQuery.cs" />
+    <Compile Include="Models\SearchMatch.cs" />
+    <Compile Include="Models\SearchQuery.cs" />
+    <Compile Include="Models\SortOn.cs" />
+    <Compile Include="Models\TagQuery.cs" />
+    <Compile Include="Models\TextQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Events\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
