@@ -189,12 +189,12 @@ namespace Our.Umbraco.Look.Services
 
                     var luceneSearchCriteria = (LuceneSearchCriteria)searchCriteria;
 
-                    //// Do the Lucene search
-                    //topDocs = indexSearcher.Search(
-                    //                            luceneSearchCriteria.Query, // the query build by Examine
-                    //                            filter ?? new QueryWrapperFilter(luceneSearchCriteria.Query),
-                    //                            LookService.MaxLuceneResults,
-                    //                            sort ?? new Sort(SortField.FIELD_SCORE));
+                    // Do the Lucene search
+                    topDocs = indexSearcher.Search(
+                                                luceneSearchCriteria.Query, // the query build by Examine
+                                                filter ?? new QueryWrapperFilter(luceneSearchCriteria.Query),
+                                                LookService.MaxLuceneResults,
+                                                sort ?? new Sort(SortField.FIELD_SCORE));
 
                     if (topDocs.TotalHits > 0)
                     {

@@ -1,4 +1,5 @@
 ﻿using Examine;
+using Our.Umbraco.Look.Services;
 using System.IO;
 using System.Web;
 using System.Web.Hosting;
@@ -21,9 +22,9 @@ namespace Our.Umbraco.Look.Events
         /// <param name="applicationContext"></param>
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            //LookService.Initialize(
-            //                this.Indexer_GatheringNodeData,
-            //                new UmbracoHelper(UmbracoContext.Current));
+            LookService.Initialize(
+                            this.Indexer_GatheringNodeData,
+                            new UmbracoHelper(UmbracoContext.Current));
         }
 
         /// <summary>
@@ -47,17 +48,18 @@ namespace Our.Umbraco.Look.Events
             {
                 this.EnsureUmbracoContext();
 
-                //LookService.Index(publishedContent, e);
+                LookService.Index(publishedContent, e);
             }
         }
 
         /// <summary>
-        /// HACK: this indexing event is on a thread outside of HttpContext, and context is required to get the url from IPubishedContent, and other cms model properties
+        /// HACK: this indexing event is on a thread outside of HttpContext, and context is required to get the url from IPubishedContent
         /// </summary>
         private void EnsureUmbracoContext()
         {
             var dummyHttpContext = new HttpContextWrapper(new HttpContext(new SimpleWorkerRequest("", "", new StringWriter())));
 
+            // commented out params as overload not available in Umbraco 7.2.3
             UmbracoContext.EnsureContext(
                                 dummyHttpContext,
                                 ApplicationContext.Current,

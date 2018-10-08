@@ -9,10 +9,8 @@ using System.Linq;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 
-
 namespace Our.Umbraco.Look.Services
 {
-
     public partial class LookService
     {
         /// <summary>
@@ -123,7 +121,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private static void SearchService_DocumentWriting(object sender, DocumentWritingEventArgs e)
+        private static void DocumentWriting(object sender, DocumentWritingEventArgs e)
         {
             if (e.Fields.ContainsKey(LookService.DateField)) // it's storing a date value as a long type
             {
@@ -212,8 +210,6 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         public static class Indexing
         {
-            #region Text
-
             /// <summary>
             /// Register consumer code to perform when indexing text
             /// </summary>
@@ -238,10 +234,6 @@ namespace Our.Umbraco.Look.Services
                 return null;
             }
 
-            #endregion
-
-            #region Tags
-
             /// <summary>
             /// Register consumer code to perform when indexing tags
             /// </summary>
@@ -259,10 +251,6 @@ namespace Our.Umbraco.Look.Services
                 return null;
             }
 
-            #endregion
-
-            #region Date
-
             /// <summary>
             /// Register consumer code to perform when indexing date
             /// </summary>
@@ -278,10 +266,6 @@ namespace Our.Umbraco.Look.Services
             {
                 return publishedContent.UpdateDate;
             }
-
-            #endregion
-
-            #region Name
 
             /// <summary>
             /// 
@@ -299,18 +283,12 @@ namespace Our.Umbraco.Look.Services
                 return publishedContent.Name;
             }
 
-            #endregion
-
-            #region Location
-
             public static void SetLocationIndexer(Func<IPublishedContent, Location> locationFunc)
             {
                 LogHelper.Info(typeof(LookService), "Location indexing function set");
 
                 LookService.Instance.LocationIndexer = locationFunc;
             }
-
-            #endregion
         }
     }
 }

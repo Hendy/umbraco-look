@@ -8,10 +8,10 @@ using System.Configuration;
 using Umbraco.Core.Logging;
 using Umbraco.Web;
 
-
 namespace Our.Umbraco.Look.Services
 {
     /// <summary>
+    /// Useful references:
     /// https://gist.github.com/ismailmayat/3902c660527c8b3d20b38ae724ab9892
     /// http://www.d2digital.co.uk/blog/2015/08/lucenenet-indexer-geospatial-searching-and-umbraco
     /// </summary>
@@ -92,10 +92,11 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         private LookService()
         {
-            // TODO: if no config, fall back to External (if exists)
+            var configuredIndexerName = ConfigurationManager.AppSettings["Our.Umbraco.Look.IndexerName"];
+            var configuredSearcherName = ConfigurationManager.AppSettings["Our.Umbraco.Look.SearcherName"];
 
-            this.IndexerName = ConfigurationManager.AppSettings["Crumpled.Search.IndexerName"];
-            this.SearcherName = ConfigurationManager.AppSettings["Crumpled.Search.SearcherName"];
+            this.IndexerName = configuredIndexerName ?? "ExternalIndexer";
+            this.SearcherName = configuredSearcherName ?? "ExternalSearcher";
         }
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace Our.Umbraco.Look.Services
                 // wire-up events
                 LookService.Indexer.GatheringNodeData += (sender, e) => action(sender, e, umbracoHelper);
 
-                ((LuceneIndexer)LookService.Indexer).DocumentWriting += SearchService_DocumentWriting;
+                ((LuceneIndexer)LookService.Indexer).DocumentWriting += DocumentWriting;
             }
         }
     }
