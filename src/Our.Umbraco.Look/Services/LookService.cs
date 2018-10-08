@@ -55,37 +55,37 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Gets the field name to use for the text - this field is expected to contain a sizeable amount of text
         /// </summary>
-        private static string TextField => "_B850F824-B546-45B2-95AD-BC3316B6C531_Text";
+        private static string TextField => "Our.Umbraco.Look_Text";
 
         /// <summary>
         /// Gets the field name to use for the tags - this field will contain space delimited non-tokenizable strings
         /// </summary>
-        private static string TagsField => "_B850F824-B546-45B2-95AD-BC3316B6C531_Tags";
+        private static string TagsField => "Our.Umbraco.Look_Tags";
 
         /// <summary>
         /// Gets the field name to use for the date - this fieldswill  stores the date as the number of seconds from the year 2000 (so it's a number that can be sorted)
         /// </summary>
-        private static string DateField => "_B850F824-B546-45B2-95AD-BC3316B6C531_Date";
+        private static string DateField => "Our.Umbraco.Look_Date";
 
         /// <summary>
         /// Gets the field name to use for the name
         /// </summary>
-        private static string NameField => "_B850F824-B546-45B2-95AD-BC3316B6C531_Name";
+        private static string NameField => "Our.Umbraco.Look_Name";
 
         /// <summary>
         /// Gets the field name to use for the location
         /// </summary>
-        private static string LocationField => "_B850F824-B546-45B2-95AD-BC3316B6C531_Location";
+        private static string LocationField => "Our.Umbraco.Look_Location";
 
         /// <summary>
         /// not stored in index, but used as a result field
         /// </summary>
-        private static string DistanceField => "_B850F824-B546-45B2-95AD-BC3316B6C531_Distance";
+        private static string DistanceField => "Our.Umbraco.Look_Distance";
 
         /// <summary>
         /// max numnber of results to request for a lucene query
         /// </summary>
-        private static int MaxLuceneResults => 1000;
+        private static int MaxLuceneResults => 1000; // TODO: make configurable (maybe part of the SearchQuery obj)
 
         /// <summary>
         /// Singleton constructor (used privately to maintain state for consumer registered indexer functions)
@@ -120,7 +120,7 @@ namespace Our.Umbraco.Look.Services
             {
                 // should this ever happen ?
 
-                LogHelper.Warn(typeof(LookService), $"Examine Indexer is not of type LuceneIndexer");
+                LogHelper.Warn(typeof(LookService), "Examine Indexer is not of type LuceneIndexer");
 
                 valid = false;
             }
@@ -132,14 +132,20 @@ namespace Our.Umbraco.Look.Services
                 valid = false;
             }
 
-            if (valid)
+            if (!valid)
             {
+                LogHelper.Warn(typeof(LookService), "Error initializing LookService");
+            }
+            else
+            {
+                LogHelper.Info(typeof(LookService), "Indexer & Searcher valid for the LookService");
+
                 // init collection of cartesian tier plotters (and store in singleton)
                 IProjector projector = new SinusoidalProjector();
                 var plotter = new CartesianTierPlotter(0, projector, CartesianTierPlotter.DefaltFieldPrefix);
 
-                var startTier = plotter.BestFit(1000);
-                var endTier = plotter.BestFit(1);
+                var startTier = plotter.BestFit(1000); // TODO: make configurable
+                var endTier = plotter.BestFit(1); // TODO: make configurable
 
                 for (var tier = startTier; tier <= endTier; tier++)
                 {
