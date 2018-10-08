@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<umbPackage>
+  
+  <info>    
+    <package>
+      <name>Look</name>
+      <version>0.1.0</version>
+      <license url="https://github.com/Hendy/umbraco-look/blob/master/LICENSE">license</license>
+      <url>https://github.com/Hendy/umbraco-look</url>
+      <requirements>
+        <major>7</major>
+        <minor>2</minor>
+        <patch>3</patch>
+      </requirements>
+    </package>    
+    <author>
+      <name>Hendy Racher</name>
+      <website>https://github.com/Hendy/umbraco-look/graphs/contributors</website>
+    </author>    
+    <readme>
+      <![CDATA[]]>
+    </readme>    
+  </info>
+
+  <DocumentTypes/>
+  <Templates/>
+  <Stylesheets/>
+  <Macros/>
+  <DictionaryItems/>
+  <Languages/>
+  <DataTypes/>
+  <Actions/>
+  <control/>
+
+  <files>
+    <file>
+      <guid>0bc5bc78-9c93-4243-8daf-66f68a101534.dll</guid>
+      <orgPath>/bin</orgPath>
+      <orgName>Our.Umbraco.Look.dll</orgName>
+    </file>
+  </files>
+
+</umbPackage>
