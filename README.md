@@ -7,13 +7,20 @@ Umbraco Examine Lucene indexer and searcher with support for text match highligh
 
 For each Umbraco node, Look will index the following data:
 
-A text field - used to store all text associated with a node, and as the source for a text highlight  
-A tag field - used to store a collection of string tags associated with a node  
-A date field - used to associate a date with a node (defaults to the node.UpdatedDate)  
-A name field - used to associate a name with a node (defaults to the node.Name)  
-A location field - used to store latitude & longitude associated with a node  
+A text field - used to store all text associated with a node, and as the source for a text highlight.  
+A tags field - used to store a collection of string tags assocated with a node.  
+A date field - used to associate a date with a node (defaults to the node.UpdatedDate).  
+A name field - used to associate a name with a node (defaults to the node.Name).  
+A location field - used to store a latitude & longitude associated with a node (defaults to null).  
   
-To configure indexing there are static methods on the Our.Umbraco.Look.Services.LookIndexService class which accept functions returning the typed value to be indexed. (No configuration files need to be changed)
+No configuration files need to be changed, as Look will hook into the default Umbraco External index and searcher (if it exists), although if you prefer to use a different indexers and/or searchers then the following appSetting keys can be set in the web.config:
+
+	<appSettings>
+		<add key="Our.Umbraco.Look.IndexerName" value="MyIndexer" />
+		<add key="Our.Umbraco.Look.SearcherName" value="MySearcher" />
+	</appSettings>
+  
+To configure the indexing behaviour there are static methods on the _LookIndexService_ class which accept functions returning the typed value to be indexed. 
 
 Eg.
 
@@ -28,7 +35,6 @@ Eg.
 
 				if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 				{	
-					// return a string (or null)
 					return "my custom name for myDocTypeAlias to be indexed";
 				}
 
@@ -40,7 +46,6 @@ Eg.
 
 				if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 				{
-					// return a string (or null)
 					return "my text for myDocTypeAlias to be indexed";
 				}
 
@@ -52,7 +57,6 @@ Eg.
 
 				if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 				{
-					// return a string array (or null)
 					return new string[] { "tag1", "tag2" };
 				}
 		
@@ -64,7 +68,6 @@ Eg.
 
 				if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 				{
-					// return a DateTime obj (or null)
 					return new DateTime(2005, 02, 16);
 				}
 
@@ -76,7 +79,7 @@ Eg.
 
 				if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 				{
-					// return an Our.Umbraco.Look.Models.Location obj (or null)
+					// return an Our.Umbraco.Look.Models.Location obj
 					return new Lcoation(55.406330, 10.388500);		
 				}
 
@@ -107,7 +110,7 @@ Eg.
 
 		TagQuery = new TagQuery() {
 			AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
-			AnyTags = new string[] { "tag3", "tag4" }, // the results must have at lease one of these tags
+			AnyTags = new string[] { "tag3", "tag4" }, // at least one of these tags is required
 			GetTags = true // indicate that the tags for each result should also be returned
 		},
 
@@ -172,7 +175,7 @@ A enumeration of the following LookMatch objects are returned:
 		public Location Location { get; internal set; }
 
 		/// <summary>
-		/// Temp field for calculated results
+		/// The calculated distance (only returned if a location supplied in query)
 		/// </summary>
 		public double? Distance { get; internal set; }
 
