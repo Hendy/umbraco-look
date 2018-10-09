@@ -20,7 +20,7 @@ No configuration files need to be changed, as Look will hook into the default Um
 		<add key="Our.Umbraco.Look.SearcherName" value="MySearcher" />
 	</appSettings>
   
-To configure the indexing behaviour there are static methods on the _LookIndexService_ class which accept functions returning the typed value to be indexed. 
+To configure the indexing behaviour there are static methods on the _LookIndexService_ class which accept functions returning the typed value to be indexed (all are optional).
 
 Eg.
 
