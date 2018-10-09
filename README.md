@@ -18,66 +18,79 @@ To configure indexing there are static methods on the Our.Umbraco.Look.Services.
 Eg.
 
 	using Our.Umbraco.Look.Services;
-	
-	LookIndexService.SetNameIndexer(publishedContent => {
+	using Umbraco.Core;
 
-		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-		{	
-			// return a string (or null)
-			return "my custom name for myDocTypeAlias to be indexed";
-		}
-
-		// fallback to default indexing (or can return null)
-		return LookIndexService.DefaultNameIndexer(publishedContent);
-	});
-	
-	LookIndexService.SetTextIndexer(publishedContent => {
-
-		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
+	public class ConfigureIndexing : ApplicationEventHandler
+	{
+		protected override void ApplicationStarted(
+									UmbracoApplicationBase umbracoApplication, 
+									ApplicationContext applicationContext)
 		{
-			// return a string (or null)
-			return "my text for myDocTypeAlias to be indexed";
-		}
+			LookIndexService.SetNameIndexer(publishedContent => {
 
-		// fallback to default indexing (or can return null)
-		return LookIndexService.DefaultTextIndexer(publishedContent);
-	});
+				if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
+				{	
+					// return a string (or null)
+					return "my custom name for myDocTypeAlias to be indexed";
+				}
+
+				// fallback to default indexing (or can return null)
+				return LookIndexService.DefaultNameIndexer(publishedContent);
+			});
 	
-	LookIndexService.SetTagIndexer(publishedContent => {
+			LookIndexService.SetTextIndexer(publishedContent => {
 
-		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-		{
-			// return a string array (or null)
-			return new string[] { "tag1", "tag2" };
-		}
+				if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
+				{
+					// return a string (or null)
+					return "my text for myDocTypeAlias to be indexed";
+				}
+
+				// fallback to default indexing (or can return null)
+				return LookIndexService.DefaultTextIndexer(publishedContent);
+			});
+	
+			LookIndexService.SetTagIndexer(publishedContent => {
+
+				if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
+				{
+					// return a string array (or null)
+					return new string[] { "tag1", "tag2" };
+				}
 		
-		// fallback to default indexing (or can return null)
-		return LookIndexService.DefaultTagIndexer(publishedContent);
-	});
+				// fallback to default indexing (or can return null)
+				return LookIndexService.DefaultTagIndexer(publishedContent);
+			});
 	
-	LookIndexService.SetDateIndexer(publishedContent => {
+			LookIndexService.SetDateIndexer(publishedContent => {
 
-		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-		{
-			// return a DateTime obj (or null)
-			return new DateTime(2005, 02, 16);
-		}
+				if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
+				{
+					// return a DateTime obj (or null)
+					return new DateTime(2005, 02, 16);
+				}
 
-		// fallback to default indexing (or can return null)
-		return LookIndexService.DefaultDateIndexer(publishedContent);
-	});
+				// fallback to default indexing (or can return null)
+				return LookIndexService.DefaultDateIndexer(publishedContent);
+			});
 	
-	LookIndexService.SetLocationIndexer(publishedContent => {
+			LookIndexService.SetLocationIndexer(publishedContent => {
 
-		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-		{
-			// return an Our.Umbraco.Look.Models.Location obj (or null)
-			return new Lcoation(55.406330, 10.388500);		
+				if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
+				{
+					// return an Our.Umbraco.Look.Models.Location obj (or null)
+					return new Lcoation(55.406330, 10.388500);		
+				}
+
+				// currenty there is no default fallback
+				return null;
+			});
+
+
+
 		}
+	}
 
-		// currenty there is no default fallback
-		return null;
-	});
 
 ## Searching
 
