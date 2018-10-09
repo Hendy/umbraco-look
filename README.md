@@ -1,5 +1,5 @@
 # Umbraco Look
-Umbraco Examine Lucene indexer and searcher with support for text match highlighting and geospacial queries
+Umbraco Examine Lucene indexer and searcher with support for text match highlighting and geospacial queries.
 
 Distributed as a single dll _Our.Umbraco.Look.dll_
 
@@ -19,7 +19,7 @@ Eg.
 
 	using Our.Umbraco.Look.Services;
 
-	// return a string or null
+	// return a string (or null)
 	LookIndexService.SetNameIndexer(publishedContent => {
 
 		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
