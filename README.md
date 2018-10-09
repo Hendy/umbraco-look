@@ -1,7 +1,7 @@
 # Umbraco Look
 Umbraco Examine Lucene indexer and searcher with support for text match highlighting and geospacial queries.
 
-Distributed as a single dll _Our.Umbraco.Look.dll_
+[The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_.
 
 ## Indexing
 
