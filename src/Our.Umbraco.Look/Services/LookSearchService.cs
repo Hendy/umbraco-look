@@ -88,7 +88,13 @@ namespace Our.Umbraco.Look.Services
                     }
                 }
 
-                // TODO: Date
+                if (lookQuery.DateQuery != null)
+                {
+                    query.And().Range(
+                                    LookService.DateField,
+                                    lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
+                                    lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
+                }
 
                 // TODO: Name
 
