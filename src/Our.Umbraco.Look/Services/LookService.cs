@@ -22,11 +22,6 @@ namespace Our.Umbraco.Look.Services
         #region Class properties
 
         /// <summary>
-        /// 
-        /// </summary>
-        internal List<CartesianTierPlotter> CartesianTierPlotters { get; } = new List<CartesianTierPlotter>();
-
-        /// <summary>
         /// Function to get text for the IPublishedContent being indexed
         /// </summary>
         internal Func<IPublishedContent, string> TextIndexer { get; set; } = x => LookIndexService.DefaultTextIndexer(x);
@@ -52,6 +47,11 @@ namespace Our.Umbraco.Look.Services
         internal Func<IPublishedContent, Location> LocationIndexer { get; set; } = x => null;
 
         /// <summary>
+        /// Collection of cartesian tier plotters
+        /// </summary>
+        internal List<CartesianTierPlotter> CartesianTierPlotters { get; } = new List<CartesianTierPlotter>();
+
+        /// <summary>
         /// Name of indexer to use (from configuration)
         /// </summary>
         private string IndexerName { get; }
@@ -64,16 +64,6 @@ namespace Our.Umbraco.Look.Services
         #endregion
 
         #region Static properties
-
-        /// <summary>
-        /// Access the singleton instance of this search service
-        /// </summary>
-        internal static LookService Instance => _lazy.Value;
-
-        /// <summary>
-        /// Singleton instance
-        /// </summary>
-        private static readonly Lazy<LookService> _lazy = new Lazy<LookService>(() => new LookService());
 
         /// <summary>
         /// Gets the Examine indexer
@@ -124,6 +114,16 @@ namespace Our.Umbraco.Look.Services
         /// max numnber of results to request for a lucene query
         /// </summary>
         internal static int MaxLuceneResults => 5000; // TODO: make configurable (maybe part of the SearchQuery obj)
+
+        /// <summary>
+        /// Access the singleton instance of this search service
+        /// </summary>
+        internal static LookService Instance => _lazy.Value;
+
+        /// <summary>
+        /// Singleton instance
+        /// </summary>
+        private static readonly Lazy<LookService> _lazy = new Lazy<LookService>(() => new LookService());
 
         #endregion
 
