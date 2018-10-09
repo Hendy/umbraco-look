@@ -90,7 +90,7 @@ Eg.
 	{
 		TextQuery = new TextQuery() {
 			SearchText = "blah",
-			HighlightFragments = 1 // specify that highlight text containing the search term once should be returned,
+			HighlightFragments = 1 // highlight text containing the search term once should be returned
 			HighlightSeparator = " ... "
 		},
 
