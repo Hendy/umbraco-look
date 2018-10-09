@@ -83,9 +83,14 @@ namespace Our.Umbraco.Look.Services
         private static string DistanceField => "Our.Umbraco.Look_Distance";
 
         /// <summary>
+        /// Max distance in miles for distance searches & location indexing
+        /// </summary>
+        private static double MaxDistance => 10000; // 12450 = half circumfrence of earth TODO: make configuration
+
+        /// <summary>
         /// max numnber of results to request for a lucene query
         /// </summary>
-        private static int MaxLuceneResults => 1000; // TODO: make configurable (maybe part of the SearchQuery obj)
+        private static int MaxLuceneResults => 5000; // TODO: make configurable (maybe part of the SearchQuery obj)
 
         /// <summary>
         /// Singleton constructor (used privately to maintain state for consumer registered indexer functions)
@@ -144,8 +149,8 @@ namespace Our.Umbraco.Look.Services
                 IProjector projector = new SinusoidalProjector();
                 var plotter = new CartesianTierPlotter(0, projector, CartesianTierPlotter.DefaltFieldPrefix);
 
-                var startTier = plotter.BestFit(1000); // TODO: make configurable
-                var endTier = plotter.BestFit(1); // TODO: make configurable
+                var startTier = plotter.BestFit(LookService.MaxDistance);
+                var endTier = plotter.BestFit(1); // min of a 1 mile search
 
                 for (var tier = startTier; tier <= endTier; tier++)
                 {

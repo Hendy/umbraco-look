@@ -147,12 +147,19 @@ namespace Our.Umbraco.Look.Services
                             break;
                     }
 
-                    if (searchQuery.LocationQuery != null && searchQuery.LocationQuery.Location != null && searchQuery.LocationQuery.MaxDistance != null)
+                    if (searchQuery.LocationQuery != null && searchQuery.LocationQuery.Location != null)
                     {
+                        double maxDistance = LookService.MaxDistance;
+
+                        if (searchQuery.LocationQuery.MaxDistance != null)
+                        {
+                            maxDistance = Math.Min(searchQuery.LocationQuery.MaxDistance.GetMiles(), maxDistance);
+                        }
+
                         var distanceQueryBuilder = new DistanceQueryBuilder(
                                                     searchQuery.LocationQuery.Location.Latitude,
                                                     searchQuery.LocationQuery.Location.Longitude,
-                                                    searchQuery.LocationQuery.MaxDistance.GetMiles(),
+                                                    maxDistance,
                                                     LookService.LocationField + "_Latitude",
                                                     LookService.LocationField + "_Longitude",
                                                     CartesianTierPlotter.DefaltFieldPrefix,
