@@ -133,10 +133,10 @@ Eg.
 	// perform the search
 	var lookResults = LookSearchService.Query(lookQuery);
 
-	var totalResults = lookResults.Total; // total number of item in the lookResults enumerable
-	var results = lookResults.ToArray(); // the lookResults enumerated into an array
+	var totalResults = lookResults.Total; // total number of results in the enumerable
+	var results = lookResults.ToArray(); // the results enumerated into an array
 
-### Search Results
+### Results
 
 A enumeration of the following LookMatch objects are returned:
 

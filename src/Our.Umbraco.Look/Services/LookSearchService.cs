@@ -305,18 +305,17 @@ namespace Our.Umbraco.Look.Services
                     date = new DateTime(ticks);
                 }
 
-                var lookMatch = new LookMatch()
-                {
-                    Id = Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
-                    Highlight = getHighlight(doc.Get(LookService.TextField)),
-                    Text = getText ? doc.Get(LookService.TextField) : null,
-                    Tags = getTags ? doc.Get(LookService.TagsField).Split(' ') : null,
-                    Date = date,
-                    Name = doc.Get(LookService.NameField),
-                    Location = doc.Get(LookService.LocationField) != null ? new Location(doc.Get(LookService.LocationField)) : null,
-                    Distance = getDistance(docId),
-                    Score = scoreDoc.score
-                };
+                var lookMatch = new LookMatch(
+                    Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
+                    getHighlight(doc.Get(LookService.TextField)),
+                    getText ? doc.Get(LookService.TextField) : null,
+                    getTags ? doc.Get(LookService.TagsField).Split(' ') : null,
+                    date,
+                    doc.Get(LookService.NameField),
+                    doc.Get(LookService.LocationField) != null ? new Location(doc.Get(LookService.LocationField)) : null,
+                    getDistance(docId),
+                    scoreDoc.score
+                );
 
                 yield return lookMatch;
             }

@@ -15,7 +15,7 @@
         ///// <summary>
         ///// 
         ///// </summary>
-        //public string[] ExcludeTags { get; } = null;
+        //public string[] NotTags { get; set; } = null;
 
         /// <summary>
         /// Flag to indicate whether to return the tag colection for each result
