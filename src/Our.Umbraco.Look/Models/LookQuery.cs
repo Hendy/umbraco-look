@@ -3,7 +3,7 @@
     /// <summary>
     /// Object used to specify a search query
     /// </summary>
-    public class SearchQuery
+    public class LookQuery
     {
         /// <summary>
         /// Search text, and configuration options for highlighting (if required)
@@ -33,7 +33,7 @@
         /// <summary>
         /// Constructor
         /// </summary>
-        public SearchQuery()
+        public LookQuery()
         {
         }
 

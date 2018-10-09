@@ -28,13 +28,13 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         ///  Main searching method
         /// </summary>
-        /// <param name="searchQuery"></param>
+        /// <param name="lookQuery"></param>
         /// <returns>an IEnumerableWithTotal</returns>
-        public static IEnumerableWithTotal<SearchMatch> Search(SearchQuery searchQuery)
+        public static IEnumerableWithTotal<LookMatch> Query(LookQuery lookQuery)
         {
-            IEnumerableWithTotal<SearchMatch> searchMatches = null; // prepare return value
+            IEnumerableWithTotal<LookMatch> lookMatches = null; // prepare return value
 
-            if (searchQuery == null)
+            if (lookQuery == null)
             {
                 LogHelper.Warn(typeof(LookService), "Supplied search query was null");
             }
@@ -47,33 +47,33 @@ namespace Our.Umbraco.Look.Services
                 var query = searchCriteria.Field(string.Empty, string.Empty);
 
                 // Text
-                if (!string.IsNullOrWhiteSpace(searchQuery.TextQuery.SearchText))
+                if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                 {
-                    if (searchQuery.TextQuery.Fuzzyness > 0)
+                    if (lookQuery.TextQuery.Fuzzyness > 0)
                     {
-                        query.And().Field(LookService.TextField, searchQuery.TextQuery.SearchText.Fuzzy(searchQuery.TextQuery.Fuzzyness));
+                        query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText.Fuzzy(lookQuery.TextQuery.Fuzzyness));
                     }
                     else
                     {
-                        query.And().Field(LookService.TextField, searchQuery.TextQuery.SearchText);
+                        query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText);
                     }
                 }
 
                 // Tags
-                if (searchQuery.TagQuery != null)
+                if (lookQuery.TagQuery != null)
                 {
                     var allTags = new List<string>();
                     var anyTags = new List<string>();
 
-                    if (searchQuery.TagQuery.AllTags != null)
+                    if (lookQuery.TagQuery.AllTags != null)
                     {
-                        allTags.AddRange(searchQuery.TagQuery.AllTags);
+                        allTags.AddRange(lookQuery.TagQuery.AllTags);
                         allTags.RemoveAll(x => string.IsNullOrWhiteSpace(x));
                     }
 
-                    if (searchQuery.TagQuery.AnyTags != null)
+                    if (lookQuery.TagQuery.AnyTags != null)
                     {
-                        anyTags.AddRange(searchQuery.TagQuery.AnyTags);
+                        anyTags.AddRange(lookQuery.TagQuery.AnyTags);
                         anyTags.RemoveAll(x => string.IsNullOrWhiteSpace(x));
                     }
 
@@ -93,13 +93,13 @@ namespace Our.Umbraco.Look.Services
                 // TODO: Name
 
                 // Nodes
-                if (searchQuery.NodeQuery != null)
+                if (lookQuery.NodeQuery != null)
                 {
-                    if (searchQuery.NodeQuery.TypeAliases != null)
+                    if (lookQuery.NodeQuery.TypeAliases != null)
                     {
                         var typeAliases = new List<string>();
 
-                        typeAliases.AddRange(searchQuery.NodeQuery.TypeAliases);
+                        typeAliases.AddRange(lookQuery.NodeQuery.TypeAliases);
                         typeAliases.RemoveAll(x => string.IsNullOrWhiteSpace(x));
 
                         if (typeAliases.Any())
@@ -108,9 +108,9 @@ namespace Our.Umbraco.Look.Services
                         }
                     }
 
-                    if (searchQuery.NodeQuery.ExcludeIds != null)
+                    if (lookQuery.NodeQuery.ExcludeIds != null)
                     {
-                        foreach (var excudeId in searchQuery.NodeQuery.ExcludeIds.Distinct())
+                        foreach (var excudeId in lookQuery.NodeQuery.ExcludeIds.Distinct())
                         {
                             query.Not().Id(excudeId);
                         }
@@ -136,7 +136,7 @@ namespace Our.Umbraco.Look.Services
 
                     TopDocs topDocs = null;
 
-                    switch (searchQuery.SortOn)
+                    switch (lookQuery.SortOn)
                     {
                         case SortOn.Date: // newest -> oldest
                             sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookService.DateField, SortField.LONG, true));
@@ -147,18 +147,18 @@ namespace Our.Umbraco.Look.Services
                             break;
                     }
 
-                    if (searchQuery.LocationQuery != null && searchQuery.LocationQuery.Location != null)
+                    if (lookQuery.LocationQuery != null && lookQuery.LocationQuery.Location != null)
                     {
                         double maxDistance = LookService.MaxDistance;
 
-                        if (searchQuery.LocationQuery.MaxDistance != null)
+                        if (lookQuery.LocationQuery.MaxDistance != null)
                         {
-                            maxDistance = Math.Min(searchQuery.LocationQuery.MaxDistance.GetMiles(), maxDistance);
+                            maxDistance = Math.Min(lookQuery.LocationQuery.MaxDistance.GetMiles(), maxDistance);
                         }
 
                         var distanceQueryBuilder = new DistanceQueryBuilder(
-                                                    searchQuery.LocationQuery.Location.Latitude,
-                                                    searchQuery.LocationQuery.Location.Longitude,
+                                                    lookQuery.LocationQuery.Location.Latitude,
+                                                    lookQuery.LocationQuery.Location.Longitude,
                                                     maxDistance,
                                                     LookService.LocationField + "_Latitude",
                                                     LookService.LocationField + "_Longitude",
@@ -168,7 +168,7 @@ namespace Our.Umbraco.Look.Services
                         // update filter
                         filter = distanceQueryBuilder.Filter;
 
-                        if (searchQuery.SortOn == SortOn.Distance)
+                        if (lookQuery.SortOn == SortOn.Distance)
                         {
                             // update sort
                             sort = new Sort(
@@ -206,7 +206,7 @@ namespace Our.Umbraco.Look.Services
                     if (topDocs.TotalHits > 0)
                     {
                         // setup the highlighing func if required
-                        if (searchQuery.TextQuery.HighlightFragments > 0 && !string.IsNullOrWhiteSpace(searchQuery.TextQuery.SearchText))
+                        if (lookQuery.TextQuery.HighlightFragments > 0 && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                         {
                             var version = Lucene.Net.Util.Version.LUCENE_29;
 
@@ -215,7 +215,7 @@ namespace Our.Umbraco.Look.Services
                             var queryParser = new QueryParser(version, LookService.TextField, analyzer);
 
                             var queryScorer = new QueryScorer(queryParser
-                                                                .Parse(searchQuery.TextQuery.SearchText)
+                                                                .Parse(lookQuery.TextQuery.SearchText)
                                                                 .Rewrite(indexSearcher.GetIndexReader()));
 
                             Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
@@ -228,16 +228,16 @@ namespace Our.Umbraco.Look.Services
                                 var highlight = highlighter.GetBestFragments(
                                                                 tokenStream,
                                                                 x,
-                                                                searchQuery.TextQuery.HighlightFragments, // max number of fragments
-                                                                searchQuery.TextQuery.HighlightSeparator); // fragment separator
+                                                                lookQuery.TextQuery.HighlightFragments, // max number of fragments
+                                                                lookQuery.TextQuery.HighlightSeparator); // fragment separator
 
                                 return new HtmlString(highlight);
                             };
                         }
 
-                        searchMatches = new EnumerableWithTotal<SearchMatch>(
-                                                    LookService.GetSearchMatches(
-                                                                        searchQuery,
+                        lookMatches = new EnumerableWithTotal<LookMatch>(
+                                                    LookService.GetLookMatches(
+                                                                        lookQuery,
                                                                         indexSearcher,
                                                                         topDocs,
                                                                         getHighlight,
@@ -247,7 +247,7 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            return searchMatches ?? new EnumerableWithTotal<SearchMatch>(Enumerable.Empty<SearchMatch>(), 0);
+            return lookMatches ?? new EnumerableWithTotal<LookMatch>(Enumerable.Empty<LookMatch>(), 0);
         }
 
         /// <summary>
@@ -258,15 +258,15 @@ namespace Our.Umbraco.Look.Services
         /// <param name="getHighlight"></param>
         /// <param name="getDistance"></param>
         /// <returns></returns>
-        private static IEnumerable<SearchMatch> GetSearchMatches(
-                                                    SearchQuery searchQuery,
+        private static IEnumerable<LookMatch> GetLookMatches(
+                                                    LookQuery lookQuery,
                                                     IndexSearcher indexSearcher,
                                                     TopDocs topDocs,
                                                     Func<string, IHtmlString> getHighlight,
                                                     Func<int, double?> getDistance)
         {
-            bool getText = searchQuery.TextQuery != null && searchQuery.TextQuery.GetText;
-            bool getTags = searchQuery.TagQuery != null && searchQuery.TagQuery.GetTags;
+            bool getText = lookQuery.TextQuery != null && lookQuery.TextQuery.GetText;
+            bool getTags = lookQuery.TagQuery != null && lookQuery.TagQuery.GetTags;
 
             var fields = new List<string>();
 
@@ -306,7 +306,7 @@ namespace Our.Umbraco.Look.Services
                     date = new DateTime(ticks);
                 }
 
-                var searchMatch = new SearchMatch()
+                var lookMatch = new LookMatch()
                 {
                     Id = Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     Highlight = getHighlight(doc.Get(LookService.TextField)),
@@ -319,7 +319,7 @@ namespace Our.Umbraco.Look.Services
                     Score = scoreDoc.score
                 };
 
-                yield return searchMatch;
+                yield return lookMatch;
             }
         }
     }
