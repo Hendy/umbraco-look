@@ -18,60 +18,60 @@ To configure indexing there are static methods on the Our.Umbraco.Look.Services.
 Eg.
 
 	using Our.Umbraco.Look.Services;
-
-	// return a string (or null)
+	
 	LookIndexService.SetNameIndexer(publishedContent => {
 
 		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-		{
+		{	
+			// return a string (or null)
 			return "my custom name for myDocTypeAlias to be indexed";
 		}
 
 		// fallback to default indexing (or can return null)
 		return LookIndexService.DefaultNameIndexer(publishedContent);
 	});
-
-	// return a string (or null)
+	
 	LookIndexService.SetTextIndexer(publishedContent => {
 
 		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 		{
+			// return a string (or null)
 			return "my text for myDocTypeAlias to be indexed";
 		}
 
 		// fallback to default indexing (or can return null)
 		return LookIndexService.DefaultTextIndexer(publishedContent);
 	});
-
-	// return a string array (or null)
+	
 	LookIndexService.SetTagIndexer(publishedContent => {
 
 		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 		{
+			// return a string array (or null)
 			return new string[] { "tag1", "tag2" };
 		}
 		
 		// fallback to default indexing (or can return null)
 		return LookIndexService.DefaultTagIndexer(publishedContent);
 	});
-
-	// return a DateTime obj (or null)
+	
 	LookIndexService.SetDateIndexer(publishedContent => {
 
 		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 		{
+			// return a DateTime obj (or null)
 			return new DateTime(2005, 02, 16);
 		}
 
 		// fallback to default indexing (or can return null)
 		return LookIndexService.DefaultDateIndexer(publishedContent);
 	});
-
-	// return an Our.Umbraco.Look.Models.Location obj (or null)
+	
 	LookIndexService.SetLocationIndexer(publishedContent => {
 
 		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 		{
+			// return an Our.Umbraco.Look.Models.Location obj (or null)
 			return new Lcoation(55.406330, 10.388500);		
 		}
 
