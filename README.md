@@ -95,7 +95,7 @@ Eg.
 
 ## Searching
 
-A Look search consists of any combinations of the following (optional) query types: TextQuery, TagQuery, NodeQuery & LocationQuery (most values are also optional)
+A Look search consists of any combinations of the following (optional) query types: TextQuery, TagQuery, DateQuery, NodeQuery & LocationQuery (most values are also optional)
 
 Eg.
 
@@ -115,6 +115,11 @@ Eg.
 			AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
 			AnyTags = new string[] { "tag3", "tag4", "tag5" }, // at least one of these tags is required
 			GetTags = true // indicate that the tags for each result should also be returned
+		},
+
+		DateQuery = new DateQuery() {
+			Before = null,
+			After = new DateTime(2005, 02, 16);
 		},
 
 		NodeQuery = new NodeQuery() {
