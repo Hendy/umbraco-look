@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Our.Umbraco.Look</id>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <authors>Hendy Racher</authors>
     <owners>Hendy Racher</owners>
     <licenseUrl>https://github.com/Hendy/umbraco-look/blob/master/LICENSE</licenseUrl>
@@ -15,7 +15,11 @@
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Umbraco</tags>
-    <dependencies></dependencies>
+    <dependencies>
+      <dependency id="UmbracoCms.Core" version="7.2.3" />
+      <dependency id="Lucene.Net.Contrib" version="2.9.4.1" />
+      <dependency id="Examine" version="0.1.70" />
+    </dependencies>
   </metadata>
   <files>
     <file src="..\src\Our.Umbraco.Look\bin\Release\Our.Umbraco.Look.dll" target="lib\net45"></file>
