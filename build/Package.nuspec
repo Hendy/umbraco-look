@@ -9,7 +9,9 @@
     <projectUrl>https://github.com/Hendy/umbraco-look</projectUrl>
     <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description></description>
+    <description>
+      Umbraco Examine indexer and searcher with support for text match highlighting and geospacial queries
+    </description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>Umbraco</tags>
