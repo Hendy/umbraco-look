@@ -29,12 +29,11 @@ Eg.
 
 		// fallback to default indexing
 		return LookIndexService.DefaultNameIndexer(publishedContent);
-
 	});
 
 	// return a string (or null)
-	LookIndexService.SetTextIndexer(publishedContent => 
-	{
+	LookIndexService.SetTextIndexer(publishedContent => {
+
 		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 		{
 			return "my text for myDocTypeAlias to be indexed";
@@ -45,8 +44,8 @@ Eg.
 	});
 
 	// return a string array (or null)
-	LookIndexService.SetTagIndexer(publishedContent => 
-	{
+	LookIndexService.SetTagIndexer(publishedContent => {
+
 		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 		{
 			return new string[] { "tag1", "tag2" };
@@ -56,14 +55,14 @@ Eg.
 	});
 
 	// return a DateTime obj (or null)
-	LookIndexService.SetDateIndexer(publishedContent => 
-	{
+	LookIndexService.SetDateIndexer(publishedContent => {
+
 		if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 		{
 			return new DateTime(2005, 02, 16);
 		}
 
-		return null;
+		return LookIndexService.DefaultDateIndexer(publishedContent);
 	});
 
 	// return an Our.Umbraco.Look.Models.Location obj (or null)
