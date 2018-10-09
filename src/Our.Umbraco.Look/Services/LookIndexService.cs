@@ -11,32 +11,87 @@ using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Services
 {
-    public partial class LookService
+    public static class LookIndexService
     {
         /// <summary>
-        /// Function to get text for the IPublishedContent being indexed
+        /// Register consumer code to perform when indexing text
         /// </summary>
-        private Func<IPublishedContent, string> TextIndexer { get; set; } = x => Indexing.DefaultTextIndexer(x);
+        /// <param name="textFunc"></param>
+        public static void SetTextIndexer(Func<IPublishedContent, string> textFunc)
+        {
+            LogHelper.Info(typeof(LookService), "Text indexing function set");
+
+            LookService.Instance.TextIndexer = textFunc;
+        }
 
         /// <summary>
-        /// Function to get the tags for the IPublishedContent being indexed
+        /// 
         /// </summary>
-        private Func<IPublishedContent, string[]> TagIndexer { get; set; } = x => Indexing.DefaultTagIndexer(x);
+        /// <param name="publishedContent"></param>
+        /// <returns></returns>
+        public static string DefaultTextIndexer(IPublishedContent publishedContent)
+        {
+            //TODO: extract text from all known text fields
+            // extract and rip html fields
+
+            return null;
+        }
 
         /// <summary>
-        /// Function to get the date for the IPublishedContent being indexed
+        /// Register consumer code to perform when indexing tags
         /// </summary>
-        private Func<IPublishedContent, DateTime?> DateIndexer { get; set; } = x => Indexing.DefaultDateIndexer(x);
+        /// <param name="tagsFunc"></param>
+        public static void SetTagIndexer(Func<IPublishedContent, string[]> tagsFunc)
+        {
+            LogHelper.Info(typeof(LookService), "Tag indexing function set");
+
+            LookService.Instance.TagIndexer = tagsFunc;
+        }
+
+        public static string[] DefaultTagIndexer(IPublishedContent publishedContent)
+        {
+            // TODO: look for known tag datatypes and pickers
+            return null;
+        }
 
         /// <summary>
-        /// Function to get the name for the IPublishedContent being indexed
+        /// Register consumer code to perform when indexing date
         /// </summary>
-        private Func<IPublishedContent, string> NameIndexer { get; set; } = x => Indexing.DefaultNameIndexer(x);
+        /// <param name="dateFunc"></param>
+        public static void SetDateIndexer(Func<IPublishedContent, DateTime?> dateFunc)
+        {
+            LogHelper.Info(typeof(LookService), "Date indexing function set");
+
+            LookService.Instance.DateIndexer = dateFunc;
+        }
+
+        public static DateTime? DefaultDateIndexer(IPublishedContent publishedContent)
+        {
+            return publishedContent.UpdateDate;
+        }
 
         /// <summary>
-        /// Function to get a location for the IPublishedContent being indexed
+        /// 
         /// </summary>
-        private Func<IPublishedContent, Location> LocationIndexer { get; set; } = x => null;
+        /// <param name="nameFunc"></param>
+        public static void SetNameIndexer(Func<IPublishedContent, string> nameFunc)
+        {
+            LogHelper.Info(typeof(LookService), "Name indexing function set");
+
+            LookService.Instance.NameIndexer = nameFunc;
+        }
+
+        public static string DefaultNameIndexer(IPublishedContent publishedContent)
+        {
+            return publishedContent.Name;
+        }
+
+        public static void SetLocationIndexer(Func<IPublishedContent, Location> locationFunc)
+        {
+            LogHelper.Info(typeof(LookService), "Location indexing function set");
+
+            LookService.Instance.LocationIndexer = locationFunc;
+        }
 
         /// <summary>
         /// Main indexing method
@@ -136,7 +191,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private static void DocumentWriting(object sender, DocumentWritingEventArgs e)
+        internal static void DocumentWriting(object sender, DocumentWritingEventArgs e)
         {
             if (e.Fields.ContainsKey(LookService.DateField)) // it's storing a date value as a long type
             {
@@ -217,92 +272,6 @@ namespace Our.Umbraco.Look.Services
 
                     e.Document.Add(tierField);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Used to namespace the index setters
-        /// </summary>
-        public static class Indexing
-        {
-            /// <summary>
-            /// Register consumer code to perform when indexing text
-            /// </summary>
-            /// <param name="textFunc"></param>
-            public static void SetTextIndexer(Func<IPublishedContent, string> textFunc)
-            {
-                LogHelper.Info(typeof(LookService), "Text indexing function set");
-
-                LookService.Instance.TextIndexer = textFunc;
-            }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="publishedContent"></param>
-            /// <returns></returns>
-            public static string DefaultTextIndexer(IPublishedContent publishedContent)
-            {
-                //TODO: extract text from all known text fields
-                // extract and rip html fields
-
-                return null;
-            }
-
-            /// <summary>
-            /// Register consumer code to perform when indexing tags
-            /// </summary>
-            /// <param name="tagsFunc"></param>
-            public static void SetTagIndexer(Func<IPublishedContent, string[]> tagsFunc)
-            {
-                LogHelper.Info(typeof(LookService), "Tag indexing function set");
-
-                LookService.Instance.TagIndexer = tagsFunc;
-            }
-
-            public static string[] DefaultTagIndexer(IPublishedContent publishedContent)
-            {
-                // TODO: look for known tag datatypes and pickers
-                return null;
-            }
-
-            /// <summary>
-            /// Register consumer code to perform when indexing date
-            /// </summary>
-            /// <param name="dateFunc"></param>
-            public static void SetDateIndexer(Func<IPublishedContent, DateTime?> dateFunc)
-            {
-                LogHelper.Info(typeof(LookService), "Date indexing function set");
-
-                LookService.Instance.DateIndexer = dateFunc;
-            }
-
-            public static DateTime? DefaultDateIndexer(IPublishedContent publishedContent)
-            {
-                return publishedContent.UpdateDate;
-            }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="nameFunc"></param>
-            public static void SetNameIndexer(Func<IPublishedContent, string> nameFunc)
-            {
-                LogHelper.Info(typeof(LookService), "Name indexing function set");
-
-                LookService.Instance.NameIndexer = nameFunc;
-            }
-
-            public static string DefaultNameIndexer(IPublishedContent publishedContent)
-            {
-                return publishedContent.Name;
-            }
-
-            public static void SetLocationIndexer(Func<IPublishedContent, Location> locationFunc)
-            {
-                LogHelper.Info(typeof(LookService), "Location indexing function set");
-
-                LookService.Instance.LocationIndexer = locationFunc;
             }
         }
     }

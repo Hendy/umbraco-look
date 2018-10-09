@@ -20,10 +20,7 @@ using UmbracoExamine;
 
 namespace Our.Umbraco.Look.Services
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public partial class LookService
+    public static class LookSearchService
     {
         /// <summary>
         ///  Main searching method
@@ -236,7 +233,7 @@ namespace Our.Umbraco.Look.Services
                         }
 
                         lookMatches = new EnumerableWithTotal<LookMatch>(
-                                                    LookService.GetLookMatches(
+                                                    LookSearchService.GetLookMatches(
                                                                         lookQuery,
                                                                         indexSearcher,
                                                                         topDocs,

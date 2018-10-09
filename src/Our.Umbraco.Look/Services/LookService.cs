@@ -2,10 +2,12 @@
 using Examine.LuceneEngine.Providers;
 using Examine.Providers;
 using Lucene.Net.Spatial.Tier.Projectors;
+using Our.Umbraco.Look.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using Umbraco.Core.Logging;
+using Umbraco.Core.Models;
 using Umbraco.Web;
 
 namespace Our.Umbraco.Look.Services
@@ -15,8 +17,40 @@ namespace Our.Umbraco.Look.Services
     /// https://gist.github.com/ismailmayat/3902c660527c8b3d20b38ae724ab9892
     /// http://www.d2digital.co.uk/blog/2015/08/lucenenet-indexer-geospatial-searching-and-umbraco
     /// </summary>
-    public partial class LookService
+    public class LookService
     {
+        #region Class properties
+
+        /// <summary>
+        /// 
+        /// </summary>
+        internal List<CartesianTierPlotter> CartesianTierPlotters { get; } = new List<CartesianTierPlotter>();
+
+        /// <summary>
+        /// Function to get text for the IPublishedContent being indexed
+        /// </summary>
+        internal Func<IPublishedContent, string> TextIndexer { get; set; } = x => LookIndexService.DefaultTextIndexer(x);
+
+        /// <summary>
+        /// Function to get the tags for the IPublishedContent being indexed
+        /// </summary>
+        internal Func<IPublishedContent, string[]> TagIndexer { get; set; } = x => LookIndexService.DefaultTagIndexer(x);
+
+        /// <summary>
+        /// Function to get the date for the IPublishedContent being indexed
+        /// </summary>
+        internal Func<IPublishedContent, DateTime?> DateIndexer { get; set; } = x => LookIndexService.DefaultDateIndexer(x);
+
+        /// <summary>
+        /// Function to get the name for the IPublishedContent being indexed
+        /// </summary>
+        internal Func<IPublishedContent, string> NameIndexer { get; set; } = x => LookIndexService.DefaultNameIndexer(x);
+
+        /// <summary>
+        /// Function to get a location for the IPublishedContent being indexed
+        /// </summary>
+        internal Func<IPublishedContent, Location> LocationIndexer { get; set; } = x => null;
+
         /// <summary>
         /// Name of indexer to use (from configuration)
         /// </summary>
@@ -27,15 +61,14 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         private string SearcherName { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private List<CartesianTierPlotter> CartesianTierPlotters { get; } = new List<CartesianTierPlotter>();
+        #endregion
+
+        #region Static properties
 
         /// <summary>
         /// Access the singleton instance of this search service
         /// </summary>
-        private static LookService Instance => _lazy.Value;
+        internal static LookService Instance => _lazy.Value;
 
         /// <summary>
         /// Singleton instance
@@ -45,52 +78,54 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Gets the Examine indexer
         /// </summary>
-        private static BaseIndexProvider Indexer => ExamineManager.Instance.IndexProviderCollection[LookService.Instance.IndexerName];
+        internal static BaseIndexProvider Indexer => ExamineManager.Instance.IndexProviderCollection[LookService.Instance.IndexerName];
 
         /// <summary>
         /// Gets the Examine searcher
         /// </summary>
-        private static BaseSearchProvider Searcher => ExamineManager.Instance.SearchProviderCollection[LookService.Instance.SearcherName];
+        internal static BaseSearchProvider Searcher => ExamineManager.Instance.SearchProviderCollection[LookService.Instance.SearcherName];
 
         /// <summary>
         /// Gets the field name to use for the text - this field is expected to contain a sizeable amount of text
         /// </summary>
-        private static string TextField => "Our.Umbraco.Look_Text";
+        internal static string TextField => "Our.Umbraco.Look_Text";
 
         /// <summary>
         /// Gets the field name to use for the tags - this field will contain space delimited non-tokenizable strings
         /// </summary>
-        private static string TagsField => "Our.Umbraco.Look_Tags";
+        internal static string TagsField => "Our.Umbraco.Look_Tags";
 
         /// <summary>
         /// Gets the field name to use for the date - this fieldswill  stores the date as the number of seconds from the year 2000 (so it's a number that can be sorted)
         /// </summary>
-        private static string DateField => "Our.Umbraco.Look_Date";
+        internal static string DateField => "Our.Umbraco.Look_Date";
 
         /// <summary>
         /// Gets the field name to use for the name
         /// </summary>
-        private static string NameField => "Our.Umbraco.Look_Name";
+        internal static string NameField => "Our.Umbraco.Look_Name";
 
         /// <summary>
         /// Gets the field name to use for the location
         /// </summary>
-        private static string LocationField => "Our.Umbraco.Look_Location";
+        internal static string LocationField => "Our.Umbraco.Look_Location";
 
         /// <summary>
         /// not stored in index, but used as a result field
         /// </summary>
-        private static string DistanceField => "Our.Umbraco.Look_Distance";
+        internal static string DistanceField => "Our.Umbraco.Look_Distance";
 
         /// <summary>
         /// Max distance in miles for distance searches & location indexing
         /// </summary>
-        private static double MaxDistance => 10000; // 12450 = half circumfrence of earth TODO: make configuration
+        internal static double MaxDistance => 10000; // 12450 = half circumfrence of earth TODO: make configuration
 
         /// <summary>
         /// max numnber of results to request for a lucene query
         /// </summary>
-        private static int MaxLuceneResults => 5000; // TODO: make configurable (maybe part of the SearchQuery obj)
+        internal static int MaxLuceneResults => 5000; // TODO: make configurable (maybe part of the SearchQuery obj)
+
+        #endregion
 
         /// <summary>
         /// Singleton constructor (used privately to maintain state for consumer registered indexer functions)
@@ -161,7 +196,7 @@ namespace Our.Umbraco.Look.Services
                 // wire-up events
                 LookService.Indexer.GatheringNodeData += (sender, e) => action(sender, e, umbracoHelper);
 
-                ((LuceneIndexer)LookService.Indexer).DocumentWriting += DocumentWriting;
+                ((LuceneIndexer)LookService.Indexer).DocumentWriting += LookIndexService.DocumentWriting;
             }
         }
     }

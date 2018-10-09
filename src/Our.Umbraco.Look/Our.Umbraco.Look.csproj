@@ -220,9 +220,9 @@
     <Compile Include="Models\TagQuery.cs" />
     <Compile Include="Models\TextQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\LookIndexService.cs" />
+    <Compile Include="Services\LookSearchService.cs" />
     <Compile Include="Services\LookService.cs" />
-    <Compile Include="Services\LookService_Indexing.cs" />
-    <Compile Include="Services\LookService_Searching.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
