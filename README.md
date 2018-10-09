@@ -22,9 +22,7 @@ Eg.
 
 	public class ConfigureIndexing : ApplicationEventHandler
 	{
-		protected override void ApplicationStarted(
-									UmbracoApplicationBase umbracoApplication, 
-									ApplicationContext applicationContext)
+		protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 		{
 			LookIndexService.SetNameIndexer(publishedContent => {
 
@@ -85,9 +83,6 @@ Eg.
 				// currenty there is no default fallback
 				return null;
 			});
-
-
-
 		}
 	}
 
