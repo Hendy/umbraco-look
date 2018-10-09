@@ -1,5 +1,5 @@
 # Umbraco Look
-Umbraco Lucene indexer and searcher with support for text match highlighting and geospacial queries.
+Umbraco Examine Lucene indexer and searcher with support for text match highlighting and geospacial queries
 
 Distributed as a single dll _Our.Umbraco.Look.dll_
 
@@ -27,7 +27,7 @@ Eg.
 			return "my custom name for myDocTypeAlias to be indexed";
 		}
 
-		// fallback to default indexing
+		// fallback to default indexing (or can return null)
 		return LookIndexService.DefaultNameIndexer(publishedContent);
 	});
 
@@ -39,7 +39,7 @@ Eg.
 			return "my text for myDocTypeAlias to be indexed";
 		}
 
-		// fallback to default indexing
+		// fallback to default indexing (or can return null)
 		return LookIndexService.DefaultTextIndexer(publishedContent);
 	});
 
@@ -51,7 +51,8 @@ Eg.
 			return new string[] { "tag1", "tag2" };
 		}
 		
-		return null;
+		// fallback to default indexing (or can return null)
+		return LookIndexService.DefaultTagIndexer(publishedContent);
 	});
 
 	// return a DateTime obj (or null)
@@ -62,6 +63,7 @@ Eg.
 			return new DateTime(2005, 02, 16);
 		}
 
+		// fallback to default indexing (or can return null)
 		return LookIndexService.DefaultDateIndexer(publishedContent);
 	});
 
@@ -73,6 +75,7 @@ Eg.
 			return new Lcoation(55.406330, 10.388500);		
 		}
 
+		// currenty there is no default fallback
 		return null;
 	});
 
@@ -88,13 +91,16 @@ Eg.
 	var lookQuery = new LookQuery()
 	{
 		TextQuery = new TextQuery() {
-			SearchText = "blah",
-			HighlightFragments = 1 // highlight text containing the search term once should be returned
-			HighlightSeparator = " ... "
+			SearchText = "some text to search for",
+			HighlightFragments = 2 // highlight text containing the search term twice should be returned
+			HighlightSeparator = " ... ",
+			GetText = true // indicate that the raw text field should also be returned
 		},
 
 		TagQuery = new TagQuery() {
-			AllTags = new string[] { "tag1", "tag2" } // both tag1 and tag2 are required
+			AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
+			AnyTags = new string[] { "tag3", "tag4" }, // the results must have at lease one of these tags
+			GetTags = true // indicate that the tags for each result should also be returned
 		},
 
 		NodeQuery = new NodeQuery() {
@@ -107,7 +113,7 @@ Eg.
 			MaxDistance = new Distance(500, DistanceUnit.Miles)  // limits the results to within this distance
 		},
 
-		SortOn = SortOn.Distance
+		SortOn = SortOn.Distance // other sorts include: Score, Name, Date
 	};
 
 	// perform the search
