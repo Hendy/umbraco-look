@@ -17,7 +17,7 @@ namespace Our.Umbraco.Look.Services
     /// https://gist.github.com/ismailmayat/3902c660527c8b3d20b38ae724ab9892
     /// http://www.d2digital.co.uk/blog/2015/08/lucenenet-indexer-geospatial-searching-and-umbraco
     /// </summary>
-    public class LookService
+    internal class LookService
     {
         #region Class properties
 
