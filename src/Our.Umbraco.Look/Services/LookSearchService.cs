@@ -44,15 +44,18 @@ namespace Our.Umbraco.Look.Services
                 var query = searchCriteria.Field(string.Empty, string.Empty);
 
                 // Text
-                if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
+                if (lookQuery.TextQuery != null)
                 {
-                    if (lookQuery.TextQuery.Fuzzyness > 0)
+                    if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                     {
-                        query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText.Fuzzy(lookQuery.TextQuery.Fuzzyness));
-                    }
-                    else
-                    {
-                        query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText);
+                        if (lookQuery.TextQuery.Fuzzyness > 0)
+                        {
+                            query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText.Fuzzy(lookQuery.TextQuery.Fuzzyness));
+                        }
+                        else
+                        {
+                            query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText);
+                        }
                     }
                 }
 
@@ -193,7 +196,7 @@ namespace Our.Umbraco.Look.Services
 
                     var luceneSearchCriteria = (LuceneSearchCriteria)searchCriteria;
 
-                    // Do the Lucene search
+                    // do the Lucene search
                     topDocs = indexSearcher.Search(
                                                 luceneSearchCriteria.Query, // the query build by Examine
                                                 filter ?? new QueryWrapperFilter(luceneSearchCriteria.Query),
@@ -202,7 +205,7 @@ namespace Our.Umbraco.Look.Services
 
                     if (topDocs.TotalHits > 0)
                     {
-                        // setup the highlighing func if required
+                        // setup the getHightlight func if required
                         if (lookQuery.TextQuery.HighlightFragments > 0 && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                         {
                             var version = Lucene.Net.Util.Version.LUCENE_29;
@@ -217,7 +220,7 @@ namespace Our.Umbraco.Look.Services
 
                             Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
 
-                            // update the func so it does real highlighting work
+                            // update the getHightlight func
                             getHighlight = (x) =>
                             {
                                 var tokenStream = analyzer.TokenStream(LookService.TextField, new StringReader(x));
@@ -248,12 +251,12 @@ namespace Our.Umbraco.Look.Services
         }
 
         /// <summary>
-        /// 
+        /// Supplied with the result of a Lucene query, this method will yield a constructed LookMatch for each in order
         /// </summary>
-        /// <param name="indexSearcher"></param>
-        /// <param name="topDocs"></param>
-        /// <param name="getHighlight"></param>
-        /// <param name="getDistance"></param>
+        /// <param name="indexSearcher">The searcher supplied to get the Lucene doc for each id in the Lucene results (topDocs)</param>
+        /// <param name="topDocs">The results of the Lucene query (a collection of ids in an order)</param>
+        /// <param name="getHighlight">Function used to get the highlight text for a given result text</param>
+        /// <param name="getDistance">Function used to calculate distance (if a location was supplied in the original query)</param>
         /// <returns></returns>
         private static IEnumerable<LookMatch> GetLookMatches(
                                                     LookQuery lookQuery,
@@ -272,13 +275,12 @@ namespace Our.Umbraco.Look.Services
             fields.Add(LookService.NameField);
             fields.Add(LookService.LocationField);
 
-            /// if a highlight function is supplied, then it'll need the text field to process
-            if (getHighlight != null || getText)
+            if (getHighlight != null || getText) // if a highlight function is supplied, then it'll need the text field to process
             {
                 fields.Add(LookService.TextField);
             }
 
-            if (getHighlight == null) // if highlight func doens't exist, then create one to always return null
+            if (getHighlight == null) // if highlight func does not exist, then create one to always return null
             {
                 getHighlight = x => null;
             }

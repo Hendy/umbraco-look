@@ -1,4 +1,7 @@
-﻿namespace Our.Umbraco.Look.Models
+﻿using System;
+using Umbraco.Core.Logging;
+
+namespace Our.Umbraco.Look.Models
 {
     /// <summary>
     /// Currently handles it's own serialization / de-serialization
@@ -6,17 +9,17 @@
     public class Location
     {
         /// <summary>
-        /// 
+        /// The longitude
         /// </summary>
         public double Latitude { get; }
 
         /// <summary>
-        /// 
+        /// The longitude
         /// </summary>
         public double Longitude { get; }
 
         /// <summary>
-        /// Constructor - used to ensure both lat & lng supplied (neither are then changeable)
+        /// Constructor - used to ensure both latitude and longitude supplied (neither are then changeable)
         /// </summary>
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
@@ -37,8 +40,9 @@
                 this.Latitude = double.Parse(location.Split('|')[0]);
                 this.Longitude = double.Parse(location.Split('|')[1]);
             }
-            catch
+            catch (Exception exception)
             {
+                LogHelper.WarnWithException(typeof(Location), $"Unable to deserialize string '{location}' into a Location ojbect", exception);
             }
         }
 

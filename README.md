@@ -7,20 +7,20 @@ Umbraco Examine Lucene indexer and searcher with support for text match highligh
 
 For each Umbraco node, Look will index the following data:
 
-A text field - used to store all text associated with a node, and as the source for a text highlight.  
+A text field - used to store all text associated with a node and as the source for a text query (and any extracted text highlight fragments).  
 A tags field - used to store a collection of string tags assocated with a node.  
 A date field - used to associate a date with a node (defaults to the node.UpdatedDate).  
 A name field - used to associate a name with a node (defaults to the node.Name).  
 A location field - used to store a latitude & longitude associated with a node (defaults to null).  
   
-No configuration files need to be changed, as Look will hook into the default Umbraco External index and searcher (if it exists), although if you prefer to use a different indexers and/or searchers then the following appSetting keys can be set in the web.config:
+No configuration files need to be changed as Look will hook into the default Umbraco External indexer and searcher (if they exist), although if you prefer to use a different indexer and/or searcher then the following appSetting keys can be set in the web.config:
 
 	<appSettings>
 		<add key="Our.Umbraco.Look.IndexerName" value="MyIndexer" />
 		<add key="Our.Umbraco.Look.SearcherName" value="MySearcher" />
 	</appSettings>
   
-To configure the indexing behaviour there are static methods on the _LookIndexService_ class which accept functions returning the typed value to be indexed (all are optional).
+To configure the indexing behaviour there are static methods on the _LookIndexService_ class which accept functions taking a parameter of IPublishedContent and returning the typed value to be indexed (all are optional).
 
 Eg.
 
@@ -28,7 +28,10 @@ Eg.
 	using Umbraco.Core;
 
 	public class ConfigureIndexing : ApplicationEventHandler
-	{
+	{	
+		/// <summary>
+		/// Umbraco has started event
+		/// </summary>
 		protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 		{
 			LookIndexService.SetNameIndexer(publishedContent => {
@@ -104,13 +107,13 @@ Eg.
 		TextQuery = new TextQuery() {
 			SearchText = "some text to search for",
 			HighlightFragments = 2 // highlight text containing the search term twice should be returned
-			HighlightSeparator = " ... ",
-			GetText = true // indicate that the raw text field should also be returned
+			HighlightSeparator = " ... ", // text to inject between any search term matches
+			GetText = true // indicate that the raw text field should also be returned (potentially a large document)
 		},
 
 		TagQuery = new TagQuery() {
 			AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
-			AnyTags = new string[] { "tag3", "tag4" }, // at least one of these tags is required
+			AnyTags = new string[] { "tag3", "tag4", "tag5" }, // at least one of these tags is required
 			GetTags = true // indicate that the tags for each result should also be returned
 		},
 
@@ -130,7 +133,7 @@ Eg.
 	// perform the search
 	var lookResults = LookSearchService.Query(lookQuery);
 
-	var totalResults = lookResults.Total; // total number of item expected in the lookResults enumerable
+	var totalResults = lookResults.Total; // total number of item in the lookResults enumerable
 	var results = lookResults.ToArray(); // the lookResults enumerated into an array
 
 ### Search Results
