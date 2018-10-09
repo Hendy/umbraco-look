@@ -13,7 +13,7 @@ A date field - used to associate a date with a node (defaults to the node.Update
 A name field - used to associate a name with a node (defaults to the node.Name)  
 A location field - used to store latitude & longitude associated with a node  
   
-To configure indexing there are static methods on the Our.Umbraco.Look.Services.LookIndexService class which accept functions returning the typed value to be indexed.
+To configure indexing there are static methods on the Our.Umbraco.Look.Services.LookIndexService class which accept functions returning the typed value to be indexed. (No configuration files need to be changed)
 
 Eg.
 
