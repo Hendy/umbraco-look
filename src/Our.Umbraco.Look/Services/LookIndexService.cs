@@ -1,5 +1,4 @@
-﻿using Examine.LuceneEngine;
-using Examine.LuceneEngine.Providers;
+﻿using Examine.LuceneEngine.Providers;
 using Lucene.Net.Documents;
 using Lucene.Net.Util;
 using Our.Umbraco.Look.Models;
@@ -115,9 +114,9 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Do the indexing and set the field values onto the Lucene document
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal static void Index(IPublishedContent publishedContent, DocumentWritingEventArgs e)
+        /// <param name="publishedContent">The IPublishedContent being indexed</param>
+        /// <param name="document">The Lucene Document</param>
+        internal static void Index(IPublishedContent publishedContent, Document document)
         {
             if (LookService.Instance.TextIndexer != null)
             {
@@ -141,7 +140,7 @@ namespace Our.Umbraco.Look.Services
                                             Field.Index.ANALYZED,
                                             Field.TermVector.YES);
 
-                    e.Document.Add(textField);
+                    document.Add(textField);
                 }
             }
 
@@ -168,9 +167,8 @@ namespace Our.Umbraco.Look.Services
                                             Field.Store.YES,
                                             Field.Index.NOT_ANALYZED);
 
-                        e.Document.Add(tagField);
+                        document.Add(tagField);
                     }
-
                 }
             }
 
@@ -204,8 +202,8 @@ namespace Our.Umbraco.Look.Services
                                                     true)
                                                 .SetLongValue(ticks);
 
-                    e.Document.Add(dateField);
-                    e.Document.Add(dateSortedField);
+                    document.Add(dateField);
+                    document.Add(dateSortedField);
                 }
             }
 
@@ -238,8 +236,8 @@ namespace Our.Umbraco.Look.Services
                                                 Field.Index.NOT_ANALYZED,
                                                 Field.TermVector.NO);
 
-                    e.Document.Add(nameField);
-                    e.Document.Add(nameSortedField);
+                    document.Add(nameField);
+                    document.Add(nameSortedField);
                 }
             }
 
@@ -271,8 +269,8 @@ namespace Our.Umbraco.Look.Services
                                         Field.Index.NOT_ANALYZED);
 
 
-                    e.Document.Add(locationLatitudeField);
-                    e.Document.Add(locationLongitudeField);
+                    document.Add(locationLatitudeField);
+                    document.Add(locationLongitudeField);
 
                     foreach (var cartesianTierPlotter in LookService.Instance.CartesianTierPlotters)
                     {
@@ -284,7 +282,7 @@ namespace Our.Umbraco.Look.Services
                                             Field.Store.YES,
                                             Field.Index.NOT_ANALYZED_NO_NORMS);
 
-                        e.Document.Add(tierField);
+                        document.Add(tierField);
                     }
                 }
             }
