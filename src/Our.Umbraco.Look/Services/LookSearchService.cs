@@ -49,11 +49,11 @@ namespace Our.Umbraco.Look.Services
                 {
                     if (lookQuery.TextQuery.Fuzzyness > 0)
                     {
-                        query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText.Fuzzy(lookQuery.TextQuery.Fuzzyness));
+                        query.And().Field(LookConstants.TextField, lookQuery.TextQuery.SearchText.Fuzzy(lookQuery.TextQuery.Fuzzyness));
                     }
                     else
                     {
-                        query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText);
+                        query.And().Field(LookConstants.TextField, lookQuery.TextQuery.SearchText);
                     }
                 }
             }
@@ -78,12 +78,12 @@ namespace Our.Umbraco.Look.Services
 
                 if (allTags.Any())
                 {
-                    query.And().GroupedAnd(allTags.Select(x => LookService.TagsField), allTags.ToArray());
+                    query.And().GroupedAnd(allTags.Select(x => LookConstants.TagsField), allTags.ToArray());
                 }
 
                 if (anyTags.Any())
                 {
-                    query.And().GroupedOr(allTags.Select(x => LookService.TagsField), anyTags.ToArray());
+                    query.And().GroupedOr(allTags.Select(x => LookConstants.TagsField), anyTags.ToArray());
                 }
             }
 
@@ -91,7 +91,7 @@ namespace Our.Umbraco.Look.Services
             if (lookQuery.DateQuery != null)
             {
                 query.And().Range(
-                                LookService.DateField,
+                                LookConstants.DateField,
                                 lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
                                 lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
             }
@@ -150,11 +150,11 @@ namespace Our.Umbraco.Look.Services
                 switch (lookQuery.SortOn)
                 {
                     case SortOn.Date: // newest -> oldest
-                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookService.DateField, SortField.LONG, true));
+                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
                         break;
 
                     case SortOn.Name: // a -> z
-                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookService.NameField, SortField.STRING));
+                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField, SortField.STRING));
                         break;
                 }
 
@@ -171,8 +171,8 @@ namespace Our.Umbraco.Look.Services
                                                 lookQuery.LocationQuery.Location.Latitude,
                                                 lookQuery.LocationQuery.Location.Longitude,
                                                 maxDistance,
-                                                LookService.LocationField + "_Latitude",
-                                                LookService.LocationField + "_Longitude",
+                                                LookConstants.LocationField + "_Latitude",
+                                                LookConstants.LocationField + "_Longitude",
                                                 CartesianTierPlotter.DefaltFieldPrefix,
                                                 true);
 
@@ -184,7 +184,7 @@ namespace Our.Umbraco.Look.Services
                         // update sort
                         sort = new Sort(
                                     new SortField(
-                                        LookService.DistanceField,
+                                        LookConstants.DistanceField,
                                         new DistanceFieldComparatorSource(distanceQueryBuilder.DistanceFilter)));
                     }
 
@@ -223,7 +223,7 @@ namespace Our.Umbraco.Look.Services
 
                         Analyzer analyzer = new StandardAnalyzer(version);
 
-                        var queryParser = new QueryParser(version, LookService.TextField, analyzer);
+                        var queryParser = new QueryParser(version, LookConstants.TextField, analyzer);
 
                         var queryScorer = new QueryScorer(queryParser
                                                             .Parse(lookQuery.TextQuery.SearchText)
@@ -234,7 +234,7 @@ namespace Our.Umbraco.Look.Services
                         // update the getHightlight func
                         getHighlight = (x) =>
                         {
-                            var tokenStream = analyzer.TokenStream(LookService.TextField, new StringReader(x));
+                            var tokenStream = analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
 
                             var highlight = highlighter.GetBestFragments(
                                                             tokenStream,
@@ -281,13 +281,13 @@ namespace Our.Umbraco.Look.Services
             var fields = new List<string>();
 
             fields.Add(LuceneIndexer.IndexNodeIdFieldName); // "__NodeId"
-            fields.Add(LookService.DateField);
-            fields.Add(LookService.NameField);
-            fields.Add(LookService.LocationField);
+            fields.Add(LookConstants.DateField);
+            fields.Add(LookConstants.NameField);
+            fields.Add(LookConstants.LocationField);
 
             if (getHighlight != null || getText) // if a highlight function is supplied, then it'll need the text field to process
             {
-                fields.Add(LookService.TextField);
+                fields.Add(LookConstants.TextField);
             }
 
             if (getHighlight == null) // if highlight func does not exist, then create one to always return null
@@ -297,7 +297,7 @@ namespace Our.Umbraco.Look.Services
 
             if (getTags)
             {
-                fields.Add(LookService.TagsField);
+                fields.Add(LookConstants.TagsField);
             }
 
             var mapFieldSelector = new MapFieldSelector(fields.ToArray());
@@ -310,19 +310,19 @@ namespace Our.Umbraco.Look.Services
 
                 DateTime? date = null;
 
-                if (long.TryParse(doc.Get(LookService.DateField), out long ticks))
+                if (long.TryParse(doc.Get(LookConstants.DateField), out long ticks))
                 {
                     date = new DateTime(ticks);
                 }
 
                 var lookMatch = new LookMatch(
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
-                    getHighlight(doc.Get(LookService.TextField)),
-                    getText ? doc.Get(LookService.TextField) : null,
-                    getTags ? doc.Get(LookService.TagsField).Split(' ') : null,
+                    getHighlight(doc.Get(LookConstants.TextField)),
+                    getText ? doc.Get(LookConstants.TextField) : null,
+                    getTags ? doc.Get(LookConstants.TagsField).Split(' ') : null,
                     date,
-                    doc.Get(LookService.NameField),
-                    doc.Get(LookService.LocationField) != null ? new Location(doc.Get(LookService.LocationField)) : null,
+                    doc.Get(LookConstants.NameField),
+                    doc.Get(LookConstants.LocationField) != null ? new Location(doc.Get(LookConstants.LocationField)) : null,
                     getDistance(docId),
                     scoreDoc.score
                 );

@@ -134,7 +134,7 @@ namespace Our.Umbraco.Look.Services
                 if (text != null)
                 {
                     var textField = new Field(
-                                            LookService.TextField,
+                                            LookConstants.TextField,
                                             text,
                                             Field.Store.YES,
                                             Field.Index.ANALYZED,
@@ -162,7 +162,7 @@ namespace Our.Umbraco.Look.Services
                     foreach (var tag in tags.Where(x => !string.IsNullOrWhiteSpace(x)))
                     {
                         var tagField = new Field(
-                                            LookService.TagsField,
+                                            LookConstants.TagsField,
                                             tag,
                                             Field.Store.YES,
                                             Field.Index.NOT_ANALYZED);
@@ -191,13 +191,13 @@ namespace Our.Umbraco.Look.Services
                     var ticks = date.Value.Ticks;
 
                     var dateField = new NumericField(
-                                               LookService.DateField,
+                                               LookConstants.DateField,
                                                Field.Store.YES,
                                                false)
                                            .SetLongValue(ticks);
 
                     var dateSortedField = new NumericField(
-                                                    LuceneIndexer.SortedFieldNamePrefix + LookService.DateField,
+                                                    LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField,
                                                     Field.Store.NO, //we don't want to store the field because we're only using it to sort, not return data
                                                     true)
                                                 .SetLongValue(ticks);
@@ -223,14 +223,14 @@ namespace Our.Umbraco.Look.Services
                 if (name != null)
                 {
                     var nameField = new Field(
-                                            LookService.NameField,
+                                            LookConstants.NameField,
                                             name,
                                             Field.Store.YES,
                                             Field.Index.NOT_ANALYZED,
                                             Field.TermVector.YES);
 
                     var nameSortedField = new Field(
-                                                LuceneIndexer.SortedFieldNamePrefix + LookService.NameField,
+                                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField,
                                                 name.ToLower(),
                                                 Field.Store.NO,
                                                 Field.Index.NOT_ANALYZED,
@@ -257,13 +257,13 @@ namespace Our.Umbraco.Look.Services
                 if (location != null)
                 {
                     var locationLatitudeField = new Field(
-                                           LookService.LocationField + "_Latitude",
+                                           LookConstants.LocationField + "_Latitude",
                                            NumericUtils.DoubleToPrefixCoded(location.Latitude),
                                            Field.Store.YES,
                                            Field.Index.NOT_ANALYZED);
 
                     var locationLongitudeField = new Field(
-                                        LookService.LocationField + "_Longitude",
+                                        LookConstants.LocationField + "_Longitude",
                                         NumericUtils.DoubleToPrefixCoded(location.Longitude),
                                         Field.Store.YES,
                                         Field.Index.NOT_ANALYZED);
