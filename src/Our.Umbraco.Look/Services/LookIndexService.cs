@@ -48,9 +48,15 @@ namespace Our.Umbraco.Look.Services
             LookService.Instance.TagIndexer = tagsFunc;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="publishedContent"></param>
+        /// <returns></returns>
         public static string[] DefaultTagIndexer(IPublishedContent publishedContent)
         {
-            // TODO: look for known tag datatypes and pickers
+            // TODO: look for known tag datatypes and pickers ?
+
             return null;
         }
 
@@ -65,13 +71,18 @@ namespace Our.Umbraco.Look.Services
             LookService.Instance.DateIndexer = dateFunc;
         }
 
+        /// <summary>
+        /// By defult, returns the UpdateDate of the IPublishedContent
+        /// </summary>
+        /// <param name="publishedContent"></param>
+        /// <returns></returns>
         public static DateTime? DefaultDateIndexer(IPublishedContent publishedContent)
         {
             return publishedContent.UpdateDate;
         }
 
         /// <summary>
-        /// 
+        /// Register consumer code to perform when indexing name
         /// </summary>
         /// <param name="nameFunc"></param>
         public static void SetNameIndexer(Func<IPublishedContent, string> nameFunc)
@@ -81,11 +92,20 @@ namespace Our.Umbraco.Look.Services
             LookService.Instance.NameIndexer = nameFunc;
         }
 
+        /// <summary>
+        /// By default, returns the Name of the IPublishedContent
+        /// </summary>
+        /// <param name="publishedContent"></param>
+        /// <returns></returns>
         public static string DefaultNameIndexer(IPublishedContent publishedContent)
         {
             return publishedContent.Name;
         }
 
+        /// <summary>
+        /// Register consumer code to perform when indexing location
+        /// </summary>
+        /// <param name="locationFunc"></param>
         public static void SetLocationIndexer(Func<IPublishedContent, Location> locationFunc)
         {
             LogHelper.Info(typeof(LookService), "Location indexing function set");

@@ -88,6 +88,7 @@ namespace Our.Umbraco.Look.Services
                     }
                 }
 
+                // Date
                 if (lookQuery.DateQuery != null)
                 {
                     query.And().Range(
@@ -96,7 +97,12 @@ namespace Our.Umbraco.Look.Services
                                     lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
                 }
 
-                // TODO: Name
+                //// Name
+                //if (lookQuery.NameQuery != null)
+                //{
+                // StartsWith
+                // Contains
+                //}
 
                 // Nodes
                 if (lookQuery.NodeQuery != null)
