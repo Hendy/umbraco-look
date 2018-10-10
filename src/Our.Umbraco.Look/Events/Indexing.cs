@@ -1,4 +1,4 @@
-﻿using Examine;
+﻿using Examine.LuceneEngine;
 using Our.Umbraco.Look.Services;
 using System.IO;
 using System.Web;
@@ -9,7 +9,6 @@ using Umbraco.Core.Models;
 using Umbraco.Web;
 using Umbraco.Web.Routing;
 using Umbraco.Web.Security;
-using UmbracoExamine;
 
 namespace Our.Umbraco.Look.Events
 {
@@ -22,27 +21,26 @@ namespace Our.Umbraco.Look.Events
         /// <param name="applicationContext"></param>
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
+            // initialization call validates indexer & searcher and then wires up the events
             LookService.Initialize(
-                            this.Indexer_GatheringNodeData,
+                            this.Indexer_DocumentWriting,
                             new UmbracoHelper(UmbracoContext.Current));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <param name="umbracoHelper"></param>
-        private void Indexer_GatheringNodeData(object sender, IndexingNodeDataEventArgs e, UmbracoHelper umbracoHelper)
+        private void Indexer_DocumentWriting(object sender, DocumentWritingEventArgs e, UmbracoHelper umbracoHelper)
         {
             IPublishedContent publishedContent = null;
 
-            switch (e.IndexType)
-            {
-                case IndexTypes.Content: publishedContent = umbracoHelper.TypedContent(e.NodeId); break;
-                case IndexTypes.Media: publishedContent = umbracoHelper.TypedMedia(e.NodeId); break;
-                case IndexTypes.Member: publishedContent = umbracoHelper.TypedMember(e.NodeId); break;
-            }
+            publishedContent = umbracoHelper.TypedContent(e.NodeId);
+
+            // TODO: helper to fall though from content -> media -> member, when trying by id
+
+            //switch (e.NodeId)
+            //{
+            //    case IndexTypes.Content: publishedContent = umbracoHelper.TypedContent(e.NodeId); break;
+            //    case IndexTypes.Media: publishedContent = umbracoHelper.TypedMedia(e.NodeId); break;
+            //    case IndexTypes.Member: publishedContent = umbracoHelper.TypedMember(e.NodeId); break;
+            //}
 
             if (publishedContent != null)
             {

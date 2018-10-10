@@ -1,4 +1,5 @@
 ﻿using Examine;
+using Examine.LuceneEngine;
 using Examine.LuceneEngine.Providers;
 using Examine.Providers;
 using Lucene.Net.Spatial.Tier.Projectors;
@@ -140,11 +141,13 @@ namespace Our.Umbraco.Look.Services
         }
 
         /// <summary>
-        /// Wire up the indexing event if both the configured indexer & searcher found
+        /// Setup indexing if configuration valid
         /// </summary>
-        /// <param name="action">indexing event</param>
+        /// <param name="gatheringNodeData">indexing event</param>
         /// <param name="umbracoHelper"></param>
-        internal static void Initialize(Action<object, IndexingNodeDataEventArgs, UmbracoHelper> action, UmbracoHelper umbracoHelper)
+        internal static void Initialize(
+                                Action<object, DocumentWritingEventArgs, UmbracoHelper> documentWriting,
+                                UmbracoHelper umbracoHelper)
         {
             LogHelper.Info(typeof(LookService), "Initializing");
 
@@ -193,10 +196,8 @@ namespace Our.Umbraco.Look.Services
                         new CartesianTierPlotter(tier, projector, CartesianTierPlotter.DefaltFieldPrefix));
                 }
 
-                // wire-up events
-                LookService.Indexer.GatheringNodeData += (sender, e) => action(sender, e, umbracoHelper);
-
-                ((LuceneIndexer)LookService.Indexer).DocumentWriting += LookIndexService.DocumentWriting;
+                // wire-up the func
+                ((LuceneIndexer)LookService.Indexer).DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper); ;
             }
         }
     }
