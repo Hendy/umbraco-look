@@ -33,14 +33,24 @@ namespace Our.Umbraco.Look.Events
 
             publishedContent = umbracoHelper.TypedContent(e.NodeId);
 
-            // TODO: helper to fall though from content -> media -> member, when trying by id
+            if (publishedContent == null)
+            {
+                // fallback to attempting to get media
+                publishedContent = umbracoHelper.TypedMedia(e.NodeId);
+            }
 
-            //switch (e.NodeId)
-            //{
-            //    case IndexTypes.Content: publishedContent = umbracoHelper.TypedContent(e.NodeId); break;
-            //    case IndexTypes.Media: publishedContent = umbracoHelper.TypedMedia(e.NodeId); break;
-            //    case IndexTypes.Member: publishedContent = umbracoHelper.TypedMember(e.NodeId); break;
-            //}
+            if (publishedContent == null)
+            {
+                // fallback to attempting to get member
+                try
+                {
+                    publishedContent = umbracoHelper.TypedMember(e.NodeId);
+                }
+                catch
+                {
+                    // HACK: suppress error
+                }
+            }
 
             if (publishedContent != null)
             {
