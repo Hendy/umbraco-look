@@ -29,237 +29,235 @@ namespace Our.Umbraco.Look.Services
         /// <returns>an IEnumerableWithTotal</returns>
         public static IEnumerableWithTotal<LookMatch> Query(LookQuery lookQuery)
         {
-            IEnumerableWithTotal<LookMatch> lookMatches = null; // prepare return value
-
             if (lookQuery == null)
             {
                 LogHelper.Warn(typeof(LookService), "Supplied search query was null");
+
+                return new EnumerableWithTotal<LookMatch>(Enumerable.Empty<LookMatch>(), 0);
             }
-            else
+
+            var searchProvider = LookService.Searcher;
+
+            var searchCriteria = searchProvider.CreateSearchCriteria();
+
+            var query = searchCriteria.Field(string.Empty, string.Empty);
+
+            // Text
+            if (lookQuery.TextQuery != null)
             {
-                var searchProvider = LookService.Searcher;
-
-                var searchCriteria = searchProvider.CreateSearchCriteria();
-
-                var query = searchCriteria.Field(string.Empty, string.Empty);
-
-                // Text
-                if (lookQuery.TextQuery != null)
+                if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                 {
-                    if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
+                    if (lookQuery.TextQuery.Fuzzyness > 0)
                     {
-                        if (lookQuery.TextQuery.Fuzzyness > 0)
-                        {
-                            query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText.Fuzzy(lookQuery.TextQuery.Fuzzyness));
-                        }
-                        else
-                        {
-                            query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText);
-                        }
+                        query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText.Fuzzy(lookQuery.TextQuery.Fuzzyness));
                     }
-                }
-
-                // Tags
-                if (lookQuery.TagQuery != null)
-                {
-                    var allTags = new List<string>();
-                    var anyTags = new List<string>();
-
-                    if (lookQuery.TagQuery.AllTags != null)
+                    else
                     {
-                        allTags.AddRange(lookQuery.TagQuery.AllTags);
-                        allTags.RemoveAll(x => string.IsNullOrWhiteSpace(x));
-                    }
-
-                    if (lookQuery.TagQuery.AnyTags != null)
-                    {
-                        anyTags.AddRange(lookQuery.TagQuery.AnyTags);
-                        anyTags.RemoveAll(x => string.IsNullOrWhiteSpace(x));
-                    }
-
-                    if (allTags.Any())
-                    {
-                        query.And().GroupedAnd(allTags.Select(x => LookService.TagsField), allTags.ToArray());
-                    }
-
-                    if (anyTags.Any())
-                    {
-                        query.And().GroupedOr(allTags.Select(x => LookService.TagsField), anyTags.ToArray());
-                    }
-                }
-
-                // Date
-                if (lookQuery.DateQuery != null)
-                {
-                    query.And().Range(
-                                    LookService.DateField,
-                                    lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
-                                    lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
-                }
-
-                //// Name
-                //if (lookQuery.NameQuery != null)
-                //{
-                // StartsWith
-                // Contains
-                //}
-
-                // Nodes
-                if (lookQuery.NodeQuery != null)
-                {
-                    if (lookQuery.NodeQuery.TypeAliases != null)
-                    {
-                        var typeAliases = new List<string>();
-
-                        typeAliases.AddRange(lookQuery.NodeQuery.TypeAliases);
-                        typeAliases.RemoveAll(x => string.IsNullOrWhiteSpace(x));
-
-                        if (typeAliases.Any())
-                        {
-                            query.And().GroupedOr(typeAliases.Select(x => UmbracoContentIndexer.NodeTypeAliasFieldName), typeAliases.ToArray());
-                        }
-                    }
-
-                    if (lookQuery.NodeQuery.ExcludeIds != null)
-                    {
-                        foreach (var excudeId in lookQuery.NodeQuery.ExcludeIds.Distinct())
-                        {
-                            query.Not().Id(excudeId);
-                        }
-                    }
-                }
-
-                try
-                {
-                    searchCriteria = query.Compile();
-                }
-                catch (Exception exception)
-                {
-                    LogHelper.WarnWithException(typeof(LookService), "Could not compile the Examine query", exception);
-                }
-
-                if (searchCriteria != null && searchCriteria is LuceneSearchCriteria)
-                {
-                    Sort sort = null;
-                    Filter filter = null;
-
-                    Func<int, double?> getDistance = x => null;
-                    Func<string, IHtmlString> getHighlight = null;
-
-                    TopDocs topDocs = null;
-
-                    switch (lookQuery.SortOn)
-                    {
-                        case SortOn.Date: // newest -> oldest
-                            sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookService.DateField, SortField.LONG, true));
-                            break;
-
-                        case SortOn.Name: // a -> z
-                            sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookService.NameField, SortField.STRING));
-                            break;
-                    }
-
-                    if (lookQuery.LocationQuery != null && lookQuery.LocationQuery.Location != null)
-                    {
-                        double maxDistance = LookService.MaxDistance;
-
-                        if (lookQuery.LocationQuery.MaxDistance != null)
-                        {
-                            maxDistance = Math.Min(lookQuery.LocationQuery.MaxDistance.GetMiles(), maxDistance);
-                        }
-
-                        var distanceQueryBuilder = new DistanceQueryBuilder(
-                                                    lookQuery.LocationQuery.Location.Latitude,
-                                                    lookQuery.LocationQuery.Location.Longitude,
-                                                    maxDistance,
-                                                    LookService.LocationField + "_Latitude",
-                                                    LookService.LocationField + "_Longitude",
-                                                    CartesianTierPlotter.DefaltFieldPrefix,
-                                                    true);
-
-                        // update filter
-                        filter = distanceQueryBuilder.Filter;
-
-                        if (lookQuery.SortOn == SortOn.Distance)
-                        {
-                            // update sort
-                            sort = new Sort(
-                                        new SortField(
-                                            LookService.DistanceField,
-                                            new DistanceFieldComparatorSource(distanceQueryBuilder.DistanceFilter)));
-                        }
-
-                        // raw data for the getDistance func
-                        var distances = distanceQueryBuilder.DistanceFilter.Distances;
-
-                        // update getDistance func
-                        getDistance = new Func<int, double?>(x =>
-                        {
-                            if (distances.ContainsKey(x))
-                            {
-                                return distances[x];
-                            }
-
-                            return null;
-                        });
-                    }
-
-                    var indexSearcher = new IndexSearcher(((LuceneIndexer)LookService.Indexer).GetLuceneDirectory(), false);
-
-                    var luceneSearchCriteria = (LuceneSearchCriteria)searchCriteria;
-
-                    // do the Lucene search
-                    topDocs = indexSearcher.Search(
-                                                luceneSearchCriteria.Query, // the query build by Examine
-                                                filter ?? new QueryWrapperFilter(luceneSearchCriteria.Query),
-                                                LookService.MaxLuceneResults,
-                                                sort ?? new Sort(SortField.FIELD_SCORE));
-
-                    if (topDocs.TotalHits > 0)
-                    {
-                        // setup the getHightlight func if required
-                        if (lookQuery.TextQuery.HighlightFragments > 0 && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
-                        {
-                            var version = Lucene.Net.Util.Version.LUCENE_29;
-
-                            Analyzer analyzer = new StandardAnalyzer(version);
-
-                            var queryParser = new QueryParser(version, LookService.TextField, analyzer);
-
-                            var queryScorer = new QueryScorer(queryParser
-                                                                .Parse(lookQuery.TextQuery.SearchText)
-                                                                .Rewrite(indexSearcher.GetIndexReader()));
-
-                            Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
-
-                            // update the getHightlight func
-                            getHighlight = (x) =>
-                            {
-                                var tokenStream = analyzer.TokenStream(LookService.TextField, new StringReader(x));
-
-                                var highlight = highlighter.GetBestFragments(
-                                                                tokenStream,
-                                                                x,
-                                                                lookQuery.TextQuery.HighlightFragments, // max number of fragments
-                                                                lookQuery.TextQuery.HighlightSeparator); // fragment separator
-
-                                return new HtmlString(highlight);
-                            };
-                        }
-
-                        lookMatches = new EnumerableWithTotal<LookMatch>(
-                                                    LookSearchService.GetLookMatches(
-                                                                        lookQuery,
-                                                                        indexSearcher,
-                                                                        topDocs,
-                                                                        getHighlight,
-                                                                        getDistance),
-                                                    topDocs.TotalHits);
+                        query.And().Field(LookService.TextField, lookQuery.TextQuery.SearchText);
                     }
                 }
             }
 
-            return lookMatches ?? new EnumerableWithTotal<LookMatch>(Enumerable.Empty<LookMatch>(), 0);
+            // Tags
+            if (lookQuery.TagQuery != null)
+            {
+                var allTags = new List<string>();
+                var anyTags = new List<string>();
+
+                if (lookQuery.TagQuery.AllTags != null)
+                {
+                    allTags.AddRange(lookQuery.TagQuery.AllTags);
+                    allTags.RemoveAll(x => string.IsNullOrWhiteSpace(x));
+                }
+
+                if (lookQuery.TagQuery.AnyTags != null)
+                {
+                    anyTags.AddRange(lookQuery.TagQuery.AnyTags);
+                    anyTags.RemoveAll(x => string.IsNullOrWhiteSpace(x));
+                }
+
+                if (allTags.Any())
+                {
+                    query.And().GroupedAnd(allTags.Select(x => LookService.TagsField), allTags.ToArray());
+                }
+
+                if (anyTags.Any())
+                {
+                    query.And().GroupedOr(allTags.Select(x => LookService.TagsField), anyTags.ToArray());
+                }
+            }
+
+            // Date
+            if (lookQuery.DateQuery != null)
+            {
+                query.And().Range(
+                                LookService.DateField,
+                                lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
+                                lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
+            }
+
+            //// Name
+            //if (lookQuery.NameQuery != null)
+            //{
+            // StartsWith
+            // Contains
+            //}
+
+            // Nodes
+            if (lookQuery.NodeQuery != null)
+            {
+                if (lookQuery.NodeQuery.TypeAliases != null)
+                {
+                    var typeAliases = new List<string>();
+
+                    typeAliases.AddRange(lookQuery.NodeQuery.TypeAliases);
+                    typeAliases.RemoveAll(x => string.IsNullOrWhiteSpace(x));
+
+                    if (typeAliases.Any())
+                    {
+                        query.And().GroupedOr(typeAliases.Select(x => UmbracoContentIndexer.NodeTypeAliasFieldName), typeAliases.ToArray());
+                    }
+                }
+
+                if (lookQuery.NodeQuery.ExcludeIds != null)
+                {
+                    foreach (var excudeId in lookQuery.NodeQuery.ExcludeIds.Distinct())
+                    {
+                        query.Not().Id(excudeId);
+                    }
+                }
+            }
+
+            try
+            {
+                searchCriteria = query.Compile();
+            }
+            catch (Exception exception)
+            {
+                LogHelper.WarnWithException(typeof(LookService), "Could not compile the Examine query", exception);
+            }
+
+            if (searchCriteria != null && searchCriteria is LuceneSearchCriteria)
+            {
+                Sort sort = null;
+                Filter filter = null;
+
+                Func<int, double?> getDistance = x => null;
+                Func<string, IHtmlString> getHighlight = null;
+
+                TopDocs topDocs = null;
+
+                switch (lookQuery.SortOn)
+                {
+                    case SortOn.Date: // newest -> oldest
+                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookService.DateField, SortField.LONG, true));
+                        break;
+
+                    case SortOn.Name: // a -> z
+                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookService.NameField, SortField.STRING));
+                        break;
+                }
+
+                if (lookQuery.LocationQuery != null && lookQuery.LocationQuery.Location != null)
+                {
+                    double maxDistance = LookService.MaxDistance;
+
+                    if (lookQuery.LocationQuery.MaxDistance != null)
+                    {
+                        maxDistance = Math.Min(lookQuery.LocationQuery.MaxDistance.GetMiles(), maxDistance);
+                    }
+
+                    var distanceQueryBuilder = new DistanceQueryBuilder(
+                                                lookQuery.LocationQuery.Location.Latitude,
+                                                lookQuery.LocationQuery.Location.Longitude,
+                                                maxDistance,
+                                                LookService.LocationField + "_Latitude",
+                                                LookService.LocationField + "_Longitude",
+                                                CartesianTierPlotter.DefaltFieldPrefix,
+                                                true);
+
+                    // update filter
+                    filter = distanceQueryBuilder.Filter;
+
+                    if (lookQuery.SortOn == SortOn.Distance)
+                    {
+                        // update sort
+                        sort = new Sort(
+                                    new SortField(
+                                        LookService.DistanceField,
+                                        new DistanceFieldComparatorSource(distanceQueryBuilder.DistanceFilter)));
+                    }
+
+                    // raw data for the getDistance func
+                    var distances = distanceQueryBuilder.DistanceFilter.Distances;
+
+                    // update getDistance func
+                    getDistance = new Func<int, double?>(x =>
+                    {
+                        if (distances.ContainsKey(x))
+                        {
+                            return distances[x];
+                        }
+
+                        return null;
+                    });
+                }
+
+                var indexSearcher = new IndexSearcher(((LuceneIndexer)LookService.Indexer).GetLuceneDirectory(), false);
+
+                var luceneSearchCriteria = (LuceneSearchCriteria)searchCriteria;
+
+                // do the Lucene search
+                topDocs = indexSearcher.Search(
+                                            luceneSearchCriteria.Query, // the query build by Examine
+                                            filter ?? new QueryWrapperFilter(luceneSearchCriteria.Query),
+                                            LookService.MaxLuceneResults,
+                                            sort ?? new Sort(SortField.FIELD_SCORE));
+
+                if (topDocs.TotalHits > 0)
+                {
+                    // setup the getHightlight func if required
+                    if (lookQuery.TextQuery.HighlightFragments > 0 && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
+                    {
+                        var version = Lucene.Net.Util.Version.LUCENE_29;
+
+                        Analyzer analyzer = new StandardAnalyzer(version);
+
+                        var queryParser = new QueryParser(version, LookService.TextField, analyzer);
+
+                        var queryScorer = new QueryScorer(queryParser
+                                                            .Parse(lookQuery.TextQuery.SearchText)
+                                                            .Rewrite(indexSearcher.GetIndexReader()));
+
+                        Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
+
+                        // update the getHightlight func
+                        getHighlight = (x) =>
+                        {
+                            var tokenStream = analyzer.TokenStream(LookService.TextField, new StringReader(x));
+
+                            var highlight = highlighter.GetBestFragments(
+                                                            tokenStream,
+                                                            x,
+                                                            lookQuery.TextQuery.HighlightFragments, // max number of fragments
+                                                            lookQuery.TextQuery.HighlightSeparator); // fragment separator
+
+                            return new HtmlString(highlight);
+                        };
+                    }
+
+                    return new EnumerableWithTotal<LookMatch>(
+                                                LookSearchService.GetLookMatches(
+                                                                    lookQuery,
+                                                                    indexSearcher,
+                                                                    topDocs,
+                                                                    getHighlight,
+                                                                    getDistance),
+                                                topDocs.TotalHits);
+                }
+            }            
+
+            return new EnumerableWithTotal<LookMatch>(Enumerable.Empty<LookMatch>(), 0);
         }
 
         /// <summary>
