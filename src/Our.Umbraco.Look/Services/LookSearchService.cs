@@ -88,7 +88,7 @@ namespace Our.Umbraco.Look.Services
             }
 
             // Date
-            if (lookQuery.DateQuery != null)
+            if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
             {
                 query.And().Range(
                                 LookConstants.DateField,
