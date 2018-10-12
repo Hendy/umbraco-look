@@ -15,10 +15,10 @@
         /// </summary>
         public TagQuery TagQuery { get; set; } = new TagQuery();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public DateQuery DateQuery { get; set; } = new DateQuery();
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        //public DateQuery DateQuery { get; set; } = new DateQuery();
 
         ///// <summary>
         ///// 

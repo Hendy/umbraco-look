@@ -105,14 +105,14 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            // Date
-            if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
-            {
-                query.And().Range(
-                                LookConstants.DateField,
-                                lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
-                                lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
-            }
+            //// Date
+            //if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
+            //{
+            //    query.And().Range(
+            //                    LookConstants.DateField,
+            //                    lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
+            //                    lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
+            //}
 
             //// Name
             //if (lookQuery.NameQuery != null)
