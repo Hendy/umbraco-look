@@ -163,7 +163,7 @@ namespace Our.Umbraco.Look.Services
                     {
                         var tagField = new Field(
                                             LookConstants.TagsField,
-                                            tag,
+                                            tag.ToLower(), // HACK: until we can figure out how to do case sensitive searches without changing config files
                                             Field.Store.YES,
                                             Field.Index.NOT_ANALYZED);
 
