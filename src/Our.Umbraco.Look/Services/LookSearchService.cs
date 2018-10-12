@@ -83,7 +83,7 @@ namespace Our.Umbraco.Look.Services
 
                 if (anyTags.Any())
                 {
-                    query.And().GroupedOr(allTags.Select(x => LookConstants.TagsField), anyTags.ToArray());
+                    query.And().GroupedOr(anyTags.Select(x => LookConstants.TagsField), anyTags.ToArray());
                 }
             }
 
