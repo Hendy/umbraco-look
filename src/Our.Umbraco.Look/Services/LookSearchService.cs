@@ -58,9 +58,27 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
+            Func<Field[], string[]> getTags = null;
+
             // Tags
             if (lookQuery.TagQuery != null)
             {
+                if (lookQuery.TagQuery.GetTags)
+                {
+                    getTags = x =>
+                    {
+                        if (x != null)
+                        {
+                            return x
+                                    .Select(y => y.StringValue())
+                                    .Where(y => !string.IsNullOrWhiteSpace(y))
+                                    .ToArray();
+                        }
+
+                        return null;
+                    };
+                }
+
                 var allTags = new List<string>();
                 var anyTags = new List<string>();
 
@@ -252,6 +270,7 @@ namespace Our.Umbraco.Look.Services
                                                                     indexSearcher,
                                                                     topDocs,
                                                                     getHighlight,
+                                                                    getTags,
                                                                     getDistance),
                                                 topDocs.TotalHits);
                 }
@@ -273,10 +292,11 @@ namespace Our.Umbraco.Look.Services
                                                     IndexSearcher indexSearcher,
                                                     TopDocs topDocs,
                                                     Func<string, IHtmlString> getHighlight,
+                                                    Func<Field[], string[]> getTags,
                                                     Func<int, double?> getDistance)
         {
+            // flag to indicate that the query has requested the full text to be returned
             bool getText = lookQuery.TextQuery != null && lookQuery.TextQuery.GetText;
-            bool getTags = lookQuery.TagQuery != null && lookQuery.TagQuery.GetTags;
 
             var fields = new List<string>();
 
@@ -295,9 +315,13 @@ namespace Our.Umbraco.Look.Services
                 getHighlight = x => null;
             }
 
-            if (getTags)
+            if (getTags != null)
             {
                 fields.Add(LookConstants.TagsField);
+            }
+            else
+            {
+                getTags = x => null;
             }
 
             var mapFieldSelector = new MapFieldSelector(fields.ToArray());
@@ -319,7 +343,7 @@ namespace Our.Umbraco.Look.Services
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     getHighlight(doc.Get(LookConstants.TextField)),
                     getText ? doc.Get(LookConstants.TextField) : null,
-                    getTags ? doc.Get(LookConstants.TagsField).Split(' ') : null,
+                    getTags(doc.GetFields(LookConstants.TagsField)),
                     date,
                     doc.Get(LookConstants.NameField),
                     doc.Get(LookConstants.LocationField) != null ? new Location(doc.Get(LookConstants.LocationField)) : null,
