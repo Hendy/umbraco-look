@@ -58,27 +58,9 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            Func<Field[], string[]> getTags = null;
-
             // Tags
             if (lookQuery.TagQuery != null)
             {
-                if (lookQuery.TagQuery.GetTags)
-                {
-                    getTags = x =>
-                    {
-                        if (x != null)
-                        {
-                            return x
-                                    .Select(y => y.StringValue())
-                                    .Where(y => !string.IsNullOrWhiteSpace(y))
-                                    .ToArray();
-                        }
-
-                        return null;
-                    };
-                }
-
                 var allTags = new List<string>();
                 var anyTags = new List<string>();
 
@@ -270,7 +252,6 @@ namespace Our.Umbraco.Look.Services
                                                                     indexSearcher,
                                                                     topDocs,
                                                                     getHighlight,
-                                                                    getTags,
                                                                     getDistance),
                                                 topDocs.TotalHits);
                 }
@@ -292,7 +273,6 @@ namespace Our.Umbraco.Look.Services
                                                     IndexSearcher indexSearcher,
                                                     TopDocs topDocs,
                                                     Func<string, IHtmlString> getHighlight,
-                                                    Func<Field[], string[]> getTags,
                                                     Func<int, double?> getDistance)
         {
             // flag to indicate that the query has requested the full text to be returned
@@ -301,30 +281,37 @@ namespace Our.Umbraco.Look.Services
             var fields = new List<string>();
 
             fields.Add(LuceneIndexer.IndexNodeIdFieldName); // "__NodeId"
-            fields.Add(LookConstants.DateField);
             fields.Add(LookConstants.NameField);
-            fields.Add(LookConstants.LocationField);
+            fields.Add(LookConstants.DateField);
 
+            // Text
             if (getHighlight != null || getText) // if a highlight function is supplied, then it'll need the text field to process
             {
                 fields.Add(LookConstants.TextField);
             }
+
+            fields.Add(LookConstants.TagsField);
+            fields.Add(LookConstants.LocationField);
+
+            var mapFieldSelector = new MapFieldSelector(fields.ToArray());
 
             if (getHighlight == null) // if highlight func does not exist, then create one to always return null
             {
                 getHighlight = x => null;
             }
 
-            if (getTags != null)
+            Func<Field[], string[]> getTags = x =>
             {
-                fields.Add(LookConstants.TagsField);
-            }
-            else
-            {
-                getTags = x => null;
-            }
+                if (x != null)
+                {
+                    return x
+                            .Select(y => y.StringValue())
+                            .Where(y => !string.IsNullOrWhiteSpace(y))
+                            .ToArray();
+                }
 
-            var mapFieldSelector = new MapFieldSelector(fields.ToArray());
+                return new string[] { };
+            };
 
             foreach (var scoreDoc in topDocs.ScoreDocs)
             {
