@@ -16,10 +16,5 @@
         ///// 
         ///// </summary>
         //public string[] NotTags { get; set; } = null;
-
-        /// <summary>
-        /// Flag to indicate whether to return the tag colection for each result
-        /// </summary>
-        public bool GetTags { get; set; } = false;
     }
 }

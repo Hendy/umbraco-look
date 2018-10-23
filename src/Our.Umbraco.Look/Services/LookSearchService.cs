@@ -8,7 +8,6 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Spatial.Tier;
 using Lucene.Net.Spatial.Tier.Projectors;
-using Our.Umbraco.Look.Interfaces;
 using Our.Umbraco.Look.Models;
 using System;
 using System.Collections.Generic;
@@ -27,13 +26,13 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="lookQuery"></param>
         /// <returns>an IEnumerableWithTotal</returns>
-        public static IEnumerableWithTotal<LookMatch> Query(LookQuery lookQuery)
+        public static LookResult Query(LookQuery lookQuery)
         {
             if (lookQuery == null)
             {
                 LogHelper.Warn(typeof(LookService), "Supplied search query was null");
 
-                return new EnumerableWithTotal<LookMatch>(Enumerable.Empty<LookMatch>(), 0);
+                return LookSearchService.EmptyResult();
             }
 
             var searchProvider = LookService.Searcher;
@@ -58,27 +57,9 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            Func<Field[], string[]> getTags = null;
-
             // Tags
             if (lookQuery.TagQuery != null)
             {
-                if (lookQuery.TagQuery.GetTags)
-                {
-                    getTags = x =>
-                    {
-                        if (x != null)
-                        {
-                            return x
-                                    .Select(y => y.StringValue())
-                                    .Where(y => !string.IsNullOrWhiteSpace(y))
-                                    .ToArray();
-                        }
-
-                        return null;
-                    };
-                }
-
                 var allTags = new List<string>();
                 var anyTags = new List<string>();
 
@@ -105,14 +86,14 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            //// Date
-            //if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
-            //{
-            //    query.And().Range(
-            //                    LookConstants.DateField,
-            //                    lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
-            //                    lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
-            //}
+            // Date
+            if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
+            {
+                query.And().Range(
+                                LookConstants.DateField,
+                                lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
+                                lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
+            }
 
             //// Name
             //if (lookQuery.NameQuery != null)
@@ -167,12 +148,16 @@ namespace Our.Umbraco.Look.Services
 
                 switch (lookQuery.SortOn)
                 {
-                    case SortOn.Date: // newest -> oldest
-                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
-                        break;
-
                     case SortOn.Name: // a -> z
                         sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField, SortField.STRING));
+                        break;
+
+                    case SortOn.DateAscending: // oldest -> newest
+                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, false));
+                        break;
+
+                    case SortOn.DateDescending: // newest -> oldest
+                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
                         break;
                 }
 
@@ -264,19 +249,17 @@ namespace Our.Umbraco.Look.Services
                         };
                     }
 
-                    return new EnumerableWithTotal<LookMatch>(
-                                                LookSearchService.GetLookMatches(
-                                                                    lookQuery,
-                                                                    indexSearcher,
-                                                                    topDocs,
-                                                                    getHighlight,
-                                                                    getTags,
-                                                                    getDistance),
-                                                topDocs.TotalHits);
+                    return new LookResult(LookSearchService.GetLookMatches(
+                                                                lookQuery,
+                                                                indexSearcher,
+                                                                topDocs,
+                                                                getHighlight,
+                                                                getDistance),
+                                            topDocs.TotalHits);
                 }
             }            
 
-            return new EnumerableWithTotal<LookMatch>(Enumerable.Empty<LookMatch>(), 0);
+            return LookSearchService.EmptyResult();
         }
 
         /// <summary>
@@ -292,7 +275,6 @@ namespace Our.Umbraco.Look.Services
                                                     IndexSearcher indexSearcher,
                                                     TopDocs topDocs,
                                                     Func<string, IHtmlString> getHighlight,
-                                                    Func<Field[], string[]> getTags,
                                                     Func<int, double?> getDistance)
         {
             // flag to indicate that the query has requested the full text to be returned
@@ -301,30 +283,37 @@ namespace Our.Umbraco.Look.Services
             var fields = new List<string>();
 
             fields.Add(LuceneIndexer.IndexNodeIdFieldName); // "__NodeId"
-            fields.Add(LookConstants.DateField);
             fields.Add(LookConstants.NameField);
-            fields.Add(LookConstants.LocationField);
+            fields.Add(LookConstants.DateField);
 
+            // Text
             if (getHighlight != null || getText) // if a highlight function is supplied, then it'll need the text field to process
             {
                 fields.Add(LookConstants.TextField);
             }
+
+            fields.Add(LookConstants.TagsField);
+            fields.Add(LookConstants.LocationField);
+
+            var mapFieldSelector = new MapFieldSelector(fields.ToArray());
 
             if (getHighlight == null) // if highlight func does not exist, then create one to always return null
             {
                 getHighlight = x => null;
             }
 
-            if (getTags != null)
+            Func<Field[], string[]> getTags = x =>
             {
-                fields.Add(LookConstants.TagsField);
-            }
-            else
-            {
-                getTags = x => null;
-            }
+                if (x != null)
+                {
+                    return x
+                            .Select(y => y.StringValue())
+                            .Where(y => !string.IsNullOrWhiteSpace(y))
+                            .ToArray();
+                }
 
-            var mapFieldSelector = new MapFieldSelector(fields.ToArray());
+                return new string[] { };
+            };
 
             foreach (var scoreDoc in topDocs.ScoreDocs)
             {
@@ -334,10 +323,17 @@ namespace Our.Umbraco.Look.Services
 
                 DateTime? date = null;
 
-                if (long.TryParse(doc.Get(LookConstants.DateField), out long ticks))
+                var dateValue = doc.Get(LookConstants.DateField);
+
+                if (!string.IsNullOrWhiteSpace(dateValue))
                 {
-                    date = new DateTime(ticks);
+                    date = DateTools.StringToDate(dateValue);
                 }
+
+                //if (long.TryParse(doc.Get(LookConstants.DateField), out long ticks))
+                //{
+                //    date = new DateTime(ticks);
+                //}
 
                 var lookMatch = new LookMatch(
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
@@ -353,6 +349,15 @@ namespace Our.Umbraco.Look.Services
 
                 yield return lookMatch;
             }
+        }
+
+        /// <summary>
+        /// Helper to return an empty result set
+        /// </summary>
+        /// <returns></returns>
+        private static LookResult EmptyResult()
+        {
+            return new LookResult(Enumerable.Empty<LookMatch>(), 0);
         }
     }
 }

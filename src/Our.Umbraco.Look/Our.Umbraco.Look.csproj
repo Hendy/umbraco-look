@@ -207,14 +207,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\Indexing.cs" />
-    <Compile Include="Interfaces\IEnumerableWithTotal.cs" />
     <Compile Include="LookConstants.cs" />
     <Compile Include="Models\DateQuery.cs" />
     <Compile Include="Models\Distance.cs" />
     <Compile Include="Models\DistanceUnit.cs" />
-    <Compile Include="Models\EnumerableWithTotal.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\LocationQuery.cs" />
+    <Compile Include="Models\LookResult.cs" />
     <Compile Include="Models\NodeQuery.cs" />
     <Compile Include="Models\LookMatch.cs" />
     <Compile Include="Models\LookQuery.cs" />
