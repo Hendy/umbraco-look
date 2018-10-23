@@ -86,14 +86,14 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            //// Date
-            //if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
-            //{
-            //    query.And().Range(
-            //                    LookConstants.DateField,
-            //                    lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
-            //                    lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
-            //}
+            // Date
+            if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
+            {
+                query.And().Range(
+                                LookConstants.DateField,
+                                lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
+                                lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
+            }
 
             //// Name
             //if (lookQuery.NameQuery != null)
@@ -323,10 +323,17 @@ namespace Our.Umbraco.Look.Services
 
                 DateTime? date = null;
 
-                if (long.TryParse(doc.Get(LookConstants.DateField), out long ticks))
+                var dateValue = doc.Get(LookConstants.DateField);
+
+                if (!string.IsNullOrWhiteSpace(dateValue))
                 {
-                    date = new DateTime(ticks);
+                    date = DateTools.StringToDate(dateValue);
                 }
+
+                //if (long.TryParse(doc.Get(LookConstants.DateField), out long ticks))
+                //{
+                //    date = new DateTime(ticks);
+                //}
 
                 var lookMatch = new LookMatch(
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),

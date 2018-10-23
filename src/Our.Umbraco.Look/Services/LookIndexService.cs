@@ -187,20 +187,35 @@ namespace Our.Umbraco.Look.Services
 
                 if (date != null)
                 {
-                    // TODO: change to storing date type
-                    var ticks = date.Value.Ticks;
+                    var dateValue = DateTools.DateToString(date.Value, DateTools.Resolution.SECOND);
 
-                    var dateField = new NumericField(
-                                               LookConstants.DateField,
-                                               Field.Store.YES,
-                                               false)
-                                           .SetLongValue(ticks);
+                    var dateField = new Field(
+                                            LookConstants.DateField,
+                                            dateValue,
+                                            Field.Store.YES,
+                                            Field.Index.ANALYZED,
+                                            Field.TermVector.YES);
 
-                    var dateSortedField = new NumericField(
-                                                    LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField,
-                                                    Field.Store.NO, //we don't want to store the field because we're only using it to sort, not return data
-                                                    true)
-                                                .SetLongValue(ticks);
+                    var dateSortedField = new Field(
+                                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField,
+                                                dateValue,
+                                                Field.Store.NO,
+                                                Field.Index.NOT_ANALYZED,
+                                                Field.TermVector.NO);
+
+                    //var ticks = date.Value.Ticks;
+
+                    //var dateField = new NumericField(
+                    //                           LookConstants.DateField,
+                    //                           Field.Store.YES,
+                    //                           false)
+                    //                       .SetLongValue(ticks);
+
+                    //var dateSortedField = new NumericField(
+                    //                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField,
+                    //                                Field.Store.NO, //we don't want to store the field because we're only using it to sort, not return data
+                    //                                true)
+                    //                            .SetLongValue(ticks);
 
                     document.Add(dateField);
                     document.Add(dateSortedField);
