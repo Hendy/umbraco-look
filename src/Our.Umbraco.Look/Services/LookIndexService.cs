@@ -1,6 +1,4 @@
-﻿using Examine;
-using Examine.LuceneEngine;
-using Examine.LuceneEngine.Providers;
+﻿using Examine.LuceneEngine.Providers;
 using Lucene.Net.Documents;
 using Lucene.Net.Util;
 using Our.Umbraco.Look.Models;
@@ -48,9 +46,15 @@ namespace Our.Umbraco.Look.Services
             LookService.Instance.TagIndexer = tagsFunc;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="publishedContent"></param>
+        /// <returns></returns>
         public static string[] DefaultTagIndexer(IPublishedContent publishedContent)
         {
-            // TODO: look for known tag datatypes and pickers
+            // TODO: look for known tag datatypes and pickers ?
+
             return null;
         }
 
@@ -65,13 +69,18 @@ namespace Our.Umbraco.Look.Services
             LookService.Instance.DateIndexer = dateFunc;
         }
 
+        /// <summary>
+        /// By defult, returns the UpdateDate of the IPublishedContent
+        /// </summary>
+        /// <param name="publishedContent"></param>
+        /// <returns></returns>
         public static DateTime? DefaultDateIndexer(IPublishedContent publishedContent)
         {
             return publishedContent.UpdateDate;
         }
 
         /// <summary>
-        /// 
+        /// Register consumer code to perform when indexing name
         /// </summary>
         /// <param name="nameFunc"></param>
         public static void SetNameIndexer(Func<IPublishedContent, string> nameFunc)
@@ -81,11 +90,20 @@ namespace Our.Umbraco.Look.Services
             LookService.Instance.NameIndexer = nameFunc;
         }
 
+        /// <summary>
+        /// By default, returns the Name of the IPublishedContent
+        /// </summary>
+        /// <param name="publishedContent"></param>
+        /// <returns></returns>
         public static string DefaultNameIndexer(IPublishedContent publishedContent)
         {
             return publishedContent.Name;
         }
 
+        /// <summary>
+        /// Register consumer code to perform when indexing location
+        /// </summary>
+        /// <param name="locationFunc"></param>
         public static void SetLocationIndexer(Func<IPublishedContent, Location> locationFunc)
         {
             LogHelper.Info(typeof(LookService), "Location indexing function set");
@@ -94,183 +112,178 @@ namespace Our.Umbraco.Look.Services
         }
 
         /// <summary>
-        /// Main indexing method
+        /// Do the indexing and set the field values onto the Lucene document
         /// </summary>
-        /// <param name="publishedContent">The IPublishedContet being indexed</param>
-        /// <param name="e"></param>
-        internal static void Index(IPublishedContent publishedContent, IndexingNodeDataEventArgs e)
+        /// <param name="publishedContent">The IPublishedContent being indexed</param>
+        /// <param name="document">The Lucene Document</param>
+        internal static void Index(IPublishedContent publishedContent, Document document)
         {
             if (LookService.Instance.TextIndexer != null)
             {
+                string text = null;
+
                 try
                 {
-                    var text = LookService.Instance.TextIndexer(publishedContent);
-
-                    if (text != null)
-                    {
-                        e.Fields[LookService.TextField] = text;
-                    }
+                    text = LookService.Instance.TextIndexer(publishedContent);
                 }
                 catch (Exception exception)
                 {
                     LogHelper.WarnWithException(typeof(LookService), "Error in text indexer", exception);
                 }
+
+                if (text != null)
+                {
+                    var textField = new Field(
+                                            LookConstants.TextField,
+                                            text,
+                                            Field.Store.YES,
+                                            Field.Index.ANALYZED,
+                                            Field.TermVector.YES);
+
+                    document.Add(textField);
+                }
             }
 
             if (LookService.Instance.TagIndexer != null)
             {
+                string[] tags = null;
+
                 try
                 {
-                    var tags = LookService.Instance.TagIndexer(publishedContent);
-
-                    if (tags != null)
-                    {
-                        e.Fields[LookService.TagsField] = string.Join(" ", tags.Where(x => !string.IsNullOrWhiteSpace(x)));
-                    }
+                    tags = LookService.Instance.TagIndexer(publishedContent);
                 }
                 catch (Exception exception)
                 {
                     LogHelper.WarnWithException(typeof(LookService), "Error in tag indexer", exception);
                 }
+
+                if (tags != null)
+                {
+                    foreach (var tag in tags.Where(x => !string.IsNullOrWhiteSpace(x)))
+                    {
+                        var tagField = new Field(
+                                            LookConstants.TagsField,
+                                            tag.ToLower(), // HACK: until we can figure out how to do case sensitive searches without changing config files
+                                            Field.Store.YES,
+                                            Field.Index.NOT_ANALYZED);
+
+                        document.Add(tagField);
+                    }
+                }
             }
 
             if (LookService.Instance.DateIndexer != null)
             {
+                DateTime? date = null;
+
                 try
                 {
-                    var date = LookService.Instance.DateIndexer(publishedContent);
-
-                    if (date.HasValue)
-                    {
-                        e.Fields[LookService.DateField] = date.Value.Ticks.ToString();
-                    }
+                    date = LookService.Instance.DateIndexer(publishedContent);
                 }
                 catch (Exception exception)
                 {
                     LogHelper.WarnWithException(typeof(LookService), "Error in date indexer", exception);
                 }
+
+                if (date != null)
+                {
+                    // TODO: change to storing date type
+                    var ticks = date.Value.Ticks;
+
+                    var dateField = new NumericField(
+                                               LookConstants.DateField,
+                                               Field.Store.YES,
+                                               false)
+                                           .SetLongValue(ticks);
+
+                    var dateSortedField = new NumericField(
+                                                    LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField,
+                                                    Field.Store.NO, //we don't want to store the field because we're only using it to sort, not return data
+                                                    true)
+                                                .SetLongValue(ticks);
+
+                    document.Add(dateField);
+                    document.Add(dateSortedField);
+                }
             }
 
             if (LookService.Instance.NameIndexer != null)
             {
+                string name = null;
+
                 try
                 {
-                    var name = LookService.Instance.NameIndexer(publishedContent);
-
-                    if (name != null)
-                    {
-                        e.Fields[LookService.NameField] = name;
-                    }
+                    name = LookService.Instance.NameIndexer(publishedContent);
                 }
                 catch (Exception exception)
                 {
                     LogHelper.WarnWithException(typeof(LookService), "Error in name indexer", exception);
                 }
+
+                if (name != null)
+                {
+                    var nameField = new Field(
+                                            LookConstants.NameField,
+                                            name,
+                                            Field.Store.YES,
+                                            Field.Index.NOT_ANALYZED,
+                                            Field.TermVector.YES);
+
+                    var nameSortedField = new Field(
+                                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField,
+                                                name.ToLower(),
+                                                Field.Store.NO,
+                                                Field.Index.NOT_ANALYZED,
+                                                Field.TermVector.NO);
+
+                    document.Add(nameField);
+                    document.Add(nameSortedField);
+                }
             }
 
             if (LookService.Instance.LocationIndexer != null)
             {
+                Location location = null;
+
                 try
                 {
-                    var location = LookService.Instance.LocationIndexer(publishedContent);
-
-                    if (location != null)
-                    {
-                        e.Fields[LookService.LocationField] = location.ToString();
-                    }
+                    location = LookService.Instance.LocationIndexer(publishedContent);
                 }
                 catch (Exception exception)
                 {
                     LogHelper.WarnWithException(typeof(LookService), "Error in location indexer", exception);
                 }
-            }
-        }
 
-        /// <summary>
-        /// Used to create the additional search fields
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal static void DocumentWriting(object sender, DocumentWritingEventArgs e)
-        {
-            if (e.Fields.ContainsKey(LookService.DateField)) // it's storing a date value as a long type
-            {
-                if (long.TryParse(e.Fields[LookService.DateField], out long ticks))
+                if (location != null)
                 {
-                    e.Document.RemoveFields(LookService.DateField);
+                    var locationLatitudeField = new Field(
+                                           LookConstants.LocationField + "_Latitude",
+                                           NumericUtils.DoubleToPrefixCoded(location.Latitude),
+                                           Field.Store.YES,
+                                           Field.Index.NOT_ANALYZED);
 
-                    var dateField = new NumericField(
-                                            LookService.DateField,
+                    var locationLongitudeField = new Field(
+                                        LookConstants.LocationField + "_Longitude",
+                                        NumericUtils.DoubleToPrefixCoded(location.Longitude),
+                                        Field.Store.YES,
+                                        Field.Index.NOT_ANALYZED);
+
+
+                    document.Add(locationLatitudeField);
+                    document.Add(locationLongitudeField);
+
+                    foreach (var cartesianTierPlotter in LookService.Instance.CartesianTierPlotters)
+                    {
+                        var boxId = cartesianTierPlotter.GetTierBoxId(location.Latitude, location.Longitude);
+
+                        var tierField = new Field(
+                                            cartesianTierPlotter.GetTierFieldName(),
+                                            NumericUtils.DoubleToPrefixCoded(boxId),
                                             Field.Store.YES,
-                                            false)
-                                        .SetLongValue(ticks);
+                                            Field.Index.NOT_ANALYZED_NO_NORMS);
 
-                    var dateSortedField = new NumericField(
-                                            LuceneIndexer.SortedFieldNamePrefix + LookService.DateField,
-                                            Field.Store.NO, //we don't want to store the field because we're only using it to sort, not return data
-                                            true)
-                                        .SetLongValue(ticks);
-
-                    e.Document.Add(dateField);
-                    e.Document.Add(dateSortedField);
-                }
-            }
-
-            if (e.Fields.ContainsKey(LookService.NameField))
-            {
-                var name = e.Fields[LookService.NameField];
-
-                e.Document.RemoveFields(LookService.NameField);
-
-                var nameField = new Field(
-                                        LookService.NameField,
-                                        name,
-                                        Field.Store.YES,
-                                        Field.Index.NOT_ANALYZED,
-                                        Field.TermVector.YES);
-
-                var nameSortedField = new Field(
-                                            LuceneIndexer.SortedFieldNamePrefix + LookService.NameField,
-                                            name.ToLower(),
-                                            Field.Store.NO,
-                                            Field.Index.NOT_ANALYZED,
-                                            Field.TermVector.NO);
-
-                e.Document.Add(nameField);
-                e.Document.Add(nameSortedField);
-            }
-
-            if (e.Fields.ContainsKey(LookService.LocationField))
-            {
-                var location = new Location(e.Fields[LookService.LocationField]);
-
-                var locationLatitudeField = new Field(
-                                                    LookService.LocationField + "_Latitude",
-                                                    NumericUtils.DoubleToPrefixCoded(location.Latitude),
-                                                    Field.Store.YES,
-                                                    Field.Index.NOT_ANALYZED);
-
-                var locationLongitudeField = new Field(
-                                    LookService.LocationField + "_Longitude",
-                                    NumericUtils.DoubleToPrefixCoded(location.Longitude),
-                                    Field.Store.YES,
-                                    Field.Index.NOT_ANALYZED);
-
-
-                e.Document.Add(locationLatitudeField);
-                e.Document.Add(locationLongitudeField);
-
-                foreach (var cartesianTierPlotter in LookService.Instance.CartesianTierPlotters)
-                {
-                    var boxId = cartesianTierPlotter.GetTierBoxId(location.Latitude, location.Longitude);
-
-                    var tierField = new Field(
-                                        cartesianTierPlotter.GetTierFieldName(),
-                                        NumericUtils.DoubleToPrefixCoded(boxId),
-                                        Field.Store.YES,
-                                        Field.Index.NOT_ANALYZED_NO_NORMS);
-
-                    e.Document.Add(tierField);
+                        document.Add(tierField);
+                    }
                 }
             }
         }

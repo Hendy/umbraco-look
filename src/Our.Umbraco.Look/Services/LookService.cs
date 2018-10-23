@@ -1,4 +1,5 @@
 ﻿using Examine;
+using Examine.LuceneEngine;
 using Examine.LuceneEngine.Providers;
 using Examine.Providers;
 using Lucene.Net.Spatial.Tier.Projectors;
@@ -19,8 +20,6 @@ namespace Our.Umbraco.Look.Services
     /// </summary>
     internal class LookService
     {
-        #region Class properties
-
         /// <summary>
         /// Function to get text for the IPublishedContent being indexed
         /// </summary>
@@ -61,10 +60,6 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         private string SearcherName { get; }
 
-        #endregion
-
-        #region Static properties
-
         /// <summary>
         /// Gets the Examine indexer
         /// </summary>
@@ -74,36 +69,6 @@ namespace Our.Umbraco.Look.Services
         /// Gets the Examine searcher
         /// </summary>
         internal static BaseSearchProvider Searcher => ExamineManager.Instance.SearchProviderCollection[LookService.Instance.SearcherName];
-
-        /// <summary>
-        /// Gets the field name to use for the text - this field is expected to contain a sizeable amount of text
-        /// </summary>
-        internal static string TextField => "Our.Umbraco.Look_Text";
-
-        /// <summary>
-        /// Gets the field name to use for the tags - this field will contain space delimited non-tokenizable strings
-        /// </summary>
-        internal static string TagsField => "Our.Umbraco.Look_Tags";
-
-        /// <summary>
-        /// Gets the field name to use for the date - this fieldswill  stores the date as the number of seconds from the year 2000 (so it's a number that can be sorted)
-        /// </summary>
-        internal static string DateField => "Our.Umbraco.Look_Date";
-
-        /// <summary>
-        /// Gets the field name to use for the name
-        /// </summary>
-        internal static string NameField => "Our.Umbraco.Look_Name";
-
-        /// <summary>
-        /// Gets the field name to use for the location
-        /// </summary>
-        internal static string LocationField => "Our.Umbraco.Look_Location";
-
-        /// <summary>
-        /// not stored in index, but used as a result field
-        /// </summary>
-        internal static string DistanceField => "Our.Umbraco.Look_Distance";
 
         /// <summary>
         /// Max distance in miles for distance searches & location indexing
@@ -125,8 +90,6 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         private static readonly Lazy<LookService> _lazy = new Lazy<LookService>(() => new LookService());
 
-        #endregion
-
         /// <summary>
         /// Singleton constructor (used privately to maintain state for consumer registered indexer functions)
         /// </summary>
@@ -140,11 +103,13 @@ namespace Our.Umbraco.Look.Services
         }
 
         /// <summary>
-        /// Wire up the indexing event if both the configured indexer & searcher found
+        /// Setup indexing if configuration valid
         /// </summary>
-        /// <param name="action">indexing event</param>
+        /// <param name="gatheringNodeData">indexing event</param>
         /// <param name="umbracoHelper"></param>
-        internal static void Initialize(Action<object, IndexingNodeDataEventArgs, UmbracoHelper> action, UmbracoHelper umbracoHelper)
+        internal static void Initialize(
+                                Action<object, DocumentWritingEventArgs, UmbracoHelper> documentWriting,
+                                UmbracoHelper umbracoHelper)
         {
             LogHelper.Info(typeof(LookService), "Initializing");
 
@@ -193,10 +158,8 @@ namespace Our.Umbraco.Look.Services
                         new CartesianTierPlotter(tier, projector, CartesianTierPlotter.DefaltFieldPrefix));
                 }
 
-                // wire-up events
-                LookService.Indexer.GatheringNodeData += (sender, e) => action(sender, e, umbracoHelper);
-
-                ((LuceneIndexer)LookService.Indexer).DocumentWriting += LookIndexService.DocumentWriting;
+                // wire-up the func
+                ((LuceneIndexer)LookService.Indexer).DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper); ;
             }
         }
     }

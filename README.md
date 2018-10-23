@@ -1,4 +1,4 @@
-# Umbraco Look
+# Umbraco Look (Alpha)
 Umbraco Examine Lucene indexer and searcher with support for text match highlighting and geospatial queries.
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on Examine 0.1.70 and Lucene.Net.Contrib 2.9.4.1
@@ -7,13 +7,13 @@ Umbraco Examine Lucene indexer and searcher with support for text match highligh
 
 For each Umbraco node, Look will index the following data:
 
-A text field - used to store all text associated with a node, and as the source for a text highlight.  
+A text field - used to store all text associated with a node and as the source for a text query (and any extracted text highlight fragments).  
 A tags field - used to store a collection of string tags assocated with a node.  
 A date field - used to associate a date with a node (defaults to the node.UpdatedDate).  
 A name field - used to associate a name with a node (defaults to the node.Name).  
 A location field - used to store a latitude & longitude associated with a node (defaults to null).  
   
-No configuration files need to be changed, as Look will hook into the default Umbraco External index and searcher (if it exists), although if you prefer to use a different indexers and/or searchers then the following appSetting keys can be set in the web.config:
+No configuration files need to be changed as Look will hook into the default Umbraco External indexer and searcher (if they exist), although if you prefer to use a different indexer and/or searcher then the following appSetting keys can be set in the web.config:
 
 ```xml
 <appSettings>
@@ -22,7 +22,7 @@ No configuration files need to be changed, as Look will hook into the default Um
 </appSettings>
 ```
 
-To configure the indexing behaviour there are static methods on the `LookIndexService` class which accept functions returning the typed value to be indexed (all are optional).
+To configure the indexing behaviour there are static methods on the `LookIndexService` class which accept functions taking a parameter of IPublishedContent and returning the typed value to be indexed (all are optional).
 
 E.g.:
 
@@ -31,10 +31,24 @@ using Our.Umbraco.Look.Services;
 using Umbraco.Core;
 
 public class ConfigureIndexing : ApplicationEventHandler
-{
-	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-	{
-		LookIndexService.SetNameIndexer(publishedContent => {
+{	
+  /// <summary>
+  /// Umbraco has started event
+  /// </summary>
+  protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+  {
+    LookIndexService.SetNameIndexer(publishedContent => {
+
+      if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
+      {	
+        return "my custom name for myDocTypeAlias to be indexed";
+      }
+
+      // fallback to default indexing (or can return null)
+      return LookIndexService.DefaultNameIndexer(publishedContent);
+    });
+
+    LookIndexService.SetTextIndexer(publishedContent => {
 
 			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 			{	
@@ -95,7 +109,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A `Look` search consists of any combinations of the following (optional) query types: `TextQuery`, `TagQuery`, `NodeQuery` & `LocationQuery` (most values are also optional).
+A `Look` search consists of any combinations of the following (optional) query types: `TextQuery`, `TagQuery`, `DateQuery`, `NodeQuery` & `LocationQuery` (most values are also optional).
 
 E.g.:
 
@@ -105,20 +119,25 @@ using Our.Umbraco.Look.Services;
 
 var lookQuery = new LookQuery()
 {
-	TextQuery = new TextQuery() {
-		SearchText = "some text to search for",
-		HighlightFragments = 2 // highlight text containing the search term twice should be returned
-		HighlightSeparator = " ... ",
-		GetText = true // indicate that the raw text field should also be returned
-	},
+  TextQuery = new TextQuery() {
+    SearchText = "some text to search for",
+    HighlightFragments = 2 // highlight text containing the search term twice should be returned
+    HighlightSeparator = " ... ", // text to inject between any search term matches
+    GetText = true // indicate that the raw text field should also be returned (potentially a large document)
+  },
 
-	TagQuery = new TagQuery() {
-		AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
-		AnyTags = new string[] { "tag3", "tag4" }, // at least one of these tags is required
-		GetTags = true // indicate that the tags for each result should also be returned
-	},
+  TagQuery = new TagQuery() {
+    AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
+    AnyTags = new string[] { "tag3", "tag4", "tag5" }, // at least one of these tags is required
+    GetTags = true // indicate that the tags for each result should also be returned
+  },
 
-	NodeQuery = new NodeQuery() {
+  DateQuery = new DateQuery() {
+    Before = null,
+    After = new DateTime(2005, 02, 16);
+  },
+
+  NodeQuery = new NodeQuery() {
 		TypeAliases = new string[] { "myDocTypeAlias" },
 		ExcludeIds = new int[] { 123 } // useful for excluding the current page
 	},
