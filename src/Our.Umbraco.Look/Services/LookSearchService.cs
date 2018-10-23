@@ -8,7 +8,6 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Spatial.Tier;
 using Lucene.Net.Spatial.Tier.Projectors;
-using Our.Umbraco.Look.Interfaces;
 using Our.Umbraco.Look.Models;
 using System;
 using System.Collections.Generic;
@@ -27,13 +26,13 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="lookQuery"></param>
         /// <returns>an IEnumerableWithTotal</returns>
-        public static IEnumerableWithTotal<LookMatch> Query(LookQuery lookQuery)
+        public static LookResult Query(LookQuery lookQuery)
         {
             if (lookQuery == null)
             {
                 LogHelper.Warn(typeof(LookService), "Supplied search query was null");
 
-                return new EnumerableWithTotal<LookMatch>(Enumerable.Empty<LookMatch>(), 0);
+                return LookSearchService.EmptyResult();
             }
 
             var searchProvider = LookService.Searcher;
@@ -246,18 +245,17 @@ namespace Our.Umbraco.Look.Services
                         };
                     }
 
-                    return new EnumerableWithTotal<LookMatch>(
-                                                LookSearchService.GetLookMatches(
-                                                                    lookQuery,
-                                                                    indexSearcher,
-                                                                    topDocs,
-                                                                    getHighlight,
-                                                                    getDistance),
-                                                topDocs.TotalHits);
+                    return new LookResult(LookSearchService.GetLookMatches(
+                                                                lookQuery,
+                                                                indexSearcher,
+                                                                topDocs,
+                                                                getHighlight,
+                                                                getDistance),
+                                            topDocs.TotalHits);
                 }
             }            
 
-            return new EnumerableWithTotal<LookMatch>(Enumerable.Empty<LookMatch>(), 0);
+            return LookSearchService.EmptyResult();
         }
 
         /// <summary>
@@ -340,6 +338,15 @@ namespace Our.Umbraco.Look.Services
 
                 yield return lookMatch;
             }
+        }
+
+        /// <summary>
+        /// Helper to return an empty result set
+        /// </summary>
+        /// <returns></returns>
+        private static LookResult EmptyResult()
+        {
+            return new LookResult(Enumerable.Empty<LookMatch>(), 0);
         }
     }
 }
