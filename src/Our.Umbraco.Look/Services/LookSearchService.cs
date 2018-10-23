@@ -148,12 +148,16 @@ namespace Our.Umbraco.Look.Services
 
                 switch (lookQuery.SortOn)
                 {
-                    case SortOn.Date: // newest -> oldest
-                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
-                        break;
-
                     case SortOn.Name: // a -> z
                         sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField, SortField.STRING));
+                        break;
+
+                    case SortOn.DateAscending: // oldest -> newest
+                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, false));
+                        break;
+
+                    case SortOn.DateDescending: // newest -> oldest
+                        sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
                         break;
                 }
 
