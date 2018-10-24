@@ -120,16 +120,16 @@ var lookQuery = new LookQuery()
 
 // perform the search
 var lookResults = LookSearchService.Query(lookQuery);
-
-var totalResults = lookResults.Total; // total number of item expected in the lookResults enumerable
-var results = lookResults.ToArray(); // the lookResults enumerated into an array
 ```
 
 ### Search Results
 
-A enumeration of the following `LookMatch` objects are returned:
-
 ```csharp
+var totalResults = lookResults.Total; // total number of item expected in the lookResults enumerable
+var results = lookResults.ToArray(); // returns LookMatch[]
+
+// TODO: var facets = lookResults.Facets(); // returns Facet[], where 
+
 public class LookMatch
 {
 	/// <summary>
