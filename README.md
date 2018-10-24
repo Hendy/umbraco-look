@@ -9,17 +9,13 @@ Umbraco Examine Lucene indexer and searcher with support for text match highligh
 
 ## Indexing
 
-Look will add the following data to an Examine managed index:
+Look will add the following data to each document in an Examine managed index:
 
-  * A name field - used to associate a name with a node (defaults to the IPublishedContent.Name).  
-
-  * A date field - used to associate a date with a node (defaults to the IPublishedContent.UpdatedDate). 
-
-  * A text field - used to store all text associated with a node into a single field and as the source for any extracted text highlight fragments.
-  
-  * A tags field - a collection of strings associated with a node (currently all expected to be lowercase & some chars are to be reserved).
-    
-  * A location field - used to store a latitude & longitude associated with a node (defaults to null).  
+  * A name field - (defaults to the IPublishedContent.Name)  
+  * A date field - (defaults to the IPublishedContent.UpdatedDate)  
+  * A text field - source for any text queries and any extracted text highlight fragments  
+  * Multiple tag fields - (currently all expected to be lowercase & some chars are to be reserved)  
+  * A location field - used to store a latitude & longitude (defaults to null)  
   
 No configuration files need to be changed as Look will hook into the default Umbraco External indexer and searcher, otherwise the following appSetting keys can be set in the web.config:
 
