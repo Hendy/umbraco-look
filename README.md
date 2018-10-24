@@ -1,17 +1,25 @@
 # Umbraco Look (Alpha)
 Umbraco Examine Lucene indexer and searcher with support for text match highlighting and geospatial queries.
 
-[The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: Umbraco 7.2.3, Examine 0.1.70 and Lucene.Net.Contrib 2.9.4.1
+[The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
+
+  * Umbraco 7.2.3 
+  * Examine 0.1.70 
+  * Lucene.Net.Contrib 2.9.4.1
 
 ## Indexing
 
-Look will index the following data:
+Look will add the following data to an Examine managed index:
 
-A text field - used to store all text associated with a node into a single field and as the source for any extracted text highlight fragments.  
-A tags field - a collection of string associated with a node (some chars are reserved)
-A date field - used to associate a date with a node (defaults to the IPublishedContent.UpdatedDate).  
-A name field - used to associate a name with a node (defaults to the IPublishedContent.Name).  
-A location field - used to store a latitude & longitude associated with a node (defaults to null).  
+  * A text field - used to store all text associated with a node into a single field and as the source for any extracted text highlight fragments.
+  
+  * A tags field - a collection of strings associated with a node (some chars are reserved).
+  
+  * A date field - used to associate a date with a node (defaults to the IPublishedContent.UpdatedDate). 
+  
+  * A name field - used to associate a name with a node (defaults to the IPublishedContent.Name).  
+
+  * A location field - used to store a latitude & longitude associated with a node (defaults to null).  
   
 No configuration files need to be changed as Look will hook into the default Umbraco External indexer and searcher (if they exist), although if you prefer to use a different indexer and/or searcher then the following appSetting keys can be set in the web.config:
 
