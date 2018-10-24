@@ -1,19 +1,23 @@
 # Umbraco Look (Alpha)
 Umbraco Examine Lucene indexer and searcher with support for text match highlighting and geospatial queries.
 
-[The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on Examine 0.1.70 and Lucene.Net.Contrib 2.9.4.1
+[The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
+
+  * Umbraco 7.2.3 (min)
+  * Examine 0.1.70 (min)
+  * Lucene.Net.Contrib 2.9.4.1 (min)
 
 ## Indexing
 
-For each Umbraco node, Look will index the following data:
+Look will add the following data to each document in an Examine managed index:
 
-A text field - used to store all text associated with a node and as the source for a text query (and any extracted text highlight fragments).  
-A tags field - used to store a collection of string tags assocated with a node.  
-A date field - used to associate a date with a node (defaults to the node.UpdatedDate).  
-A name field - used to associate a name with a node (defaults to the node.Name).  
-A location field - used to store a latitude & longitude associated with a node (defaults to null).  
+  * A name field - (defaults to the IPublishedContent.Name)  
+  * A date field - (defaults to the IPublishedContent.UpdatedDate)  
+  * A text field - source for any text queries and any extracted text highlight fragments  
+  * Multiple tag fields - (currently all expected to be lowercase & some chars are to be reserved)  
+  * A location field - used to store a latitude & longitude (defaults to null)  
   
-No configuration files need to be changed as Look will hook into the default Umbraco External indexer and searcher (if they exist), although if you prefer to use a different indexer and/or searcher then the following appSetting keys can be set in the web.config:
+No configuration files need to be changed as Look will hook into the default Umbraco External indexer and searcher, otherwise the following appSetting keys can be set in the web.config:
 
 ```xml
 <appSettings>
@@ -23,8 +27,6 @@ No configuration files need to be changed as Look will hook into the default Umb
 ```
 
 To configure the indexing behaviour there are static methods on the `LookIndexService` class which accept functions taking a parameter of IPublishedContent and returning the typed value to be indexed (all are optional).
-
-E.g.:
 
 ```csharp
 using Our.Umbraco.Look.Services;
@@ -37,76 +39,30 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{
-		LookIndexService.SetNameIndexer(publishedContent => {
-		
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{	
-			return "my custom name for myDocTypeAlias to be indexed";
-			}
-
-			// fallback to default indexing (or can return null)
-			return LookIndexService.DefaultNameIndexer(publishedContent);
-			
+		LookIndexService.SetNameIndexer(ipublishedContent => {			
+			// return a string or null or 
+			return LookIndexService.DefaultNameIndexer(ipublishedContent);			
 		});
 
-		LookIndexService.SetTextIndexer(publishedContent => {
-
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{	
-				return "my custom name for myDocTypeAlias to be indexed";
-			}
-
-			// fallback to default indexing (or can return null)
-			return LookIndexService.DefaultNameIndexer(publishedContent);
-			
+		LookIndexService.SetDateIndexer(ipublishedContent => {
+			// return DateTime or null or
+			return LookIndexService.DefaultDateIndexer(ipublishedContent);
 		});
 
-		LookIndexService.SetTextIndexer(publishedContent => {
-
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{
-				return "my text for myDocTypeAlias to be indexed";
-			}
-
-			// fallback to default indexing (or can return null)
-			return LookIndexService.DefaultTextIndexer(publishedContent);
+		LookIndexService.SetTextIndexer(ipublishedContent => {		
+			// return a string or null or 
+			return LookIndexService.DefaultTextIndexer(ipublishedContent);			
 		});
 
-		LookIndexService.SetTagIndexer(publishedContent => {
-
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{
-				return new string[] { "tag1", "tag2" };
-			}
-
-			// fallback to default indexing (or can return null)
-			return LookIndexService.DefaultTagIndexer(publishedContent);
-			
+		LookIndexService.SetTagIndexer(ipublishedContent => {
+			// return string[] or null or 
+			return LookIndexService.DefaultTagIndexer(ipublishedContent);
 		});
 
-		LookIndexService.SetDateIndexer(publishedContent => {
-
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{
-				return new DateTime(2005, 02, 16);
-			}
-
-			// fallback to default indexing (or can return null)
-			return LookIndexService.DefaultDateIndexer(publishedContent);
-			
-		});
-
-		LookIndexService.SetLocationIndexer(publishedContent => {
-
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{
-				// return an Our.Umbraco.Look.Models.Location obj
-				return new Lcoation(55.406330, 10.388500);		
-			}
-
-			// currently there is no default fallback
-			return null;
-			
+		LookIndexService.SetLocationIndexer(ipublishedContent => {
+			// return Our.Umbraco.Look.Model.Location or null
+			// eg. return new Location(55.406330, 10.388500);		
+			return null;			
 		});
 	}
 }
@@ -114,9 +70,8 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A `Look` search consists of any combinations of the following (optional) query types: `TextQuery`, `TagQuery`, `DateQuery`, `NodeQuery` & `LocationQuery` (most values are also optional).
+A `Look` search consists of any combinations of the following (optional) query types:  `NodeQuery` , `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` (most values are also optional).
 
-E.g.:
 
 ```csharp
 using Our.Umbraco.Look.Models;  
@@ -124,26 +79,28 @@ using Our.Umbraco.Look.Services;
 
 var lookQuery = new LookQuery()
 {
+	NodeQuery = new NodeQuery() {
+		TypeAliases = new string[] { "myDocTypeAlias" },
+		ExcludeIds = new int[] { 123 } // (eg. exclude current page) // TODO: rename to NotIds ?
+	},
+
+	DateQuery = new DateQuery() {
+		After = new DateTime(2005, 02, 16),
+		Before = null
+	},
+
 	TextQuery = new TextQuery() {
 		SearchText = "some text to search for",
-		HighlightFragments = 2 // highlight text containing the search term twice should be returned
+		HighlightFragments = 2, // highlight text containing the search term twice should be returned
 		HighlightSeparator = " ... ", // text to inject between any search term matches
-		GetText = true // indicate that the raw text field should also be returned (potentially a large document)
+		GetText = true // raw text field should be returned (potentially a large document)
 	},
 
 	TagQuery = new TagQuery() {
 		AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
 		AnyTags = new string[] { "tag3", "tag4", "tag5" } // at least one of these tags is required
-	},
-
-	DateQuery = new DateQuery() {
-		Before = null,
-		After = new DateTime(2005, 02, 16);
-	},
-
-	NodeQuery = new NodeQuery() {
-		TypeAliases = new string[] { "myDocTypeAlias" },
-		ExcludeIds = new int[] { 123 } // useful for excluding the current page
+		// TODO: NotTags = new string[] { "tag6" } // results must not have any of these tags
+		// TODO: FacetTags = new string[] { "tag5", "tag7", "tag8" } // facet counts will be returned for these tags
 	},
 
 	LocationQuery = new LocationQuery() {
@@ -156,37 +113,31 @@ var lookQuery = new LookQuery()
 
 // perform the search
 var lookResults = LookSearchService.Query(lookQuery);
-
-var totalResults = lookResults.Total; // total number of item expected in the lookResults enumerable
-var results = lookResults.ToArray(); // the lookResults enumerated into an array
 ```
 
 ### Search Results
 
-A enumeration of the following `LookMatch` objects are returned:
-
 ```csharp
+var totalResults = lookResults.Total; // total number of item expected in the lookResults enumerable
+var results = lookResults.ToArray(); // returns LookMatch[]
+// TODO: var facets = lookResults.Facets; // returns Facet[]
+
 public class LookMatch
 {
+	/// <summary>
+	/// The Lucene score for this match
+	/// </summary>
+	public float Score { get; internal set; }
+
 	/// <summary>
 	/// The Umbraco node Id of the matched item
 	/// </summary>
 	public int Id { get; internal set; }
-
+	
 	/// <summary>
-	/// Highlight text (containing search text) extracted from from the full text
+	/// The custom name field
 	/// </summary>
-	public IHtmlString Highlight { get; internal set; }
-
-	/// <summary>
-	/// The full text (only returned if specified)
-	/// </summary>
-	public string Text { get; internal set; }
-
-	/// <summary>
-	/// Tag collection (only returned if specified)
-	/// </summary>
-	public string[] Tags { get; internal set; }
+	public string Name { get; internal set; }
 
 	/// <summary>
 	/// The custom date field
@@ -194,9 +145,19 @@ public class LookMatch
 	public DateTime? Date { get; internal set; }
 
 	/// <summary>
-	/// The custom name field
+	/// The full text (only returned if specified)
 	/// </summary>
-	public string Name { get; internal set; }
+	public string Text { get; internal set; }
+
+	/// <summary>
+	/// Highlight text (containing search text) extracted from from the full text
+	/// </summary>
+	public IHtmlString Highlight { get; internal set; }
+
+	/// <summary>
+	/// Tag collection
+	/// </summary>
+	public string[] Tags { get; internal set; }
 
 	/// <summary>
 	/// The custom location (lat|lng) field
@@ -207,10 +168,5 @@ public class LookMatch
 	/// The calculated distance (only returned if a location supplied in query)
 	/// </summary>
 	public double? Distance { get; internal set; }
-
-	/// <summary>
-	/// The Lucene score for this match
-	/// </summary>
-	public float Score { get; internal set; }
 }
 ```
