@@ -26,7 +26,7 @@ No configuration files need to be changed as Look will hook into the default Umb
 </appSettings>
 ```
 
-To configure the indexing behaviour there are static methods on the `LookIndexService` class which accept functions taking a parameter of IPublishedContent and returning the typed value to be indexed (all are optional).
+To configure the indexing behaviour there are static methods on the `LookIndexService` class which accept functions taking a parameter of IPublishedContent (ipc) and returning the typed value to be indexed (all are optional).
 
 ```csharp
 using Our.Umbraco.Look.Services;
@@ -39,27 +39,27 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{
-		LookIndexService.SetNameIndexer(ipublishedContent => {			
-			// return a string or null or 
-			return LookIndexService.DefaultNameIndexer(ipublishedContent);			
+		LookIndexService.SetNameIndexer(ipc => {			
+			// return string or null or 
+			return LookIndexService.DefaultNameIndexer(ipc);			
 		});
 
-		LookIndexService.SetDateIndexer(ipublishedContent => {
+		LookIndexService.SetDateIndexer(ipc => {
 			// return DateTime or null or
-			return LookIndexService.DefaultDateIndexer(ipublishedContent);
+			return LookIndexService.DefaultDateIndexer(ipc);
 		});
 
-		LookIndexService.SetTextIndexer(ipublishedContent => {		
-			// return a string or null or 
-			return LookIndexService.DefaultTextIndexer(ipublishedContent);			
+		LookIndexService.SetTextIndexer(ipc => {		
+			// return string or null or 
+			return LookIndexService.DefaultTextIndexer(ipc);			
 		});
 
-		LookIndexService.SetTagIndexer(ipublishedContent => {
+		LookIndexService.SetTagIndexer(ipc => {
 			// return string[] or null or 
-			return LookIndexService.DefaultTagIndexer(ipublishedContent);
+			return LookIndexService.DefaultTagIndexer(ipc);
 		});
 
-		LookIndexService.SetLocationIndexer(ipublishedContent => {
+		LookIndexService.SetLocationIndexer(ipc => {
 			// return Our.Umbraco.Look.Model.Location or null
 			// eg. return new Location(55.406330, 10.388500);		
 			return null;			
