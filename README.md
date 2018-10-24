@@ -1,16 +1,16 @@
 # Umbraco Look (Alpha)
 Umbraco Examine Lucene indexer and searcher with support for text match highlighting and geospatial queries.
 
-[The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on Examine 0.1.70 and Lucene.Net.Contrib 2.9.4.1
+[The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: Umbraco 7.2.3, Examine 0.1.70 and Lucene.Net.Contrib 2.9.4.1
 
 ## Indexing
 
-For each Umbraco node, Look will index the following data:
+Look will index the following data:
 
-A text field - used to store all text associated with a node and as the source for a text query (and any extracted text highlight fragments).  
-A tags field - used to store a collection of string tags assocated with a node.  
-A date field - used to associate a date with a node (defaults to the node.UpdatedDate).  
-A name field - used to associate a name with a node (defaults to the node.Name).  
+A text field - used to store all text associated with a node into a single field and as the source for any extracted text highlight fragments.  
+A tags field - a collection of string associated with a node (some chars are reserved)
+A date field - used to associate a date with a node (defaults to the IPublishedContent.UpdatedDate).  
+A name field - used to associate a name with a node (defaults to the IPublishedContent.Name).  
 A location field - used to store a latitude & longitude associated with a node (defaults to null).  
   
 No configuration files need to be changed as Look will hook into the default Umbraco External indexer and searcher (if they exist), although if you prefer to use a different indexer and/or searcher then the following appSetting keys can be set in the web.config:
@@ -37,76 +37,30 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{
-		LookIndexService.SetNameIndexer(publishedContent => {
-		
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{	
-			return "my custom name for myDocTypeAlias to be indexed";
-			}
-
-			// fallback to default indexing (or can return null)
-			return LookIndexService.DefaultNameIndexer(publishedContent);
-			
+		LookIndexService.SetNameIndexer(ipublishedContent => {			
+			// return a string or null or 
+			return LookIndexService.DefaultNameIndexer(ipublishedContent);			
 		});
 
-		LookIndexService.SetTextIndexer(publishedContent => {
-
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{	
-				return "my custom name for myDocTypeAlias to be indexed";
-			}
-
-			// fallback to default indexing (or can return null)
-			return LookIndexService.DefaultNameIndexer(publishedContent);
-			
+		LookIndexService.SetTextIndexer(ipublishedContent => {		
+			// return a string or null or 
+			return LookIndexService.DefaultTextIndexer(ipublishedContent);			
 		});
 
-		LookIndexService.SetTextIndexer(publishedContent => {
-
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{
-				return "my text for myDocTypeAlias to be indexed";
-			}
-
-			// fallback to default indexing (or can return null)
-			return LookIndexService.DefaultTextIndexer(publishedContent);
+		LookIndexService.SetTagIndexer(ipublishedContent => {
+			// return string[] or null or 
+			return LookIndexService.DefaultTagIndexer(ipublishedContent);
 		});
 
-		LookIndexService.SetTagIndexer(publishedContent => {
-
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{
-				return new string[] { "tag1", "tag2" };
-			}
-
-			// fallback to default indexing (or can return null)
-			return LookIndexService.DefaultTagIndexer(publishedContent);
-			
+		LookIndexService.SetDateIndexer(ipublishedContent => {
+			// return DateTime or null or
+			return LookIndexService.DefaultDateIndexer(ipublishedContent);
 		});
 
-		LookIndexService.SetDateIndexer(publishedContent => {
-
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{
-				return new DateTime(2005, 02, 16);
-			}
-
-			// fallback to default indexing (or can return null)
-			return LookIndexService.DefaultDateIndexer(publishedContent);
-			
-		});
-
-		LookIndexService.SetLocationIndexer(publishedContent => {
-
-			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-			{
-				// return an Our.Umbraco.Look.Models.Location obj
-				return new Lcoation(55.406330, 10.388500);		
-			}
-
-			// currently there is no default fallback
-			return null;
-			
+		LookIndexService.SetLocationIndexer(ipublishedContent => {
+			// return Our.Umbraco.Look.Model.Location or null
+			// eg. return new Location(55.406330, 10.388500);		
+			return null;			
 		});
 	}
 }
@@ -184,7 +138,7 @@ public class LookMatch
 	public string Text { get; internal set; }
 
 	/// <summary>
-	/// Tag collection (only returned if specified)
+	/// Tag collection
 	/// </summary>
 	public string[] Tags { get; internal set; }
 
