@@ -32,8 +32,6 @@ No configuration files need to be changed as Look will hook into the default Umb
 
 To configure the indexing behaviour there are static methods on the `LookIndexService` class which accept functions taking a parameter of IPublishedContent and returning the typed value to be indexed (all are optional).
 
-E.g.:
-
 ```csharp
 using Our.Umbraco.Look.Services;
 using Umbraco.Core;
@@ -78,7 +76,6 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 A `Look` search consists of any combinations of the following (optional) query types:  `NodeQuery` , `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` (most values are also optional).
 
-E.g.:
 
 ```csharp
 using Our.Umbraco.Look.Models;  
@@ -127,8 +124,7 @@ var lookResults = LookSearchService.Query(lookQuery);
 ```csharp
 var totalResults = lookResults.Total; // total number of item expected in the lookResults enumerable
 var results = lookResults.ToArray(); // returns LookMatch[]
-
-// TODO: var facets = lookResults.Facets(); // returns Facet[], where 
+// TODO: var facets = lookResults.Facets; // returns Facet[]
 
 public class LookMatch
 {
