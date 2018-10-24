@@ -32,23 +32,24 @@ using Umbraco.Core;
 
 public class ConfigureIndexing : ApplicationEventHandler
 {	
-  /// <summary>
-  /// Umbraco has started event
-  /// </summary>
-  protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-  {
-    LookIndexService.SetNameIndexer(publishedContent => {
+	/// <summary>
+	/// Umbraco has started event
+	/// </summary>
+	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+	{
+		LookIndexService.SetNameIndexer(publishedContent => {
+		
+			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
+			{	
+			return "my custom name for myDocTypeAlias to be indexed";
+			}
 
-      if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
-      {	
-        return "my custom name for myDocTypeAlias to be indexed";
-      }
+			// fallback to default indexing (or can return null)
+			return LookIndexService.DefaultNameIndexer(publishedContent);
+			
+		});
 
-      // fallback to default indexing (or can return null)
-      return LookIndexService.DefaultNameIndexer(publishedContent);
-    });
-
-    LookIndexService.SetTextIndexer(publishedContent => {
+		LookIndexService.SetTextIndexer(publishedContent => {
 
 			if (publishedContent.DocumentTypeAlias == "myDocTypeAlias")
 			{	
@@ -57,6 +58,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 			// fallback to default indexing (or can return null)
 			return LookIndexService.DefaultNameIndexer(publishedContent);
+			
 		});
 
 		LookIndexService.SetTextIndexer(publishedContent => {
@@ -76,9 +78,10 @@ public class ConfigureIndexing : ApplicationEventHandler
 			{
 				return new string[] { "tag1", "tag2" };
 			}
-	
+
 			// fallback to default indexing (or can return null)
 			return LookIndexService.DefaultTagIndexer(publishedContent);
+			
 		});
 
 		LookIndexService.SetDateIndexer(publishedContent => {
@@ -90,6 +93,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 			// fallback to default indexing (or can return null)
 			return LookIndexService.DefaultDateIndexer(publishedContent);
+			
 		});
 
 		LookIndexService.SetLocationIndexer(publishedContent => {
@@ -102,6 +106,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 			// currently there is no default fallback
 			return null;
+			
 		});
 	}
 }
@@ -119,25 +124,24 @@ using Our.Umbraco.Look.Services;
 
 var lookQuery = new LookQuery()
 {
-  TextQuery = new TextQuery() {
-    SearchText = "some text to search for",
-    HighlightFragments = 2 // highlight text containing the search term twice should be returned
-    HighlightSeparator = " ... ", // text to inject between any search term matches
-    GetText = true // indicate that the raw text field should also be returned (potentially a large document)
-  },
+	TextQuery = new TextQuery() {
+		SearchText = "some text to search for",
+		HighlightFragments = 2 // highlight text containing the search term twice should be returned
+		HighlightSeparator = " ... ", // text to inject between any search term matches
+		GetText = true // indicate that the raw text field should also be returned (potentially a large document)
+	},
 
-  TagQuery = new TagQuery() {
-    AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
-    AnyTags = new string[] { "tag3", "tag4", "tag5" }, // at least one of these tags is required
-    GetTags = true // indicate that the tags for each result should also be returned
-  },
+	TagQuery = new TagQuery() {
+		AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
+		AnyTags = new string[] { "tag3", "tag4", "tag5" } // at least one of these tags is required
+	},
 
-  DateQuery = new DateQuery() {
-    Before = null,
-    After = new DateTime(2005, 02, 16);
-  },
+	DateQuery = new DateQuery() {
+		Before = null,
+		After = new DateTime(2005, 02, 16);
+	},
 
-  NodeQuery = new NodeQuery() {
+	NodeQuery = new NodeQuery() {
 		TypeAliases = new string[] { "myDocTypeAlias" },
 		ExcludeIds = new int[] { 123 } // useful for excluding the current page
 	},
@@ -147,7 +151,7 @@ var lookQuery = new LookQuery()
 		MaxDistance = new Distance(500, DistanceUnit.Miles)  // limits the results to within this distance
 	},
 
-	SortOn = SortOn.Distance // other sorts include: Score, Name, Date
+	SortOn = SortOn.Distance // other sorts include: Score, Name, DateAscending, DateDescending
 };
 
 // perform the search
