@@ -88,24 +88,26 @@ var lookQuery = new LookQuery()
 {
 	NodeQuery = new NodeQuery() {
 		TypeAliases = new string[] { "myDocTypeAlias" },
-		ExcludeIds = new int[] { 123 } // (eg. exclude current page)
+		ExcludeIds = new int[] { 123 } // (eg. exclude current page) // TODO: rename to NotIds ?
 	},
 
 	DateQuery = new DateQuery() {
-		Before = null,
-		After = new DateTime(2005, 02, 16);
+		After = new DateTime(2005, 02, 16),
+		Before = null
 	},
 
 	TextQuery = new TextQuery() {
 		SearchText = "some text to search for",
-		HighlightFragments = 2 // highlight text containing the search term twice should be returned
+		HighlightFragments = 2, // highlight text containing the search term twice should be returned
 		HighlightSeparator = " ... ", // text to inject between any search term matches
-		GetText = true // indicate that the raw text field should also be returned (potentially a large document)
+		GetText = true // raw text field should be returned (potentially a large document)
 	},
 
 	TagQuery = new TagQuery() {
 		AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
 		AnyTags = new string[] { "tag3", "tag4", "tag5" } // at least one of these tags is required
+		// TODO: NotTags = new string[] { "tag6" } // results must not have any of these tags
+		// TODO: FacetTags = new string[] { "tag5", "tag7", "tag8" } // facet counts will be returned for these tags
 	},
 
 	LocationQuery = new LocationQuery() {
