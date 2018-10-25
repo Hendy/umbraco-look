@@ -32,7 +32,7 @@ namespace Our.Umbraco.Look.Services
             {
                 LogHelper.Warn(typeof(LookService), "Supplied search query was null");
 
-                return LookSearchService.EmptyResult();
+                return LookResult.Empty;
             }
 
             var searchProvider = LookService.Searcher;
@@ -255,11 +255,12 @@ namespace Our.Umbraco.Look.Services
                                                                 topDocs,
                                                                 getHighlight,
                                                                 getDistance),
-                                            topDocs.TotalHits);
+                                            topDocs.TotalHits,
+                                            new Facet[] { });
                 }
             }            
 
-            return LookSearchService.EmptyResult();
+            return LookResult.Empty;
         }
 
         /// <summary>
@@ -330,11 +331,6 @@ namespace Our.Umbraco.Look.Services
                     date = DateTools.StringToDate(dateValue);
                 }
 
-                //if (long.TryParse(doc.Get(LookConstants.DateField), out long ticks))
-                //{
-                //    date = new DateTime(ticks);
-                //}
-
                 var lookMatch = new LookMatch(
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     getHighlight(doc.Get(LookConstants.TextField)),
@@ -349,15 +345,6 @@ namespace Our.Umbraco.Look.Services
 
                 yield return lookMatch;
             }
-        }
-
-        /// <summary>
-        /// Helper to return an empty result set
-        /// </summary>
-        /// <returns></returns>
-        private static LookResult EmptyResult()
-        {
-            return new LookResult(Enumerable.Empty<LookMatch>(), 0);
         }
     }
 }

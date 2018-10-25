@@ -211,6 +211,7 @@
     <Compile Include="Models\DateQuery.cs" />
     <Compile Include="Models\Distance.cs" />
     <Compile Include="Models\DistanceUnit.cs" />
+    <Compile Include="Models\Facet.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\LocationQuery.cs" />
     <Compile Include="Models\LookResult.cs" />
