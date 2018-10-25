@@ -30,7 +30,7 @@ namespace Our.Umbraco.Look.Services
         {
             if (lookQuery == null)
             {
-                LogHelper.Warn(typeof(LookService), "Supplied search query was null");
+                LogHelper.Info(typeof(LookService), "Supplied search query was null");
 
                 return LookResult.Empty;
             }
@@ -287,21 +287,16 @@ namespace Our.Umbraco.Look.Services
             fields.Add(LookConstants.NameField);
             fields.Add(LookConstants.DateField);
 
-            // Text
-            if (getHighlight != null || getText) // if a highlight function is supplied, then it'll need the text field to process
-            {
-                fields.Add(LookConstants.TextField);
-            }
+            // if a highlight function is supplied (or text requested)
+            if (getHighlight != null || getText)  { fields.Add(LookConstants.TextField); }
 
             fields.Add(LookConstants.TagsField);
             fields.Add(LookConstants.LocationField);
 
             var mapFieldSelector = new MapFieldSelector(fields.ToArray());
 
-            if (getHighlight == null) // if highlight func does not exist, then create one to always return null
-            {
-                getHighlight = x => null;
-            }
+            // if highlight func does not exist, then create one to always return null
+            if (getHighlight == null) { getHighlight = x => null; }
 
             foreach (var scoreDoc in topDocs.ScoreDocs)
             {
@@ -325,6 +320,11 @@ namespace Our.Umbraco.Look.Services
             }
         }
 
+        /// <summary>
+        /// Helper
+        /// </summary>
+        /// <param name="fields"></param>
+        /// <returns></returns>
         private static string[] GetTags(Field[] fields)
         {
             if (fields != null)
@@ -338,6 +338,11 @@ namespace Our.Umbraco.Look.Services
             return new string[] { };
         }
 
+        /// <summary>
+        /// Helper
+        /// </summary>
+        /// <param name="dateValue"></param>
+        /// <returns></returns>
         private static DateTime? GetDate(string dateValue)
         {
             DateTime? date = null;
