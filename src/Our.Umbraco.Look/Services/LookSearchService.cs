@@ -303,40 +303,18 @@ namespace Our.Umbraco.Look.Services
                 getHighlight = x => null;
             }
 
-            Func<Field[], string[]> getTags = x =>
-            {
-                if (x != null)
-                {
-                    return x
-                            .Select(y => y.StringValue())
-                            .Where(y => !string.IsNullOrWhiteSpace(y))
-                            .ToArray();
-                }
-
-                return new string[] { };
-            };
-
             foreach (var scoreDoc in topDocs.ScoreDocs)
             {
                 var docId = scoreDoc.doc;
 
                 var doc = indexSearcher.Doc(docId, mapFieldSelector);
 
-                DateTime? date = null;
-
-                var dateValue = doc.Get(LookConstants.DateField);
-
-                if (!string.IsNullOrWhiteSpace(dateValue))
-                {
-                    date = DateTools.StringToDate(dateValue);
-                }
-
                 var lookMatch = new LookMatch(
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     getHighlight(doc.Get(LookConstants.TextField)),
                     getText ? doc.Get(LookConstants.TextField) : null,
-                    getTags(doc.GetFields(LookConstants.TagsField)),
-                    date,
+                    LookSearchService.GetTags(doc.GetFields(LookConstants.TagsField)),
+                    LookSearchService.GetDate(doc.Get(LookConstants.DateField)),
                     doc.Get(LookConstants.NameField),
                     doc.Get(LookConstants.LocationField) != null ? new Location(doc.Get(LookConstants.LocationField)) : null,
                     getDistance(docId),
@@ -345,6 +323,31 @@ namespace Our.Umbraco.Look.Services
 
                 yield return lookMatch;
             }
+        }
+
+        private static string[] GetTags(Field[] fields)
+        {
+            if (fields != null)
+            {
+                return fields
+                        .Select(y => y.StringValue())
+                        .Where(y => !string.IsNullOrWhiteSpace(y))
+                        .ToArray();
+            }
+
+            return new string[] { };
+        }
+
+        private static DateTime? GetDate(string dateValue)
+        {
+            DateTime? date = null;
+
+            if (!string.IsNullOrWhiteSpace(dateValue))
+            {
+                date = DateTools.StringToDate(dateValue);
+            }
+
+            return date;
         }
     }
 }
