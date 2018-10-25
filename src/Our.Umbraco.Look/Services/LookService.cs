@@ -2,6 +2,7 @@
 using Examine.LuceneEngine;
 using Examine.LuceneEngine.Providers;
 using Examine.Providers;
+using Lucene.Net.Analysis;
 using Lucene.Net.Spatial.Tier.Projectors;
 using Our.Umbraco.Look.Models;
 using System;
@@ -64,6 +65,11 @@ namespace Our.Umbraco.Look.Services
         /// Gets the Examine indexer
         /// </summary>
         internal static BaseIndexProvider Indexer => ExamineManager.Instance.IndexProviderCollection[LookService.Instance.IndexerName];
+
+        /// <summary>
+        /// Get the Analyzer in use by Examine
+        /// </summary>
+        internal static Analyzer Analyzer => ((LuceneIndexer)LookService.Indexer).IndexingAnalyzer;
 
         /// <summary>
         /// Gets the Examine searcher
