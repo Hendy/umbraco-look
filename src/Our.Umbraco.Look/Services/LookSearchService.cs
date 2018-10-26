@@ -1,7 +1,5 @@
 ﻿using Examine.LuceneEngine.Providers;
 using Examine.LuceneEngine.SearchCriteria;
-using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Highlight;
 using Lucene.Net.QueryParsers;
@@ -222,11 +220,7 @@ namespace Our.Umbraco.Look.Services
                     // setup the getHightlight func if required
                     if (lookQuery.TextQuery.HighlightFragments > 0 && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                     {
-                        var version = Lucene.Net.Util.Version.LUCENE_29;
-
-                        Analyzer analyzer = new StandardAnalyzer(version);
-
-                        var queryParser = new QueryParser(version, LookConstants.TextField, analyzer);
+                        var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, LookService.Analyzer);
 
                         var queryScorer = new QueryScorer(queryParser
                                                             .Parse(lookQuery.TextQuery.SearchText)
@@ -237,7 +231,7 @@ namespace Our.Umbraco.Look.Services
                         // update the getHightlight func
                         getHighlight = (x) =>
                         {
-                            var tokenStream = analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
+                            var tokenStream = LookService.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
 
                             var highlight = highlighter.GetBestFragments(
                                                             tokenStream,
