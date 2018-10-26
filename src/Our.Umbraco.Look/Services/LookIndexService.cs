@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
+using Our.Umbraco.Look.Extensions;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -159,15 +160,22 @@ namespace Our.Umbraco.Look.Services
 
                 if (tags != null)
                 {
-                    foreach (var tag in tags.Where(x => !string.IsNullOrWhiteSpace(x)))
+                    foreach (var tag in tags)
                     {
-                        var tagField = new Field(
-                                            LookConstants.TagsField,
-                                            tag.ToLower(), // HACK: until we can figure out how to do case sensitive searches without changing config files
-                                            Field.Store.YES,
-                                            Field.Index.NOT_ANALYZED);
+                        if (tag.IsValidTag())
+                        {
+                            var tagField = new Field(
+                                                LookConstants.TagsField,
+                                                tag,
+                                                Field.Store.YES,
+                                                Field.Index.NOT_ANALYZED);
 
-                        document.Add(tagField);
+                            document.Add(tagField);
+                        }
+                        else
+                        {
+                            LogHelper.Info(typeof(LookIndexService), $"Attemped to index an invalid tag string '{tag}'");
+                        }
                     }
                 }
             }
@@ -202,20 +210,6 @@ namespace Our.Umbraco.Look.Services
                                                 Field.Store.NO,
                                                 Field.Index.NOT_ANALYZED,
                                                 Field.TermVector.NO);
-
-                    //var ticks = date.Value.Ticks;
-
-                    //var dateField = new NumericField(
-                    //                           LookConstants.DateField,
-                    //                           Field.Store.YES,
-                    //                           false)
-                    //                       .SetLongValue(ticks);
-
-                    //var dateSortedField = new NumericField(
-                    //                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField,
-                    //                                Field.Store.NO, //we don't want to store the field because we're only using it to sort, not return data
-                    //                                true)
-                    //                            .SetLongValue(ticks);
 
                     document.Add(dateField);
                     document.Add(dateSortedField);

@@ -315,7 +315,7 @@ namespace Our.Umbraco.Look.Services
         }
 
         /// <summary>
-        /// Helper
+        /// Helper for when building a look match obj
         /// </summary>
         /// <param name="fields"></param>
         /// <returns></returns>
@@ -333,7 +333,7 @@ namespace Our.Umbraco.Look.Services
         }
 
         /// <summary>
-        /// Helper
+        /// Helper for when building a look match obj
         /// </summary>
         /// <param name="dateValue"></param>
         /// <returns></returns>
@@ -341,9 +341,13 @@ namespace Our.Umbraco.Look.Services
         {
             DateTime? date = null;
 
-            if (!string.IsNullOrWhiteSpace(dateValue))
+            try
             {
                 date = DateTools.StringToDate(dateValue);
+            }
+            catch
+            {
+                LogHelper.Info(typeof(LookSearchService), $"Unable to convert string '{dateValue}' into a DateTime");
             }
 
             return date;
