@@ -10,7 +10,7 @@
     <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      Umbraco Examine Lucene indexer and searcher with support for text match highlighting and geospatial queries.
+      Extends Umbraco Examine adding support for: text match highlighting, geospatial querying and tag faceting.
     </description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2018</copyright>

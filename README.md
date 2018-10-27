@@ -108,7 +108,7 @@ var lookQuery = new LookQuery()
 		MaxDistance = new Distance(500, DistanceUnit.Miles)  // limits the results to within this distance
 	},
 
-	SortOn = SortOn.Distance // other sorts include: Score, Name, DateAscending, DateDescending
+	SortOn = SortOn.Distance // other sorts are: Score (default), Name, DateAscending, DateDescending
 };
 
 // perform the search
