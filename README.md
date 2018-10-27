@@ -9,13 +9,7 @@ Extends Umbraco Examine adding support for: text match highlighting, geospatial 
 
 ## Indexing
 
-Look will add the following data to each document in an Examine managed index:
-
-  * A name field - (defaults to the IPublishedContent.Name)  
-  * A date field - (defaults to the IPublishedContent.UpdatedDate)  
-  * A text field - source for any text queries and any extracted text highlight fragments  
-  * Multiple tag fields - (currently all expected to be lowercase & some chars are to be reserved)  
-  * A location field - used to store a latitude & longitude (defaults to null)  
+Look will add the following (optional) fields to each document in an Examine managed index: Name, Date, Text, Tags and a Location
   
 No configuration files need to be changed as Look will hook into the default Umbraco External indexer and searcher, otherwise the following appSetting keys can be set in the web.config:
 
@@ -26,7 +20,7 @@ No configuration files need to be changed as Look will hook into the default Umb
 </appSettings>
 ```
 
-To configure the indexing behaviour there are static methods on the `LookIndexService` class which accept functions taking a parameter of IPublishedContent (ipc) and returning the typed value to be indexed (all are optional).
+To configure indexing there are static methods on the `LookIndexService` class which accept functions taking a parameter of IPublishedContent (ipc) that return the typed value to be indexed (all are optional).
 
 ```csharp
 using Our.Umbraco.Look.Services;
@@ -70,7 +64,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A `Look` search consists of any combinations of the following (optional) query types:  `NodeQuery` , `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` (most values are also optional).
+A `Look` search consists of any combinations of the following (optional) query types:  `NodeQuery` , `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`.
 
 
 ```csharp
@@ -149,12 +143,12 @@ public class LookMatch
 	public string Text { get; internal set; }
 
 	/// <summary>
-	/// Highlight text (containing search text) extracted from from the full text
+	/// Highlight text (containing search text) extracted from the full text
 	/// </summary>
 	public IHtmlString Highlight { get; internal set; }
 
 	/// <summary>
-	/// Tag collection
+	/// Tag collection from the custom tags feild
 	/// </summary>
 	public string[] Tags { get; internal set; }
 
