@@ -98,9 +98,9 @@ var lookQuery = new LookQuery()
 
 	TagQuery = new TagQuery() {
 		AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
-		AnyTags = new string[] { "tag3", "tag4", "tag5" } // at least one of these tags is required
-		// TODO: NotTags = new string[] { "tag6" } // results must not have any of these tags
-		// TODO: FacetTags = new string[] { "tag5", "tag7", "tag8" } // facet counts will be returned for these tags
+		AnyTags = new string[] { "tag3", "tag4", "tag5" }, // at least one of these tags is required
+		// TODO: NotTags = new string[] { "tag6" }, // results must not have any of these tags
+		GetFacets = true // facet counts will be returned for tags
 	},
 
 	LocationQuery = new LocationQuery() {
@@ -119,8 +119,8 @@ var lookResults = LookSearchService.Query(lookQuery);
 
 ```csharp
 var totalResults = lookResults.Total; // total number of item expected in the lookResults enumerable
-var results = lookResults.ToArray(); // returns LookMatch[]
-// TODO: var facets = lookResults.Facets; // returns Facet[]
+var results = lookResults.ToArray(); // returns Our.Umbraco.Look.Models.LookMatch[]
+var facets = lookResults.Facets; // returns Our.Umbraco.Look.Models.Facet[]
 
 public class LookMatch
 {
@@ -169,4 +169,18 @@ public class LookMatch
 	/// </summary>
 	public double? Distance { get; internal set; }
 }
+
+public class Facet
+{
+	/// <summary>
+    /// The name of the tag
+    /// </summary>
+    public string Tag { get; internal set; }
+
+    /// <summary>
+    /// The total number of results expected should this tag be added to TagQuery.AllTags on the current query
+    /// </summary>
+    public int Count { get; internal set; }
+}
+
 ```
