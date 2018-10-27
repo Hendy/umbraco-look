@@ -204,19 +204,51 @@ namespace Our.Umbraco.Look.Services
                     });
                 }
 
-                var indexSearcher = new IndexSearcher(((LuceneIndexer)LookService.Indexer).GetLuceneDirectory(), false);
+                var indexSearcher = new IndexSearcher(((LuceneIndexer)LookService.Indexer).GetLuceneDirectory(), true);
 
                 var luceneSearchCriteria = (LuceneSearchCriteria)searchCriteria;
 
                 // do the Lucene search
                 topDocs = indexSearcher.Search(
                                             luceneSearchCriteria.Query, // the query build by Examine
-                                            filter ?? new QueryWrapperFilter(luceneSearchCriteria.Query),
+                                            filter,
                                             LookService.MaxLuceneResults,
                                             sort ?? new Sort(SortField.FIELD_SCORE));
 
                 if (topDocs.TotalHits > 0)
                 {
+                    Facet[] facets = null;
+
+                    // facets
+                    if (lookQuery.TagQuery != null && lookQuery.TagQuery.GetFacets)
+                    {
+                        var simpleFacetedSearch = new SimpleFacetedSearch(indexSearcher.GetIndexReader(), LookConstants.TagsField);
+
+                        Query facetQuery = null;
+
+                        if (filter != null)
+                        {
+                            facetQuery = new FilteredQuery(luceneSearchCriteria.Query, filter);
+                        }
+                        else
+                        {
+                            facetQuery = luceneSearchCriteria.Query;
+                        }
+
+                        var facetResult = simpleFacetedSearch.Search(facetQuery);
+
+                        facets = facetResult
+                                    .HitsPerFacet
+                                    .Select(
+                                        x => new Facet()
+                                        {
+                                            Tag = x.Name.ToString(),
+                                            Count = Convert.ToInt32(x.HitCount)
+                                        }
+                                    )
+                                    .ToArray();
+                    }
+
                     // setup the getHightlight func if required
                     if (lookQuery.TextQuery.HighlightFragments > 0 && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                     {
@@ -226,7 +258,7 @@ namespace Our.Umbraco.Look.Services
                                                             .Parse(lookQuery.TextQuery.SearchText)
                                                             .Rewrite(indexSearcher.GetIndexReader()));
 
-                        Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
+                        var highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
 
                         // update the getHightlight func
                         getHighlight = (x) =>
@@ -250,7 +282,7 @@ namespace Our.Umbraco.Look.Services
                                                                 getHighlight,
                                                                 getDistance),
                                             topDocs.TotalHits,
-                                            new Facet[] { });
+                                            facets);
                 }
             }            
 

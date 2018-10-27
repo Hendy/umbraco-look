@@ -240,7 +240,7 @@ namespace Our.Umbraco.Look.Services
 
                     var nameSortedField = new Field(
                                                 LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField,
-                                                name.ToLower(),
+                                                name.ToLower(), // force case insentive sorting
                                                 Field.Store.NO,
                                                 Field.Index.NOT_ANALYZED,
                                                 Field.TermVector.NO);
