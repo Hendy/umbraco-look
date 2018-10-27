@@ -1,5 +1,5 @@
 # Umbraco Look (Alpha)
-Umbraco Examine Lucene indexer and searcher with support for text match highlighting and geospatial queries.
+Extends Umbraco Examine adding support for: text match highlighting, geospatial querying and tag faceting.
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
 
@@ -91,8 +91,7 @@ var lookQuery = new LookQuery()
 
 	TextQuery = new TextQuery() {
 		SearchText = "some text to search for",
-		HighlightFragments = 2, // highlight text containing the search term twice should be returned
-		HighlightSeparator = " ... ", // text to inject between any search term matches
+		GetHighlight = true, // return highlight extract from the text field containing the search text
 		GetText = true // raw text field should be returned (potentially a large document)
 	},
 

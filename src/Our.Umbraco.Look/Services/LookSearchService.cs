@@ -250,7 +250,7 @@ namespace Our.Umbraco.Look.Services
                     }
 
                     // setup the getHightlight func if required
-                    if (lookQuery.TextQuery.HighlightFragments > 0 && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
+                    if (lookQuery.TextQuery != null && lookQuery.TextQuery.GetHighlight && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                     {
                         var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, LookService.Analyzer);
 
@@ -268,8 +268,8 @@ namespace Our.Umbraco.Look.Services
                             var highlight = highlighter.GetBestFragments(
                                                             tokenStream,
                                                             x,
-                                                            lookQuery.TextQuery.HighlightFragments, // max number of fragments
-                                                            lookQuery.TextQuery.HighlightSeparator); // fragment separator
+                                                            1, // max number of fragments
+                                                            "..."); 
 
                             return new HtmlString(highlight);
                         };

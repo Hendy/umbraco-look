@@ -13,14 +13,9 @@
         public float Fuzzyness { get; set; } = 0;
 
         /// <summary>
-        /// The max number of fragments to show, 0 = highlighting disabled
+        /// When true (and SearchText provided), a hightlight extract containing the search text will be returned
         /// </summary>
-        public int HighlightFragments { get; set; } = 0;
-
-        /// <summary>
-        /// Text rendered between any highlight fragments
-        /// </summary>
-        public string HighlightSeparator { get; set; } = "...";
+        public bool GetHighlight { get; set; } = false;
 
         /// <summary>
         /// Flag to indicate whether the source text field should be returned
