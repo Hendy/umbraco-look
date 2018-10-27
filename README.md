@@ -9,7 +9,7 @@ Extends Umbraco Examine adding support for: text match highlighting, geospatial 
 
 ## Indexing
 
-Look will add the following (optional) fields to each document in an Examine managed index: Name, Date, Text, Tags and a Location
+Look will add the following (optional) fields to each document in an Examine managed index: Name, Date, Text, Tags and a Location. (Each field is prefixed with Our.Umbraco.Look to ensure uniqueness)
   
 No configuration files need to be changed as Look will hook into the default Umbraco External indexer and searcher, otherwise the following appSetting keys can be set in the web.config:
 
