@@ -64,7 +64,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A `Look` search consists of any combinations of the following (optional) query types:  `NodeQuery` , `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`.
+A Look search consists of any combinations of the following (optional) query types:  `NodeQuery` , `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`.
 
 
 ```csharp
