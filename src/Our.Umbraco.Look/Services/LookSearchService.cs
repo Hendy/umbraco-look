@@ -37,7 +37,7 @@ namespace Our.Umbraco.Look.Services
 
             var searchCriteria = searchProvider.CreateSearchCriteria();
 
-            var query = searchCriteria.Field(string.Empty, string.Empty);
+            var examineQuery = searchCriteria.Field(string.Empty, string.Empty);
 
             // Text
             if (lookQuery.TextQuery != null)
@@ -46,11 +46,11 @@ namespace Our.Umbraco.Look.Services
                 {
                     if (lookQuery.TextQuery.Fuzzyness > 0)
                     {
-                        query.And().Field(LookConstants.TextField, lookQuery.TextQuery.SearchText.Fuzzy(lookQuery.TextQuery.Fuzzyness));
+                        examineQuery.And().Field(LookConstants.TextField, lookQuery.TextQuery.SearchText.Fuzzy(lookQuery.TextQuery.Fuzzyness));
                     }
                     else
                     {
-                        query.And().Field(LookConstants.TextField, lookQuery.TextQuery.SearchText);
+                        examineQuery.And().Field(LookConstants.TextField, lookQuery.TextQuery.SearchText);
                     }
                 }
             }
@@ -60,14 +60,14 @@ namespace Our.Umbraco.Look.Services
             {
                 if (lookQuery.TagQuery.AllTags != null)
                 {
-                    query.And().GroupedAnd(
+                    examineQuery.And().GroupedAnd(
                                     lookQuery.TagQuery.AllTags.Select(x => LookConstants.TagsField), 
                                     lookQuery.TagQuery.AllTags);
                 }
 
                 if (lookQuery.TagQuery.AnyTags != null)
                 {
-                    query.And().GroupedOr(
+                    examineQuery.And().GroupedOr(
                                     lookQuery.TagQuery.AnyTags.Select(x => LookConstants.TagsField),
                                     lookQuery.TagQuery.AnyTags);
                 }
@@ -76,7 +76,7 @@ namespace Our.Umbraco.Look.Services
             // Date
             if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
             {
-                query.And().Range(
+                examineQuery.And().Range(
                                 LookConstants.DateField,
                                 lookQuery.DateQuery.After.HasValue ? lookQuery.DateQuery.After.Value : DateTime.MinValue,
                                 lookQuery.DateQuery.Before.HasValue ? lookQuery.DateQuery.Before.Value : DateTime.MaxValue);
@@ -101,7 +101,7 @@ namespace Our.Umbraco.Look.Services
 
                     if (typeAliases.Any())
                     {
-                        query.And().GroupedOr(typeAliases.Select(x => UmbracoContentIndexer.NodeTypeAliasFieldName), typeAliases.ToArray());
+                        examineQuery.And().GroupedOr(typeAliases.Select(x => UmbracoContentIndexer.NodeTypeAliasFieldName), typeAliases.ToArray());
                     }
                 }
 
@@ -109,14 +109,14 @@ namespace Our.Umbraco.Look.Services
                 {
                     foreach (var excudeId in lookQuery.NodeQuery.ExcludeIds.Distinct())
                     {
-                        query.Not().Id(excudeId);
+                        examineQuery.Not().Id(excudeId);
                     }
                 }
             }
 
             try
             {
-                searchCriteria = query.Compile();
+                searchCriteria = examineQuery.Compile();
             }
             catch (Exception exception)
             {
