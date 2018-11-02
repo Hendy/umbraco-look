@@ -47,32 +47,8 @@
         {
         }
 
-        //public SearchQuery(string text)
+        //public SearchQuery(string rawQuery)
         //{
-        //	this.TextQuery.Text = text;
-        //}
-
-        //public SearchQuery(string text, string nodeType)
-        //{
-        //	this.TextQuery.Text = text;
-        //	this.NodeQuery.NodeTypes.Add(nodeType);
-        //}
-
-        //public SearchQuery(string[] tags)
-        //{
-        //	this.TagQuery.AllTags.AddRange(tags);
-        //}
-
-        //public SearchQuery(string[] tags, string nodeType)
-        //{
-        //	this.TagQuery.AllTags.AddRange(tags);
-        //	this.NodeQuery.NodeTypes.Add(nodeType);
-        //}
-
-        //public SearchQuery(string nodeType, SortOn sortOn)
-        //{
-        //	this.NodeQuery.NodeTypes.Add(nodeType);
-        //	this.SortOn = sortOn;
         //}
     }
 }
