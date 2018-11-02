@@ -64,7 +64,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A Look search consists of any combinations of the following (optional) query types:  `NodeQuery` , `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`.
+A Look search consists of any combinations of the following (optional) query types:  `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`.
 
 
 ```csharp
@@ -166,14 +166,14 @@ public class LookMatch
 public class Facet
 {
 	/// <summary>
-    /// The name of the tag
-    /// </summary>
-    public string Tag { get; internal set; }
+	/// The name of the tag
+	/// </summary>
+	public string Tag { get; internal set; }
 
-    /// <summary>
-    /// The total number of results expected should this tag be added to TagQuery.AllTags on the current query
-    /// </summary>
-    public int Count { get; internal set; }
+	/// <summary>
+	/// The total number of results expected should this tag be added to TagQuery.AllTags on the current query
+	/// </summary>
+	public int Count { get; internal set; }
 }
 
 ```
