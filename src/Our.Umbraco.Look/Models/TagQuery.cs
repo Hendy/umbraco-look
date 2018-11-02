@@ -1,21 +1,69 @@
-﻿namespace Our.Umbraco.Look.Models
+﻿using System.Linq;
+using Our.Umbraco.Look.Extensions;
+
+namespace Our.Umbraco.Look.Models
 {
     public class TagQuery
     {
         /// <summary>
+        /// Null or collection of tags known to be valid (as cleaned in the setter)
+        /// </summary>
+        private string[] _allTags;
+
+        /// <summary>
+        /// Null or collection of tags known to be valid (as cleaned in the setter)
+        /// </summary>
+        private string[] _anyTags;
+
+        ///// <summary>
+        ///// Null or collection of tags known to be valid (as cleaned in the setter)
+        ///// </summary>
+        //private string[] _notTags;
+
+        /// <summary>
         /// When set, each search result must contain all of these tags -- TODO: rename to Required
         /// </summary>
-        public string[] AllTags { get; set; } = null;
+        public string[] AllTags
+        {
+            get
+            {
+                return this._allTags;
+            }
+            set
+            {
+                this._allTags = value?.Where(x => x.IsValidTag()).ToArray();
+            }
+        }
 
         /// <summary>
         /// When set, each search result must contain at least one of these tags
         /// </summary>
-        public string[] AnyTags { get; set; } = null;
+        public string[] AnyTags
+        {
+            get
+            {
+                return this._anyTags;
+            }
+            set
+            {
+                this._anyTags = value?.Where(x => x.IsValidTag()).ToArray();
+            }
+        }
 
         ///// <summary>
         ///// 
         ///// </summary>
-        //public string[] NotTags { get; set; } = null;
+        //public string[] NotTags
+        //{
+        //    get
+        //    {
+        //        return this._notTags;
+        //    }
+        //    set
+        //    {
+        //        this._notTags = value?.Where(x => x.IsValidTag()).ToArray();
+        //    }
+        //}
 
         /// <summary>
         /// Flag to indicate whether facets should be calculated for tags
