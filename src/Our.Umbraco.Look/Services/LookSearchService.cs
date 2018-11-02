@@ -58,29 +58,18 @@ namespace Our.Umbraco.Look.Services
             // Tags
             if (lookQuery.TagQuery != null)
             {
-                var allTags = new List<string>();
-                var anyTags = new List<string>();
-
                 if (lookQuery.TagQuery.AllTags != null)
                 {
-                    allTags.AddRange(lookQuery.TagQuery.AllTags);
-                    allTags.RemoveAll(x => string.IsNullOrWhiteSpace(x));
+                    query.And().GroupedAnd(
+                                    lookQuery.TagQuery.AllTags.Select(x => LookConstants.TagsField), 
+                                    lookQuery.TagQuery.AllTags);
                 }
 
                 if (lookQuery.TagQuery.AnyTags != null)
                 {
-                    anyTags.AddRange(lookQuery.TagQuery.AnyTags);
-                    anyTags.RemoveAll(x => string.IsNullOrWhiteSpace(x));
-                }
-
-                if (allTags.Any())
-                {
-                    query.And().GroupedAnd(allTags.Select(x => LookConstants.TagsField), allTags.ToArray());
-                }
-
-                if (anyTags.Any())
-                {
-                    query.And().GroupedOr(anyTags.Select(x => LookConstants.TagsField), anyTags.ToArray());
+                    query.And().GroupedOr(
+                                    lookQuery.TagQuery.AnyTags.Select(x => LookConstants.TagsField),
+                                    lookQuery.TagQuery.AnyTags);
                 }
             }
 
