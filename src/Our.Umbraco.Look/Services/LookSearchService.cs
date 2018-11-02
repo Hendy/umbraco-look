@@ -131,8 +131,6 @@ namespace Our.Umbraco.Look.Services
                 Func<int, double?> getDistance = x => null;
                 Func<string, IHtmlString> getHighlight = null;
 
-                TopDocs topDocs = null;
-
                 switch (lookQuery.SortOn)
                 {
                     case SortOn.Name: // a -> z
@@ -198,7 +196,7 @@ namespace Our.Umbraco.Look.Services
                 var luceneSearchCriteria = (LuceneSearchCriteria)searchCriteria;
 
                 // do the Lucene search
-                topDocs = indexSearcher.Search(
+                var topDocs = indexSearcher.Search(
                                             luceneSearchCriteria.Query, // the query build by Examine
                                             filter,
                                             LookService.MaxLuceneResults,
