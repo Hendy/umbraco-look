@@ -20,7 +20,7 @@ No configuration files need to be changed as Look will hook into the default Umb
 </appSettings>
 ```
 
-To configure indexing there are static methods on the `LookIndexService` class which accept functions taking a parameter of IPublishedContent (ipc) that return the typed value to be indexed (all are optional).
+To configure indexing there are static methods on the `LookService` class which accept functions taking a parameter of IPublishedContent (ipc) that return the typed value to be indexed (all are optional).
 
 ```csharp
 using Our.Umbraco.Look.Services;
@@ -33,27 +33,27 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{
-		LookIndexService.SetNameIndexer(ipc => {			
+		LookService.SetNameIndexer(ipc => {			
 			// return string or null or 
-			return LookIndexService.DefaultNameIndexer(ipc);			
+			return LookService.DefaultNameIndexer(ipc);			
 		});
 
-		LookIndexService.SetDateIndexer(ipc => {
+		LookService.SetDateIndexer(ipc => {
 			// return DateTime or null or
-			return LookIndexService.DefaultDateIndexer(ipc);
+			return LookService.DefaultDateIndexer(ipc);
 		});
 
-		LookIndexService.SetTextIndexer(ipc => {		
+		LookService.SetTextIndexer(ipc => {		
 			// return string or null or 
-			return LookIndexService.DefaultTextIndexer(ipc);			
+			return LookService.DefaultTextIndexer(ipc);			
 		});
 
-		LookIndexService.SetTagIndexer(ipc => {
+		LookService.SetTagIndexer(ipc => {
 			// return string[] or null or 
-			return LookIndexService.DefaultTagIndexer(ipc);
+			return LookService.DefaultTagIndexer(ipc);
 		});
 
-		LookIndexService.SetLocationIndexer(ipc => {
+		LookService.SetLocationIndexer(ipc => {
 			// return Our.Umbraco.Look.Model.Location or null
 			// eg. return new Location(55.406330, 10.388500);		
 			return null;			
@@ -107,7 +107,7 @@ var lookQuery = new LookQuery()
 };
 
 // perform the search
-var lookResults = LookSearchService.Query(lookQuery);
+var lookResults = LookService.Query(lookQuery);
 ```
 
 ### Search Results
