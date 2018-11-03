@@ -36,7 +36,6 @@ namespace Our.Umbraco.Look.Services
             // the lucene query being built
             var query = new BooleanQuery(); 
 
-            // pasre the supplied lookQuery
             if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
             {
                 query.Add(
@@ -224,16 +223,7 @@ namespace Our.Umbraco.Look.Services
                 {
                     var simpleFacetedSearch = new SimpleFacetedSearch(indexSearcher.GetIndexReader(), LookConstants.TagsField);
 
-                    Query facetQuery = null;
-
-                    if (filter != null)
-                    {
-                        facetQuery = new FilteredQuery(query, filter);
-                    }
-                    else
-                    {
-                        facetQuery = query;
-                    }
+                    Query facetQuery = filter != null ? (Query)new FilteredQuery(query, filter) : query;
 
                     var facetResult = simpleFacetedSearch.Search(facetQuery);
 
