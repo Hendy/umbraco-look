@@ -36,14 +36,6 @@ namespace Our.Umbraco.Look.Services
             // the lucene query being built
             var query = new BooleanQuery(); 
 
-            // optional sorting / filtering in th lucene query
-            Sort sort = null;
-            Filter filter = null;
-
-            // optional actions to execute when peforming a query
-            Func<int, double?> getDistance = x => null;
-            Func<string, IHtmlString> getHighlight = null;
-
             // pasre the supplied lookQuery
             if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
             {
@@ -73,8 +65,8 @@ namespace Our.Umbraco.Look.Services
                     foreach(var exculudeId in lookQuery.NodeQuery.ExcludeIds)
                     {
                         query.Add(
-                                        new TermQuery(new Term(UmbracoContentIndexer.IndexNodeIdFieldName, exculudeId.ToString())),
-                                        BooleanClause.Occur.MUST);
+                                new TermQuery(new Term(UmbracoContentIndexer.IndexNodeIdFieldName, exculudeId.ToString())),
+                                BooleanClause.Occur.MUST);
                     }
                 }
             }
@@ -86,14 +78,13 @@ namespace Our.Umbraco.Look.Services
             if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
             {
                 query.Add(
-                                new TermRangeQuery(
-                                        LookConstants.DateField,
-                                        GetDate(lookQuery.DateQuery.After) ?? GetDate(DateTime.MinValue),
-                                        GetDate(lookQuery.DateQuery.Before) ?? GetDate(DateTime.MaxValue),
-                                        true,
-                                        true),
-                                BooleanClause.Occur.MUST
-                    );
+                        new TermRangeQuery(
+                                LookConstants.DateField,
+                                GetDate(lookQuery.DateQuery.After) ?? GetDate(DateTime.MinValue),
+                                GetDate(lookQuery.DateQuery.Before) ?? GetDate(DateTime.MaxValue),
+                                true,
+                                true),
+                        BooleanClause.Occur.MUST);
             }
 
             if (lookQuery.TextQuery != null)
@@ -105,17 +96,16 @@ namespace Our.Umbraco.Look.Services
                     if (lookQuery.TextQuery.Fuzzyness > 0)
                     {
                         query.Add(
-                                        new FuzzyQuery(
-                                            new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText), 
-                                            lookQuery.TextQuery.Fuzzyness),
-                                        BooleanClause.Occur.MUST
-                                    );
+                                new FuzzyQuery(
+                                    new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText), 
+                                    lookQuery.TextQuery.Fuzzyness),
+                                BooleanClause.Occur.MUST);
                     }
                     else
                     {
                         query.Add(
-                                    new TermQuery(new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText)),
-                                    BooleanClause.Occur.MUST);
+                                new TermQuery(new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText)),
+                                BooleanClause.Occur.MUST);
                     }
                 }
             }
@@ -139,8 +129,8 @@ namespace Our.Umbraco.Look.Services
                     foreach(var tag in lookQuery.TagQuery.AnyTags)
                     {
                         anyTagQuery.Add(
-                                    new TermQuery(new Term(LookConstants.TagsField, tag)),
-                                    BooleanClause.Occur.SHOULD);
+                                        new TermQuery(new Term(LookConstants.TagsField, tag)),
+                                        BooleanClause.Occur.SHOULD);
                     }
                     
                     query.Add(anyTagQuery, BooleanClause.Occur.MUST);
@@ -149,21 +139,12 @@ namespace Our.Umbraco.Look.Services
                 // TODO: NotTags
             }
 
-            // Sorting - swap with location - order currently significant
-            switch (lookQuery.SortOn)
-            {
-                case SortOn.Name: // a -> z
-                    sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField, SortField.STRING));
-                    break;
+            // optional filter used for geospatial queries
+            Filter filter = null;
+            Sort sort = null;
 
-                case SortOn.DateAscending: // oldest -> newest
-                    sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, false));
-                    break;
-
-                case SortOn.DateDescending: // newest -> oldest
-                    sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
-                    break;
-            }
+            // optional actions to execute when peforming a query
+            Func<int, double?> getDistance = x => null;
 
             // Location
             if (lookQuery.LocationQuery != null && lookQuery.LocationQuery.Location != null)
@@ -211,15 +192,31 @@ namespace Our.Umbraco.Look.Services
                 });
             }
 
-            var indexSearcher = new IndexSearcher(((LuceneIndexer)LookService.Indexer).GetLuceneDirectory(), true); // TODO: allow directory to be injected in for testing outside of umbraco
+            // sorting (distance sort may already have been set)
+            switch (lookQuery.SortOn)
+            {
+                case SortOn.Name: // a -> z
+                    sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField, SortField.STRING));
+                    break;
 
+                case SortOn.DateAscending: // oldest -> newest
+                    sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, false));
+                    break;
+
+                case SortOn.DateDescending: // newest -> oldest
+                    sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
+                    break;
+            }
+
+            // TODO: allow directory to be injected in for testing outside of umbraco
+            var indexSearcher = new IndexSearcher(((LuceneIndexer)LookService.Indexer).GetLuceneDirectory(), true); 
 
             // do the Lucene search
             var topDocs = indexSearcher.Search(
-                                        query,
-                                        filter,
-                                        LookService.MaxLuceneResults,
-                                        sort ?? new Sort(SortField.FIELD_SCORE));
+                                            query,
+                                            filter,
+                                            LookService.MaxLuceneResults,
+                                            sort ?? new Sort(SortField.FIELD_SCORE));
 
             if (topDocs.TotalHits > 0)
             {
@@ -254,6 +251,8 @@ namespace Our.Umbraco.Look.Services
                                 )
                                 .ToArray();
                 }
+
+                Func<string, IHtmlString> getHighlight = null;
 
                 // setup the getHightlight func if required
                 if (lookQuery.TextQuery != null && lookQuery.TextQuery.GetHighlight && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
