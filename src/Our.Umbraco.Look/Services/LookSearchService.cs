@@ -2,6 +2,7 @@
 using Examine.LuceneEngine.SearchCriteria;
 using Lucene.Net.Documents;
 using Lucene.Net.Highlight;
+using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Spatial.Tier;
@@ -32,6 +33,159 @@ namespace Our.Umbraco.Look.Services
 
                 return LookResult.Empty;
             }
+
+            var luceneQuery = new BooleanQuery(); // main query being built
+
+            // Raw
+            if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
+            {
+                luceneQuery.Add(
+                        new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, LookService.Analyzer).Parse(lookQuery.RawQuery),
+                        BooleanClause.Occur.MUST);
+            }
+
+            // Node
+            if (lookQuery.NodeQuery != null)
+            {
+                if (lookQuery.NodeQuery.TypeAliases != null)
+                {
+                    var typeAliasQuery = new BooleanQuery();
+
+                    foreach (var typeAlias in lookQuery.NodeQuery.TypeAliases)
+                    {
+                        typeAliasQuery.Add(
+                                            new TermQuery(new Term(UmbracoContentIndexer.NodeTypeAliasFieldName, typeAlias)),
+                                            BooleanClause.Occur.SHOULD);
+                    }
+
+                    luceneQuery.Add(typeAliasQuery, BooleanClause.Occur.MUST);
+                }
+
+                if (lookQuery.NodeQuery.ExcludeIds != null) // TODO: rename to NotIds (like tags)
+                {
+                    foreach(var exculudeId in lookQuery.NodeQuery.ExcludeIds)
+                    {
+                        luceneQuery.Add(
+                                        new TermQuery(new Term(UmbracoContentIndexer.IndexNodeIdFieldName, exculudeId.ToString())),
+                                        BooleanClause.Occur.MUST);
+                    }
+                }
+            }
+
+            //// Name
+            //if (lookQuery.NameQuery != null)
+            //{
+            //}
+
+            // Date
+            if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
+            {
+                luceneQuery.Add(
+                                new TermRangeQuery(
+                                        LookConstants.DateField,
+                                        GetDate(lookQuery.DateQuery.After.Value) ?? GetDate(DateTime.MinValue),
+                                        GetDate(lookQuery.DateQuery.Before.Value) ?? GetDate(DateTime.MaxValue),
+                                        true,
+                                        true),
+                                BooleanClause.Occur.MUST
+                    );
+            }
+
+            // Text
+            if (lookQuery.TextQuery != null)
+            {
+                if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
+                {
+                    // TODO: wildcards
+
+                    if (lookQuery.TextQuery.Fuzzyness > 0)
+                    {
+                        luceneQuery.Add(
+                                        new FuzzyQuery(
+                                            new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText), 
+                                            lookQuery.TextQuery.Fuzzyness),
+                                        BooleanClause.Occur.MUST
+                                    );
+                    }
+                    else
+                    {
+                        luceneQuery.Add(
+                                    new TermQuery(new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText)),
+                                    BooleanClause.Occur.MUST);
+                    }
+                }
+            }
+
+            // Tag
+            if (lookQuery.TagQuery != null)
+            {
+                if (lookQuery.TagQuery.AllTags != null)
+                {
+                    foreach(var tag in lookQuery.TagQuery.AllTags)
+                    {
+                        luceneQuery.Add(
+                                new TermQuery(new Term(LookConstants.TagsField, tag)),
+                                BooleanClause.Occur.MUST);
+                    }
+                }
+
+                // 'and' a 'grouped or'
+                if (lookQuery.TagQuery.AnyTags != null)
+                {                    
+                    var anyTagQuery = new BooleanQuery();
+
+                    foreach(var tag in lookQuery.TagQuery.AnyTags)
+                    {
+                        anyTagQuery.Add(
+                                    new TermQuery(new Term(LookConstants.TagsField, tag)),
+                                    BooleanClause.Occur.SHOULD);
+                    }
+                    
+                    luceneQuery.Add(anyTagQuery, BooleanClause.Occur.MUST);
+                }
+
+                // TODO: NotTags
+            }
+
+            // Location
+            if (lookQuery.LocationQuery != null)
+            {
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            // ======================
+
 
             var searchProvider = LookService.Searcher;
 
@@ -370,6 +524,21 @@ namespace Our.Umbraco.Look.Services
             }
 
             return date;
+        }
+
+        /// <summary>
+        /// the reverse - get string from DateTime?
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        private static string GetDate(DateTime? dateTime)
+        {
+            if (dateTime != null)
+            {
+                return DateTools.DateToString(dateTime.Value, DateTools.Resolution.SECOND);
+            }
+
+            return null;
         }
     }
 }
