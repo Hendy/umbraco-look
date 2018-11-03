@@ -11,5 +11,28 @@
         /// Any umbraco ids that should be exlcuded from the results (performed as part of the Lucene query so as to get an accurate result count)
         /// </summary>
         public int[] ExcludeIds { get; set; } = null;
+
+        ///// <summary>
+        ///// Constructor
+        ///// </summary>
+        //public NodeQuery()
+        //{
+        //}
+
+        //public NodeQuery(string typeAlias)
+        //{
+        //    this.TypeAliases = new string[] { typeAlias };
+        //}
+
+        //public NodeQuery(int notId)
+        //{
+        //    this.ExcludeIds = new int[] { notId };
+        //}
+
+        //public NodeQuery(string typeAlias, int notId)
+        //{
+        //    this.TypeAliases = new string[] { typeAlias };
+        //    this.ExcludeIds = new int[] { notId };
+        //}
     }
 }

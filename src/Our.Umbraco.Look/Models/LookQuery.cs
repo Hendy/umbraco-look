@@ -55,10 +55,26 @@
         /// <summary>
         /// Constructor - overload to set a starting raw query
         /// </summary>
-        /// <param name="rawQuery"></param>
+        /// <param name="rawQuery">An optional raw Lucene query to extend upon</param>
         public LookQuery(string rawQuery)
         {
            this.RawQuery = rawQuery;
         }
+
+        //public LookQuery(
+        //        string rawQuery = null,
+        //        NodeQuery nodeQuery = null,
+        //        DateQuery dateQuery = null,
+        //        TextQuery textQuery = null,
+        //        LocationQuery locationQuery = null,
+        //        SortOn sortOn = SortOn.Score)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(rawQuery)) this.RawQuery = rawQuery;
+        //    if (nodeQuery != null) this.NodeQuery = nodeQuery;
+        //    if (dateQuery != null) this.DateQuery = dateQuery;
+        //    if (textQuery != null) this.TextQuery = textQuery;
+        //    if (locationQuery != null) this.LocationQuery = LocationQuery;
+        //    this.SortOn = sortOn;
+        //}
     }
 }
