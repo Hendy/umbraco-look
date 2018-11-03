@@ -45,21 +45,21 @@
         /// </summary>
         public SortOn SortOn { get; set; } = SortOn.Score;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public LookQuery()
-        {
-        }
+        ///// <summary>
+        ///// Constructor
+        ///// </summary>
+        //public LookQuery()
+        //{
+        //}
 
-        /// <summary>
-        /// Constructor - overload to set a starting raw query
-        /// </summary>
-        /// <param name="rawQuery">An optional raw Lucene query to extend upon</param>
-        public LookQuery(string rawQuery)
-        {
-           this.RawQuery = rawQuery;
-        }
+        ///// <summary>
+        ///// Constructor - overload to set a starting raw query
+        ///// </summary>
+        ///// <param name="rawQuery">An optional raw Lucene query to extend upon</param>
+        //public LookQuery(string rawQuery)
+        //{
+        //   this.RawQuery = rawQuery;
+        //}
 
         //public LookQuery(
         //        string rawQuery = null,
