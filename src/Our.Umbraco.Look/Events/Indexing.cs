@@ -56,7 +56,7 @@ namespace Our.Umbraco.Look.Events
             {
                 this.EnsureUmbracoContext();
 
-                LookIndexService.Index(publishedContent, e.Document);
+                LookService.Index(publishedContent, e.Document);
             }
         }
 

@@ -1,16 +1,15 @@
 ﻿using Examine.LuceneEngine.Providers;
 using Lucene.Net.Documents;
 using Lucene.Net.Util;
+using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Models;
 using System;
-using System.Linq;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
-using Our.Umbraco.Look.Extensions;
 
 namespace Our.Umbraco.Look.Services
 {
-    public static class LookIndexService
+    public partial class LookService
     {
         /// <summary>
         /// Register consumer code to perform when indexing text
@@ -174,7 +173,7 @@ namespace Our.Umbraco.Look.Services
                         }
                         else
                         {
-                            LogHelper.Info(typeof(LookIndexService), $"Attemped to index an invalid tag string '{tag}'");
+                            LogHelper.Info(typeof(LookService), $"Attemped to index an invalid tag string '{tag}'");
                         }
                     }
                 }

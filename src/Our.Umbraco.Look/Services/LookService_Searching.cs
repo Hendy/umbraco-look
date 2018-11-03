@@ -17,7 +17,7 @@ using UmbracoExamine;
 
 namespace Our.Umbraco.Look.Services
 {
-    public static class LookSearchService
+    public partial class LookService
     {
         /// <summary>
         ///  Main searching method
@@ -34,7 +34,7 @@ namespace Our.Umbraco.Look.Services
             }
 
             // the lucene query being built
-            var query = new BooleanQuery(); 
+            var query = new BooleanQuery();
 
             if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
             {
@@ -61,7 +61,7 @@ namespace Our.Umbraco.Look.Services
 
                 if (lookQuery.NodeQuery.NotIds != null)
                 {
-                    foreach(var exculudeId in lookQuery.NodeQuery.NotIds)
+                    foreach (var exculudeId in lookQuery.NodeQuery.NotIds)
                     {
                         query.Add(
                                 new TermQuery(new Term(UmbracoContentIndexer.IndexNodeIdFieldName, exculudeId.ToString())),
@@ -96,7 +96,7 @@ namespace Our.Umbraco.Look.Services
                     {
                         query.Add(
                                 new FuzzyQuery(
-                                    new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText), 
+                                    new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText),
                                     lookQuery.TextQuery.Fuzzyness),
                                 BooleanClause.Occur.MUST);
                     }
@@ -113,7 +113,7 @@ namespace Our.Umbraco.Look.Services
             {
                 if (lookQuery.TagQuery.AllTags != null)
                 {
-                    foreach(var tag in lookQuery.TagQuery.AllTags)
+                    foreach (var tag in lookQuery.TagQuery.AllTags)
                     {
                         query.Add(
                                 new TermQuery(new Term(LookConstants.TagsField, tag)),
@@ -122,16 +122,16 @@ namespace Our.Umbraco.Look.Services
                 }
 
                 if (lookQuery.TagQuery.AnyTags != null)
-                {                    
+                {
                     var anyTagQuery = new BooleanQuery();
 
-                    foreach(var tag in lookQuery.TagQuery.AnyTags)
+                    foreach (var tag in lookQuery.TagQuery.AnyTags)
                     {
                         anyTagQuery.Add(
                                         new TermQuery(new Term(LookConstants.TagsField, tag)),
                                         BooleanClause.Occur.SHOULD);
                     }
-                    
+
                     query.Add(anyTagQuery, BooleanClause.Occur.MUST);
                 }
 
@@ -205,7 +205,7 @@ namespace Our.Umbraco.Look.Services
             }
 
             // TODO: allow directory to be injected in for testing outside of umbraco
-            var indexSearcher = new IndexSearcher(((LuceneIndexer)LookService.Indexer).GetLuceneDirectory(), true); 
+            var indexSearcher = new IndexSearcher(((LuceneIndexer)LookService.Indexer).GetLuceneDirectory(), true);
 
             // do the Lucene search
             var topDocs = indexSearcher.Search(
@@ -267,12 +267,12 @@ namespace Our.Umbraco.Look.Services
                     };
                 }
 
-                return new LookResult(LookSearchService.GetLookMatches(
-                                                            lookQuery,
-                                                            indexSearcher,
-                                                            topDocs,
-                                                            getHighlight,
-                                                            getDistance),
+                return new LookResult(LookService.GetLookMatches(
+                                                        lookQuery,
+                                                        indexSearcher,
+                                                        topDocs,
+                                                        getHighlight,
+                                                        getDistance),
                                         topDocs.TotalHits,
                                         facets);
             }
@@ -305,7 +305,7 @@ namespace Our.Umbraco.Look.Services
             fields.Add(LookConstants.DateField);
 
             // if a highlight function is supplied (or text requested)
-            if (getHighlight != null || getText)  { fields.Add(LookConstants.TextField); }
+            if (getHighlight != null || getText) { fields.Add(LookConstants.TextField); }
 
             fields.Add(LookConstants.TagsField);
             fields.Add(LookConstants.LocationField);
@@ -325,8 +325,8 @@ namespace Our.Umbraco.Look.Services
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     getHighlight(doc.Get(LookConstants.TextField)),
                     getText ? doc.Get(LookConstants.TextField) : null,
-                    LookSearchService.GetTags(doc.GetFields(LookConstants.TagsField)),
-                    LookSearchService.GetDate(doc.Get(LookConstants.DateField)),
+                    LookService.GetTags(doc.GetFields(LookConstants.TagsField)),
+                    LookService.GetDate(doc.Get(LookConstants.DateField)),
                     doc.Get(LookConstants.NameField),
                     doc.Get(LookConstants.LocationField) != null ? new Location(doc.Get(LookConstants.LocationField)) : null,
                     getDistance(docId),
@@ -370,7 +370,7 @@ namespace Our.Umbraco.Look.Services
             }
             catch
             {
-                LogHelper.Info(typeof(LookSearchService), $"Unable to convert string '{dateValue}' into a DateTime");
+                LogHelper.Info(typeof(LookService), $"Unable to convert string '{dateValue}' into a DateTime");
             }
 
             return date;
