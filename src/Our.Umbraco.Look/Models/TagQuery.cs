@@ -21,7 +21,7 @@ namespace Our.Umbraco.Look.Models
         //private string[] _notTags;
 
         /// <summary>
-        /// When set, each search result must contain all of these tags -- TODO: rename to Required
+        /// When set, each search result must contain all of these tags
         /// </summary>
         public string[] AllTags
         {
@@ -51,7 +51,7 @@ namespace Our.Umbraco.Look.Models
         }
 
         ///// <summary>
-        ///// 
+        ///// When set, each search result must not contain any of these tags
         ///// </summary>
         //public string[] NotTags
         //{

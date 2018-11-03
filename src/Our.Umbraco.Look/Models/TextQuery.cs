@@ -12,6 +12,11 @@
         /// </summary>
         public float Fuzzyness { get; set; } = 0;
 
+        ///// <summary>
+        ///// when specified, then wildcard term search will be used
+        ///// </summary>
+        //public char[] Wildcards { get; set; } = null;
+
         /// <summary>
         /// When true (and SearchText provided), a hightlight extract containing the search text will be returned
         /// </summary>
