@@ -104,7 +104,7 @@ namespace Our.Umbraco.Look.Services
                     else
                     {
                         query.Add(
-                                new TermQuery(new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText)),
+                                new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, LookService.Analyzer).Parse(lookQuery.TextQuery.SearchText),
                                 BooleanClause.Occur.MUST);
                     }
                 }
