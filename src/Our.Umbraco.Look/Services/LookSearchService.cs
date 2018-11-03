@@ -177,15 +177,12 @@ namespace Our.Umbraco.Look.Services
                                     new DistanceFieldComparatorSource(distanceQueryBuilder.DistanceFilter)));
                 }
 
-                // raw data for the getDistance func
-                var distances = distanceQueryBuilder.DistanceFilter.Distances;
-
                 // update getDistance func
                 getDistance = new Func<int, double?>(x =>
                 {
-                    if (distances.ContainsKey(x))
+                    if (distanceQueryBuilder.DistanceFilter.Distances.ContainsKey(x))
                     {
-                        return distances[x];
+                        return distanceQueryBuilder.DistanceFilter.Distances[x];
                     }
 
                     return null;

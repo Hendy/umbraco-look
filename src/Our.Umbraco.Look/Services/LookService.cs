@@ -22,6 +22,16 @@ namespace Our.Umbraco.Look.Services
     internal class LookService
     {
         /// <summary>
+        /// Function to get the name for the IPublishedContent being indexed
+        /// </summary>
+        internal Func<IPublishedContent, string> NameIndexer { get; set; } = x => LookIndexService.DefaultNameIndexer(x);
+
+        /// <summary>
+        /// Function to get the date for the IPublishedContent being indexed
+        /// </summary>
+        internal Func<IPublishedContent, DateTime?> DateIndexer { get; set; } = x => LookIndexService.DefaultDateIndexer(x);
+
+        /// <summary>
         /// Function to get text for the IPublishedContent being indexed
         /// </summary>
         internal Func<IPublishedContent, string> TextIndexer { get; set; } = x => LookIndexService.DefaultTextIndexer(x);
@@ -30,16 +40,6 @@ namespace Our.Umbraco.Look.Services
         /// Function to get the tags for the IPublishedContent being indexed
         /// </summary>
         internal Func<IPublishedContent, string[]> TagIndexer { get; set; } = x => LookIndexService.DefaultTagIndexer(x);
-
-        /// <summary>
-        /// Function to get the date for the IPublishedContent being indexed
-        /// </summary>
-        internal Func<IPublishedContent, DateTime?> DateIndexer { get; set; } = x => LookIndexService.DefaultDateIndexer(x);
-
-        /// <summary>
-        /// Function to get the name for the IPublishedContent being indexed
-        /// </summary>
-        internal Func<IPublishedContent, string> NameIndexer { get; set; } = x => LookIndexService.DefaultNameIndexer(x);
 
         /// <summary>
         /// Function to get a location for the IPublishedContent being indexed
@@ -141,8 +141,13 @@ namespace Our.Umbraco.Look.Services
 
                 for (var tier = startTier; tier <= endTier; tier++)
                 {
-                    LookService.Instance.CartesianTierPlotters.Add(
-                        new CartesianTierPlotter(tier, projector, CartesianTierPlotter.DefaltFieldPrefix));
+                    LookService
+                        .Instance
+                        .CartesianTierPlotters
+                        .Add(new CartesianTierPlotter(
+                                            tier, 
+                                            projector, 
+                                            CartesianTierPlotter.DefaltFieldPrefix));
                 }
 
                 // wire-up the func

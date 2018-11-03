@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Umbraco.Core.Logging;
+﻿using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Extensions
 {
@@ -14,9 +13,9 @@ namespace Our.Umbraco.Look.Extensions
         {
             var isValid = true;
 
-            //if (value.Any(char.IsUpper)) { isValid = false; } // tag must be lowercase until field queried without analyzer
             //if (value.Any(char.IsWhiteSpace)) { isValid = false; }
-            if (value.Contains("\\")) isValid = false; // reserved for future use (tag tree)
+            if (string.IsNullOrWhiteSpace(value)) { isValid = false; }
+            if (value.Contains("\\")) { isValid = false; } // reserved for future use (tag tree)
 
             if (!isValid)
             {
