@@ -57,6 +57,11 @@ namespace Our.Umbraco.Look.Services
         private string IndexerName { get; }
 
         /// <summary>
+        /// Name of searcher to use (from configuration)
+        /// </summary>
+        private string SearcherName { get; }
+
+        /// <summary>
         /// Gets the Examine indexer
         /// </summary>
         internal static BaseIndexProvider Indexer => ExamineManager.Instance.IndexProviderCollection[LookService.Instance.IndexerName];
@@ -65,6 +70,11 @@ namespace Our.Umbraco.Look.Services
         /// Get the Analyzer in use by Examine
         /// </summary>
         internal static Analyzer Analyzer => ((LuceneIndexer)LookService.Indexer).IndexingAnalyzer;
+
+        /// <summary>
+        /// Gets the Examine searcher
+        /// </summary>
+        internal static BaseSearchProvider Searcher => ExamineManager.Instance.SearchProviderCollection[LookService.Instance.SearcherName];
 
         /// <summary>
         /// Max distance in miles for distance searches & location indexing
@@ -92,8 +102,10 @@ namespace Our.Umbraco.Look.Services
         private LookService()
         {
             var configuredIndexerName = ConfigurationManager.AppSettings["Our.Umbraco.Look.IndexerName"];
+            var configuredSearcherName = ConfigurationManager.AppSettings["Our.Umbraco.Look.SearcherName"];
 
             this.IndexerName = configuredIndexerName ?? "ExternalIndexer";
+            this.SearcherName = configuredSearcherName ?? "ExternalSearcher";
         }
 
         /// <summary>
