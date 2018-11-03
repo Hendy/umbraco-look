@@ -34,28 +34,37 @@ public class ConfigureIndexing : ApplicationEventHandler
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{
 		LookService.SetNameIndexer(ipc => {			
-			// return string or null or 
-			return LookService.DefaultNameIndexer(ipc);			
+			// return string or null
 		});
 
 		LookService.SetDateIndexer(ipc => {
-			// return DateTime or null or
-			return LookService.DefaultDateIndexer(ipc);
+			// return DateTime or null
 		});
 
 		LookService.SetTextIndexer(ipc => {		
-			// return string or null or 
-			return LookService.DefaultTextIndexer(ipc);			
+			// return string or null
 		});
 
 		LookService.SetTagIndexer(ipc => {
-			// return string[] or null or 
-			return LookService.DefaultTagIndexer(ipc);
+			// return string[] or null
 		});
 
 		LookService.SetLocationIndexer(ipc => {
 			// return Our.Umbraco.Look.Model.Location or null
 			// eg. return new Location(55.406330, 10.388500);		
+
+            var terratype = ipc.GetProperty("location").Value as Terratype.Models.Model;
+
+            if (terratype != null)
+            {
+                var latLng = terratype.Position.ToWgs84();
+
+                if (latLng != null)
+                {
+                    return new Location(latLng.Latitude, latLng.Longitude);
+                }
+            }
+
 			return null;			
 		});
 	}

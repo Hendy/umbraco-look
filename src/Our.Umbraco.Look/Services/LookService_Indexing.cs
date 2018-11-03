@@ -27,7 +27,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="publishedContent"></param>
         /// <returns></returns>
-        public static string DefaultTextIndexer(IPublishedContent publishedContent)
+        private static string DefaultTextIndexer(IPublishedContent publishedContent)
         {
             //TODO: extract text from all known text fields
             // extract and rip html fields
@@ -51,7 +51,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="publishedContent"></param>
         /// <returns></returns>
-        public static string[] DefaultTagIndexer(IPublishedContent publishedContent)
+        private static string[] DefaultTagIndexer(IPublishedContent publishedContent)
         {
             // TODO: look for known tag datatypes and pickers ?
 
@@ -74,7 +74,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="publishedContent"></param>
         /// <returns></returns>
-        public static DateTime? DefaultDateIndexer(IPublishedContent publishedContent)
+        private static DateTime? DefaultDateIndexer(IPublishedContent publishedContent)
         {
             return publishedContent.UpdateDate;
         }
@@ -95,7 +95,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="publishedContent"></param>
         /// <returns></returns>
-        public static string DefaultNameIndexer(IPublishedContent publishedContent)
+        private static string DefaultNameIndexer(IPublishedContent publishedContent)
         {
             return publishedContent.Name;
         }
