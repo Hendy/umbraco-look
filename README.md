@@ -63,7 +63,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A Look search consists of any combinations of the following (optional) query types:  `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`.
+A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`.
 
 
 ```csharp
@@ -72,9 +72,11 @@ using Our.Umbraco.Look.Services;
 
 var lookQuery = new LookQuery()
 {
+	RawQuery = "+path: 1059",
+
 	NodeQuery = new NodeQuery() {
 		TypeAliases = new string[] { "myDocTypeAlias" },
-		ExcludeIds = new int[] { 123 } // (eg. exclude current page) // TODO: rename to NotIds ?
+		NotIds = new int[] { 123 } // (eg. exclude current page)
 	},
 
 	DateQuery = new DateQuery() {
@@ -117,11 +119,6 @@ var facets = lookResults.Facets; // returns Our.Umbraco.Look.Models.Facet[]
 public class LookMatch
 {
 	/// <summary>
-	/// The Lucene score for this match
-	/// </summary>
-	public float Score { get; internal set; }
-
-	/// <summary>
 	/// The Umbraco node Id of the matched item
 	/// </summary>
 	public int Id { get; internal set; }
@@ -160,6 +157,11 @@ public class LookMatch
 	/// The calculated distance (only returned if a location supplied in query)
 	/// </summary>
 	public double? Distance { get; internal set; }
+
+	/// <summary>
+	/// The Lucene score for this match
+	/// </summary>
+	public float Score { get; internal set; }
 }
 
 public class Facet

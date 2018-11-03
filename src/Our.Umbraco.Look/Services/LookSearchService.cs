@@ -59,9 +59,9 @@ namespace Our.Umbraco.Look.Services
                     query.Add(typeAliasQuery, BooleanClause.Occur.MUST);
                 }
 
-                if (lookQuery.NodeQuery.ExcludeIds != null) // TODO: rename to NotIds (like tags)
+                if (lookQuery.NodeQuery.NotIds != null)
                 {
-                    foreach(var exculudeId in lookQuery.NodeQuery.ExcludeIds)
+                    foreach(var exculudeId in lookQuery.NodeQuery.NotIds)
                     {
                         query.Add(
                                 new TermQuery(new Term(UmbracoContentIndexer.IndexNodeIdFieldName, exculudeId.ToString())),

@@ -10,7 +10,7 @@
         /// <summary>
         /// Any umbraco ids that should be exlcuded from the results (performed as part of the Lucene query so as to get an accurate result count)
         /// </summary>
-        public int[] ExcludeIds { get; set; } = null;
+        public int[] NotIds { get; set; } = null;
 
         ///// <summary>
         ///// Constructor
