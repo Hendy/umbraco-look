@@ -53,17 +53,17 @@ public class ConfigureIndexing : ApplicationEventHandler
 			// return Our.Umbraco.Look.Model.Location or null
 			// eg. return new Location(55.406330, 10.388500);		
 
-            var terratype = ipc.GetProperty("location").Value as Terratype.Models.Model;
+			var terratype = ipc.GetProperty("location").Value as Terratype.Models.Model;
 
-            if (terratype != null)
-            {
-                var latLng = terratype.Position.ToWgs84();
+			if (terratype != null)
+			{
+				var latLng = terratype.Position.ToWgs84();
 
-                if (latLng != null)
-                {
-                    return new Location(latLng.Latitude, latLng.Longitude);
-                }
-            }
+				if (latLng != null)
+				{
+					return new Location(latLng.Latitude, latLng.Longitude);
+				}
+			}
 
 			return null;			
 		});
