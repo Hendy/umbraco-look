@@ -16,7 +16,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="publishedContent">The IPublishedContent being indexed</param>
         /// <param name="document">The Lucene Document</param>
-        internal static void Index(IPublishedContent publishedContent, Document document)
+        internal static void Index(IPublishedContent publishedContent, Document document, string indexerName)
         {
             if (LookService.Instance.TextIndexer != null)
             {
@@ -24,7 +24,7 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    text = LookService.Instance.TextIndexer(publishedContent);
+                    text = LookService.Instance.TextIndexer(publishedContent, indexerName);
                 }
                 catch (Exception exception)
                 {
@@ -50,7 +50,7 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    tags = LookService.Instance.TagIndexer(publishedContent);
+                    tags = LookService.Instance.TagIndexer(publishedContent, indexerName);
                 }
                 catch (Exception exception)
                 {
@@ -85,7 +85,7 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    date = LookService.Instance.DateIndexer(publishedContent);
+                    date = LookService.Instance.DateIndexer(publishedContent, indexerName);
                 }
                 catch (Exception exception)
                 {
@@ -121,7 +121,7 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    name = LookService.Instance.NameIndexer(publishedContent);
+                    name = LookService.Instance.NameIndexer(publishedContent, indexerName);
                 }
                 catch (Exception exception)
                 {
@@ -155,7 +155,7 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    location = LookService.Instance.LocationIndexer(publishedContent);
+                    location = LookService.Instance.LocationIndexer(publishedContent, indexerName);
                 }
                 catch (Exception exception)
                 {

@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.Services
         /// Register consumer code to perform when indexing text
         /// </summary>
         /// <param name="textFunc"></param>
-        public static void SetTextIndexer(Func<IPublishedContent, string> textFunc)
+        public static void SetTextIndexer(Func<IPublishedContent, string, string> textFunc)
         {
             LogHelper.Info(typeof(LookService), "Text indexing function set");
 

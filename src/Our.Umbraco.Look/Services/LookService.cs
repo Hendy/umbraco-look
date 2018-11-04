@@ -22,27 +22,27 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
         /// </summary>
-        private Func<IPublishedContent, string> NameIndexer { get; set; } = x => x.Name;
+        private Func<IPublishedContent, string, string> NameIndexer { get; set; } = (iPublishedContent, indexerName) => iPublishedContent.Name;
 
         /// <summary>
         /// Function to get the date for the IPublishedContent being indexed
         /// </summary>
-        private Func<IPublishedContent, DateTime?> DateIndexer { get; set; } = x => x.UpdateDate;
+        private Func<IPublishedContent, string, DateTime?> DateIndexer { get; set; } = (iPublishedContent, indexerName) => iPublishedContent.UpdateDate;
 
         /// <summary>
         /// Function to get text for the IPublishedContent being indexed
         /// </summary>
-        private Func<IPublishedContent, string> TextIndexer { get; set; } = null;
+        private Func<IPublishedContent, string, string> TextIndexer { get; set; } = null;
 
         /// <summary>
         /// Function to get the tags for the IPublishedContent being indexed
         /// </summary>
-        private Func<IPublishedContent, string[]> TagIndexer { get; set; } = null;
+        private Func<IPublishedContent, string, string[]> TagIndexer { get; set; } = null;
 
         /// <summary>
         /// Function to get a location for the IPublishedContent being indexed
         /// </summary>
-        private Func<IPublishedContent, Location> LocationIndexer { get; set; } = x => null;
+        private Func<IPublishedContent, string, Location> LocationIndexer { get; set; } = null;
 
         /// <summary>
         /// Collection of cartesian tier plotters

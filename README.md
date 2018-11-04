@@ -13,7 +13,9 @@ Look can add the following (optional) fields to each document in an Umbraco Exam
   
 No configuration files need to be changed as Look will use default Examine searcher (unless specified otherwise).
 
-To configure indexing there are static methods on the `LookService` class which accept functions taking a parameter of IPublishedContent (ipc) that return the typed value to be indexed (all are optional).
+To configure the indexing behaviour there are static methods on the `LookService` class where (optional) custom indexers can be specified.
+
+Each custom indexer is supplied with the IPublishedContent representation of the content, media or member being indexed, together with the name of the Examine index being operated upon.
 
 ```csharp
 using Our.Umbraco.Look.Services;
@@ -26,27 +28,27 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{
-		LookService.SetNameIndexer(ipc => {			
+		LookService.SetNameIndexer((iPublishedContent, indexerName) => {			
 			// return string or null
 		});
 
-		LookService.SetDateIndexer(ipc => {
+		LookService.SetDateIndexer((iPublishedContent, indexerName) => {
 			// return DateTime or null
 		});
 
-		LookService.SetTextIndexer(ipc => {		
+		LookService.SetTextIndexer((iPublishedContent, indexerName) => {		
 			// return string or null
 		});
 
-		LookService.SetTagIndexer(ipc => {
+		LookService.SetTagIndexer((iPublishedContent, indexerName) => {
 			// return string[] or null
 		});
 
-		LookService.SetLocationIndexer(ipc => {
+		LookService.SetLocationIndexer((iPublishedContent, indexerName) => {
 			// return Our.Umbraco.Look.Model.Location or null
 			// eg. return new Location(55.406330, 10.388500);		
 
-			var terratype = ipc.GetProperty("location").Value as Terratype.Models.Model;
+			var terratype = iPublishedContent.GetProperty("location").Value as Terratype.Models.Model;
 
 			if (terratype != null)
 			{

@@ -27,7 +27,7 @@ namespace Our.Umbraco.Look.Events
                             new UmbracoHelper(UmbracoContext.Current));
         }
 
-        private void Indexer_DocumentWriting(object sender, DocumentWritingEventArgs e, UmbracoHelper umbracoHelper)
+        private void Indexer_DocumentWriting(object sender, DocumentWritingEventArgs e, UmbracoHelper umbracoHelper, string indexerName)
         {
             IPublishedContent publishedContent = null;
 
@@ -56,7 +56,7 @@ namespace Our.Umbraco.Look.Events
             {
                 this.EnsureUmbracoContext();
 
-                LookService.Index(publishedContent, e.Document);
+                LookService.Index(publishedContent, e.Document, indexerName);
             }
         }
 

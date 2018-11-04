@@ -17,7 +17,7 @@ namespace Our.Umbraco.Look.Services
         /// <param name="gatheringNodeData">indexing event</param>
         /// <param name="umbracoHelper"></param>
         internal static void Initialize(
-                                Action<object, DocumentWritingEventArgs, UmbracoHelper> documentWriting,
+                                Action<object, DocumentWritingEventArgs, UmbracoHelper, string> documentWriting,
                                 UmbracoHelper umbracoHelper)
         {
             LogHelper.Info(typeof(LookService), "Initializing");
@@ -60,7 +60,7 @@ namespace Our.Umbraco.Look.Services
                 // hook into all index providers
                 foreach(var indexProvider in indexProviders)
                 {
-                    indexProvider.DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper);
+                    indexProvider.DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper, indexProvider.Name);
                 }
             }
         }
