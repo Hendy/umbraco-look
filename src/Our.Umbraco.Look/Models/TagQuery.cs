@@ -5,25 +5,31 @@ namespace Our.Umbraco.Look.Models
 {
     public class TagQuery
     {
-        /// <summary>
-        /// Null or collection of tags known to be valid (as cleaned in the setter)
-        /// </summary>
-        private string[] _allTags;
+        //public Tag[] AllTags { get; set; }
+
+        //public Tag[] AnyTags { get; set; }
+
+        //public Tag[] NotTags { get; set; }
 
         /// <summary>
         /// Null or collection of tags known to be valid (as cleaned in the setter)
         /// </summary>
-        private string[] _anyTags;
+        private Tag[] _allTags;
+
+        /// <summary>
+        /// Null or collection of tags known to be valid (as cleaned in the setter)
+        /// </summary>
+        private Tag[] _anyTags;
 
         ///// <summary>
         ///// Null or collection of tags known to be valid (as cleaned in the setter)
         ///// </summary>
-        //private string[] _notTags;
+        //private Tag[] _notTags;
 
         /// <summary>
         /// When set, each search result must contain all of these tags
         /// </summary>
-        public string[] AllTags
+        public Tag[] AllTags
         {
             get
             {
@@ -31,14 +37,14 @@ namespace Our.Umbraco.Look.Models
             }
             set
             {
-                this._allTags = value?.Where(x => x.IsValidTag()).ToArray();
+                this._allTags = value?.Where(x => x.Name.IsValidTag()).ToArray();
             }
         }
 
         /// <summary>
         /// When set, each search result must contain at least one of these tags
         /// </summary>
-        public string[] AnyTags
+        public Tag[] AnyTags
         {
             get
             {
@@ -46,24 +52,24 @@ namespace Our.Umbraco.Look.Models
             }
             set
             {
-                this._anyTags = value?.Where(x => x.IsValidTag()).ToArray();
+                this._anyTags = value?.Where(x => x.Name.IsValidTag()).ToArray();
             }
         }
 
-        ///// <summary>
-        ///// When set, each search result must not contain any of these tags
-        ///// </summary>
-        //public string[] NotTags
-        //{
-        //    get
-        //    {
-        //        return this._notTags;
-        //    }
-        //    set
-        //    {
-        //        this._notTags = value?.Where(x => x.IsValidTag()).ToArray();
-        //    }
-        //}
+        /////// <summary>
+        /////// When set, each search result must not contain any of these tags
+        /////// </summary>
+        ////public Tag[] NotTags
+        ////{
+        ////    get
+        ////    {
+        ////        return this._notTags;
+        ////    }
+        ////    set
+        ////    {
+        ////        this._notTags = value?.Where(x => x.IsValidTag()).ToArray();
+        ////    }
+        ////}
 
         /// <summary>
         /// Flag to indicate whether facets should be calculated for tags

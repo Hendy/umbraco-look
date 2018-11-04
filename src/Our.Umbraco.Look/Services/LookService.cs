@@ -3,7 +3,6 @@ using Lucene.Net.Store;
 using Our.Umbraco.Look.Models;
 using System;
 using System.Collections.Generic;
-using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -37,7 +36,7 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Function to get the tags for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, string[]> TagIndexer { get; set; } = null;
+        private Func<IndexingContext, Tag[]> TagIndexer { get; set; } = null;
 
         /// <summary>
         /// Function to get a location for the IPublishedContent being indexed

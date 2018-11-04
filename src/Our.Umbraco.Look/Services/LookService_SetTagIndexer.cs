@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.Services
         /// Register consumer code to perform when indexing tags
         /// </summary>
         /// <param name="tagsFunc"></param>
-        public static void SetTagIndexer(Func<IndexingContext, string[]> tagsFunc)
+        public static void SetTagIndexer(Func<IndexingContext, Tag[]> tagsFunc)
         {
             LogHelper.Info(typeof(LookService), "Tag indexing function set");
 

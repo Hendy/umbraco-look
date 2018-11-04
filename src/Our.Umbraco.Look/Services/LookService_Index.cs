@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.Services
 
             if (LookService.Instance.TagIndexer != null)
             {
-                string[] tags = null;
+                Tag[] tags = null;
 
                 try
                 {
@@ -60,11 +60,13 @@ namespace Our.Umbraco.Look.Services
                 {
                     foreach (var tag in tags)
                     {
-                        if (tag.IsValidTag())
+                        // TODO: seperate fields for each tag group
+
+                        if (tag.Name.IsValidTag())
                         {
                             var tagField = new Field(
                                                 LookConstants.TagsField,
-                                                tag,
+                                                tag.Name, //string.IsNullOrWhiteSpace(tag.Group) ? tag.Name : string.Join("-", tag.Group, tag.Name),
                                                 Field.Store.YES,
                                                 Field.Index.NOT_ANALYZED);
 

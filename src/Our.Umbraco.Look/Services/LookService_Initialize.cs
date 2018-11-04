@@ -32,7 +32,7 @@ namespace Our.Umbraco.Look.Services
 
             if (!indexProviders.Any())
             {
-                LogHelper.Warn(typeof(LookService), "Unable to initialize as could not find any Umbraco Examine indexers !");
+                LogHelper.Warn(typeof(LookService), "Unable to initialize indexing as could not find any Umbraco Examine indexers !");
             }
             else
             {

@@ -125,7 +125,7 @@ namespace Our.Umbraco.Look.Services
                     foreach (var tag in lookQuery.TagQuery.AllTags)
                     {
                         query.Add(
-                                new TermQuery(new Term(LookConstants.TagsField, tag)),
+                                new TermQuery(new Term(LookConstants.TagsField, tag.Name)), // TODO : fields for tag group
                                 BooleanClause.Occur.MUST);
                     }
                 }
@@ -137,7 +137,7 @@ namespace Our.Umbraco.Look.Services
                     foreach (var tag in lookQuery.TagQuery.AnyTags)
                     {
                         anyTagQuery.Add(
-                                        new TermQuery(new Term(LookConstants.TagsField, tag)),
+                                        new TermQuery(new Term(LookConstants.TagsField, tag.Name)), // TODO : fields for tag group
                                         BooleanClause.Occur.SHOULD);
                     }
 
