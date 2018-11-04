@@ -33,9 +33,9 @@ namespace Our.Umbraco.Look.Services
                 return LookResult.Empty;
             }
 
-            var searcherContext = LookService.GetSearchingContext(lookQuery.SearcherName);
+            var searchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
 
-            if (searcherContext == null)
+            if (searchingContext == null)
             {
                 LogHelper.Debug(typeof(LookService), "Unable to perform query, as Examine searcher not found");
 
@@ -48,7 +48,7 @@ namespace Our.Umbraco.Look.Services
             if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
             {
                 query.Add(
-                        new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, searcherContext.Analyzer).Parse(lookQuery.RawQuery),
+                        new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, searchingContext.Analyzer).Parse(lookQuery.RawQuery),
                         BooleanClause.Occur.MUST);
             }
 
@@ -112,7 +112,7 @@ namespace Our.Umbraco.Look.Services
                     else
                     {
                         query.Add(
-                                new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searcherContext.Analyzer).Parse(lookQuery.TextQuery.SearchText),
+                                new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer).Parse(lookQuery.TextQuery.SearchText),
                                 BooleanClause.Occur.MUST);
                     }
                 }
@@ -214,7 +214,7 @@ namespace Our.Umbraco.Look.Services
             }
 
             // do the Lucene search
-            var topDocs = searcherContext
+            var topDocs = searchingContext
                                 .IndexSearcher
                                 .Search(
                                     query,
@@ -229,7 +229,7 @@ namespace Our.Umbraco.Look.Services
                 // facets
                 if (lookQuery.TagQuery != null && lookQuery.TagQuery.GetFacets)
                 {
-                    var simpleFacetedSearch = new SimpleFacetedSearch(searcherContext.IndexSearcher.GetIndexReader(), LookConstants.TagsField);
+                    var simpleFacetedSearch = new SimpleFacetedSearch(searchingContext.IndexSearcher.GetIndexReader(), LookConstants.TagsField);
 
                     Query facetQuery = filter != null ? (Query)new FilteredQuery(query, filter) : query;
 
@@ -252,18 +252,18 @@ namespace Our.Umbraco.Look.Services
                 // setup the getHightlight func if required
                 if (lookQuery.TextQuery != null && lookQuery.TextQuery.GetHighlight && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                 {
-                    var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searcherContext.Analyzer);
+                    var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer);
 
                     var queryScorer = new QueryScorer(queryParser
                                                         .Parse(lookQuery.TextQuery.SearchText)
-                                                        .Rewrite(searcherContext.IndexSearcher.GetIndexReader()));
+                                                        .Rewrite(searchingContext.IndexSearcher.GetIndexReader()));
 
                     var highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
 
                     // update the getHightlight func
                     getHighlight = (x) =>
                     {
-                        var tokenStream = searcherContext.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
+                        var tokenStream = searchingContext.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
 
                         var highlight = highlighter.GetBestFragments(
                                                         tokenStream,
@@ -277,7 +277,7 @@ namespace Our.Umbraco.Look.Services
 
                 return new LookResult(LookService.GetLookMatches(
                                                         lookQuery,
-                                                        searcherContext.IndexSearcher,
+                                                        searchingContext.IndexSearcher,
                                                         topDocs,
                                                         getHighlight,
                                                         getDistance),
