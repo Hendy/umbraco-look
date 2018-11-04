@@ -147,6 +147,8 @@ var lookQuery = new LookQuery("InternalMemberSearcher");
 ### Search Results
 
 ```csharp
+using Our.Umbraco.Look.Services;
+
 // perform the search
 var lookResults = LookService.Query(lookQuery);
 
