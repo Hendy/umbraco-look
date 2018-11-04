@@ -45,7 +45,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 		});
 
 		LookService.SetTagIndexer(indexingContext => {
-			// return string[] (or null to not index)
+			// return Our.Umbraco.Look.Models.Tag[] (or null to not index)
 			return null;
 		});
 
@@ -118,9 +118,9 @@ var lookQuery = new LookQuery()
 	},
 
 	TagQuery = new TagQuery() {
-		AllTags = new string[] { "tag1", "tag2" }, // both tag1 and tag2 are required
-		AnyTags = new string[] { "tag3", "tag4", "tag5" }, // at least one of these tags is required
-		// TODO: NotTags = new string[] { "tag6" }, // results must not have any of these tags
+		AllTags = new Tag[] { new Tag("tag1"), new Tag("tag2") }, // both tag1 and tag2 are required
+		AnyTags = new Tag[] { new Tag("tag3"), new Tag("tag4") }, // at least one of these tags is required
+		// TODO: NotTags = new Tag[] { new Tag("tag6") }, // results must not have any of these tags
 		GetFacets = true // facet counts will be returned for tags
 	},
 
