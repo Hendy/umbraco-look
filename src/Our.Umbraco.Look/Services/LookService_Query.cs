@@ -213,14 +213,14 @@ namespace Our.Umbraco.Look.Services
                     break;
             }
 
-            var indexSearcher = searcherContext.IndexSearcher;
-
             // do the Lucene search
-            var topDocs = indexSearcher.Search(
-                                            query,
-                                            filter,
-                                            LookService.MaxLuceneResults,
-                                            sort ?? new Sort(SortField.FIELD_SCORE));
+            var topDocs = searcherContext
+                                .IndexSearcher
+                                .Search(
+                                    query,
+                                    filter,
+                                    LookService.MaxLuceneResults,
+                                    sort ?? new Sort(SortField.FIELD_SCORE));
 
             if (topDocs.TotalHits > 0)
             {
@@ -229,7 +229,7 @@ namespace Our.Umbraco.Look.Services
                 // facets
                 if (lookQuery.TagQuery != null && lookQuery.TagQuery.GetFacets)
                 {
-                    var simpleFacetedSearch = new SimpleFacetedSearch(indexSearcher.GetIndexReader(), LookConstants.TagsField);
+                    var simpleFacetedSearch = new SimpleFacetedSearch(searcherContext.IndexSearcher.GetIndexReader(), LookConstants.TagsField);
 
                     Query facetQuery = filter != null ? (Query)new FilteredQuery(query, filter) : query;
 
@@ -256,7 +256,7 @@ namespace Our.Umbraco.Look.Services
 
                     var queryScorer = new QueryScorer(queryParser
                                                         .Parse(lookQuery.TextQuery.SearchText)
-                                                        .Rewrite(indexSearcher.GetIndexReader()));
+                                                        .Rewrite(searcherContext.IndexSearcher.GetIndexReader()));
 
                     var highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
 
@@ -277,7 +277,7 @@ namespace Our.Umbraco.Look.Services
 
                 return new LookResult(LookService.GetLookMatches(
                                                         lookQuery,
-                                                        indexSearcher,
+                                                        searcherContext.IndexSearcher,
                                                         topDocs,
                                                         getHighlight,
                                                         getDistance),
