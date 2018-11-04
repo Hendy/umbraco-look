@@ -5,7 +5,6 @@ using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Models;
 using System;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Services
 {

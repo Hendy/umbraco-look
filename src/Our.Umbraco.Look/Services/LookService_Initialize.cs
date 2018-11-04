@@ -27,7 +27,7 @@ namespace Our.Umbraco.Look.Services
                                     .IndexProviderCollection
                                     .Select(x => x as BaseUmbracoIndexer)
                                     .Where(x => x != null)
-                                    .Select(x => (BaseUmbracoIndexer)x) // UmbracoContentIndexer, UmbracoMemberIndexer
+                                    //.Select(x => (BaseUmbracoIndexer)x) // UmbracoContentIndexer, UmbracoMemberIndexer
                                     .ToArray();
 
             if (!indexProviders.Any())
@@ -54,7 +54,7 @@ namespace Our.Umbraco.Look.Services
                                             CartesianTierPlotter.DefaltFieldPrefix));
                 }
 
-                // cache the collection of dictionaries (so don't have to parse at query time)
+                // cache the collection of Lucene Directory objs (so don't have to at query time)
                 LookService.Instance.IndexSetDirectories = indexProviders.ToDictionary(x => x.IndexSetName, x => x.GetLuceneDirectory());
 
                 // hook into all index providers

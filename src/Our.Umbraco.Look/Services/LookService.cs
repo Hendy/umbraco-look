@@ -15,7 +15,7 @@ namespace Our.Umbraco.Look.Services
     public partial class LookService
     {
         /// <summary>
-        /// Lucene directory representations for each of the index sets
+        /// Lucene directory representations for each of the Examine index sets
         /// </summary>
         private Dictionary<string, Directory> IndexSetDirectories { get; set; } = null;
 
