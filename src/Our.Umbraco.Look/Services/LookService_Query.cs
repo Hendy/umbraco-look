@@ -125,7 +125,7 @@ namespace Our.Umbraco.Look.Services
                     foreach (var tag in lookQuery.TagQuery.AllTags)
                     {
                         query.Add(
-                                new TermQuery(new Term(LookConstants.TagsField, tag.Name)), // TODO : fields for tag group
+                                new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
                                 BooleanClause.Occur.MUST);
                     }
                 }
@@ -137,7 +137,7 @@ namespace Our.Umbraco.Look.Services
                     foreach (var tag in lookQuery.TagQuery.AnyTags)
                     {
                         anyTagQuery.Add(
-                                        new TermQuery(new Term(LookConstants.TagsField, tag.Name)), // TODO : fields for tag group
+                                        new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
                                         BooleanClause.Occur.SHOULD);
                     }
 
@@ -224,27 +224,32 @@ namespace Our.Umbraco.Look.Services
 
             if (topDocs.TotalHits > 0)
             {
-                Facet[] facets = null;
+                var facets = new List<Facet>();
 
-                // facets
-                if (lookQuery.TagQuery != null && lookQuery.TagQuery.GetFacets)
+                if (lookQuery.TagQuery != null && lookQuery.TagQuery.GetFacets != null)
                 {
-                    var simpleFacetedSearch = new SimpleFacetedSearch(searchingContext.IndexSearcher.GetIndexReader(), LookConstants.TagsField);
-
                     Query facetQuery = filter != null ? (Query)new FilteredQuery(query, filter) : query;
 
-                    var facetResult = simpleFacetedSearch.Search(facetQuery);
+                    // do a facet query for each group in the array
+                    foreach (var group in lookQuery.TagQuery.GetFacets)
+                    {
+                        var simpleFacetedSearch = new SimpleFacetedSearch(
+                                                        searchingContext.IndexSearcher.GetIndexReader(),
+                                                        LookConstants.TagsField + group); // WARNING: TODO: handle invalid chars at tag level
 
-                    facets = facetResult
-                                .HitsPerFacet
-                                .Select(
-                                    x => new Facet()
-                                    {
-                                        Tag = x.Name.ToString(),
-                                        Count = Convert.ToInt32(x.HitCount)
-                                    }
-                                )
-                                .ToArray();
+                        var facetResult = simpleFacetedSearch.Search(facetQuery);
+
+                        facets.AddRange(
+                                facetResult
+                                    .HitsPerFacet
+                                    .Select(
+                                        x => new Facet()
+                                        {
+                                            Tag = new Tag(group, x.Name.ToString()),
+                                            Count = Convert.ToInt32(x.HitCount)
+                                        }
+                                    ));
+                    }
                 }
 
                 Func<string, IHtmlString> getHighlight = null;
@@ -282,7 +287,7 @@ namespace Our.Umbraco.Look.Services
                                                         getHighlight,
                                                         getDistance),
                                         topDocs.TotalHits,
-                                        facets);
+                                        facets.ToArray());
             }
 
             return LookResult.Empty;

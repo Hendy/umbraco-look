@@ -72,9 +72,9 @@ namespace Our.Umbraco.Look.Models
         ////}
 
         /// <summary>
-        /// Flag to indicate whether facets should be calculated for tags
-        /// The count value for a tag indicates how may results would be expected should that tag be added into the AllTags collection of this query
+        /// when null, facets are not calculated, but when string[], each string value represents the tag group field to facet on, the empty string or whitespace = empty group
+        /// The count value for a returned tag indicates how may results would be expected should that tag be added into the AllTags collection of this query
         /// </summary>
-        public bool GetFacets { get; set; } = false;
+        public string[] GetFacets { get; set; } = null;
     }
 }

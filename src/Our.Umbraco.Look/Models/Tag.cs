@@ -2,27 +2,18 @@
 {
     public class Tag
     {
-        //public const string DEFAULT_GROUP = "default";
-
         /// <summary>
-        /// Optional group for this tag (NOT YET USED)
+        /// Optional group for this tag
         /// </summary>
-        public string Group { get; }
+        public string Group { get; } = string.Empty;
 
         /// <summary>
         /// Name of this tag (the key)
         /// </summary>
-        public string Name { get; set; }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public Tag()
-        //{
-        //}
+        public string Name { get; }
 
         /// <summary>
-        /// Constructor - create a tag in the 'default' no group
+        /// Constructor - create a tag in the default 'name-less' group
         /// </summary>
         /// <param name="name"></param>
         public Tag(string name)
@@ -30,21 +21,20 @@
             this.Name = name;
         }
 
-        ///// <summary>
-        ///// Constructor - create a tag in the specified group
-        ///// </summary>
-        ///// <param name="group"></param>
-        ///// <param name="name"></param>
-        //public Tag(string group, string name)
-        //{
-        //    this.Group = group;
-        //    this.Name = name;
-        //}
+        /// <summary>
+        /// Constructor - create a tag in the specified group
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="name"></param>
+        public Tag(string group, string name)
+        {
+            if (string.IsNullOrWhiteSpace(group))
+            {
+                group = string.Empty;
+            }
 
-
-        //public Tag(string name, string group = Tag.DEFAULT_GROUP)
-        //{
-
-        //}
+            this.Group = group;
+            this.Name = name;
+        }
     }
 }

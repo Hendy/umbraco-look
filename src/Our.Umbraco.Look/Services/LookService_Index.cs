@@ -60,13 +60,11 @@ namespace Our.Umbraco.Look.Services
                 {
                     foreach (var tag in tags)
                     {
-                        // TODO: seperate fields for each tag group
-
                         if (tag.Name.IsValidTag())
                         {
                             var tagField = new Field(
-                                                LookConstants.TagsField,
-                                                tag.Name, //string.IsNullOrWhiteSpace(tag.Group) ? tag.Name : string.Join("-", tag.Group, tag.Name),
+                                                LookConstants.TagsField + tag.Group, // TODO: limit char types allowed in group name
+                                                tag.Name,
                                                 Field.Store.YES,
                                                 Field.Index.NOT_ANALYZED);
 

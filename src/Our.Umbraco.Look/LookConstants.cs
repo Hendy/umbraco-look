@@ -10,7 +10,7 @@
         /// <summary>
         /// Gets the field name to use for the tags - this field will contain space delimited non-tokenizable strings
         /// </summary>
-        internal static string TagsField => "Our.Umbraco.Look_Tags";
+        internal static string TagsField => "Our.Umbraco.Look_Tags_";
 
         /// <summary>
         /// Gets the field name to use for the date - this fieldswill  stores the date as the number of seconds from the year 2000 (so it's a number that can be sorted)

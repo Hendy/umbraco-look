@@ -118,10 +118,18 @@ var lookQuery = new LookQuery()
 	},
 
 	TagQuery = new TagQuery() {
-		AllTags = new Tag[] { new Tag("tag1"), new Tag("tag2") }, // both tag1 and tag2 are required
-		AnyTags = new Tag[] { new Tag("tag3"), new Tag("tag4") }, // at least one of these tags is required
-		// TODO: NotTags = new Tag[] { new Tag("tag6") }, // results must not have any of these tags
-		GetFacets = true // facet counts will be returned for tags
+
+		AllTags = new Tag[] { 
+						new Tag("tag1"), // tag in the 'nameless group'
+						new Tag("group1", "tag2") }, // tag in a named group
+
+		AnyTags = new Tag[] { 
+						new Tag("tag3"), 
+						new Tag("tag4") }, // at least one of these tags (in name-less group) is required
+
+		// TODO: NotTags = new Tag[] { new Tag("tag6") }, // results must not have any of these tags (any tags here that are also in either AllTags or AnyTags, will cause an empty result)
+
+		GetFacets = new string[] { "", "group1" } // facet counts will be returned for tags in the 'name-less' group and group1
 	},
 
 	LocationQuery = new LocationQuery() {

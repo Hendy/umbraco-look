@@ -3,9 +3,9 @@
     public class Facet
     {
         /// <summary>
-        /// The name of the tag
+        /// The tag
         /// </summary>
-        public string Tag { get; internal set; }
+        public Tag Tag { get; internal set; }
 
         /// <summary>
         /// The total number of results expected should this tag be added to TagQuery.AllTags on the current query
