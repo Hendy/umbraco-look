@@ -6,7 +6,7 @@ namespace Our.Umbraco.Look.Models
     /// <summary>
     /// Model specifying details as to how the search should interact with the Lucene index
     /// </summary>
-    internal class SearcherContext
+    internal class SearchingContext
     {
         internal Analyzer Analyzer { get; set; }
 

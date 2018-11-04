@@ -14,7 +14,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="searcherName">The name of the Examine seracher (see ExamineSettings.config)</param>
         /// <returns></returns>
-        private static SearcherContext GetSearcherContext(string searcherName)
+        private static SearchingContext GetSearchingContext(string searcherName)
         {
             var searcher = !string.IsNullOrWhiteSpace(searcherName) 
                             ? ExamineManager.Instance.SearchProviderCollection[searcherName]
@@ -40,7 +40,7 @@ namespace Our.Umbraco.Look.Services
 
                     if (indexSetDirectory != null)
                     {
-                        return new SearcherContext()
+                        return new SearchingContext()
                         {
                             Analyzer = umbracoExamineSearcher.IndexingAnalyzer,
                             IndexSearcher = new Lucene.Net.Search.IndexSearcher(indexSetDirectory, true), // TODO: need to handle reuse

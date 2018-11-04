@@ -33,7 +33,7 @@ namespace Our.Umbraco.Look.Services
                 return LookResult.Empty;
             }
 
-            var searcherContext = LookService.GetSearcherContext(lookQuery.SearcherName);
+            var searcherContext = LookService.GetSearchingContext(lookQuery.SearcherName);
 
             if (searcherContext == null)
             {
