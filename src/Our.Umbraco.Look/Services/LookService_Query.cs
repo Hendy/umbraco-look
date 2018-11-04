@@ -213,7 +213,7 @@ namespace Our.Umbraco.Look.Services
                     break;
             }
 
-            var indexSearcher = searcherContext.GetIndexSearcher();
+            var indexSearcher = searcherContext.IndexSearcher;
 
             // do the Lucene search
             var topDocs = indexSearcher.Search(

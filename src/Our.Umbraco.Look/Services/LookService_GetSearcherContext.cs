@@ -35,15 +35,18 @@ namespace Our.Umbraco.Look.Services
                 else
                 {
                     var umbracoExamineSearcher = (UmbracoExamineSearcher)searcher;
-                    
-                    return new SearcherContext()
+
+                    var indexSetDirectory = LookService.Instance.IndexSetDirectories[umbracoExamineSearcher.IndexSetName];
+
+                    if (indexSetDirectory != null)
                     {
-                        //SearcherName = searcherName,
-                        IndexSetName = umbracoExamineSearcher.IndexSetName,
-                        //LuceneIndexFolder = umbracoExamineSearcher.LuceneIndexFolder,
-                        Analyzer = umbracoExamineSearcher.IndexingAnalyzer,
-                        EnableLeadingWildcards = umbracoExamineSearcher.EnableLeadingWildcards
-                    };
+                        return new SearcherContext()
+                        {
+                            Analyzer = umbracoExamineSearcher.IndexingAnalyzer,
+                            IndexSearcher = new Lucene.Net.Search.IndexSearcher(indexSetDirectory, true), // TODO: need to handle reuse
+                            EnableLeadingWildcards = umbracoExamineSearcher.EnableLeadingWildcards
+                        };
+                    }
                 }
             }
 

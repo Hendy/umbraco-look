@@ -54,6 +54,9 @@ namespace Our.Umbraco.Look.Services
                                             CartesianTierPlotter.DefaltFieldPrefix));
                 }
 
+                // cache the collection of dictionaries (so don't have to parse at query time)
+                LookService.Instance.IndexSetDirectories = indexProviders.ToDictionary(x => x.IndexSetName, x => x.GetLuceneDirectory());
+
                 // hook into all index providers
                 foreach(var indexProvider in indexProviders)
                 {
