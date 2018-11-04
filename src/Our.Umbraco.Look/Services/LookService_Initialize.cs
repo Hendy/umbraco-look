@@ -1,5 +1,7 @@
-﻿using Examine.LuceneEngine;
+﻿using Examine;
+using Examine.LuceneEngine;
 using Examine.LuceneEngine.Providers;
+using Examine.Providers;
 using Lucene.Net.Spatial.Tier.Projectors;
 using System;
 using Umbraco.Core.Logging;
@@ -19,6 +21,14 @@ namespace Our.Umbraco.Look.Services
                                 UmbracoHelper umbracoHelper)
         {
             LogHelper.Info(typeof(LookService), "Initializing");
+
+            // read exmaine configuration for Indexers / Searchers  & which to use as default
+            //ExamineManager.Instance.IndexProviderCollection[LookService.Instance.IndexerName]
+
+
+            // ideally should have index registrations known that this point, so we know which examine indexers require the custom fields
+
+            // -----
 
             var valid = true;
 
@@ -64,7 +74,10 @@ namespace Our.Umbraco.Look.Services
                 }
 
                 // wire-up the func
-                ((LuceneIndexer)LookService.Indexer).DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper); ;
+                ((LuceneIndexer)LookService.Indexer).DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper);
+
+
+                // TODO: wire up to all examine indexes (unless config says not to ? - could force all registartions to have taken place at this point in time ?)
             }
         }
     }

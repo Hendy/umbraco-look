@@ -23,19 +23,6 @@ namespace Our.Umbraco.Look.Services
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="publishedContent"></param>
-        /// <returns></returns>
-        private static string DefaultTextIndexer(IPublishedContent publishedContent)
-        {
-            //TODO: extract text from all known text fields
-            // extract and rip html fields
-
-            return null;
-        }
-
-        /// <summary>
         /// Register consumer code to perform when indexing tags
         /// </summary>
         /// <param name="tagsFunc"></param>
@@ -44,18 +31,6 @@ namespace Our.Umbraco.Look.Services
             LogHelper.Info(typeof(LookService), "Tag indexing function set");
 
             LookService.Instance.TagIndexer = tagsFunc;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="publishedContent"></param>
-        /// <returns></returns>
-        private static string[] DefaultTagIndexer(IPublishedContent publishedContent)
-        {
-            // TODO: look for known tag datatypes and pickers ?
-
-            return null;
         }
 
         /// <summary>
@@ -70,16 +45,6 @@ namespace Our.Umbraco.Look.Services
         }
 
         /// <summary>
-        /// By defult, returns the UpdateDate of the IPublishedContent
-        /// </summary>
-        /// <param name="publishedContent"></param>
-        /// <returns></returns>
-        private static DateTime? DefaultDateIndexer(IPublishedContent publishedContent)
-        {
-            return publishedContent.UpdateDate;
-        }
-
-        /// <summary>
         /// Register consumer code to perform when indexing name
         /// </summary>
         /// <param name="nameFunc"></param>
@@ -88,16 +53,6 @@ namespace Our.Umbraco.Look.Services
             LogHelper.Info(typeof(LookService), "Name indexing function set");
 
             LookService.Instance.NameIndexer = nameFunc;
-        }
-
-        /// <summary>
-        /// By default, returns the Name of the IPublishedContent
-        /// </summary>
-        /// <param name="publishedContent"></param>
-        /// <returns></returns>
-        private static string DefaultNameIndexer(IPublishedContent publishedContent)
-        {
-            return publishedContent.Name;
         }
 
         /// <summary>

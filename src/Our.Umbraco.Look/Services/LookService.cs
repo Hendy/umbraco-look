@@ -21,22 +21,22 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
         /// </summary>
-        private Func<IPublishedContent, string> NameIndexer { get; set; } = x => LookService.DefaultNameIndexer(x);
+        private Func<IPublishedContent, string> NameIndexer { get; set; } = x => x.Name;
 
         /// <summary>
         /// Function to get the date for the IPublishedContent being indexed
         /// </summary>
-        private Func<IPublishedContent, DateTime?> DateIndexer { get; set; } = x => LookService.DefaultDateIndexer(x);
+        private Func<IPublishedContent, DateTime?> DateIndexer { get; set; } = x => x.UpdateDate;
 
         /// <summary>
         /// Function to get text for the IPublishedContent being indexed
         /// </summary>
-        private Func<IPublishedContent, string> TextIndexer { get; set; } = x => LookService.DefaultTextIndexer(x);
+        private Func<IPublishedContent, string> TextIndexer { get; set; } = null;
 
         /// <summary>
         /// Function to get the tags for the IPublishedContent being indexed
         /// </summary>
-        private Func<IPublishedContent, string[]> TagIndexer { get; set; } = x => LookService.DefaultTagIndexer(x);
+        private Func<IPublishedContent, string[]> TagIndexer { get; set; } = null;
 
         /// <summary>
         /// Function to get a location for the IPublishedContent being indexed
