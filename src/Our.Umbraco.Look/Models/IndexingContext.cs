@@ -25,7 +25,7 @@ namespace Our.Umbraco.Look.Models
         internal IndexingContext(IPublishedContent item, string indexerName)
         {
             this.Item = item;
-            this.IndexerName = IndexerName;
+            this.IndexerName = indexerName;
         }
     }
 }
