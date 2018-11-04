@@ -6,6 +6,11 @@
     public class LookQuery
     {
         /// <summary>
+        /// Name of searcher (index) to use (the context for the query properties as it were)
+        /// </summary>
+        internal string SearcherName { get; private set; }
+
+        /// <summary>
         /// A raw Lucene query string
         /// </summary>
         public string RawQuery { get; set; }
@@ -45,36 +50,20 @@
         /// </summary>
         public SortOn SortOn { get; set; } = SortOn.Score;
 
-        ///// <summary>
-        ///// Constructor
-        ///// </summary>
-        //public LookQuery()
-        //{
-        //}
+        /// <summary>
+        /// Constructor - use the default Examine searcher (usually "ExternalSearcher", see ExamineSettings.config)
+        /// </summary>
+        public LookQuery()
+        {
+        }
 
-        ///// <summary>
-        ///// Constructor - overload to set a starting raw query
-        ///// </summary>
-        ///// <param name="rawQuery">An optional raw Lucene query to extend upon</param>
-        //public LookQuery(string rawQuery)
-        //{
-        //   this.RawQuery = rawQuery;
-        //}
-
-        //public LookQuery(
-        //        string rawQuery = null,
-        //        NodeQuery nodeQuery = null,
-        //        DateQuery dateQuery = null,
-        //        TextQuery textQuery = null,
-        //        LocationQuery locationQuery = null,
-        //        SortOn sortOn = SortOn.Score)
-        //{
-        //    if (!string.IsNullOrWhiteSpace(rawQuery)) this.RawQuery = rawQuery;
-        //    if (nodeQuery != null) this.NodeQuery = nodeQuery;
-        //    if (dateQuery != null) this.DateQuery = dateQuery;
-        //    if (textQuery != null) this.TextQuery = textQuery;
-        //    if (locationQuery != null) this.LocationQuery = LocationQuery;
-        //    this.SortOn = sortOn;
-        //}
+        /// <summary>
+        /// Constructor - use a named Examine Searcher
+        /// </summary>
+        /// <param name="searcherName">The name of the Examine searcher to use</param>
+        public LookQuery(string searcherName)
+        {
+            this.SearcherName = searcherName;
+        }
     }
 }

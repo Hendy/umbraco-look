@@ -5,7 +5,7 @@
         /// <summary>
         /// Collection of Node type aliases that a results can be any one of (when empty = has no effect)
         /// </summary>
-        public string[] TypeAliases { get; set; } = null;
+        public string[] TypeAliases { get; set; } = null; // TODO: rename to aliases ?
 
         /// <summary>
         /// Any umbraco ids that should be exlcuded from the results (performed as part of the Lucene query so as to get an accurate result count)

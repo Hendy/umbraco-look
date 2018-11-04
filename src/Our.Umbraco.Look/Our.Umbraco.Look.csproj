@@ -219,11 +219,13 @@
     <Compile Include="Models\NodeQuery.cs" />
     <Compile Include="Models\LookMatch.cs" />
     <Compile Include="Models\LookQuery.cs" />
+    <Compile Include="Models\SearcherContext.cs" />
     <Compile Include="Models\SortOn.cs" />
     <Compile Include="Models\TagQuery.cs" />
     <Compile Include="Models\TextQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LookService.cs" />
+    <Compile Include="Services\LookService_GetSearcherContext.cs" />
     <Compile Include="Services\LookService_Index.cs" />
     <Compile Include="Services\LookService_Query.cs" />
     <Compile Include="Services\LookService_Initialize.cs" />

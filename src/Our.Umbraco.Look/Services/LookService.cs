@@ -1,12 +1,7 @@
-﻿using Examine;
-using Examine.LuceneEngine.Providers;
-using Examine.Providers;
-using Lucene.Net.Analysis;
-using Lucene.Net.Spatial.Tier.Projectors;
+﻿using Lucene.Net.Spatial.Tier.Projectors;
 using Our.Umbraco.Look.Models;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Services
@@ -49,31 +44,6 @@ namespace Our.Umbraco.Look.Services
         private List<CartesianTierPlotter> CartesianTierPlotters { get; } = new List<CartesianTierPlotter>();
 
         /// <summary>
-        /// Name of indexer to use (from configuration)
-        /// </summary>
-        private string IndexerName { get; }
-
-        /// <summary>
-        /// Name of searcher to use (from configuration)
-        /// </summary>
-        private string SearcherName { get; }
-
-        /// <summary>
-        /// Gets the Examine indexer
-        /// </summary>
-        private static BaseIndexProvider Indexer => ExamineManager.Instance.IndexProviderCollection[LookService.Instance.IndexerName];
-
-        /// <summary>
-        /// Get the Analyzer in use by Examine
-        /// </summary>
-        private static Analyzer Analyzer => ((LuceneIndexer)LookService.Indexer).IndexingAnalyzer;
-
-        /// <summary>
-        /// Gets the Examine searcher
-        /// </summary>
-        private static BaseSearchProvider Searcher => ExamineManager.Instance.SearchProviderCollection[LookService.Instance.SearcherName];
-
-        /// <summary>
         /// Max distance in miles for distance searches & location indexing
         /// </summary>
         private static double MaxDistance => 10000; // 12450 = half circumfrence of earth TODO: make configuration
@@ -98,11 +68,6 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         private LookService()
         {
-            var configuredIndexerName = ConfigurationManager.AppSettings["Our.Umbraco.Look.IndexerName"];
-            var configuredSearcherName = ConfigurationManager.AppSettings["Our.Umbraco.Look.SearcherName"];
-
-            this.IndexerName = configuredIndexerName ?? "ExternalIndexer";
-            this.SearcherName = configuredSearcherName ?? "ExternalSearcher";
         }
     }
 }

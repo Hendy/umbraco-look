@@ -28,7 +28,16 @@ namespace Our.Umbraco.Look.Services
         {
             if (lookQuery == null)
             {
-                LogHelper.Debug(typeof(LookService), "The supplied LookQuery was null");
+                LogHelper.Debug(typeof(LookService), "Unable to perform query, as supplied LookQuery object was null");
+
+                return LookResult.Empty;
+            }
+
+            var searcherContext = LookService.GetSearcherContext(lookQuery.SearcherName);
+
+            if (searcherContext == null)
+            {
+                LogHelper.Debug(typeof(LookService), "Unable to perform query, as Examine searcher not found");
 
                 return LookResult.Empty;
             }
@@ -39,7 +48,7 @@ namespace Our.Umbraco.Look.Services
             if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
             {
                 query.Add(
-                        new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, LookService.Analyzer).Parse(lookQuery.RawQuery),
+                        new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, searcherContext.Analyzer).Parse(lookQuery.RawQuery),
                         BooleanClause.Occur.MUST);
             }
 
@@ -103,7 +112,7 @@ namespace Our.Umbraco.Look.Services
                     else
                     {
                         query.Add(
-                                new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, LookService.Analyzer).Parse(lookQuery.TextQuery.SearchText),
+                                new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searcherContext.Analyzer).Parse(lookQuery.TextQuery.SearchText),
                                 BooleanClause.Occur.MUST);
                     }
                 }
@@ -204,8 +213,7 @@ namespace Our.Umbraco.Look.Services
                     break;
             }
 
-            // TODO: allow directory to be injected in for testing outside of umbraco
-            var indexSearcher = new IndexSearcher(((LuceneIndexer)LookService.Indexer).GetLuceneDirectory(), true);
+            var indexSearcher = searcherContext.GetIndexSearcher();
 
             // do the Lucene search
             var topDocs = indexSearcher.Search(
@@ -244,7 +252,7 @@ namespace Our.Umbraco.Look.Services
                 // setup the getHightlight func if required
                 if (lookQuery.TextQuery != null && lookQuery.TextQuery.GetHighlight && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                 {
-                    var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, LookService.Analyzer);
+                    var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searcherContext.Analyzer);
 
                     var queryScorer = new QueryScorer(queryParser
                                                         .Parse(lookQuery.TextQuery.SearchText)
@@ -255,7 +263,7 @@ namespace Our.Umbraco.Look.Services
                     // update the getHightlight func
                     getHighlight = (x) =>
                     {
-                        var tokenStream = LookService.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
+                        var tokenStream = searcherContext.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
 
                         var highlight = highlighter.GetBestFragments(
                                                         tokenStream,

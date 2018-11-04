@@ -1,11 +1,11 @@
 ﻿using Examine;
 using Examine.LuceneEngine;
-using Examine.LuceneEngine.Providers;
-using Examine.Providers;
 using Lucene.Net.Spatial.Tier.Projectors;
 using System;
+using System.Linq;
 using Umbraco.Core.Logging;
 using Umbraco.Web;
+using UmbracoExamine;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -22,39 +22,20 @@ namespace Our.Umbraco.Look.Services
         {
             LogHelper.Info(typeof(LookService), "Initializing");
 
-            // read exmaine configuration for Indexers / Searchers  & which to use as default
-            //ExamineManager.Instance.IndexProviderCollection[LookService.Instance.IndexerName]
+            var indexProviders = ExamineManager
+                                    .Instance
+                                    .IndexProviderCollection
+                                    .Select(x => x as BaseUmbracoIndexer)
+                                    .Where(x => x != null)
+                                    .Select(x => (BaseUmbracoIndexer)x) // UmbracoContentIndexer, UmbracoMemberIndexer
+                                    .ToArray();
 
-
-            // ideally should have index registrations known that this point, so we know which examine indexers require the custom fields
-
-            // -----
-
-            var valid = true;
-
-            if (LookService.Indexer == null)
+            if (!indexProviders.Any())
             {
-                LogHelper.Warn(typeof(LookService), $"Examine Indexer '{LookService.Instance.IndexerName}' Not Found");
-
-                valid = false;
-            }
-            else if (!(LookService.Indexer is LuceneIndexer))
-            {
-                // should this ever happen ?
-
-                LogHelper.Warn(typeof(LookService), "Examine Indexer is not of type LuceneIndexer");
-
-                valid = false;
-            }
-
-            if (!valid)
-            {
-                LogHelper.Warn(typeof(LookService), "Error initializing LookService");
+                LogHelper.Warn(typeof(LookService), "Unable to initialize as could not find any Umbraco Examine indexers !");
             }
             else
             {
-                LogHelper.Info(typeof(LookService), "Indexer & Searcher valid for the LookService");
-
                 // init collection of cartesian tier plotters (and store in singleton)
                 IProjector projector = new SinusoidalProjector();
                 var plotter = new CartesianTierPlotter(0, projector, CartesianTierPlotter.DefaltFieldPrefix);
@@ -73,11 +54,11 @@ namespace Our.Umbraco.Look.Services
                                             CartesianTierPlotter.DefaltFieldPrefix));
                 }
 
-                // wire-up the func
-                ((LuceneIndexer)LookService.Indexer).DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper);
-
-
-                // TODO: wire up to all examine indexes (unless config says not to ? - could force all registartions to have taken place at this point in time ?)
+                // hook into all index providers
+                foreach(var indexProvider in indexProviders)
+                {
+                    indexProvider.DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper);
+                }
             }
         }
     }
