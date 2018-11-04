@@ -227,6 +227,7 @@
     <Compile Include="Services\LookService_Index.cs" />
     <Compile Include="Services\LookService_Query.cs" />
     <Compile Include="Services\LookService_Initialize.cs" />
+    <Compile Include="Services\LookService_SetIndexers.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
