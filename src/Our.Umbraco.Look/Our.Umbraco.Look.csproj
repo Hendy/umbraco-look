@@ -229,7 +229,11 @@
     <Compile Include="Services\LookService_Index.cs" />
     <Compile Include="Services\LookService_Query.cs" />
     <Compile Include="Services\LookService_Initialize.cs" />
-    <Compile Include="Services\LookService_SetIndexers.cs" />
+    <Compile Include="Services\LookService_SetDateIndexer.cs" />
+    <Compile Include="Services\LookService_SetLocationIndexer.cs" />
+    <Compile Include="Services\LookService_SetNameIndexer.cs" />
+    <Compile Include="Services\LookService_SetTagIndexer.cs" />
+    <Compile Include="Services\LookService_SetTextIndexer.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
