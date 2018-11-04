@@ -11,14 +11,15 @@ Extends Umbraco Examine adding support for: text match highlighting, geospatial 
 
 Look can add the following (optional) fields to each document in an Umbraco Examine managed index: Name, Date, Text, Tags and a Location. (Each field is prefixed with Our.Umbraco.Look to ensure uniqueness)
   
-No configuration files need to be changed as Look will use default Examine searcher (unless specified otherwise).
+No configuration files need to be changed as Look will use default Examine searcher (unless otherwise specified in a Look query).
 
-To configure the indexing behaviour there are static methods on the `LookService` class where (optional) custom indexers can be specified.
+To configure the indexing behaviour there are static methods on the `LookService` class where (optional) custom indexers can be registered.
 
 Each custom indexer is supplied with an IndexingContext model which contains details as to the IPublishedContent representation of the content, media or member being indexed, together with the name of the Examine index being operated upon.
 
 ```csharp
 using Our.Umbraco.Look.Services;
+using Our.Umbraco.Look.Models;
 using Umbraco.Core;
 
 public class ConfigureIndexing : ApplicationEventHandler
@@ -29,23 +30,27 @@ public class ConfigureIndexing : ApplicationEventHandler
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{
 		LookService.SetNameIndexer(indexingContext => {			
-			// return string or null
+			// return string (or null to not index)
+			return indexingContext.Item.Name; // fallback
 		});
 
 		LookService.SetDateIndexer(indexingContext => {
-			// return DateTime or null
+			// return DateTime (or null to not index)
+			return indexingContext.Item.UpdateDate; // fallback
 		});
 
 		LookService.SetTextIndexer(indexingContext => {		
-			// return string or null
+			// return string (or null to not index)
+			return null;
 		});
 
 		LookService.SetTagIndexer(indexingContext => {
-			// return string[] or null
+			// return string[] (or null to not index)
+			return null;
 		});
 
 		LookService.SetLocationIndexer(indexingContext => {
-			// return Our.Umbraco.Look.Model.Location or null
+			// return Our.Umbraco.Look.Model.Location (or null to not index)
 			// eg. return new Location(55.406330, 10.388500);		
 
 			var terratype = indexingContext.Item.GetProperty("location").Value as Terratype.Models.Model;
@@ -64,16 +69,33 @@ public class ConfigureIndexing : ApplicationEventHandler
 		});
 	}
 }
+
+```
+
+The Our.Umbraco.Look.Model.IndexingContext model:
+
+```csharp
+public class IndexingContext
+{
+    /// <summary>
+    /// The IPublishedContent representation of the Content, Media or Member being indexed
+    /// </summary>
+    public IPublishedContent Item { get; }
+
+    /// <summary>
+    /// The name of the Examine indexer into which this item is being indexed
+    /// </summary>
+    public string IndexerName { get; }
+}
+
 ```
 
 ## Searching
 
 A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`.
 
-
 ```csharp
 using Our.Umbraco.Look.Models;  
-using Our.Umbraco.Look.Services;  
 
 var lookQuery = new LookQuery()
 {
@@ -110,13 +132,24 @@ var lookQuery = new LookQuery()
 	SortOn = SortOn.Distance // other sorts are: Score (default), Name, DateAscending, DateDescending
 };
 
-// perform the search
-var lookResults = LookService.Query(lookQuery);
+```
+
+By default, a Look query will use the default Examine searcher (usually "ExternalSearcher"), however if you want to query a diffent index, the LookQuery model has an
+overloaded constructor where a spcific Exmaine searcher name can be supplied.
+
+```csharp
+using Our.Umbraco.Look.Models;  
+
+var lookQuery = new LookQuery("InternalMemberSearcher");
+
 ```
 
 ### Search Results
 
 ```csharp
+// perform the search
+var lookResults = LookService.Query(lookQuery);
+
 var totalResults = lookResults.Total; // total number of item expected in the lookResults enumerable
 var results = lookResults.ToArray(); // returns Our.Umbraco.Look.Models.LookMatch[]
 var facets = lookResults.Facets; // returns Our.Umbraco.Look.Models.Facet[]
