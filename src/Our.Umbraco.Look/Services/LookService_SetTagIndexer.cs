@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Our.Umbraco.Look.Models;
+using System;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.Services
         /// Register consumer code to perform when indexing tags
         /// </summary>
         /// <param name="tagsFunc"></param>
-        public static void SetTagIndexer(Func<IPublishedContent, string, string[]> tagsFunc)
+        public static void SetTagIndexer(Func<IndexingContext, string[]> tagsFunc)
         {
             LogHelper.Info(typeof(LookService), "Tag indexing function set");
 

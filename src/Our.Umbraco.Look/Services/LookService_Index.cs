@@ -12,11 +12,11 @@ namespace Our.Umbraco.Look.Services
     public partial class LookService
     {
         /// <summary>
-        /// Do the indexing and set the field values onto the Lucene document
+        ///  Do the indexing and set the field values onto the Lucene document
         /// </summary>
-        /// <param name="publishedContent">The IPublishedContent being indexed</param>
-        /// <param name="document">The Lucene Document</param>
-        internal static void Index(IPublishedContent publishedContent, Document document, string indexerName)
+        /// <param name="indexingContext"></param>
+        /// <param name="document"></param>
+        internal static void Index(IndexingContext indexingContext, Document document)
         {
             if (LookService.Instance.TextIndexer != null)
             {
@@ -24,7 +24,7 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    text = LookService.Instance.TextIndexer(publishedContent, indexerName);
+                    text = LookService.Instance.TextIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -50,7 +50,7 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    tags = LookService.Instance.TagIndexer(publishedContent, indexerName);
+                    tags = LookService.Instance.TagIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -85,7 +85,7 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    date = LookService.Instance.DateIndexer(publishedContent, indexerName);
+                    date = LookService.Instance.DateIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -121,7 +121,7 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    name = LookService.Instance.NameIndexer(publishedContent, indexerName);
+                    name = LookService.Instance.NameIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -155,7 +155,7 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    location = LookService.Instance.LocationIndexer(publishedContent, indexerName);
+                    location = LookService.Instance.LocationIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {

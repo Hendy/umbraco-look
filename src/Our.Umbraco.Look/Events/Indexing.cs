@@ -1,4 +1,5 @@
 ﻿using Examine.LuceneEngine;
+using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
 using System.IO;
 using System.Web;
@@ -56,7 +57,9 @@ namespace Our.Umbraco.Look.Events
             {
                 this.EnsureUmbracoContext();
 
-                LookService.Index(publishedContent, e.Document, indexerName);
+                var indexingContext = new IndexingContext(publishedContent, indexerName);
+
+                LookService.Index(indexingContext, e.Document);
             }
         }
 

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Our.Umbraco.Look.Models;
+using System;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.Services
         /// Register consumer code to perform when indexing date
         /// </summary>
         /// <param name="dateFunc"></param>
-        public static void SetDateIndexer(Func<IPublishedContent, string, DateTime?> dateFunc)
+        public static void SetDateIndexer(Func<IndexingContext, DateTime?> dateFunc)
         {
             LogHelper.Info(typeof(LookService), "Date indexing function set");
 

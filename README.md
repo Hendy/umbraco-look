@@ -15,7 +15,7 @@ No configuration files need to be changed as Look will use default Examine searc
 
 To configure the indexing behaviour there are static methods on the `LookService` class where (optional) custom indexers can be specified.
 
-Each custom indexer is supplied with the IPublishedContent representation of the content, media or member being indexed, together with the name of the Examine index being operated upon.
+Each custom indexer is supplied with an IndexingContext model which contains details as to the IPublishedContent representation of the content, media or member being indexed, together with the name of the Examine index being operated upon.
 
 ```csharp
 using Our.Umbraco.Look.Services;
@@ -28,27 +28,27 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{
-		LookService.SetNameIndexer((iPublishedContent, indexerName) => {			
+		LookService.SetNameIndexer(indexingContext => {			
 			// return string or null
 		});
 
-		LookService.SetDateIndexer((iPublishedContent, indexerName) => {
+		LookService.SetDateIndexer(indexingContext => {
 			// return DateTime or null
 		});
 
-		LookService.SetTextIndexer((iPublishedContent, indexerName) => {		
+		LookService.SetTextIndexer(indexingContext => {		
 			// return string or null
 		});
 
-		LookService.SetTagIndexer((iPublishedContent, indexerName) => {
+		LookService.SetTagIndexer(indexingContext => {
 			// return string[] or null
 		});
 
-		LookService.SetLocationIndexer((iPublishedContent, indexerName) => {
+		LookService.SetLocationIndexer(indexingContext => {
 			// return Our.Umbraco.Look.Model.Location or null
 			// eg. return new Location(55.406330, 10.388500);		
 
-			var terratype = iPublishedContent.GetProperty("location").Value as Terratype.Models.Model;
+			var terratype = indexingContext.Item.GetProperty("location").Value as Terratype.Models.Model;
 
 			if (terratype != null)
 			{

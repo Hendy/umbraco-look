@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Our.Umbraco.Look.Models;
+using System;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.Services
         /// Register consumer code to perform when indexing text
         /// </summary>
         /// <param name="textFunc"></param>
-        public static void SetTextIndexer(Func<IPublishedContent, string, string> textFunc)
+        public static void SetTextIndexer(Func<IndexingContext, string> textFunc)
         {
             LogHelper.Info(typeof(LookService), "Text indexing function set");
 
