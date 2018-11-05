@@ -1,14 +1,24 @@
-﻿using System;
+﻿using Our.Umbraco.Look.Extensions;
+using System;
 using System.Web;
+using Umbraco.Core.Models;
+using Umbraco.Web;
 
 namespace Our.Umbraco.Look.Models
 {
     public class LookMatch
     {
+        private Lazy<IPublishedContent> _item;
+
         /// <summary>
         /// The Umbraco (content, media or member) Id of the matched item
         /// </summary>
         public int Id { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IPublishedContent Item => this._item.Value;
 
         /// <summary>
         /// Highlight text (containing search text) extracted from from the full text
@@ -82,6 +92,13 @@ namespace Our.Umbraco.Look.Models
             this.Location = location;
             this.Distance = distance;
             this.Score = score;
+
+            this._item = new Lazy<IPublishedContent>(() => {
+
+                var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+
+                return umbracoHelper.GetPublishedContent(id);
+            });
         }
     }
 }

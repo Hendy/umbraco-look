@@ -1,4 +1,5 @@
 ﻿using Examine.LuceneEngine;
+using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
 using System.IO;
@@ -30,28 +31,7 @@ namespace Our.Umbraco.Look.Events
 
         private void Indexer_DocumentWriting(object sender, DocumentWritingEventArgs e, UmbracoHelper umbracoHelper, string indexerName)
         {
-            IPublishedContent publishedContent = null;
-
-            publishedContent = umbracoHelper.TypedContent(e.NodeId);
-
-            if (publishedContent == null)
-            {
-                // fallback to attempting to get media
-                publishedContent = umbracoHelper.TypedMedia(e.NodeId);
-            }
-
-            if (publishedContent == null)
-            {
-                // fallback to attempting to get member
-                try
-                {
-                    publishedContent = umbracoHelper.TypedMember(e.NodeId);
-                }
-                catch
-                {
-                    // HACK: suppress error
-                }
-            }
+            IPublishedContent publishedContent = umbracoHelper.GetPublishedContent(e.NodeId);
 
             if (publishedContent != null)
             {
