@@ -6,7 +6,7 @@
 
         public Tag[] AnyTags { get; set; }
 
-        //public Tag[] NotTags { get; set; }
+        public Tag[] NotTags { get; set; }
 
         /// <summary>
         /// when null, facets are not calculated, but when string[], each string value represents the tag group field to facet on, the empty string or whitespace = empty group

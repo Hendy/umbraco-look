@@ -5,7 +5,6 @@ using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Spatial.Tier;
-using Lucene.Net.Spatial.Tier.Projectors;
 using Our.Umbraco.Look.Models;
 using System;
 using System.Collections.Generic;
@@ -98,8 +97,6 @@ namespace Our.Umbraco.Look.Services
             {
                 if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                 {
-                    // TODO: wildcards
-
                     if (lookQuery.TextQuery.Fuzzyness > 0)
                     {
                         query.Add(
@@ -144,6 +141,10 @@ namespace Our.Umbraco.Look.Services
                 }
 
                 // TODO: NotTags
+                if (lookQuery.TagQuery.NotTags != null)
+                {
+
+                }
             }
 
             // optional filter used for geospatial queries

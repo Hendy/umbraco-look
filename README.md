@@ -18,8 +18,10 @@ of the content, media or member being indexed and the name of the current Exmain
 ```csharp
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
-using Umbraco.Core;
+using Tag = Our.Umbraco.Look.Models.Tag;
+```
 
+```csharp
 public class ConfigureIndexing : ApplicationEventHandler
 {	
 	/// <summary>
@@ -37,7 +39,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 			if (indexerName == "ExternalIndexer")
 			{
-				return "contrived_" + item.Name;
+				return item.Parent.Name + " " + item.Name;
 			}
 			
 			return null; // don't index
@@ -119,7 +121,7 @@ var lookQuery = new LookQuery("InternalSearcher")
 						new Tag("tag3"), 
 						new Tag("tag4") }, // at least one of these tags (in name-less group) is required
 
-		// TODO: NotTags = new Tag[] { new Tag("tag6") }, // results must not have any of these tags (any tags here that are also in either AllTags or AnyTags, will cause an empty result)
+		NotTags = new Tag[] { new Tag("tag6") }, // results must not have any of these tags (any tags here that are also in AllTags will cause an empty result)
 
 		GetFacets = new string[] { "", "group1" } // facet counts will be returned for tags in the 'name-less' group and group1
 	},

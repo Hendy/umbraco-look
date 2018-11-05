@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Models
 {
@@ -23,12 +24,13 @@ namespace Our.Umbraco.Look.Models
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    var valid = value.Length > 50 // artifical limit as this is used a lucene field name
-                                || !value.Any(x => char.IsWhiteSpace(x) || x == '.');
+                    var valid = value.Length < 50 // artifical limit as this is used a lucene field name
+                                && !value.Contains(" ")
+                                && !value.Contains(".");
 
                     if (valid)
                     {
-                        this.Group = value;
+                        this._group = value;
                     }
                     else
                     {
