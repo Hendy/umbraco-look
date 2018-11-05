@@ -27,18 +27,22 @@ namespace Our.Umbraco.Look.Services
         {
             if (lookQuery == null)
             {
-                LogHelper.Debug(typeof(LookService), "Unable to perform query, as supplied LookQuery object was null");
+                var message = "Unable to perform query, as supplied LookQuery object was null";
 
-                return LookResult.Empty;
+                LogHelper.Debug(typeof(LookService), message);
+
+                return new LookResult(message);
             }
 
             var searchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
 
             if (searchingContext == null)
             {
-                LogHelper.Debug(typeof(LookService), "Unable to perform query, as Examine searcher not found");
+                var message = "Unable to perform query, as Examine searcher not found";
 
-                return LookResult.Empty;
+                LogHelper.Debug(typeof(LookService), message);
+
+                return new LookResult(message);
             }
             
             var query = new BooleanQuery(); // the lucene query being built
@@ -105,8 +109,6 @@ namespace Our.Umbraco.Look.Services
                     //                lookQuery.TextQuery.Fuzzyness),
                     //            BooleanClause.Occur.MUST);
                     //}
-                    //else
-                    //{
 
                     Query searchTextQuery = null;
 
@@ -117,20 +119,17 @@ namespace Our.Umbraco.Look.Services
                     }
                     catch (Exception exception)
                     {
-                        LogHelper.WarnWithException(typeof(LookService), $"Unable to parse SearchText string: '{ lookQuery.TextQuery.SearchText }'", exception);
+                        var message = $"Unable to parse LookQuery.TextQuery.SearchText: '{ lookQuery.TextQuery.SearchText }' into a Lucene query";
 
-                        return LookResult.Empty;
+                        LogHelper.WarnWithException(typeof(LookService), message, exception);
+
+                        return new LookResult(message);
                     }
 
                     if (searchTextQuery != null)
                     {
                         query.Add(searchTextQuery, BooleanClause.Occur.MUST);
                     }
-
-                    //query.Add(
-                    //        new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer).Parse(lookQuery.TextQuery.SearchText),
-                    //        BooleanClause.Occur.MUST);
-                    //}
                 }
             }
 
@@ -144,9 +143,11 @@ namespace Our.Umbraco.Look.Services
 
                         if (conflictTags.Any())
                         {
-                            LogHelper.Info(typeof(LookService), $"Query conflict, tags: '{ string.Join(",", conflictTags) }' in both AllTags and NotTags");
+                            var message = $"Query conflict, tags: '{ string.Join(",", conflictTags) }' in both AllTags and NotTags";
 
-                            return LookResult.Empty;
+                            LogHelper.Info(typeof(LookService), message);
+
+                            return new LookResult(message);
                         }
                     }
 
@@ -166,9 +167,11 @@ namespace Our.Umbraco.Look.Services
 
                         if (conflictTags.Any())
                         {
-                            LogHelper.Info(typeof(LookService), $"Query conflict, tags: '{ string.Join(",", conflictTags) }' in both AnyTags and NotTags");
+                            var message = $"Query conflict, tags: '{ string.Join(",", conflictTags) }' in both AnyTags and NotTags";
 
-                            return LookResult.Empty;
+                            LogHelper.Info(typeof(LookService), message);
+
+                            return new LookResult(message);
                         }
                     }
 
@@ -303,7 +306,7 @@ namespace Our.Umbraco.Look.Services
                 Func<string, IHtmlString> getHighlight = null;
 
                 // setup the getHightlight func if required
-                if (lookQuery.TextQuery != null && lookQuery.TextQuery.GetHighlight && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
+                if (lookQuery.TextQuery != null && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText) && lookQuery.TextQuery.GetHighlight)
                 {
                     var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer);
 
@@ -338,7 +341,7 @@ namespace Our.Umbraco.Look.Services
                                         facets.ToArray());
             }
 
-            return LookResult.Empty;
+            return new LookResult();
         }
 
         /// <summary>
