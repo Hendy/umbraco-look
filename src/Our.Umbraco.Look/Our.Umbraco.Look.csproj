@@ -207,7 +207,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\Indexing.cs" />
-    <Compile Include="Extensions\StringExtensions\IsValidTag.cs" />
     <Compile Include="LookConstants.cs" />
     <Compile Include="Models\DateQuery.cs" />
     <Compile Include="Models\Distance.cs" />

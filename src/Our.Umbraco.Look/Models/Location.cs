@@ -1,5 +1,4 @@
 ﻿using System;
-using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Models
 {
@@ -30,29 +29,31 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// Constructor - internal helper for de-serialization
-        /// </summary>
-        /// <param name="location"></param>
-        internal Location(string location)
-        {
-            try
-            {
-                this.Latitude = double.Parse(location.Split('|')[0]);
-                this.Longitude = double.Parse(location.Split('|')[1]);
-            }
-            catch (Exception exception)
-            {
-                LogHelper.WarnWithException(typeof(Location), $"Unable to deserialize string '{location}' into a Location ojbect", exception);
-            }
-        }
-
-        /// <summary>
         /// serialization helper
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
             return this.Latitude.ToString() + "|" + this.Longitude.ToString();
+        }
+
+        internal static Location FromString(string value)
+        {
+            Location location = null;
+
+            try
+            {
+                var latitude = double.Parse(value.Split('|')[0]);
+                var longitude = double.Parse(value.Split('|')[1]);
+
+                location = new Location(latitude, longitude);
+            }
+            catch (Exception exception)
+            {
+                throw new Exception($"Unable to deserialize string '{value}' into a Location ojbect", exception);
+            }
+
+            return location;
         }
     }
 }

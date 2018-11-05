@@ -1,19 +1,65 @@
-﻿using System.Linq;
-using Umbraco.Core.Logging;
+﻿using System;
+using System.Linq;
 
 namespace Our.Umbraco.Look.Models
 {
     public class Tag
     {
+        private string _group = string.Empty; // default value (the 'name-less' default group)
+
+        private string _name = null;
+
         /// <summary>
         /// Optional group for this tag
         /// </summary>
-        public string Group { get; } = string.Empty;
+        public string Group
+        {
+            get
+            {
+                return this._group;
+            }
+
+            private set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    var valid = value.Length > 50 // artifical limit as this is used a lucene field name
+                                || !value.Any(x => char.IsWhiteSpace(x) || x == '.');
+
+                    if (valid)
+                    {
+                        this.Group = value;
+                    }
+                    else
+                    {
+                        throw new Exception($"Invalid tag group '{ value }' - must be less than 50 chars and not contain whitespace nor '.'");
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Name of this tag (the key)
         /// </summary>
-        public string Name { get; }
+        public string Name
+        {
+            get
+            {
+                return this._name;
+            }
+
+            private set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    this._name = value;
+                }
+                else
+                {
+                    throw new Exception("Invalid tag name, must have a value");
+                }
+            }
+        }
 
         /// <summary>
         /// Constructor - create a tag in the default 'name-less' group
@@ -31,22 +77,34 @@ namespace Our.Umbraco.Look.Models
         /// <param name="name">the unique name for this tag within this tag group (all chars valid)</param>
         public Tag(string group, string name)
         {
+            this.Group = group;
             this.Name = name;
+        }
 
-            if (!string.IsNullOrWhiteSpace(group))
+        public override string ToString()
+        {
+            return this.Group + "|" + this.Name;
+        }
+
+        internal static Tag FromString(string value)
+        {
+            Tag tag = null;
+
+            var pipe = value.IndexOf('|');
+
+            if (pipe > -1)
             {
-                var valid = group.Length > 100 // artifical limit as this is used a lucene field name
-                            || !group.Any(x => char.IsWhiteSpace(x) || x == '.');
+                var group = value.Substring(0, pipe);
+                var name = value.Substring(pipe + 1);
 
-                if (valid)
-                {
-                    this.Group = group;
-                }
-                else
-                {
-                    LogHelper.Debug(typeof(Tag), $"Invalid tag group '{ group }' - must be less than 100 chars and not contain whitespace nor '.'");
-                }
+                tag = new Tag(group, name);
             }
+            else
+            {
+                throw new Exception($"Unable to deserialize string '{ value }' into a Tag object");
+            }
+
+            return tag;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Examine.LuceneEngine.Providers;
 using Lucene.Net.Documents;
 using Lucene.Net.Util;
-using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Models;
 using System;
 using Umbraco.Core.Logging;
@@ -17,6 +16,76 @@ namespace Our.Umbraco.Look.Services
         /// <param name="document"></param>
         internal static void Index(IndexingContext indexingContext, Document document)
         {
+            if (LookService.Instance.NameIndexer != null)
+            {
+                string name = null;
+
+                try
+                {
+                    name = LookService.Instance.NameIndexer(indexingContext);
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.WarnWithException(typeof(LookService), "Error in name indexer", exception);
+                }
+
+                if (name != null)
+                {
+                    var nameField = new Field(
+                                            LookConstants.NameField,
+                                            name,
+                                            Field.Store.YES,
+                                            Field.Index.NOT_ANALYZED,
+                                            Field.TermVector.YES);
+
+                    var nameSortedField = new Field(
+                                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField,
+                                                name.ToLower(), // force case insentive sorting
+                                                Field.Store.NO,
+                                                Field.Index.NOT_ANALYZED,
+                                                Field.TermVector.NO);
+
+                    document.Add(nameField);
+                    document.Add(nameSortedField);
+                }
+            }
+
+            if (LookService.Instance.DateIndexer != null)
+            {
+                DateTime? date = null;
+
+                try
+                {
+                    date = LookService.Instance.DateIndexer(indexingContext);
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.WarnWithException(typeof(LookService), "Error in date indexer", exception);
+                }
+
+                if (date != null)
+                {
+                    var dateValue = DateTools.DateToString(date.Value, DateTools.Resolution.SECOND);
+
+                    var dateField = new Field(
+                                            LookConstants.DateField,
+                                            dateValue,
+                                            Field.Store.YES,
+                                            Field.Index.ANALYZED,
+                                            Field.TermVector.YES);
+
+                    var dateSortedField = new Field(
+                                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField,
+                                                dateValue,
+                                                Field.Store.NO,
+                                                Field.Index.NOT_ANALYZED,
+                                                Field.TermVector.NO);
+
+                    document.Add(dateField);
+                    document.Add(dateSortedField);
+                }
+            }
+
             if (LookService.Instance.TextIndexer != null)
             {
                 string text = null;
@@ -60,91 +129,23 @@ namespace Our.Umbraco.Look.Services
                 {
                     foreach (var tag in tags)
                     {
-                        if (tag.Name.IsValidTag())
-                        {
-                            var tagField = new Field(
-                                                LookConstants.TagsField + tag.Group, // TODO: limit char types allowed in group name
-                                                tag.Name,
-                                                Field.Store.YES,
-                                                Field.Index.NOT_ANALYZED);
+                        // add all tags to a common field (serialized such that Tag objects can be restored from this)
+                        var allTagsField = new Field(
+                                            LookConstants.AllTagsField,
+                                            tag.ToString(),
+                                            Field.Store.YES,
+                                            Field.Index.NOT_ANALYZED);
 
-                            document.Add(tagField);
-                        }
-                        else
-                        {
-                            LogHelper.Info(typeof(LookService), $"Attemped to index an invalid tag string '{tag}'");
-                        }
+                        // add the tag value to a specific field - this is used for searching on
+                        var tagField = new Field(
+                                            LookConstants.TagsField + tag.Group,
+                                            tag.Name,
+                                            Field.Store.YES,
+                                            Field.Index.NOT_ANALYZED);
+
+                        document.Add(allTagsField);
+                        document.Add(tagField);
                     }
-                }
-            }
-
-            if (LookService.Instance.DateIndexer != null)
-            {
-                DateTime? date = null;
-
-                try
-                {
-                    date = LookService.Instance.DateIndexer(indexingContext);
-                }
-                catch (Exception exception)
-                {
-                    LogHelper.WarnWithException(typeof(LookService), "Error in date indexer", exception);
-                }
-
-                if (date != null)
-                {
-                    var dateValue = DateTools.DateToString(date.Value, DateTools.Resolution.SECOND);
-
-                    var dateField = new Field(
-                                            LookConstants.DateField,
-                                            dateValue,
-                                            Field.Store.YES,
-                                            Field.Index.ANALYZED,
-                                            Field.TermVector.YES);
-
-                    var dateSortedField = new Field(
-                                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField,
-                                                dateValue,
-                                                Field.Store.NO,
-                                                Field.Index.NOT_ANALYZED,
-                                                Field.TermVector.NO);
-
-                    document.Add(dateField);
-                    document.Add(dateSortedField);
-                }
-            }
-
-            if (LookService.Instance.NameIndexer != null)
-            {
-                string name = null;
-
-                try
-                {
-                    name = LookService.Instance.NameIndexer(indexingContext);
-                }
-                catch (Exception exception)
-                {
-                    LogHelper.WarnWithException(typeof(LookService), "Error in name indexer", exception);
-                }
-
-                if (name != null)
-                {
-                    var nameField = new Field(
-                                            LookConstants.NameField,
-                                            name,
-                                            Field.Store.YES,
-                                            Field.Index.NOT_ANALYZED,
-                                            Field.TermVector.YES);
-
-                    var nameSortedField = new Field(
-                                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField,
-                                                name.ToLower(), // force case insentive sorting
-                                                Field.Store.NO,
-                                                Field.Index.NOT_ANALYZED,
-                                                Field.TermVector.NO);
-
-                    document.Add(nameField);
-                    document.Add(nameSortedField);
                 }
             }
 

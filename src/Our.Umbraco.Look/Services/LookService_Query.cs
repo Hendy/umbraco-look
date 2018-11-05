@@ -41,9 +41,8 @@ namespace Our.Umbraco.Look.Services
 
                 return LookResult.Empty;
             }
-
-            // the lucene query being built
-            var query = new BooleanQuery();
+            
+            var query = new BooleanQuery(); // the lucene query being built
 
             if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
             {
@@ -320,7 +319,7 @@ namespace Our.Umbraco.Look.Services
             // if a highlight function is supplied (or text requested)
             if (getHighlight != null || getText) { fields.Add(LookConstants.TextField); }
 
-            fields.Add(LookConstants.TagsField);
+            fields.Add(LookConstants.AllTagsField);
             fields.Add(LookConstants.LocationField);
 
             var mapFieldSelector = new MapFieldSelector(fields.ToArray());
@@ -338,10 +337,10 @@ namespace Our.Umbraco.Look.Services
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     getHighlight(doc.Get(LookConstants.TextField)),
                     getText ? doc.Get(LookConstants.TextField) : null,
-                    LookService.GetTags(doc.GetFields(LookConstants.TagsField)),
+                    LookService.GetTags(doc.GetFields(LookConstants.AllTagsField)),
                     LookService.GetDate(doc.Get(LookConstants.DateField)),
                     doc.Get(LookConstants.NameField),
-                    doc.Get(LookConstants.LocationField) != null ? new Location(doc.Get(LookConstants.LocationField)) : null,
+                    doc.Get(LookConstants.LocationField) != null ? Location.FromString(doc.Get(LookConstants.LocationField)) : null,
                     getDistance(docId),
                     scoreDoc.score
                 );
@@ -355,17 +354,16 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="fields"></param>
         /// <returns></returns>
-        private static string[] GetTags(Field[] fields)
+        private static Tag[] GetTags(Field[] fields)
         {
             if (fields != null)
             {
                 return fields
-                        .Select(y => y.StringValue())
-                        .Where(y => !string.IsNullOrWhiteSpace(y))
+                        .Select(x => Tag.FromString(x.StringValue()))
                         .ToArray();
             }
 
-            return new string[] { };
+            return new Tag[] { };
         }
 
         /// <summary>
