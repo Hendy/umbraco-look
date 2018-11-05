@@ -33,6 +33,11 @@
         internal static string LocationField => "Look_Location";
 
         /// <summary>
+        /// 
+        /// </summary>
+        internal static string LocationTierFieldPrefix => "Look_Location_Tier_";
+
+        /// <summary>
         /// not stored in index, but used as a result field
         /// </summary>
         internal static string DistanceField => "Look_Distance";

@@ -169,7 +169,7 @@ namespace Our.Umbraco.Look.Services
                                             maxDistance,
                                             LookConstants.LocationField + "_Latitude",
                                             LookConstants.LocationField + "_Longitude",
-                                            CartesianTierPlotter.DefaltFieldPrefix,
+                                            LookConstants.LocationTierFieldPrefix,
                                             true);
 
                 // update filter

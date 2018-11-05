@@ -36,9 +36,9 @@ namespace Our.Umbraco.Look.Services
             }
             else
             {
-                // init collection of cartesian tier plotters (and store in singleton)
+                // init collection of cartesian tier plotters
                 IProjector projector = new SinusoidalProjector();
-                var plotter = new CartesianTierPlotter(0, projector, CartesianTierPlotter.DefaltFieldPrefix);
+                var plotter = new CartesianTierPlotter(0, projector, LookConstants.LocationTierFieldPrefix);
 
                 var startTier = plotter.BestFit(LookService.MaxDistance);
                 var endTier = plotter.BestFit(1); // min of a 1 mile search
@@ -51,7 +51,7 @@ namespace Our.Umbraco.Look.Services
                         .Add(new CartesianTierPlotter(
                                             tier,
                                             projector,
-                                            CartesianTierPlotter.DefaltFieldPrefix));
+                                            LookConstants.LocationTierFieldPrefix));
                 }
 
                 // cache the collection of Lucene Directory objs (so don't have to at query time)
