@@ -7,15 +7,10 @@
         /// </summary>
         public string SearchText { get; set; } = null;
 
-        /// <summary>
-        /// Optional fuzzyness factor
-        /// </summary>
-        public float Fuzzyness { get; set; } = 0;
-
         ///// <summary>
-        ///// when specified, then wildcard term search will be used
+        ///// Optional fuzzyness factor
         ///// </summary>
-        //public char[] Wildcards { get; set; } = null;
+        //public float Fuzzyness { get; set; } = 0;
 
         /// <summary>
         /// When true (and SearchText provided), a hightlight extract containing the search text will be returned

@@ -107,9 +107,29 @@ namespace Our.Umbraco.Look.Services
                     //}
                     //else
                     //{
-                    query.Add(
-                            new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer).Parse(lookQuery.TextQuery.SearchText),
-                            BooleanClause.Occur.MUST);
+
+                    Query searchTextQuery = null;
+
+                    try
+                    { 
+                        searchTextQuery = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer)
+                                                .Parse(lookQuery.TextQuery.SearchText);
+                    }
+                    catch (Exception exception)
+                    {
+                        LogHelper.WarnWithException(typeof(LookService), $"Unable to parse SearchText string: '{ lookQuery.TextQuery.SearchText }'", exception);
+
+                        return LookResult.Empty;
+                    }
+
+                    if (searchTextQuery != null)
+                    {
+                        query.Add(searchTextQuery, BooleanClause.Occur.MUST);
+                    }
+
+                    //query.Add(
+                    //        new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer).Parse(lookQuery.TextQuery.SearchText),
+                    //        BooleanClause.Occur.MUST);
                     //}
                 }
             }
