@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Models
 {
@@ -66,6 +67,8 @@ namespace Our.Umbraco.Look.Models
             this.Facets = new Facet[] { };
             this.Success = false;
             this.FailureMessage = failureMessage;
+
+            LogHelper.Debug(typeof(LookResult), failureMessage);
         }
 
         public IEnumerator<LookMatch> GetEnumerator()

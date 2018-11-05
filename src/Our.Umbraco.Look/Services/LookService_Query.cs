@@ -27,22 +27,14 @@ namespace Our.Umbraco.Look.Services
         {
             if (lookQuery == null)
             {
-                var message = "Unable to perform query, as supplied LookQuery object was null";
-
-                LogHelper.Debug(typeof(LookService), message);
-
-                return new LookResult(message);
+                return new LookResult("Unable to perform query, as supplied LookQuery object was null");
             }
 
             var searchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
 
             if (searchingContext == null)
             {
-                var message = "Unable to perform query, as Examine searcher not found";
-
-                LogHelper.Debug(typeof(LookService), message);
-
-                return new LookResult(message);
+                return new LookResult("Unable to perform query, as Examine searcher not found");
             }
             
             var query = new BooleanQuery(); // the lucene query being built
@@ -117,13 +109,9 @@ namespace Our.Umbraco.Look.Services
                         searchTextQuery = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer)
                                                 .Parse(lookQuery.TextQuery.SearchText);
                     }
-                    catch (Exception exception)
+                    catch
                     {
-                        var message = $"Unable to parse LookQuery.TextQuery.SearchText: '{ lookQuery.TextQuery.SearchText }' into a Lucene query";
-
-                        LogHelper.WarnWithException(typeof(LookService), message, exception);
-
-                        return new LookResult(message);
+                        return new LookResult($"Unable to parse LookQuery.TextQuery.SearchText: '{ lookQuery.TextQuery.SearchText }' into a Lucene query");
                     }
 
                     if (searchTextQuery != null)
@@ -143,11 +131,7 @@ namespace Our.Umbraco.Look.Services
 
                         if (conflictTags.Any())
                         {
-                            var message = $"Query conflict, tags: '{ string.Join(",", conflictTags) }' in both AllTags and NotTags";
-
-                            LogHelper.Info(typeof(LookService), message);
-
-                            return new LookResult(message);
+                            return new LookResult($"Query conflict, tags: '{ string.Join(",", conflictTags) }' are in both AllTags and NotTags");
                         }
                     }
 
@@ -167,11 +151,7 @@ namespace Our.Umbraco.Look.Services
 
                         if (conflictTags.Any())
                         {
-                            var message = $"Query conflict, tags: '{ string.Join(",", conflictTags) }' in both AnyTags and NotTags";
-
-                            LogHelper.Info(typeof(LookService), message);
-
-                            return new LookResult(message);
+                            return new LookResult($"Query conflict, tags: '{ string.Join(",", conflictTags) }' are in both AnyTags and NotTags");
                         }
                     }
 
