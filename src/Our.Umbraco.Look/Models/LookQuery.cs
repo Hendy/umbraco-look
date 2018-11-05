@@ -6,11 +6,6 @@
     public class LookQuery
     {
         /// <summary>
-        /// Name of searcher (index) to use (the context for the query properties as it were)
-        /// </summary>
-        internal string SearcherName { get; private set; }
-
-        /// <summary>
         /// A raw Lucene query string
         /// </summary>
         public string RawQuery { get; set; }
@@ -49,6 +44,11 @@
         /// Specify the field to sort on
         /// </summary>
         public SortOn SortOn { get; set; } = SortOn.Score;
+
+        /// <summary>
+        /// Name of searcher (index) to use (the context for the query properties as it were)
+        /// </summary>
+        internal string SearcherName { get; private set; }
 
         /// <summary>
         /// Constructor - use the default Examine searcher (usually "ExternalSearcher", see ExamineSettings.config)

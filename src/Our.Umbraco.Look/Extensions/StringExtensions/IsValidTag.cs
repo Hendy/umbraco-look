@@ -1,4 +1,5 @@
-﻿using Umbraco.Core.Logging;
+﻿using System;
+using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Extensions
 {
@@ -9,6 +10,7 @@ namespace Our.Umbraco.Look.Extensions
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [Obsolete]
         internal static bool IsValidTag (this string value)
         {
             var isValid = true;
