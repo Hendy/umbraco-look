@@ -97,20 +97,20 @@ namespace Our.Umbraco.Look.Services
             {
                 if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                 {
-                    if (lookQuery.TextQuery.Fuzzyness > 0)
-                    {
-                        query.Add(
-                                new FuzzyQuery(
-                                    new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText),
-                                    lookQuery.TextQuery.Fuzzyness),
-                                BooleanClause.Occur.MUST);
-                    }
-                    else
-                    {
-                        query.Add(
-                                new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer).Parse(lookQuery.TextQuery.SearchText),
-                                BooleanClause.Occur.MUST);
-                    }
+                    //if (lookQuery.TextQuery.Fuzzyness > 0)
+                    //{
+                    //    query.Add(
+                    //            new FuzzyQuery(
+                    //                new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText),
+                    //                lookQuery.TextQuery.Fuzzyness),
+                    //            BooleanClause.Occur.MUST);
+                    //}
+                    //else
+                    //{
+                    query.Add(
+                            new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer).Parse(lookQuery.TextQuery.SearchText),
+                            BooleanClause.Occur.MUST);
+                    //}
                 }
             }
 
@@ -348,7 +348,7 @@ namespace Our.Umbraco.Look.Services
             // if a highlight function is supplied (or text requested)
             if (getHighlight != null || getText) { fields.Add(LookConstants.TextField); }
 
-            fields.Add(LookConstants.AllTagsField);
+            fields.Add(LookConstants.AllTagsField); // single field used to store all tags (for quick re-construction)
             fields.Add(LookConstants.LocationField);
 
             var mapFieldSelector = new MapFieldSelector(fields.ToArray());

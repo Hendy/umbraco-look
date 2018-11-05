@@ -28,7 +28,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// Umbraco has started event
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-	{		
+	{
 		LookService.SetNameIndexer(indexingContext => {			
 
 			// the content, media or member being indexed
@@ -47,16 +47,21 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 		LookService.SetDateIndexer(indexingContext => {
 			// return DateTime (or null to not index)
+
 			return indexingContext.Item.UpdateDate;
 		});
 
 		LookService.SetTextIndexer(indexingContext => {		
 			// return string (or null to not index)
+			// eg. if content, trigger web request and scrape markup
+
 			return null;
 		});
 
 		LookService.SetTagIndexer(indexingContext => {
 			// return Our.Umbraco.Look.Models.Tag[] (or null to not index)
+			// eg.
+
 			return null;
 		});
 
@@ -85,13 +90,10 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` and an optional
-Exmaine Searcher (if an Exmaine searcher isn't specified then the default Exmaine searcher will be used).
+A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` and an Exmaine Searcher.
 
 ```csharp
-using Our.Umbraco.Look.Models;  
-
-var lookQuery = new LookQuery("InternalSearcher")
+var lookQuery = new LookQuery() // use the default Examine searcher
 {
 	RawQuery = "+path: 1059",
 
@@ -113,15 +115,20 @@ var lookQuery = new LookQuery("InternalSearcher")
 
 	TagQuery = new TagQuery() {
 
+		// all of these tags must be present
 		AllTags = new Tag[] { 
-						new Tag("tag1"), // tag in the 'nameless group'
-						new Tag("group1", "tag2") }, // tag in a named group
+				new Tag("tag1"), // tag in the 'nameless group'
+				new Tag("group1", "tag2") // tag in a named group
+		}, 
 
+		// at least one of these tags must be present
 		AnyTags = new Tag[] { 
-						new Tag("tag3"), 
-						new Tag("tag4") }, // at least one of these tags (in name-less group) is required
+				new Tag("tag3"), 
+				new Tag("tag4") 
+		}, 
 
-		NotTags = new Tag[] { new Tag("tag6") }, // results must not have any of these tags (any tags here that are also in AllTags will cause an empty result)
+		// none of these tags must be present
+		NotTags = new Tag[] { new Tag("tag6") },
 
 		GetFacets = new string[] { "", "group1" } // facet counts will be returned for tags in the 'name-less' group and group1
 	},
@@ -146,66 +153,75 @@ var lookResults = LookService.Query(lookQuery);
 var totalResults = lookResults.Total; // total number of item expected in the lookResults enumerable
 var results = lookResults.ToArray(); // returns Our.Umbraco.Look.Models.LookMatch[]
 var facets = lookResults.Facets; // returns Our.Umbraco.Look.Models.Facet[]
+```
 
+```csharp
 public class LookMatch
 {
 	/// <summary>
 	/// The Umbraco node Id of the matched item
 	/// </summary>
-	public int Id { get; internal set; }
+	public int Id { get; }
+	
+	/// <summary>
+	/// Lazy evaluation of the IPublishedContent
+	/// </summary>
+	public IPublishedContent Item { get; }
 	
 	/// <summary>
 	/// The custom name field
 	/// </summary>
-	public string Name { get; internal set; }
+	public string Name { get; }
 
 	/// <summary>
 	/// The custom date field
 	/// </summary>
-	public DateTime? Date { get; internal set; }
+	public DateTime? Date { get; }
 
 	/// <summary>
 	/// The full text (only returned if specified)
 	/// </summary>
-	public string Text { get; internal set; }
+	public string Text { get; }
 
 	/// <summary>
 	/// Highlight text (containing search text) extracted from the full text
 	/// </summary>
-	public IHtmlString Highlight { get; internal set; }
+	public IHtmlString Highlight { get; }
 
 	/// <summary>
-	/// Tag collection from the custom tags feild
+	/// Collection of all tags associated with this item
 	/// </summary>
-	public Tag[] Tags { get; internal set; }
+	public Tag[] Tags { get; }
 
 	/// <summary>
 	/// The custom location (lat|lng) field
 	/// </summary>
-	public Location Location { get; internal set; }
+	public Location Location { get; }
 
 	/// <summary>
 	/// The calculated distance (only returned if a location supplied in query)
 	/// </summary>
-	public double? Distance { get; internal set; }
+	public double? Distance { get; }
 
 	/// <summary>
 	/// The Lucene score for this match
 	/// </summary>
-	public float Score { get; internal set; }
+	public float Score { get; }
 }
+```
 
+```csharp
 public class Facet
 {
 	/// <summary>
-	/// The name of the tag
+	/// The tag
 	/// </summary>
-	public Tag Tag { get; internal set; }
+	public Tag Tag { get; }
 
 	/// <summary>
 	/// The total number of results expected should this tag be added to TagQuery.AllTags on the current query
 	/// </summary>
-	public int Count { get; internal set; }
+	public int Count { get;  }
 }
 
 ```
