@@ -9,12 +9,12 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Register consumer code to perform when indexing date
         /// </summary>
-        /// <param name="dateFunc"></param>
-        public static void SetDateIndexer(Func<IndexingContext, DateTime?> dateFunc)
+        /// <param name="dateIndexer"></param>
+        public static void SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
         {
             LogHelper.Info(typeof(LookService), "Date indexing function set");
 
-            LookService.Instance.DateIndexer = dateFunc;
+            LookService.Instance.DateIndexer = dateIndexer;
         }
     }
 }

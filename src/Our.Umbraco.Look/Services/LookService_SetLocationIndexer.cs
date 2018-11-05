@@ -10,12 +10,12 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Register consumer code to perform when indexing location
         /// </summary>
-        /// <param name="locationFunc"></param>
-        public static void SetLocationIndexer(Func<IndexingContext, Location> locationFunc)
+        /// <param name="locationIndexer"></param>
+        public static void SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
         {
             LogHelper.Info(typeof(LookService), "Location indexing function set");
 
-            LookService.Instance.LocationIndexer = locationFunc;
+            LookService.Instance.LocationIndexer = locationIndexer;
         }
     }
 }
