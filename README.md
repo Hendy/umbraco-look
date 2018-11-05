@@ -8,34 +8,16 @@ Extends Umbraco Examine adding support for: text match highlighting, geospatial 
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
 
-```csharp
-using Our.Umbraco.Look.Services;
-using Our.Umbraco.Look.Models;
-
-```
-
 ## Indexing
 
 No configuration files need to be changed as Look hooks into all configured Umbraco Exmaine indexers (usually "InternalIndexer", "InternalMemberIndexer" and "ExternalIndexer").
 
 The indexing behaviour is controlled by supplying indexing functions though static methods on the LookService. Each of these functions at index-time will be given the IPublishedContent representation
-of the content, media or member being indexed and the name of the current Exmaine Indexer.
+of the content, media or member being indexed and the name of the current Exmaine Indexer. If an indexer is not set, or returns null, then that field is not indexed, otherwise the value will be indexed into an additional field (prefixed "Look_" for uniqueness).
 
 ```csharp
-public class LookService
-{
-	public static void SetNameIndexer(Func<IndexingContext, string> nameIndexer) {}
-	public static void SetDateIndexer(Func<IndexingContext>, DateTime?> dateIndexer) {}
-	public static void SetTextIndexer(Func<IndexingContext, string> textIndexer) {}
-	public static void SetTagIndexer(Func<IndexingContext, Tag[]> tagIndexer) {}
-	public static void SetLocationIndexer(Func<IndexingContext, Location> locationIndexer) {}
-}
-```
- 
- If an indexer is not set, or returns null, then that field is not indexed, otherwise the value will be indexed into an additional field (prefixed "Look_" for uniqueness).
-
-
-```csharp
+using Our.Umbraco.Look.Services;
+using Our.Umbraco.Look.Models;
 using Umbraco.Core;
 
 public class ConfigureIndexing : ApplicationEventHandler
@@ -63,7 +45,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 		LookService.SetDateIndexer(indexingContext => {
 			// return DateTime (or null to not index)
-			return indexingContext.Item.UpdateDate; // fallback
+			return indexingContext.Item.UpdateDate;
 		});
 
 		LookService.SetTextIndexer(indexingContext => {		
@@ -101,12 +83,13 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`.
+A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` and an optional
+Exmaine Searcher (if an Exmaine searcher isn't specified then the default Exmaine searcher will be used).
 
 ```csharp
 using Our.Umbraco.Look.Models;  
 
-var lookQuery = new LookQuery() // use the default Examine searcher
+var lookQuery = new LookQuery("InternalSearcher")
 {
 	RawQuery = "+path: 1059",
 
@@ -151,11 +134,6 @@ var lookQuery = new LookQuery() // use the default Examine searcher
 
 ```
 
-By default, a Look query will use the default Examine searcher (usually "ExternalSearcher"), however to query a diffent index, the LookQuery constructor has a string overload where a spcific Exmaine searcher name can be specified:
-
-```csharp
-var lookQuery = new LookQuery("InternalMemberSearcher");
-```
 
 ### Search Results
 
