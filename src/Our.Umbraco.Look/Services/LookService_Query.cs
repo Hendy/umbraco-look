@@ -234,7 +234,7 @@ namespace Our.Umbraco.Look.Services
                     {
                         var simpleFacetedSearch = new SimpleFacetedSearch(
                                                         searchingContext.IndexSearcher.GetIndexReader(),
-                                                        LookConstants.TagsField + group); // WARNING: TODO: handle invalid chars at tag level
+                                                        LookConstants.TagsField + group);
 
                         var facetResult = simpleFacetedSearch.Search(facetQuery);
 

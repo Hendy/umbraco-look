@@ -7,19 +7,35 @@ Extends Umbraco Examine adding support for: text match highlighting, geospatial 
   * Examine 0.1.70 (min)
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
-## Indexing
-
-Look can add the following (optional) fields to each document in an Umbraco Examine managed index: Name, Date, Text, Tags and a Location. (Each field is prefixed with 'Look_' for uniqueness)
-  
-No configuration files need to be changed as Look will use default Examine searcher (unless otherwise specified in a Look query).
-
-To configure the indexing behaviour there are static methods on the `LookService` class where (optional) custom indexers can be registered.
-
-Each custom indexer is supplied with an IndexingContext model which contains details as to the IPublishedContent representation of the content, media or member being indexed, together with the name of the Examine index being operated upon.
 
 ```csharp
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
+
+```
+
+## Indexing
+
+No configuration files need to be changed as Look hooks into all configured Umbraco Exmaine indexers (usually "InternalIndexer", "InternalMemberIndexer" and "ExternalIndexer").
+
+The indexing behaviour is controlled by supplying indexing functions though static methods on the LookService. Each of these functions at index-time will be given the IPublishedContent representation
+of the content, media or member being indexed and the name of the current Exmaine Indexer.
+
+```csharp
+public class LookService
+{
+	public static void SetNameIndexer(Func<IndexingContext, string> nameIndexer) {}
+	public static void SetDateIndexer(Func<IndexingContext>, DateTime?> dateIndexer) {}
+	public static void SetTextIndexer(Func<IndexingContext, string> textIndexer) {}
+	public static void SetTagIndexer(Func<IndexingContext, Tag[]> tagIndexer) {}
+	public static void SetLocationIndexer(Func<IndexingContext, Location> locationIndexer) {}
+}
+```
+ 
+ If an indexer is not set, or returns null, then that field is not indexed, otherwise the value will be indexed into an additional field (prefixed "Look_" for uniqueness).
+
+
+```csharp
 using Umbraco.Core;
 
 public class ConfigureIndexing : ApplicationEventHandler
@@ -28,10 +44,21 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// Umbraco has started event
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-	{
+	{		
 		LookService.SetNameIndexer(indexingContext => {			
-			// return string (or null to not index)
-			return indexingContext.Item.Name; // fallback
+
+			// the content, media or member being indexed
+			var item = indexingContext.Item; // IPublishedContent 
+
+			// the current Examine indexer
+			var indexerName = indexingContext.IndexerName; // string
+
+			if (indexerName == "ExternalIndexer")
+			{
+				return "contrived_" + item.Name;
+			}
+			
+			return null; // don't index
 		});
 
 		LookService.SetDateIndexer(indexingContext => {
@@ -72,24 +99,6 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ```
 
-The Our.Umbraco.Look.Model.IndexingContext model:
-
-```csharp
-public class IndexingContext
-{
-    /// <summary>
-    /// The IPublishedContent representation of the Content, Media or Member being indexed
-    /// </summary>
-    public IPublishedContent Item { get; }
-
-    /// <summary>
-    /// The name of the Examine indexer into which this item is being indexed
-    /// </summary>
-    public string IndexerName { get; }
-}
-
-```
-
 ## Searching
 
 A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`.
@@ -97,7 +106,7 @@ A Look query consists of any combinations of the following (optional) query type
 ```csharp
 using Our.Umbraco.Look.Models;  
 
-var lookQuery = new LookQuery()
+var lookQuery = new LookQuery() // use the default Examine searcher
 {
 	RawQuery = "+path: 1059",
 
@@ -142,21 +151,15 @@ var lookQuery = new LookQuery()
 
 ```
 
-By default, a Look query will use the default Examine searcher (usually "ExternalSearcher"), however if you want to query a diffent index, the LookQuery model has an
-overloaded constructor where a spcific Exmaine searcher name can be supplied.
+By default, a Look query will use the default Examine searcher (usually "ExternalSearcher"), however to query a diffent index, the LookQuery constructor has a string overload where a spcific Exmaine searcher name can be specified:
 
 ```csharp
-using Our.Umbraco.Look.Models;  
-
 var lookQuery = new LookQuery("InternalMemberSearcher");
-
 ```
 
 ### Search Results
 
 ```csharp
-using Our.Umbraco.Look.Services;
-
 // perform the search
 var lookResults = LookService.Query(lookQuery);
 
@@ -194,7 +197,7 @@ public class LookMatch
 	/// <summary>
 	/// Tag collection from the custom tags feild
 	/// </summary>
-	public string[] Tags { get; internal set; }
+	public Tag[] Tags { get; internal set; }
 
 	/// <summary>
 	/// The custom location (lat|lng) field
@@ -217,7 +220,7 @@ public class Facet
 	/// <summary>
 	/// The name of the tag
 	/// </summary>
-	public string Tag { get; internal set; }
+	public Tag Tag { get; internal set; }
 
 	/// <summary>
 	/// The total number of results expected should this tag be added to TagQuery.AllTags on the current query
