@@ -16,7 +16,7 @@ namespace Our.Umbraco.Look.Models
         public int Id { get; }
 
         /// <summary>
-        /// 
+        /// Lazy evaluation of Item for IPublishedContent
         /// </summary>
         public IPublishedContent Item => this._item.Value;
 

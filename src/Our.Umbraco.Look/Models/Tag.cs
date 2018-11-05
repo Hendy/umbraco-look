@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Models
 {
-    public class Tag
+    public class Tag : IEqualityComparer<Tag>
     {
         private string _group = string.Empty; // default value (the 'name-less' default group)
 
@@ -81,6 +82,16 @@ namespace Our.Umbraco.Look.Models
         {
             this.Group = group;
             this.Name = name;
+        }
+
+        public bool Equals(Tag x, Tag y)
+        {
+            return x.ToString() == y.ToString();
+        }
+
+        public int GetHashCode(Tag obj)
+        {
+            return obj.GetHashCode();
         }
 
         public override string ToString()

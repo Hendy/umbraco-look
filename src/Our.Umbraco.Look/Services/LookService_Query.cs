@@ -118,6 +118,18 @@ namespace Our.Umbraco.Look.Services
             {
                 if (lookQuery.TagQuery.AllTags != null)
                 {
+                    if (lookQuery.TagQuery.NotTags != null)
+                    {
+                        var conflictTags = lookQuery.TagQuery.AllTags.Where(x => !lookQuery.TagQuery.NotTags.Contains(x));
+
+                        if (conflictTags.Any())
+                        {
+                            LogHelper.Info(typeof(LookService), $"Query conflict, tags: '{ string.Join(",", conflictTags) }' in both AllTags and NotTags");
+
+                            return LookResult.Empty;
+                        }
+                    }
+
                     foreach (var tag in lookQuery.TagQuery.AllTags)
                     {
                         query.Add(
@@ -126,8 +138,20 @@ namespace Our.Umbraco.Look.Services
                     }
                 }
 
-                if (lookQuery.TagQuery.AnyTags != null)
+                if (lookQuery.TagQuery.AnyTags != null) // TODO: require at least two items in this collection (with any nots removed)
                 {
+                    if (lookQuery.TagQuery.NotTags != null)
+                    {
+                        var conflictTags = lookQuery.TagQuery.AnyTags.Where(x => !lookQuery.TagQuery.NotTags.Contains(x));
+
+                        if (conflictTags.Any())
+                        {
+                            LogHelper.Info(typeof(LookService), $"Query conflict, tags: '{ string.Join(",", conflictTags) }' in both AnyTags and NotTags");
+
+                            return LookResult.Empty;
+                        }
+                    }
+
                     var anyTagQuery = new BooleanQuery();
 
                     foreach (var tag in lookQuery.TagQuery.AnyTags)
@@ -140,10 +164,14 @@ namespace Our.Umbraco.Look.Services
                     query.Add(anyTagQuery, BooleanClause.Occur.MUST);
                 }
 
-                // TODO: NotTags
                 if (lookQuery.TagQuery.NotTags != null)
                 {
-
+                    foreach (var tag in lookQuery.TagQuery.NotTags)
+                    {
+                        query.Add(
+                            new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
+                            BooleanClause.Occur.MUST_NOT);
+                    }
                 }
             }
 
