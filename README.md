@@ -10,15 +10,17 @@ Extends Umbraco Examine adding support for: text match highlighting, geospatial 
 
 ## Indexing
 
-No configuration files need to be changed as Look hooks into all configured Umbraco Exmaine indexers (usually "InternalIndexer", "InternalMemberIndexer" and "ExternalIndexer").
+No configuration files need to be changed as Look hooks into all Umbraco Exmaine indexers (usually "InternalIndexer", "InternalMemberIndexer" and "ExternalIndexer").
 
-The indexing behaviour is controlled by supplying indexing functions though static methods on the LookService. Each of these functions at index-time will be given the IPublishedContent representation
-of the content, media or member being indexed and the name of the current Exmaine Indexer. If an indexer is not set, or returns null, then that field is not indexed, otherwise the value will be indexed into an additional field (prefixed "Look_" for uniqueness).
+The indexing behaviour is controlled by setting your custom indexing functions via static methods on the LookService. Each of these functions at index-time will be given the IPublishedContent 
+of the content, media or member being indexed and details about the current Exmaine Indexer.
+
+If an indexing function is not set, or it returns null, then that field is not indexed, otherwise the value will be indexed into a custom field (prefixed with "Look_").
 
 ```csharp
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
-using Tag = Our.Umbraco.Look.Models.Tag;
+using Tag = Our.Umbraco.Look.Models.Tag; // TODO: rename Tag to avoid conflict ? (Mark ?)
 ```
 
 ```csharp
@@ -31,11 +33,11 @@ public class ConfigureIndexing : ApplicationEventHandler
 	{
 		LookService.SetNameIndexer(indexingContext => {			
 
-			// the content, media or member being indexed
-			var item = indexingContext.Item; // IPublishedContent 
+			// IPublishedContent of the content, media or member being indexed
+			var item = indexingContext.Item;
 
-			// the current Examine indexer
-			var indexerName = indexingContext.IndexerName; // string
+			// string name of the Examine indexer
+			var indexerName = indexingContext.IndexerName;
 
 			if (indexerName == "ExternalIndexer")
 			{
@@ -53,35 +55,34 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 		LookService.SetTextIndexer(indexingContext => {		
 			// return string (or null to not index)
-			// eg. if content, trigger web request and scrape markup
+			// eg. for content, trigger a web request and scrape markup to index
 
 			return null;
 		});
 
 		LookService.SetTagIndexer(indexingContext => {
 			// return Our.Umbraco.Look.Models.Tag[] (or null to not index)
-			// eg.
+			// eg a nuPicker
 
-			return null;
+            var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
+
+            return picker
+                    .AsPublishedContent()
+                    .Select(x => new Tag("group1", x.Name)) // create a grouped tag
+                    .ToArray();
 		});
 
 		LookService.SetLocationIndexer(indexingContext => {
 			// return Our.Umbraco.Look.Model.Location (or null to not index)
-			// eg. return new Location(55.406330, 10.388500);		
+			// eg. return new Location(55.406330, 10.388500);
 
-			var terratype = indexingContext.Item.GetProperty("location").Value as Terratype.Models.Model;
+			var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
 
-			if (terratype != null)
-			{
-				var latLng = terratype.Position.ToWgs84();
+			var terratypeLatLng = terratype.Position.ToWgs84();
 
-				if (latLng != null)
-				{
-					return new Location(latLng.Latitude, latLng.Longitude);
-				}
-			}
-
-			return null;			
+			return new Location(
+							terratypeLatLng.Latitude, 
+							terratypeLatLng.Longitude);
 		});
 	}
 }
@@ -90,10 +91,10 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` and an Exmaine Searcher.
+A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` and an Examine Searcher.
 
 ```csharp
-var lookQuery = new LookQuery() // use the default Examine searcher
+var lookQuery = new LookQuery("InternalSearcher") // (omit the seracher name to use the default, usually "ExternalSearcher")
 {
 	RawQuery = "+path: 1059",
 
@@ -117,25 +118,28 @@ var lookQuery = new LookQuery() // use the default Examine searcher
 
 		// all of these tags must be present
 		AllTags = new Tag[] { 
-				new Tag("tag1"), // tag in the 'nameless group'
-				new Tag("group1", "tag2") // tag in a named group
+			new Tag("tag1"), // tag in the 'nameless group'
+			new Tag("group1", "tag2") // tag in a named group
 		}, 
 
 		// at least one of these tags must be present
 		AnyTags = new Tag[] { 
-				new Tag("tag3"), 
-				new Tag("tag4") 
+			new Tag("tag3"), 
+			new Tag("tag4") 
 		}, 
 
-		// none of these tags must be present
-		NotTags = new Tag[] { new Tag("tag6") },
+		// none of these tags must be present (any query contrdictions will return an empty result with message)
+		NotTags = new Tag[] { 
+			new Tag("tag6") 
+		},
 
-		GetFacets = new string[] { "", "group1" } // facet counts will be returned for tags in the 'name-less' group and group1
+		GetFacets = new string[] { "", "group1" } // facet counts will be returned all tags in the 'name-less' group and group1
 	},
 
 	LocationQuery = new LocationQuery() {
 		Location = new Location(55.406330, 10.388500), // a location means distance results can be set
 		MaxDistance = new Distance(500, DistanceUnit.Miles)  // limits the results to within this distance
+		// TODO: GetFacets = new Distance[] { }
 	},
 
 	SortOn = SortOn.Distance // other sorts are: Score (default), Name, DateAscending, DateDescending
@@ -148,11 +152,11 @@ var lookQuery = new LookQuery() // use the default Examine searcher
 
 ```csharp
 // perform the search
-var lookResults = LookService.Query(lookQuery);
+var lookResult = LookService.Query(lookQuery);
 
-var totalResults = lookResults.Total; // total number of item expected in the lookResults enumerable
-var results = lookResults.ToArray(); // returns Our.Umbraco.Look.Models.LookMatch[]
-var facets = lookResults.Facets; // returns Our.Umbraco.Look.Models.Facet[]
+var totalResults = lookResult.Total; // total number of item expected in the lookResult enumerable
+var results = lookResult.ToArray(); // returns Our.Umbraco.Look.Models.LookMatch[]
+var facets = lookResult.Facets; // returns Our.Umbraco.Look.Models.Facet[]
 ```
 
 ```csharp
