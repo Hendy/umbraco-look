@@ -64,12 +64,12 @@ public class ConfigureIndexing : ApplicationEventHandler
 			// return Our.Umbraco.Look.Models.Tag[] (or null to not index)
 			// eg a nuPicker
 
-            var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
+			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
 
-            return picker
-                    .AsPublishedContent()
-                    .Select(x => new Tag("group1", x.Name)) // create a grouped tag
-                    .ToArray();
+			return picker
+					.AsPublishedContent()
+					.Select(x => new Tag("group1", x.Name)) // create a grouped tag
+					.ToArray();
 		});
 
 		LookService.SetLocationIndexer(indexingContext => {
