@@ -67,9 +67,9 @@ public class ConfigureIndexing : ApplicationEventHandler
 			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
 
 			return picker
-					.AsPublishedContent()
-					.Select(x => new Tag("group1", x.Name)) // create a grouped tag
-					.ToArray();
+				.AsPublishedContent()
+				.Select(x => new Tag("group1", x.Name)) // create a grouped tag
+				.ToArray();
 		});
 
 		LookService.SetLocationIndexer(indexingContext => {
@@ -81,8 +81,8 @@ public class ConfigureIndexing : ApplicationEventHandler
 			var terratypeLatLng = terratype.Position.ToWgs84();
 
 			return new Location(
-							terratypeLatLng.Latitude, 
-							terratypeLatLng.Longitude);
+				terratypeLatLng.Latitude, 
+				terratypeLatLng.Longitude);
 		});
 	}
 }
@@ -91,10 +91,10 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` and an Examine Searcher.
+A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` together with an Examine Searcher.
 
 ```csharp
-var lookQuery = new LookQuery("InternalSearcher") // (omit the seracher name to use the default, usually "ExternalSearcher")
+var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use default, usually "ExternalSearcher")
 {
 	RawQuery = "+path: 1059",
 
@@ -133,7 +133,7 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit the seracher name to 
 			new Tag("tag6") 
 		},
 
-		GetFacets = new string[] { "", "group1" } // facet counts will be returned all tags in the 'name-less' group and group1
+		GetFacets = new string[] { "", "group1" } // return facets for all tags in the 'name-less' group and group1
 	},
 
 	LocationQuery = new LocationQuery() {
