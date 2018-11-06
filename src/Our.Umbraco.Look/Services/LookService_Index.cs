@@ -170,8 +170,6 @@ namespace Our.Umbraco.Look.Services
                                                 Field.Store.YES,
                                                 Field.Index.NOT_ANALYZED);
 
-                    document.Add(locationField);
-
                     var locationLatitudeField = new Field(
                                            LookConstants.LocationField + "_Latitude",
                                            NumericUtils.DoubleToPrefixCoded(location.Latitude),
@@ -184,6 +182,7 @@ namespace Our.Umbraco.Look.Services
                                         Field.Store.YES,
                                         Field.Index.NOT_ANALYZED);
 
+                    document.Add(locationField);
                     document.Add(locationLatitudeField);
                     document.Add(locationLongitudeField);
 
