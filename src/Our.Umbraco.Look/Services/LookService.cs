@@ -6,11 +6,6 @@ using System.Collections.Generic;
 
 namespace Our.Umbraco.Look.Services
 {
-    /// <summary>
-    /// Useful references:
-    /// https://gist.github.com/ismailmayat/3902c660527c8b3d20b38ae724ab9892
-    /// http://www.d2digital.co.uk/blog/2015/08/lucenenet-indexer-geospatial-searching-and-umbraco
-    /// </summary>
     public partial class LookService
     {
         /// <summary>
@@ -21,12 +16,12 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, string> NameIndexer { get; set; } = x => x.Item.Name;
+        private Func<IndexingContext, string> NameIndexer { get; set; } = null;
 
         /// <summary>
         /// Function to get the date for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, DateTime?> DateIndexer { get; set; } = x => x.Item.UpdateDate;
+        private Func<IndexingContext, DateTime?> DateIndexer { get; set; } = null;
 
         /// <summary>
         /// Function to get text for the IPublishedContent being indexed

@@ -164,7 +164,7 @@ public class LookMatch
 	public int Id { get; }
 	
 	/// <summary>
-	/// Lazy evaluation of the IPublishedContent
+	/// Lazy evaluation of the associated IPublishedContent item
 	/// </summary>
 	public IPublishedContent Item { get; }
 	

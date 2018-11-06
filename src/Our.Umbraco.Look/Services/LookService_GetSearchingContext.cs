@@ -13,7 +13,7 @@ namespace Our.Umbraco.Look.Services
         /// TODO: move validation logic out into initialize, so quicker to get content during a query
         /// </summary>
         /// <param name="searcherName">The name of the Examine seracher (see ExamineSettings.config)</param>
-        /// <returns></returns>
+        /// <returns>SearchingContext if found, otherwise null</returns>
         private static SearchingContext GetSearchingContext(string searcherName)
         {
             var searcher = !string.IsNullOrWhiteSpace(searcherName) 
@@ -26,8 +26,6 @@ namespace Our.Umbraco.Look.Services
             }
             else
             {
-                // TODO: other searcher types ?
-
                 if (!(searcher is UmbracoExamineSearcher))
                 {
                     LogHelper.Debug(typeof(LookService), $"Examine searcher of unexpected type '{ searcher.GetType() }'");
@@ -43,7 +41,7 @@ namespace Our.Umbraco.Look.Services
                         return new SearchingContext()
                         {
                             Analyzer = umbracoExamineSearcher.IndexingAnalyzer,
-                            IndexSearcher = new Lucene.Net.Search.IndexSearcher(indexSetDirectory, true), // TODO: need to handle reuse
+                            IndexSearcher = new Lucene.Net.Search.IndexSearcher(indexSetDirectory, true), // TODO: handle reuse
                             EnableLeadingWildcards = umbracoExamineSearcher.EnableLeadingWildcards
                         };
                     }
