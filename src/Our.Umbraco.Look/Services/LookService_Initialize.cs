@@ -20,48 +20,47 @@ namespace Our.Umbraco.Look.Services
                                 Action<object, DocumentWritingEventArgs, UmbracoHelper, string> documentWriting,
                                 UmbracoHelper umbracoHelper)
         {
-            LogHelper.Info(typeof(LookService), "Initializing");
+            LogHelper.Info(typeof(LookService), "Initializing...");
 
             var indexProviders = ExamineManager
                                     .Instance
                                     .IndexProviderCollection
-                                    .Select(x => x as BaseUmbracoIndexer)
+                                    .Select(x => x as BaseUmbracoIndexer) // UmbracoContentIndexer, UmbracoMemberIndexer
                                     .Where(x => x != null)
-                                    //.Select(x => (BaseUmbracoIndexer)x) // UmbracoContentIndexer, UmbracoMemberIndexer
                                     .ToArray();
-
+            
             if (!indexProviders.Any())
             {
                 LogHelper.Warn(typeof(LookService), "Unable to initialize indexing as could not find any Umbraco Examine indexers !");
+
+                return;
             }
-            else
+
+            // init collection of cartesian tier plotters
+            IProjector projector = new SinusoidalProjector();
+            var plotter = new CartesianTierPlotter(0, projector, LookConstants.LocationTierFieldPrefix);
+
+            var startTier = plotter.BestFit(LookService.MaxDistance);
+            var endTier = plotter.BestFit(1); // min of a 1 mile search
+
+            for (var tier = startTier; tier <= endTier; tier++)
             {
-                // init collection of cartesian tier plotters
-                IProjector projector = new SinusoidalProjector();
-                var plotter = new CartesianTierPlotter(0, projector, LookConstants.LocationTierFieldPrefix);
+                LookService
+                    .Instance
+                    .CartesianTierPlotters
+                    .Add(new CartesianTierPlotter(
+                                        tier,
+                                        projector,
+                                        LookConstants.LocationTierFieldPrefix));
+            }
 
-                var startTier = plotter.BestFit(LookService.MaxDistance);
-                var endTier = plotter.BestFit(1); // min of a 1 mile search
+            // cache the collection of Lucene Directory objs (so don't have to at query time)
+            LookService.Instance.IndexSetDirectories = indexProviders.ToDictionary(x => x.IndexSetName, x => x.GetLuceneDirectory());
 
-                for (var tier = startTier; tier <= endTier; tier++)
-                {
-                    LookService
-                        .Instance
-                        .CartesianTierPlotters
-                        .Add(new CartesianTierPlotter(
-                                            tier,
-                                            projector,
-                                            LookConstants.LocationTierFieldPrefix));
-                }
-
-                // cache the collection of Lucene Directory objs (so don't have to at query time)
-                LookService.Instance.IndexSetDirectories = indexProviders.ToDictionary(x => x.IndexSetName, x => x.GetLuceneDirectory());
-
-                // hook into all index providers
-                foreach(var indexProvider in indexProviders)
-                {
-                    indexProvider.DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper, indexProvider.Name);
-                }
+            // hook into all index providers
+            foreach(var indexProvider in indexProviders)
+            {
+                indexProvider.DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper, indexProvider.Name);
             }
         }
     }
