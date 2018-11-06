@@ -143,7 +143,7 @@ namespace Our.Umbraco.Look.Services
                     }
                 }
 
-                if (lookQuery.TagQuery.AnyTags != null) // TODO: require at least two items in this collection (with any nots removed)
+                if (lookQuery.TagQuery.AnyTags != null)
                 {
                     if (lookQuery.TagQuery.NotTags != null)
                     {
@@ -255,10 +255,12 @@ namespace Our.Umbraco.Look.Services
 
             if (topDocs.TotalHits > 0)
             {
-                var facets = new List<Facet>();
+                List<Facet> facets = null;
 
                 if (lookQuery.TagQuery != null && lookQuery.TagQuery.GetFacets != null)
                 {
+                    facets = new List<Facet>();
+
                     Query facetQuery = filter != null ? (Query)new FilteredQuery(query, filter) : query;
 
                     // do a facet query for each group in the array
@@ -318,7 +320,7 @@ namespace Our.Umbraco.Look.Services
                                                         getHighlight,
                                                         getDistance),
                                         topDocs.TotalHits,
-                                        facets.ToArray());
+                                        facets != null ? facets.ToArray() : new Facet[] { });
             }
 
             return new LookResult();
@@ -407,13 +409,16 @@ namespace Our.Umbraco.Look.Services
         {
             DateTime? date = null;
 
-            try
+            if (!string.IsNullOrWhiteSpace(dateValue))
             {
-                date = DateTools.StringToDate(dateValue);
-            }
-            catch
-            {
-                LogHelper.Info(typeof(LookService), $"Unable to convert string '{dateValue}' into a DateTime");
+                try
+                {
+                    date = DateTools.StringToDate(dateValue);
+                }
+                catch
+                {
+                    LogHelper.Info(typeof(LookService), $"Unable to convert string '{dateValue}' into a DateTime");
+                }
             }
 
             return date;
