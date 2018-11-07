@@ -55,7 +55,7 @@ namespace Our.Umbraco.Look.Services
                     foreach (var typeAlias in lookQuery.NodeQuery.TypeAliases)
                     {
                         typeAliasQuery.Add(
-                                            new TermQuery(new Term(UmbracoContentIndexer.NodeTypeAliasFieldName, typeAlias)),
+                                            new TermQuery(new Term(UmbracoContentIndexer.NodeTypeAliasFieldName, typeAlias.ToLower())), // TODO: store alias in a custom field to keep casing
                                             BooleanClause.Occur.SHOULD);
                     }
 
