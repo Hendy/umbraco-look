@@ -207,6 +207,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\Indexing.cs" />
+    <Compile Include="Extensions\StringExtensions\LuceneStringToDate.cs" />
+    <Compile Include="Extensions\DateTimeExtensions\ToLuceneString.cs" />
     <Compile Include="Extensions\UmbracoHelperExtensions\GetPublishedContent.cs" />
     <Compile Include="LookConstants.cs" />
     <Compile Include="Models\DateQuery.cs" />
@@ -227,6 +229,7 @@
     <Compile Include="Models\TextQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LookService.cs" />
+    <Compile Include="Services\LookService_GetLookMatches.cs" />
     <Compile Include="Services\LookService_GetSearchingContext.cs" />
     <Compile Include="Services\LookService_Index.cs" />
     <Compile Include="Services\LookService_Query.cs" />

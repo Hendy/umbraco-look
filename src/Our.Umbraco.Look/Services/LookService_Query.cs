@@ -1,17 +1,16 @@
 ﻿using Examine.LuceneEngine.Providers;
-using Lucene.Net.Documents;
 using Lucene.Net.Highlight;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Spatial.Tier;
+using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
-using Umbraco.Core.Logging;
 using UmbracoExamine;
 
 namespace Our.Umbraco.Look.Services
@@ -25,19 +24,26 @@ namespace Our.Umbraco.Look.Services
         /// <returns>an IEnumerableWithTotal</returns>
         public static LookResult Query(LookQuery lookQuery)
         {
+            SearchingContext searchingContext = null;
+            BooleanQuery query = null; // the lucene query being built                                            
+            Filter filter = null; // used for geospatial queries
+            Sort sort = null;
+            Func<int, double?> getDistance = x => null;
+            Func<string, IHtmlString> getHighlight = null;
+
             if (lookQuery == null)
             {
                 return new LookResult("Unable to perform query, as supplied LookQuery object was null");
             }
 
-            var searchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
+            searchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
 
             if (searchingContext == null)
             {
                 return new LookResult("Unable to perform query, as Examine searcher not found");
             }
-            
-            var query = new BooleanQuery(); // the lucene query being built
+
+            query = new BooleanQuery();
 
             if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
             {
@@ -82,8 +88,8 @@ namespace Our.Umbraco.Look.Services
                 query.Add(
                         new TermRangeQuery(
                                 LookConstants.DateField,
-                                GetDate(lookQuery.DateQuery.After) ?? GetDate(DateTime.MinValue),
-                                GetDate(lookQuery.DateQuery.Before) ?? GetDate(DateTime.MaxValue),
+                                lookQuery.DateQuery.After.ToLuceneString() ?? DateTime.MinValue.ToLuceneString(),
+                                lookQuery.DateQuery.Before.ToLuceneString() ?? DateTime.MaxValue.ToLuceneString(),
                                 true,
                                 true),
                         BooleanClause.Occur.MUST);
@@ -177,13 +183,6 @@ namespace Our.Umbraco.Look.Services
                     }
                 }
             }
-
-            // optional filter used for geospatial queries
-            Filter filter = null;
-            Sort sort = null;
-
-            // optional actions to execute when peforming a query
-            Func<int, double?> getDistance = x => null;
 
             // Location
             if (lookQuery.LocationQuery != null && lookQuery.LocationQuery.Location != null)
@@ -285,8 +284,6 @@ namespace Our.Umbraco.Look.Services
                     }
                 }
 
-                Func<string, IHtmlString> getHighlight = null;
-
                 // setup the getHightlight func if required
                 if (lookQuery.TextQuery != null && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText) && lookQuery.TextQuery.GetHighlight)
                 {
@@ -324,119 +321,6 @@ namespace Our.Umbraco.Look.Services
             }
 
             return new LookResult();
-        }
-
-        /// <summary>
-        /// Supplied with the result of a Lucene query, this method will yield a constructed LookMatch for each in order
-        /// </summary>
-        /// <param name="indexSearcher">The searcher supplied to get the Lucene doc for each id in the Lucene results (topDocs)</param>
-        /// <param name="topDocs">The results of the Lucene query (a collection of ids in an order)</param>
-        /// <param name="getHighlight">Function used to get the highlight text for a given result text</param>
-        /// <param name="getDistance">Function used to calculate distance (if a location was supplied in the original query)</param>
-        /// <returns></returns>
-        private static IEnumerable<LookMatch> GetLookMatches(
-                                                    LookQuery lookQuery,
-                                                    IndexSearcher indexSearcher,
-                                                    TopDocs topDocs,
-                                                    Func<string, IHtmlString> getHighlight,
-                                                    Func<int, double?> getDistance)
-        {
-            // flag to indicate that the query has requested the full text to be returned
-            bool getText = lookQuery.TextQuery != null && lookQuery.TextQuery.GetText;
-
-            var fields = new List<string>();
-
-            fields.Add(LuceneIndexer.IndexNodeIdFieldName); // "__NodeId"
-            fields.Add(LookConstants.NameField);
-            fields.Add(LookConstants.DateField);
-
-            // if a highlight function is supplied (or text requested)
-            if (getHighlight != null || getText) { fields.Add(LookConstants.TextField); }
-
-            fields.Add(LookConstants.AllTagsField); // single field used to store all tags (for quick re-construction)
-            fields.Add(LookConstants.LocationField);
-
-            var mapFieldSelector = new MapFieldSelector(fields.ToArray());
-
-            // if highlight func does not exist, then create one to always return null
-            if (getHighlight == null) { getHighlight = x => null; }
-
-            foreach (var scoreDoc in topDocs.ScoreDocs)
-            {
-                var docId = scoreDoc.doc;
-
-                var doc = indexSearcher.Doc(docId, mapFieldSelector);
-
-                var lookMatch = new LookMatch(
-                    Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
-                    getHighlight(doc.Get(LookConstants.TextField)),
-                    getText ? doc.Get(LookConstants.TextField) : null,
-                    LookService.GetTags(doc.GetFields(LookConstants.AllTagsField)),
-                    LookService.GetDate(doc.Get(LookConstants.DateField)),
-                    doc.Get(LookConstants.NameField),
-                    doc.Get(LookConstants.LocationField) != null ? Location.FromString(doc.Get(LookConstants.LocationField)) : null,
-                    getDistance(docId),
-                    scoreDoc.score
-                );
-
-                yield return lookMatch;
-            }
-        }
-
-        /// <summary>
-        /// Helper for when building a look match obj
-        /// </summary>
-        /// <param name="fields"></param>
-        /// <returns></returns>
-        private static Tag[] GetTags(Field[] fields)
-        {
-            if (fields != null)
-            {
-                return fields
-                        .Select(x => Tag.FromString(x.StringValue()))
-                        .ToArray();
-            }
-
-            return new Tag[] { };
-        }
-
-        /// <summary>
-        /// Helper for when building a look match obj
-        /// </summary>
-        /// <param name="dateValue"></param>
-        /// <returns></returns>
-        private static DateTime? GetDate(string dateValue)
-        {
-            DateTime? date = null;
-
-            if (!string.IsNullOrWhiteSpace(dateValue))
-            {
-                try
-                {
-                    date = DateTools.StringToDate(dateValue);
-                }
-                catch
-                {
-                    LogHelper.Info(typeof(LookService), $"Unable to convert string '{dateValue}' into a DateTime");
-                }
-            }
-
-            return date;
-        }
-
-        /// <summary>
-        /// the reverse - get string from DateTime?
-        /// </summary>
-        /// <param name="dateTime"></param>
-        /// <returns></returns>
-        private static string GetDate(DateTime? dateTime)
-        {
-            if (dateTime != null)
-            {
-                return DateTools.DateToString(dateTime.Value, DateTools.Resolution.SECOND);
-            }
-
-            return null;
         }
     }
 }
