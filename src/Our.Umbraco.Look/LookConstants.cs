@@ -2,6 +2,16 @@
 {
     internal static class LookConstants
     {
+        ///// <summary>
+        ///// Stored in a custom field
+        ///// </summary>
+        //internal static string NodeAliasField => "Look_NodeAlias";
+
+        ///// <summary>
+        ///// Stored in custom field
+        ///// </summary>
+        //internal static string NodeTypeField => "Look_NodeType";
+
         /// <summary>
         /// Gets the field name to use for the text - this field is expected to contain a sizeable amount of text
         /// </summary>
