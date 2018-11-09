@@ -208,7 +208,7 @@
   <ItemGroup>
     <Compile Include="Events\Indexing.cs" />
     <Compile Include="Extensions\StringExtensions\LuceneStringToDate.cs" />
-    <Compile Include="Extensions\DateTimeExtensions\ToLuceneString.cs" />
+    <Compile Include="Extensions\DateTimeExtensions\DateToLuceneString.cs" />
     <Compile Include="Extensions\UmbracoHelperExtensions\GetPublishedContent.cs" />
     <Compile Include="LookConstants.cs" />
     <Compile Include="Models\DateQuery.cs" />

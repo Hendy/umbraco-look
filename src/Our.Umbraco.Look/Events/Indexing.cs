@@ -44,7 +44,7 @@ namespace Our.Umbraco.Look.Events
         }
 
         /// <summary>
-        /// HACK: this indexing event is on a thread outside of HttpContext, and context is required to get the url from IPubishedContent
+        /// HACK: this indexing event is on a thread outside of HttpContext, and context is required to get the url from IPublishedContent
         /// </summary>
         private void EnsureUmbracoContext()
         {
