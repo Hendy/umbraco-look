@@ -1,5 +1,5 @@
 # Umbraco Look (Alpha)
-Extends Umbraco Examine adding support for: text match highlighting, geospatial querying and tag faceting.
+Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for: text match highlighting, geospatial querying and tag faceting.
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
 
