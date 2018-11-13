@@ -1,5 +1,5 @@
 # Umbraco Look (Alpha)
-Extends Umbraco Examine adding support for: text match highlighting, geospatial querying and tag faceting.
+Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for: text match highlighting, geospatial querying and tag faceting.
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
 
@@ -10,12 +10,12 @@ Extends Umbraco Examine adding support for: text match highlighting, geospatial 
 
 ## Indexing
 
-No configuration files need to be changed as Look hooks into all Umbraco Exmaine indexers (usually "InternalIndexer", "InternalMemberIndexer" and "ExternalIndexer").
+Look automatically hooks into all Umbraco Exmaine indexers (by default "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer") where the indexing behaviour can be configured by setting custom functions via static methods on the LookService. 
 
-The indexing behaviour is controlled by setting your custom indexing functions via static methods on the LookService. Each of these functions at index-time will be given the IPublishedContent 
-of the content, media or member being indexed and details about the current Exmaine Indexer.
+Each function at index-time will be given the IPublishedContent 
+of the content, media or member node being indexed and details about the current Exmaine Indexer.
 
-If an indexing function is not set, or it returns null, then that field is not indexed, otherwise the value will be indexed into a custom field (prefixed with "Look_").
+If an indexing function is not set or it returns null, then that field is not indexed, otherwise the value will be indexed into a custom field (prefixed with "Look_").
 
 ```csharp
 using Our.Umbraco.Look.Services;
@@ -128,7 +128,8 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 			new Tag("tag4") 
 		}, 
 
-		// none of these tags must be present (any query contrdictions will return an empty result with message)
+		// none of these tags must be present 
+		// 'not' always takes priority - any query contradictions will return an empty result with message
 		NotTags = new Tag[] { 
 			new Tag("tag6") 
 		},
