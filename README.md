@@ -20,7 +20,6 @@ If an indexing function is not set or it returns null, then that field is not in
 ```csharp
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
-using Tag = Our.Umbraco.Look.Models.Tag; // TODO: rename Tag to avoid conflict ? (Mark ?)
 ```
 
 ```csharp
@@ -61,14 +60,14 @@ public class ConfigureIndexing : ApplicationEventHandler
 		});
 
 		LookService.SetTagIndexer(indexingContext => {
-			// return Our.Umbraco.Look.Models.Tag[] (or null to not index)
-			// eg a nuPicker
+			// return Our.Umbraco.Look.Models.LookTag[] (or null to not index)
 
+			// eg a nuPicker
 			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
 
 			return picker
 				.AsPublishedContent()
-				.Select(x => new Tag("group1", x.Name)) // create a grouped tag
+				.Select(x => new LookTag("colour", x.Name))
 				.ToArray();
 		});
 
@@ -117,22 +116,19 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	TagQuery = new TagQuery() {
 
 		// all of these tags must be present
-		AllTags = new Tag[] { 
-			new Tag("tag1"), // tag in the 'nameless group'
-			new Tag("group1", "tag2") // tag in a named group
-		}, 
+		AllTags = new LookTag[] { new LookTag("size", "large") }, 
 
 		// at least one of these tags must be present
-		AnyTags = new Tag[] { 
-			new Tag("tag3"), 
-			new Tag("tag4") 
+		AnyTags = new LookTag[] { 
+			new LookTag("colour", "red"), 
+			new LookTag("colour", "green"), 
+			new LookTag("colour", "blue")
 		}, 
 
 		// none of these tags must be present 
-		// 'not' always takes priority - any query contradictions will return an empty result with message
-		NotTags = new Tag[] { 
-			new Tag("tag6") 
-		},
+		// 'not' always takes priority ('not' always takes priority - 
+		// any query contradictions will return an empty result with message)
+		NotTags = new Tag[] { new Tag("colour:black") },
 
 		GetFacets = new string[] { "", "group1" } // return facets for all tags in the 'name-less' group and group1
 	},
@@ -196,7 +192,7 @@ public class LookMatch
 	/// <summary>
 	/// Collection of all tags associated with this item
 	/// </summary>
-	public Tag[] Tags { get; }
+	public LookTag[] Tags { get; }
 
 	/// <summary>
 	/// The custom location (lat|lng) field
@@ -221,7 +217,7 @@ public class Facet
 	/// <summary>
 	/// The tag
 	/// </summary>
-	public Tag Tag { get; }
+	public LookTag Tag { get; }
 
 	/// <summary>
 	/// The total number of results expected should this tag be added to TagQuery.AllTags on the current query
