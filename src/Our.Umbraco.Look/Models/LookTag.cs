@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Our.Umbraco.Look.Models
 {
     public class LookTag : IEqualityComparer<LookTag>
     {
+        private const char DELIMITER = ':';
+
         private string _group = string.Empty; // default value (the 'name-less' default group)
 
         private string _name = null;
@@ -23,17 +26,15 @@ namespace Our.Umbraco.Look.Models
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    var valid = value.Length < 50 // artifical limit as this is used a lucene field name
-                                && !value.Contains(" ")
-                                && !value.Contains(".");
+                    var regex = new Regex("^[a-zA-Z0-9_]*$");
 
-                    if (valid)
+                    if (regex.IsMatch(value) && value.Length < 50)
                     {
                         this._group = value;
                     }
                     else
                     {
-                        throw new Exception($"Invalid tag group '{ value }' - must be less than 50 chars and not contain whitespace nor '.'");
+                        throw new Exception($"Invalid tag group '{ value }' - must be less than 50 chars and only contain alphanumberic/underscore chars");
                     }
                 }
             }
@@ -62,13 +63,30 @@ namespace Our.Umbraco.Look.Models
             }
         }
 
+        ///// <summary>
+        ///// TODO: empty public constructor as might be useful for consumer mapping / serialization
+        ///// </summary>
+        //public LookTag()
+        //{
+        //}
+
         /// <summary>
         /// Constructor - create a tag in the default 'name-less' group
         /// </summary>
-        /// <param name="name">the unique name for this tag (all chars valid)</param>
-        public LookTag(string name)
+        /// <param name="value">the raw string value for a tag (with optional group)</param>
+        public LookTag(string value)
         {
-            this.Name = name;
+            var delimiter = value.IndexOf(DELIMITER);
+
+            if (delimiter > -1)
+            {
+                this.Group = value.Substring(0, delimiter);
+                this.Name = value.Substring(delimiter + 1);
+            }
+            else
+            {
+                this.Name = value;
+            }
         }
 
         /// <summary>
@@ -76,7 +94,7 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         /// <param name="group">name of tag group, a null or string.Empty indicate this tag belongs to the default 'name-less' group</param>
         /// <param name="name">the unique name for this tag within this tag group (all chars valid)</param>
-        public LookTag(string group, string name)
+        internal LookTag(string group, string name)
         {
             this.Group = group;
             this.Name = name;
@@ -94,28 +112,7 @@ namespace Our.Umbraco.Look.Models
 
         public override string ToString()
         {
-            return this.Group + "|" + this.Name;
-        }
-
-        internal static LookTag FromString(string value)
-        {
-            LookTag tag = null;
-
-            var pipe = value.IndexOf('|');
-
-            if (pipe > -1)
-            {
-                var group = value.Substring(0, pipe);
-                var name = value.Substring(pipe + 1);
-
-                tag = new LookTag(group, name);
-            }
-            else
-            {
-                throw new Exception($"Unable to deserialize string '{ value }' into a Tag object");
-            }
-
-            return tag;
+            return this.Group + DELIMITER + this.Name;
         }
     }
 }

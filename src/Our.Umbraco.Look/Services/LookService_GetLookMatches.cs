@@ -49,7 +49,7 @@ namespace Our.Umbraco.Look.Services
             
             // helper to simplify call below
             var getTags = new Func<Field[], LookTag[]>(x => {
-                if (x != null) { return x.Select(y => LookTag.FromString(y.StringValue())).ToArray(); }
+                if (x != null) { return x.Select(y => new LookTag(y.StringValue())).ToArray(); }
                 return new LookTag[] { };
             });
 

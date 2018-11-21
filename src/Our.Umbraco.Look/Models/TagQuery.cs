@@ -29,7 +29,7 @@ namespace Our.Umbraco.Look.Models
             {
                 foreach(var tag in tags)
                 {
-                    lookTags.Add(LookTag.FromString(tag));
+                    lookTags.Add(new LookTag(tag));
                 }
             }
 
