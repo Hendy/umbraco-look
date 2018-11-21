@@ -88,8 +88,8 @@ namespace Our.Umbraco.Look.Services
                 query.Add(
                         new TermRangeQuery(
                                 LookConstants.DateField,
-                                lookQuery.DateQuery.After.ToLuceneString() ?? DateTime.MinValue.ToLuceneString(),
-                                lookQuery.DateQuery.Before.ToLuceneString() ?? DateTime.MaxValue.ToLuceneString(),
+                                lookQuery.DateQuery.After.DateToLuceneString() ?? DateTime.MinValue.DateToLuceneString(),
+                                lookQuery.DateQuery.Before.DateToLuceneString() ?? DateTime.MaxValue.DateToLuceneString(),
                                 true,
                                 true),
                         BooleanClause.Occur.MUST);

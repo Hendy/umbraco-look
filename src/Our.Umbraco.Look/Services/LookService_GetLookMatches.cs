@@ -46,14 +46,10 @@ namespace Our.Umbraco.Look.Services
 
             // if highlight func does not exist, then create one to always return null
             if (getHighlight == null) { getHighlight = x => null; }
-
+            
+            // helper to simplify call below
             var getTags = new Func<Field[], Tag[]>(x => {
-
-                if (x != null)
-                {
-                    return x.Select(y => Tag.FromString(y.StringValue())).ToArray();
-                }
-
+                if (x != null) { return x.Select(y => Tag.FromString(y.StringValue())).ToArray(); }
                 return new Tag[] { };
             });
 
