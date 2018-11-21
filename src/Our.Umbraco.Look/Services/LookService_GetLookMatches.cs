@@ -48,9 +48,9 @@ namespace Our.Umbraco.Look.Services
             if (getHighlight == null) { getHighlight = x => null; }
             
             // helper to simplify call below
-            var getTags = new Func<Field[], Tag[]>(x => {
-                if (x != null) { return x.Select(y => Tag.FromString(y.StringValue())).ToArray(); }
-                return new Tag[] { };
+            var getTags = new Func<Field[], LookTag[]>(x => {
+                if (x != null) { return x.Select(y => LookTag.FromString(y.StringValue())).ToArray(); }
+                return new LookTag[] { };
             });
 
             foreach (var scoreDoc in topDocs.ScoreDocs)

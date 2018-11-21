@@ -31,7 +31,7 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Function to get the tags for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, Tag[]> TagIndexer { get; set; } = null;
+        private Func<IndexingContext, LookTag[]> TagIndexer { get; set; } = null;
 
         /// <summary>
         /// Function to get a location for the IPublishedContent being indexed

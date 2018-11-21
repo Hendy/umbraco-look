@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Our.Umbraco.Look.Models
 {
-    public class Tag : IEqualityComparer<Tag>
+    public class LookTag : IEqualityComparer<LookTag>
     {
         private string _group = string.Empty; // default value (the 'name-less' default group)
 
@@ -66,7 +66,7 @@ namespace Our.Umbraco.Look.Models
         /// Constructor - create a tag in the default 'name-less' group
         /// </summary>
         /// <param name="name">the unique name for this tag (all chars valid)</param>
-        public Tag(string name)
+        public LookTag(string name)
         {
             this.Name = name;
         }
@@ -76,18 +76,18 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         /// <param name="group">name of tag group, a null or string.Empty indicate this tag belongs to the default 'name-less' group</param>
         /// <param name="name">the unique name for this tag within this tag group (all chars valid)</param>
-        public Tag(string group, string name)
+        public LookTag(string group, string name)
         {
             this.Group = group;
             this.Name = name;
         }
 
-        public bool Equals(Tag x, Tag y)
+        public bool Equals(LookTag x, LookTag y)
         {
             return x.ToString() == y.ToString();
         }
 
-        public int GetHashCode(Tag obj)
+        public int GetHashCode(LookTag obj)
         {
             return obj.GetHashCode();
         }
@@ -97,9 +97,9 @@ namespace Our.Umbraco.Look.Models
             return this.Group + "|" + this.Name;
         }
 
-        internal static Tag FromString(string value)
+        internal static LookTag FromString(string value)
         {
-            Tag tag = null;
+            LookTag tag = null;
 
             var pipe = value.IndexOf('|');
 
@@ -108,7 +108,7 @@ namespace Our.Umbraco.Look.Models
                 var group = value.Substring(0, pipe);
                 var name = value.Substring(pipe + 1);
 
-                tag = new Tag(group, name);
+                tag = new LookTag(group, name);
             }
             else
             {

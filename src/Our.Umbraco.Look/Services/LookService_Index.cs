@@ -114,7 +114,7 @@ namespace Our.Umbraco.Look.Services
 
             if (LookService.Instance.TagIndexer != null)
             {
-                Tag[] tags = null;
+                LookTag[] tags = null;
 
                 try
                 {

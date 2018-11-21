@@ -33,7 +33,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Tag collection (only returned if specified)
         /// </summary>
-        public Tag[] Tags { get; }
+        public LookTag[] Tags { get; }
 
         /// <summary>
         /// The custom date field
@@ -76,7 +76,7 @@ namespace Our.Umbraco.Look.Models
                     int id,
                     IHtmlString highlight,
                     string text,
-                    Tag[] tags,
+                    LookTag[] tags,
                     DateTime? date,
                     string name,
                     Location location,

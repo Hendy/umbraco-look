@@ -277,7 +277,7 @@ namespace Our.Umbraco.Look.Services
                                     .Select(
                                         x => new Facet()
                                         {
-                                            Tag = new Tag(group, x.Name.ToString()),
+                                            Tag = new LookTag(group, x.Name.ToString()),
                                             Count = Convert.ToInt32(x.HitCount)
                                         }
                                     ));

@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.Services
         /// Register consumer code to perform when indexing tags
         /// </summary>
         /// <param name="tagIndexer">Your custom tag indexing function</param>
-        public static void SetTagIndexer(Func<IndexingContext, Tag[]> tagIndexer)
+        public static void SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
         {
             if (LookService.Instance.TagIndexer == null)
             {
