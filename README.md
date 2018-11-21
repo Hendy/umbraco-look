@@ -62,6 +62,22 @@ public class ConfigureIndexing : ApplicationEventHandler
 		LookService.SetTagIndexer(indexingContext => {
 			// return Our.Umbraco.Look.Models.LookTag[] (or null to not index)
 
+			// A tag can be any string and exists within an optionally specified group. 
+			// (using groups allows for targeted facet queries, as each group corresponds
+			// with a custom field)
+			// eg.
+			//		"red" - a tag "red" in the default un-named group
+			//		"colour:red" - a tag "red", in group "colour"
+			// 
+			// A group must contain only alphanumeric / underscore chars and be less 
+			// than 50 chars. The first colon in the string is used as the delimieter, 
+			// so to use a colon char in a tag (in the default un-named group) it must be 
+			// escaped by prefixing with a colon.
+			// eg.
+			//		":red:green" - a tag "red:green" in the default un-named group
+			//		"colour:red:green" - a tag "red:green" in the group "colour"
+
+
 			// eg a nuPicker
 			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
 

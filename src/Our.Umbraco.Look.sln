@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{453855DC
 		..\build\Package.nuspec = ..\build\Package.nuspec
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Our.Umbraco.Look.Tests", "Our.Umbraco.Look.Tests\Our.Umbraco.Look.Tests.csproj", "{76C3481A-2FA8-46EF-B60A-7C380A35FB9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{2FE19117-C0A1-4A9C-BEE0-C35FCC2355E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FE19117-C0A1-4A9C-BEE0-C35FCC2355E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FE19117-C0A1-4A9C-BEE0-C35FCC2355E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76C3481A-2FA8-46EF-B60A-7C380A35FB9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C3481A-2FA8-46EF-B60A-7C380A35FB9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C3481A-2FA8-46EF-B60A-7C380A35FB9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C3481A-2FA8-46EF-B60A-7C380A35FB9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
