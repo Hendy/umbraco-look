@@ -83,7 +83,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 			return picker
 				.AsPublishedContent()
-				.Select(x => new LookTag("colour", x.Name))
+				.Select(x => new LookTag("colour:" + x.Name))
 				.ToArray();
 		});
 
@@ -132,7 +132,7 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	TagQuery = new TagQuery() {
 
 		// all of these tags must be present
-		AllTags = new LookTag[] { new LookTag("size", "large") }, 
+		AllTags = new LookTag[] { new LookTag("size:large") }, 
 		
 		// at least one of these tags must be present
 		AnyTags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // helper syntax to make LookTag[]
