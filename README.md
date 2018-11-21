@@ -119,17 +119,11 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 		AllTags = new LookTag[] { new LookTag("size", "large") }, 
 		
 		// at least one of these tags must be present
-		//AnyTags = new LookTag[] { 
-		//	new LookTag("colour", "red"), 
-		//	new LookTag("colour", "green"), 
-		//	new LookTag("colour", "blue")
-		//}, 
-		AnyTags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // helper for above
+		AnyTags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // helper syntax to make LookTag[]
 
 		// none of these tags must be present 
-		// 'not' always takes priority ('not' always takes priority - 
-		// any query contradictions will return an empty result with message)
-		NotTags = new Tag[] { new Tag("colour:black") },
+		// 'not' always takes priority ('not' always takes priority - any query contradictions will return an empty result with message)
+		NotTags = new LookTag[] { new LookTag("colour:black") },
 
 		GetFacets = new string[] { "colour", "size" } // return facet counts for all tags in the colour and size groups
 	},
