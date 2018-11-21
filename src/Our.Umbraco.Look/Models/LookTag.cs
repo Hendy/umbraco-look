@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Our.Umbraco.Look.Models
 {
-    public class LookTag : IEqualityComparer<LookTag>
+    public class LookTag
     {
         private const char DELIMITER = ':';
 
@@ -94,20 +93,20 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         /// <param name="group">name of tag group, a null or string.Empty indicate this tag belongs to the default 'name-less' group</param>
         /// <param name="name">the unique name for this tag within this tag group (all chars valid)</param>
-        internal LookTag(string group, string name)
+        public LookTag(string group, string name)
         {
             this.Group = group;
             this.Name = name;
         }
 
-        public bool Equals(LookTag x, LookTag y)
+        public override bool Equals(object obj)
         {
-            return x.ToString() == y.ToString();
+            return this.ToString() == obj.ToString();
         }
 
-        public int GetHashCode(LookTag obj)
+        public override int GetHashCode()
         {
-            return obj.GetHashCode();
+            return base.GetHashCode();
         }
 
         public override string ToString()

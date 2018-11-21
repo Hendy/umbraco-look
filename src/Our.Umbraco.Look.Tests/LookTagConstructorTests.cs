@@ -4,7 +4,7 @@ using Our.Umbraco.Look.Models;
 namespace Our.Umbraco.Look.Tests
 {
     [TestClass]
-    public class LookTagTests
+    public class LookTagConstructorTests
     {
         [TestMethod]
         public void Construct_Tag_In_Default_Group()

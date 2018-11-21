@@ -70,7 +70,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 			//		"colour:red" - a tag "red", in group "colour"
 			// 
 			// A group must contain only alphanumeric / underscore chars and be less 
-			// than 50 chars. The first colon in the string is used as the delimieter, 
+			// than 50 chars. The first colon in the string is used as the delimeter, 
 			// so to use a colon char in a tag (in the default un-named group) it must be 
 			// escaped by prefixing with a colon.
 			// eg.
@@ -132,14 +132,14 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	TagQuery = new TagQuery() {
 
 		// all of these tags must be present
-		AllTags = new LookTag[] { new LookTag("size:large") }, 
+		AllTags = new LookTag[] { new LookTag("size", "large") }, // constructor overload for group, tag params
 		
 		// at least one of these tags must be present
 		AnyTags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // helper syntax to make LookTag[]
 
 		// none of these tags must be present 
 		// 'not' always takes priority ('not' always takes priority - any query contradictions will return an empty result with message)
-		NotTags = new LookTag[] { new LookTag("colour:black") },
+		NotTags = new LookTag[] { new LookTag("colour:black") }, // single string constructor (using delimeter)
 
 		GetFacets = new string[] { "colour", "size" } // return facet counts for all tags in the colour and size groups
 	},
