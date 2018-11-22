@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Our.Umbraco.Look.Models;
+using System;
 
 namespace Our.Umbraco.Look.Tests
 {
@@ -7,7 +8,7 @@ namespace Our.Umbraco.Look.Tests
     public class LookTagConstructorTests
     {
         [TestMethod]
-        public void Construct_Tag_In_Default_Group()
+        public void Tag_In_Default_Group()
         {
             var lookTag = new LookTag("tag");
 
@@ -16,7 +17,7 @@ namespace Our.Umbraco.Look.Tests
         }
 
         [TestMethod]
-        public void Construct_Tag_In_Default_Group_Using_Delimiter()
+        public void Tag_In_Default_Group_Using_Delimiter()
         {
             var lookTag = new LookTag(":tag");
 
@@ -25,7 +26,7 @@ namespace Our.Umbraco.Look.Tests
         }
 
         [TestMethod]
-        public void Construct_Tag_Containing_Delimiter_In_Default_Group()
+        public void Tag_Containing_Delimiter_In_Default_Group_Using_Delimiter()
         {
             var lookTag = new LookTag(":tag:with:delimiter");
 
@@ -34,12 +35,44 @@ namespace Our.Umbraco.Look.Tests
         }
 
         [TestMethod]
-        public void Construct_Tag_In_Named_Group()
+        public void Tag_Containing_Delimiter_In_Named_Group()
+        {
+            var lookTag = new LookTag("group:tag:with:delimiter");
+
+            Assert.AreEqual("group", lookTag.Group);
+            Assert.AreEqual("tag:with:delimiter", lookTag.Name);
+        }
+
+        [TestMethod]
+        public void Tag_In_Named_Group()
         {
             var lookTag = new LookTag("group:tag");
 
             Assert.AreEqual("group", lookTag.Group);
             Assert.AreEqual("tag", lookTag.Name);
+        }
+
+        [TestMethod]
+        public void Tag_In_Named_Group_Overloaded_Constructor()
+        {
+            var lookTag = new LookTag("group", "tag");
+
+            Assert.AreEqual("group", lookTag.Group);
+            Assert.AreEqual("tag", lookTag.Name);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void Invalid_Char_In_Group_Name()
+        {
+            var lookTag = new LookTag("*", "tag");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void Group_Name_Too_Long()
+        {
+            var lookTag = new LookTag("123456789012345678901234567890123456789012345678901", "tag");
         }
     }
 }

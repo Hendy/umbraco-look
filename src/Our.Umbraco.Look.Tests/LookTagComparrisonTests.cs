@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.Tests
         public void Same_Tag()
         {
             var lookTag1 = new LookTag("group:tag");
-            var lookTag2 = lookTag1;
+            var lookTag2 = new LookTag("group:tag");
 
             Assert.AreEqual(lookTag1, lookTag2);
         }
@@ -22,7 +22,15 @@ namespace Our.Umbraco.Look.Tests
             var lookTag2 = new LookTag("group", "tag");
 
             Assert.AreEqual(lookTag1, lookTag2);
-       }
+        }
 
+        [TestMethod]
+        public void Different_Tags()
+        {
+            var lookTag1 = new LookTag("tag");
+            var lookTag2 = new LookTag("group", "tag");
+
+            Assert.AreNotEqual(lookTag1, lookTag2);
+        }
     }
 }
