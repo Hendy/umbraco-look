@@ -56,22 +56,22 @@ public class ConfigureIndexing : ApplicationEventHandler
 			// (using groups allows for targeted facet queries, as each group corresponds
 			// with a custom field)
 			// eg.
-			//		"red" - a tag "red" in the default un-named group
-			//		"colour:red" - a tag "red", in group "colour"
+			//	"red" - a tag "red" in the default un-named group
+			//	"colour:red" - a tag "red", in group "colour"
 			// 
 			// A group must contain only alphanumeric / underscore chars and be less 
 			// than 50 chars. The first colon in the string is used as the delimeter, 
 			// so to use a colon char in a tag (in the default un-named group) it must be 
 			// escaped by prefixing with a colon.
 			// eg.
-			//		":red:green" - a tag "red:green" in the default un-named group
-			//		"colour:red:green" - a tag "red:green" in the group "colour"
+			//	":red:green" - a tag "red:green" in the default un-named group
+			//	"colour:red:green" - a tag "red:green" in the group "colour"
 			//
 			// A LookTag can be constructed with a raw string, and there is a static helper
 			// as a shorthand to create a LookTag[]
 			// eg.
-			//		var tag = new LookTag("colour:red"); // raw string
-			//	    var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue"); 
+			//	var tag = new LookTag("colour:red"); // raw string
+			//	var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue"); 
 
 
 			// eg a nuPicker
