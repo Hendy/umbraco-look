@@ -62,7 +62,8 @@ public class ConfigureIndexing : ApplicationEventHandler
 		LookService.SetTagIndexer(indexingContext => {
 			// return Our.Umbraco.Look.Models.LookTag[] (or null to not index)
 
-			// A tag can be any string and exists within an optionally specified group. 
+			// A tag can be any string and exists within an optionally specified group.
+			// If a group isn't set, then the tag is put into a default un-named group.
 			// (using groups allows for targeted facet queries, as each group corresponds
 			// with a custom field)
 			// eg.
@@ -76,6 +77,12 @@ public class ConfigureIndexing : ApplicationEventHandler
 			// eg.
 			//		":red:green" - a tag "red:green" in the default un-named group
 			//		"colour:red:green" - a tag "red:green" in the group "colour"
+			//
+			// A LookTag can be constructed with a raw string, and there is a static helper
+			// as a shorthand to create a LookTag[]
+			// eg.
+			//		var tag = new LookTag("colour:red"); // raw string
+			//	    var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue"); 
 
 
 			// eg a nuPicker
@@ -132,14 +139,14 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	TagQuery = new TagQuery() {
 
 		// all of these tags must be present
-		AllTags = new LookTag[] { new LookTag("size", "large") }, // constructor overload for group, tag params
+		AllTags = TagQuery.MakeTags("size:large"),
 		
-		// at least one of these tags must be present
-		AnyTags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // helper syntax to make LookTag[]
+		// at least one of these tags must be present (if single tag, then it's deemed mandatory as per AllTags)
+		AnyTags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue")
 
 		// none of these tags must be present 
-		// 'not' always takes priority ('not' always takes priority - any query contradictions will return an empty result with message)
-		NotTags = new LookTag[] { new LookTag("colour:black") }, // single string constructor (using delimeter)
+		// ('not' always takes priority, any query contradictions will return an empty result with message)
+		NotTags = TagQuery.MakeTags("colour:black"),
 
 		GetFacets = new string[] { "colour", "size" } // return facet counts for all tags in the colour and size groups
 	},
@@ -147,7 +154,6 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	LocationQuery = new LocationQuery() {
 		Location = new Location(55.406330, 10.388500), // a location means distance results can be set
 		MaxDistance = new Distance(500, DistanceUnit.Miles)  // limits the results to within this distance
-		// TODO: GetFacets = new Distance[] { }
 	},
 
 	SortOn = SortOn.Distance // other sorts are: Score (default), Name, DateAscending, DateDescending

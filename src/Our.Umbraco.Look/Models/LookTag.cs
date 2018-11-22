@@ -93,7 +93,7 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         /// <param name="group">name of tag group, a null or string.Empty indicate this tag belongs to the default 'name-less' group</param>
         /// <param name="name">the unique name for this tag within this tag group (all chars valid)</param>
-        public LookTag(string group, string name)
+        internal LookTag(string group, string name)
         {
             this.Group = group;
             this.Name = name;

@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="LookTagComparrisonTests.cs" />
     <Compile Include="LookTagConstructorTests.cs" />
+    <Compile Include="MakeTagsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
