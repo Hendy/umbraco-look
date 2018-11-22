@@ -53,16 +53,17 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 			// A tag can be any string and exists within an optionally specified group.
 			// If a group isn't set, then the tag is put into a default un-named group.
-			// (using groups allows for targeted facet queries, as each group corresponds
-			// with a custom field)
 			// eg.
 			//	"red" - a tag "red" in the default un-named group
 			//	"colour:red" - a tag "red", in group "colour"
 			// 
-			// A group must contain only alphanumeric / underscore chars and be less 
-			// than 50 chars. The first colon in the string is used as the delimeter, 
-			// so to use a colon char in a tag (in the default un-named group) it must be 
-			// escaped by prefixing with a colon.
+			// Using groups allows for targeted facet queries, as each group corresponds
+			// with a custom field. A group must contain only alphanumeric / underscore 
+			// chars and be less than 50 chars.
+			//
+			// The first colon in the string is used as the delimeter, so to use a colon 
+			// char in a tag (in the default un-named group) it must be escaped by 
+			// prefixing with a colon.
 			// eg.
 			//	":red:green" - a tag "red:green" in the default un-named group
 			//	"colour:red:green" - a tag "red:green" in the group "colour"
@@ -137,7 +138,8 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 		// ('not' always takes priority, any query contradictions will return an empty result with message)
 		NotTags = TagQuery.MakeTags("colour:black"),
 
-		GetFacets = new string[] { "colour", "size" } // return facet counts for all tags in the colour and size groups
+		// request facet counts for all tags in the following groups
+		GetFacets = new string[] { "colour", "size", "shape" }
 	},
 
 	LocationQuery = new LocationQuery() {
