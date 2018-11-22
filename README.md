@@ -29,37 +29,26 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// Umbraco has started event
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-	{
+	{		
 		LookService.SetNameIndexer(indexingContext => {			
 
-			// IPublishedContent of the content, media or member being indexed
-			var item = indexingContext.Item;
+			// indexingContext.Item is the IPublishedContent of the content, media or member being indexed
+			// indexingContext.IndexerName is the string name of the Examine Indexer
 
-			// string name of the Examine indexer
-			var indexerName = indexingContext.IndexerName;
-
-			if (indexerName == "ExternalIndexer")
-			{
-				return item.Parent.Name + " " + item.Name;
-			}
-			
-			return null; // don't index
+			return indexingContext.Item.Name;
 		});
 
-		LookService.SetDateIndexer(indexingContext => {
-			// return DateTime (or null to not index)
-
-			return indexingContext.Item.UpdateDate;
-		});
+		LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
 
 		LookService.SetTextIndexer(indexingContext => {		
-			// return string (or null to not index)
+
 			// eg. for content, trigger a web request and scrape markup to index
 
 			return null;
 		});
 
 		LookService.SetTagIndexer(indexingContext => {
+
 			// return Our.Umbraco.Look.Models.LookTag[] (or null to not index)
 
 			// A tag can be any string and exists within an optionally specified group.
