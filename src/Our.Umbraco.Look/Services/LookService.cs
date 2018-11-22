@@ -56,7 +56,7 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Access the singleton instance of this search service
         /// </summary>
-        internal static LookService Instance => _lazy.Value;
+        private static LookService Instance => _lazy.Value;
 
         /// <summary>
         /// Singleton instance
