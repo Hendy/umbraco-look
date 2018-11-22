@@ -135,7 +135,7 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 		AnyTags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue")
 
 		// none of these tags must be present 
-		// ('not' always takes priority, any query contradictions will return an empty result with message)
+		// ('not' always takes priority - any query contradictions will return an empty result with message)
 		NotTags = TagQuery.MakeTags("colour:black"),
 
 		// request facet counts for all tags in the following groups

@@ -10,7 +10,7 @@
     <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      Extends Umbraco Examine adding support for: text match highlighting, geospatial querying and tag faceting.
+      Look sits on top of Umbraco Examine adding support for: text match highlighting, geospatial querying and tag faceting.
     </description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2018</copyright>
