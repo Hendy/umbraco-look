@@ -23,5 +23,6 @@
   </metadata>
   <files>
     <file src="..\src\Our.Umbraco.Look\bin\Release\Our.Umbraco.Look.dll" target="lib\net45"></file>
+    <file src="..\src\Our.Umbraco.Look\bin\Release\Our.Umbraco.Look.xml" target="lib\net45"></file>
   </files>
 </package>
