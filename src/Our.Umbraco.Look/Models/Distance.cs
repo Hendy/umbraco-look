@@ -9,10 +9,10 @@ namespace Our.Umbraco.Look.Models
         public DistanceUnit DistanceUnit { get; set; }
 
         /// <summary>
-        /// Constructor - used to ensure both value & unit supplied
+        /// Create a new Distance model
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="unit"></param>
+        /// <param name="value">An integer value</param>
+        /// <param name="unit">Kilometers or Miles</param>
         public Distance(int value, DistanceUnit unit)
         {
             this.DistanceValue = value;

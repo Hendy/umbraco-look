@@ -70,7 +70,8 @@ namespace Our.Umbraco.Look.Models
         //}
 
         /// <summary>
-        /// Constructor - create a tag in the default 'name-less' group
+        /// Create a new LookTag from a raw string value, where a 
+        /// colon token ':' can be used to delimit an (optional) group from a tag.
         /// </summary>
         /// <param name="value">the raw string value for a tag (with optional group)</param>
         public LookTag(string value)

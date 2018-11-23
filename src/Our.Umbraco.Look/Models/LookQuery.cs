@@ -1,47 +1,47 @@
 ﻿namespace Our.Umbraco.Look.Models
 {
     /// <summary>
-    /// Model used to specify the search query criteria
+    /// Model used to specify the search query criteria for a LookService.Query
     /// </summary>
     public class LookQuery
     {
         /// <summary>
-        /// Set raw Lucene query criteria
+        /// (Optional) set a raw Lucene query
         /// </summary>
         public string RawQuery { get; set; }
 
         /// <summary>
-        /// Specify node query criteria
+        /// (Optional) set search critera for Umbraco aliases and/or ids
         /// </summary>
         public NodeQuery NodeQuery { get; set; } = new NodeQuery();
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public NameQuery NameQuery { get; set; } = new NameQuery();
+        /// <summary>
+        /// (Optional) set search critera for the custom name field
+        /// </summary>
+        public NameQuery NameQuery { get; set; } = new NameQuery();
 
         /// <summary>
-        /// Set a before and/or an after date
+        /// (Optional) set a before and/or an after date for the custom date field
         /// </summary>
         public DateQuery DateQuery { get; set; } = new DateQuery();
 
         /// <summary>
-        /// Set search text and specify whether text highlighting should be returned
+        /// (Optional) set text search criteria for the custom text field
         /// </summary>
         public TextQuery TextQuery { get; set; } = new TextQuery();
 
         /// <summary>
-        /// Set tag query criteria
+        /// (Optional) set tag query criteria for the custom tag field
         /// </summary>
         public TagQuery TagQuery { get; set; } = new TagQuery();
 
         /// <summary>
-        /// Set geospatial query criteria
+        /// (Optional) set geospatial search criteria
         /// </summary>
         public LocationQuery LocationQuery { get; set; } = new LocationQuery();
 
         /// <summary>
-        /// Specify the field to sort on
+        /// (Optional) specify the field to sort on
         /// </summary>
         public SortOn SortOn { get; set; } = SortOn.Score;
 

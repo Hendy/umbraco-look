@@ -20,8 +20,8 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Perform a Look search
         /// </summary>
-        /// <param name="lookQuery"></param>
-        /// <returns>an IEnumerableWithTotal</returns>
+        /// <param name="lookQuery">A LookQuery model for the search criteria</param>
+        /// <returns>A LookResult model for the search response</returns>
         public static LookResult Query(LookQuery lookQuery)
         {
             SearchingContext searchingContext = null;
@@ -61,7 +61,7 @@ namespace Our.Umbraco.Look.Services
                     foreach (var typeAlias in lookQuery.NodeQuery.TypeAliases)
                     {
                         typeAliasQuery.Add(
-                                            new TermQuery(new Term(UmbracoContentIndexer.NodeTypeAliasFieldName, typeAlias.ToLower())), // TODO: store alias in a custom field to keep casing
+                                            new TermQuery(new Term(UmbracoContentIndexer.NodeTypeAliasFieldName, typeAlias.ToLower())), // TODO: store alias in a custom field to keep casing ?
                                             BooleanClause.Occur.SHOULD);
                     }
 
@@ -79,9 +79,50 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            //if (lookQuery.NameQuery != null)
-            //{
-            //}
+            if (lookQuery.NameQuery != null)
+            {
+                string wildcard1 = null;
+                string wildcard2 = null; // incase Contains specified with StartsWith and/or EndsWith
+
+                if (!string.IsNullOrEmpty(lookQuery.NameQuery.StartsWith))
+                {
+                    wildcard1 = lookQuery.NameQuery.StartsWith + "*";
+                }
+
+                if (!string.IsNullOrEmpty(lookQuery.NameQuery.EndsWith))
+                {
+                    if (wildcard1 == null)
+                    {
+                        wildcard1 = "*" + lookQuery.NameQuery.EndsWith;
+                    }
+                    else
+                    {
+                        wildcard1 += lookQuery.NameQuery.EndsWith;
+                    }                    
+                }
+
+                if (!string.IsNullOrEmpty(lookQuery.NameQuery.Contains))
+                {
+                    if (wildcard1 == null)
+                    {
+                        wildcard1 = "*" + lookQuery.NameQuery.Contains + "*";
+                    }
+                    else
+                    {
+                        wildcard2 = "*" + lookQuery.NameQuery.Contains + "*";
+                    }
+                }
+
+                if (wildcard1 != null)
+                {
+                    query.Add(new WildcardQuery(new Term(LookConstants.NameField, wildcard1)), BooleanClause.Occur.MUST);
+
+                    if (wildcard2 != null)
+                    {
+                        query.Add(new WildcardQuery(new Term(LookConstants.NameField, wildcard2)), BooleanClause.Occur.MUST);
+                    }
+                }
+            }
 
             if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
             {
