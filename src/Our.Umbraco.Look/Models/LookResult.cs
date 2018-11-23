@@ -8,12 +8,12 @@ namespace Our.Umbraco.Look.Models
     public class LookResult : IEnumerable<LookMatch>
     {
         /// <summary>
-        /// wrapped enumerable
+        /// The wrapped enumerable
         /// </summary>
         private IEnumerable<LookMatch> _lookMatches;
 
         /// <summary>
-        /// Expected total number of LookMatch objects in the enumerable
+        /// Expected total number of results in the enumerable
         /// </summary>
         public int Total { get; }
 

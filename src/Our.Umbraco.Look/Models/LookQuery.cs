@@ -1,17 +1,17 @@
 ﻿namespace Our.Umbraco.Look.Models
 {
     /// <summary>
-    /// Object used to specify a search query
+    /// Model used to specify the Look search criteria
     /// </summary>
     public class LookQuery
     {
         /// <summary>
-        /// A raw Lucene query string
+        /// Set raw Lucene query criteria
         /// </summary>
         public string RawQuery { get; set; }
 
         /// <summary>
-        /// Specify (optional) docType aliases to include, or node ids to exclude
+        /// Specify node query criteria
         /// </summary>
         public NodeQuery NodeQuery { get; set; } = new NodeQuery();
 
@@ -26,17 +26,17 @@
         public DateQuery DateQuery { get; set; } = new DateQuery();
 
         /// <summary>
-        /// Search text, and configuration options for highlighting (if required)
+        /// Set search text and specify whether text highlighting should be returned
         /// </summary>
         public TextQuery TextQuery { get; set; } = new TextQuery();
 
         /// <summary>
-        /// Search tags, configuring collections that are 'required', and/or 'grouped ors'
+        /// Set tag query criteria
         /// </summary>
         public TagQuery TagQuery { get; set; } = new TagQuery();
 
         /// <summary>
-        /// specifify criteria to perform a location distance query
+        /// Set geospatial query criteria
         /// </summary>
         public LocationQuery LocationQuery { get; set; } = new LocationQuery();
 
@@ -51,14 +51,14 @@
         internal string SearcherName { get; private set; }
 
         /// <summary>
-        /// Constructor - use the default Examine searcher (usually "ExternalSearcher", see ExamineSettings.config)
+        /// Create a new query using the default Examine searcher (usually "ExternalSearcher", see config/ExamineSettings.config)
         /// </summary>
         public LookQuery()
         {
         }
 
         /// <summary>
-        /// Constructor - use a named Examine Searcher
+        /// Create a new query using the specified Exmaine searcher (see config/ExamineSettings.config for available searchers)
         /// </summary>
         /// <param name="searcherName">The name of the Examine searcher to use</param>
         public LookQuery(string searcherName)

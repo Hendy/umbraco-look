@@ -18,7 +18,7 @@ namespace Our.Umbraco.Look.Services
     public partial class LookService
     {
         /// <summary>
-        ///  Main searching method
+        /// Perform a Look search
         /// </summary>
         /// <param name="lookQuery"></param>
         /// <returns>an IEnumerableWithTotal</returns>
