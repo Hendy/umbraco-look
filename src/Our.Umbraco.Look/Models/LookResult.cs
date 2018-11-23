@@ -5,6 +5,9 @@ using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Models
 {
+    /// <summary>
+    /// Model returned as a response to a Look query
+    /// </summary>
     public class LookResult : IEnumerable<LookMatch>
     {
         /// <summary>

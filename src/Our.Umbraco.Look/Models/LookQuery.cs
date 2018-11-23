@@ -1,7 +1,7 @@
 ﻿namespace Our.Umbraco.Look.Models
 {
     /// <summary>
-    /// Model used to specify the Look search criteria
+    /// Model used to specify the search query criteria
     /// </summary>
     public class LookQuery
     {
@@ -51,14 +51,14 @@
         internal string SearcherName { get; private set; }
 
         /// <summary>
-        /// Create a new query using the default Examine searcher (usually "ExternalSearcher", see config/ExamineSettings.config)
+        /// Create a new Look query using the default Examine searcher (usually "ExternalSearcher", see config/ExamineSettings.config)
         /// </summary>
         public LookQuery()
         {
         }
 
         /// <summary>
-        /// Create a new query using the specified Exmaine searcher (see config/ExamineSettings.config for available searchers)
+        /// Create a new Look query using the specified Exmaine searcher (see config/ExamineSettings.config for available searchers)
         /// </summary>
         /// <param name="searcherName">The name of the Examine searcher to use</param>
         public LookQuery(string searcherName)
