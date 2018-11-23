@@ -25,7 +25,7 @@ namespace Our.Umbraco.Look.Models
 
             set
             {
-                if (!this.ContainsWildcards(value))
+                if (this.IsValid(value))
                 {
                     this._startsWith = value;
                 }
@@ -48,7 +48,7 @@ namespace Our.Umbraco.Look.Models
 
             set
             {
-                if (!this.ContainsWildcards(value))
+                if (this.IsValid(value))
                 {
                     this._endsWith = value;
                 }
@@ -71,7 +71,7 @@ namespace Our.Umbraco.Look.Models
 
             set
             {
-                if (!this.ContainsWildcards(value))
+                if (this.IsValid(value))
                 {
                     this._contains = value;
                 }
@@ -87,9 +87,25 @@ namespace Our.Umbraco.Look.Models
         ///// </summary>
         //public bool CaseSensitive { get; set; } = true;
 
-        private bool ContainsWildcards(string value)
+        /// <summary>
+        /// Helper to parse user set value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private bool IsValid(string value)
         {
-            return !value.Contains("*") && !value.Contains("?");
+            if (value == null)
+            {
+                return true;
+            }
+
+            //if (value.Contains("*") || value.Contains("?"))
+            //{
+            //    throw new Exception($"Value must not contain any wildcard chars '*', or '?'");
+            //}
+
+            return !value.Contains("*") 
+                && !value.Contains("?");
         }
     }
 }
