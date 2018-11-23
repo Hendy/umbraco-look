@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace Our.Umbraco.Look.Models
 {
+    /// <summary>
+    /// A LookTag can be any string value, in an optionally named group
+    /// </summary>
     public class LookTag
     {
         private const char DELIMITER = ':';
@@ -70,8 +73,15 @@ namespace Our.Umbraco.Look.Models
         //}
 
         /// <summary>
-        /// Create a new LookTag from a raw string value, where a 
-        /// colon token ':' can be used to delimit an (optional) group from a tag.
+        /// <para>Create a new LookTag from a raw string value.</para>
+        /// <para>A tag can be any string value and can be in a named group.</para>
+        /// <para>The raw string value will be parsed for the first colon char ':' to split a group from a tag.</para>
+        /// <para>(to use a colon char in the tag string without a group, prefix the value with with the delimiting colon)</para>
+        /// <para>eg.</para>
+        /// <para>&#160;</para>                
+        /// <para>"tag" = the tag "tag" in the group ""</para>
+        /// <para>"group:tag" = the tag "tag" in the group "group"</para>
+        /// <para>":tag:colon" = the tag "tag:colon" in the group ""</para>
         /// </summary>
         /// <param name="value">the raw string value for a tag (with optional group)</param>
         public LookTag(string value)
@@ -90,11 +100,11 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// Constructor - create a tag in the specified group
+        /// Create a new LookTag from specifed group and tag name values
         /// </summary>
         /// <param name="group">name of tag group, a null or string.Empty indicate this tag belongs to the default 'name-less' group</param>
         /// <param name="name">the unique name for this tag within this tag group (all chars valid)</param>
-        internal LookTag(string group, string name)
+        public LookTag(string group, string name)
         {
             this.Group = group;
             this.Name = name;
@@ -110,6 +120,10 @@ namespace Our.Umbraco.Look.Models
             return base.GetHashCode();
         }
 
+        /// <summary>
+        /// Serialize using the colon char delimiter to split the group from the tag
+        /// </summary>
+        /// <returns>delimited string value for group:tag</returns>
         public override string ToString()
         {
             return this.Group + DELIMITER + this.Name;

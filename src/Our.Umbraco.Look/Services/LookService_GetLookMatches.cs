@@ -15,6 +15,7 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Supplied with the result of a Lucene query, this method will yield a constructed LookMatch for each in order
         /// </summary>
+        /// <param name="lookQuery"></param>
         /// <param name="indexSearcher">The searcher supplied to get the Lucene doc for each id in the Lucene results (topDocs)</param>
         /// <param name="topDocs">The results of the Lucene query (a collection of ids in an order)</param>
         /// <param name="getHighlight">Function used to get the highlight text for a given result text</param>
