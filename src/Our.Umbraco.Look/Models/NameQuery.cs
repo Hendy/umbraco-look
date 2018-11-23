@@ -31,7 +31,7 @@ namespace Our.Umbraco.Look.Models
                 }
                 else
                 {
-                    throw new Exception($"StartsWith value must not contain any wildcard characters '*', '?'");
+                    throw new Exception($"StartsWith value '{ value }' must not contain any wildcard characters '*', '?'");
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace Our.Umbraco.Look.Models
                 }
                 else
                 {
-                    throw new Exception($"EndsWith value must not contain any wildcard characters '*', '?'");
+                    throw new Exception($"EndsWith value '{ value }' must not contain any wildcard characters '*', '?'");
                 }
             }
         }
@@ -77,7 +77,7 @@ namespace Our.Umbraco.Look.Models
                 }
                 else
                 {
-                    throw new Exception($"Contains value must not contain any wildcard characters '*', '?'");
+                    throw new Exception($"Contains value '{ value }' must not contain any wildcard characters '*', '?'");
                 }
             }
         }

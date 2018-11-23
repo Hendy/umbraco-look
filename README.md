@@ -115,6 +115,13 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 		NotIds = new int[] { 123 } // (eg. exclude current page)
 	},
 
+	NameQuery = new NameQuery() {
+		StartsWith = "Abc", // the name must start with this string
+		EndsWith = "Xyz",  // the name must end with this string
+		Contains = "123", // the name must contain this string
+		CaseSenstive = true // applies to all StartsWith, EndsWith, Contains
+	},
+
 	DateQuery = new DateQuery() {
 		After = new DateTime(2005, 02, 16),
 		Before = null
