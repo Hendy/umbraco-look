@@ -13,5 +13,7 @@ namespace Our.Umbraco.Look.Models
         internal bool EnableLeadingWildcards { get; set; }
 
         internal IndexSearcher IndexSearcher { get; set; }
+
+        //internal bool InUnitTest { get; set; }
     }
 }

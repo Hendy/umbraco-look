@@ -87,6 +87,18 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         public bool CaseSensitive { get; set; } = true;
 
+        //public NameQuery()
+        //{
+        //}
+
+        //public NameQuery(string startsWith = null, string contains = null, string endsWith = null, bool caseSensitive = true)
+        //{
+        //    this.StartsWith = startsWith;
+        //    this.Contains = contains;
+        //    this.EndsWith = endsWith;
+        //    this.CaseSensitive = caseSensitive;
+        //}
+
         /// <summary>
         /// Helper to parse user set value
         /// </summary>
@@ -98,11 +110,6 @@ namespace Our.Umbraco.Look.Models
             {
                 return true;
             }
-
-            //if (value.Contains("*") || value.Contains("?"))
-            //{
-            //    throw new Exception($"Value must not contain any wildcard chars '*', or '?'");
-            //}
 
             return !value.Contains("*") 
                 && !value.Contains("?");

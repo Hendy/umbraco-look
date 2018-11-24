@@ -1,4 +1,5 @@
-﻿using Examine.LuceneEngine.Providers;
+﻿using Examine;
+using Examine.LuceneEngine.Providers;
 using Lucene.Net.Highlight;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using Umbraco.Core.Logging;
 using UmbracoExamine;
 
 namespace Our.Umbraco.Look.Services
@@ -24,7 +26,19 @@ namespace Our.Umbraco.Look.Services
         /// <returns>A LookResult model for the search response</returns>
         public static LookResult Query(LookQuery lookQuery)
         {
-            SearchingContext searchingContext = null;
+            var searchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
+
+            return LookService.Query(lookQuery, searchingContext);
+        }
+
+        /// <summary>
+        /// Seam for unit testing, so can pass in searchingContext, without going via Umbraco Examine
+        /// </summary>
+        /// <param name="lookQuery"></param>
+        /// <param name="searchingContext"></param>
+        /// <returns></returns>
+        internal static LookResult Query(LookQuery lookQuery, SearchingContext searchingContext)
+        {
             BooleanQuery query = null; // the lucene query being built                                            
             Filter filter = null; // used for geospatial queries
             Sort sort = null;
@@ -35,8 +49,6 @@ namespace Our.Umbraco.Look.Services
             {
                 return new LookResult("Unable to perform query, as supplied LookQuery object was null");
             }
-
-            searchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
 
             if (searchingContext == null)
             {
@@ -98,7 +110,7 @@ namespace Our.Umbraco.Look.Services
                     else
                     {
                         wildcard1 += lookQuery.NameQuery.EndsWith;
-                    }                    
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(lookQuery.NameQuery.Contains))
@@ -157,7 +169,7 @@ namespace Our.Umbraco.Look.Services
                     Query searchTextQuery = null;
 
                     try
-                    { 
+                    {
                         searchTextQuery = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer)
                                                 .Parse(lookQuery.TextQuery.SearchText);
                     }

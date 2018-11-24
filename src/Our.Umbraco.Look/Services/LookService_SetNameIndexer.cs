@@ -7,9 +7,9 @@ namespace Our.Umbraco.Look.Services
     public partial class LookService
     {
         /// <summary>
-        /// Register consumer code to perform when indexing name
+        /// Set a custom function to execute at index-time, which will return a string value for the name field (or null to not index)
         /// </summary>
-        /// <param name="nameIndexer">Your custom name indexing function</param>
+        /// <param name="nameIndexer">The custom name indexing function</param>
         public static void SetNameIndexer(Func<IndexingContext, string> nameIndexer)
         {
             if (LookService.Instance.NameIndexer == null)

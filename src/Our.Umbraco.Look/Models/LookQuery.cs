@@ -46,7 +46,7 @@
         public SortOn SortOn { get; set; } = SortOn.Score;
 
         /// <summary>
-        /// Name of searcher (index) to use (the context for the query properties as it were)
+        /// Name of searcher (index) to use
         /// </summary>
         internal string SearcherName { get; private set; }
 

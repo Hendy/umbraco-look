@@ -1,4 +1,5 @@
 ﻿using Examine;
+using Lucene.Net.Search;
 using Our.Umbraco.Look.Models;
 using Umbraco.Core.Logging;
 using UmbracoExamine;
@@ -41,7 +42,7 @@ namespace Our.Umbraco.Look.Services
                         return new SearchingContext()
                         {
                             Analyzer = umbracoExamineSearcher.IndexingAnalyzer,
-                            IndexSearcher = new Lucene.Net.Search.IndexSearcher(indexSetDirectory, true), // TODO: handle reuse
+                            IndexSearcher = new IndexSearcher(indexSetDirectory, true), // TODO: handle reuse
                             EnableLeadingWildcards = umbracoExamineSearcher.EnableLeadingWildcards
                         };
                     }

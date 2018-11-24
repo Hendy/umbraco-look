@@ -35,6 +35,11 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         public string FailureMessage { get; }
 
+        // output for testing
+        //internal BooleanQuery Query { get; set; }
+        //internal Filter Filter { get; set; }
+        //internal Sort Sort { get; set; }
+
         /// <summary>
         /// Constructor for populated result
         /// </summary>
