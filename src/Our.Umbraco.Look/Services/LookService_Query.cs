@@ -115,11 +115,16 @@ namespace Our.Umbraco.Look.Services
 
                 if (wildcard1 != null)
                 {
-                    query.Add(new WildcardQuery(new Term(LookConstants.NameField, wildcard1)), BooleanClause.Occur.MUST);
+                    var nameField = lookQuery.NameQuery.CaseSensitive ? LookConstants.NameField : LookConstants.NameField + "_Lowered";
+                    var wildcard = lookQuery.NameQuery.CaseSensitive ? wildcard1 : wildcard1.ToLower();
+
+                    query.Add(new WildcardQuery(new Term(nameField, wildcard)), BooleanClause.Occur.MUST);
 
                     if (wildcard2 != null)
                     {
-                        query.Add(new WildcardQuery(new Term(LookConstants.NameField, wildcard2)), BooleanClause.Occur.MUST);
+                        wildcard = lookQuery.NameQuery.CaseSensitive ? wildcard2 : wildcard2.ToLower();
+
+                        query.Add(new WildcardQuery(new Term(nameField, wildcard)), BooleanClause.Occur.MUST);
                     }
                 }
             }

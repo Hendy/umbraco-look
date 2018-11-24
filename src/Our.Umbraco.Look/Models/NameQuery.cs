@@ -82,10 +82,10 @@ namespace Our.Umbraco.Look.Models
             }
         }
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public bool CaseSensitive { get; set; } = true;
+        /// <summary>
+        /// When true, StartsWith, EndsWith or Contains critera properties will be case sensitive
+        /// </summary>
+        public bool CaseSensitive { get; set; } = true;
 
         /// <summary>
         /// Helper to parse user set value

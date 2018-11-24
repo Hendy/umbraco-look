@@ -38,6 +38,14 @@ namespace Our.Umbraco.Look.Services
                                             Field.Index.NOT_ANALYZED,
                                             Field.TermVector.YES);
 
+                    // field for lower case searching
+                    var nameFieldLowered = new Field(
+                                            LookConstants.NameField + "_Lowered",
+                                            name.ToLower(),
+                                            Field.Store.NO,
+                                            Field.Index.NOT_ANALYZED,
+                                            Field.TermVector.YES);
+
                     var nameSortedField = new Field(
                                                 LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField,
                                                 name.ToLower(), // force case insentive sorting
@@ -46,6 +54,7 @@ namespace Our.Umbraco.Look.Services
                                                 Field.TermVector.NO);
 
                     document.Add(nameField);
+                    document.Add(nameFieldLowered);
                     document.Add(nameSortedField);
                 }
             }
