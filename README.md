@@ -1,4 +1,4 @@
-# Umbraco Look (Alpha)
+# Umbraco Look (Beta)
 Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for: text match highlighting, geospatial querying and tag faceting.
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
@@ -21,7 +21,7 @@ using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
 ```
 
-The model suppied to custom functions at index-time:
+The model supplied to the custom functions at index-time:
 
 ```csharp
 public class IndexingContext
@@ -38,7 +38,7 @@ public class IndexingContext
 }
 ```
 
-The static method definitions on the LookService where custom indexing functions can be set:
+The static method definitions on the LookService where the custom indexing functions can be set:
 
 ```csharp
 void LookService.SetNameIndexer(Func<IndexingContext, string> nameIndexer)
@@ -62,8 +62,10 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{		
+		// set value of the custom name field to be the name of the content, media or member being indexed
 		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
 
+		// set value of the custom date field to be the UpdateDate of the content, media or member being indexed
 		LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
 
 		LookService.SetTextIndexer(indexingContext => {		
