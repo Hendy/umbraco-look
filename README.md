@@ -10,17 +10,41 @@ Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/refe
 
 ## Indexing
 
-Look automatically hooks into all Umbraco Exmaine indexers (by default "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer") where the indexing behaviour can be configured by setting custom functions via static methods on the LookService. 
+Look will automatically hook into all Umbraco Exmaine indexers (by default "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see /config/ExamineSettings.config),
+offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data for every Umbraco content, media or member being indexed. 
 
-Each function at index-time will be given the IPublishedContent 
-of the content, media or member node being indexed and details about the current Exmaine Indexer.
-
-If an indexing function is not set or it returns null, then that field is not indexed, otherwise the value will be indexed into a custom field (prefixed with "Look_").
+To configure the indexing behaviour, custom functions can be set via static methods on the LookService. At index-time each of these functions will be given the IndexingContext 
+which contains the IPublishedContent of the content, media or member being indexed, together with details about the Exmaine index being used.
 
 ```csharp
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
 ```
+
+```csharp
+void LookService.SetNameIndexer(Func<IndexingContext, string> nameIndexer)
+void LookService.SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
+void LookService.SetTextIndexer(Func<IndexingContext, string> textIndexer)
+void LookService.SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
+void LookService.SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
+```
+
+```csharp
+public class IndexingContext
+{
+	/// <summary>
+    /// The IPublishedContent of the Content, Media or Member being indexed
+    /// </summary>
+	public IPublishedContent Item { get; }
+
+	/// <summary>
+	/// The name of the Examine indexer into which this item is being indexed
+	/// </summary>
+	public string IndexerName { get; }
+}
+```
+
+For Example:
 
 ```csharp
 public class ConfigureIndexing : ApplicationEventHandler
@@ -30,26 +54,18 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{		
-		LookService.SetNameIndexer(indexingContext => {			
-
-			// indexingContext.Item is the IPublishedContent of the content, media or member being indexed
-			// indexingContext.IndexerName is the string name of the Examine Indexer
-
-			return indexingContext.Item.Name;
-		});
+		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
 
 		LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
 
 		LookService.SetTextIndexer(indexingContext => {		
-
 			// eg. for content, trigger a web request and scrape markup to index
 
 			return null;
 		});
 
 		LookService.SetTagIndexer(indexingContext => {
-
-			// return Our.Umbraco.Look.Models.LookTag[] (or null to not index)
+			// eg. return new LookTag[] { new LookTag("colour:Red") }; (or null to not index)
 
 			// A tag can be any string and exists within an optionally specified group.
 			// If a group isn't set, then the tag is put into a default un-named group.
@@ -85,16 +101,13 @@ public class ConfigureIndexing : ApplicationEventHandler
 		});
 
 		LookService.SetLocationIndexer(indexingContext => {
-			// return Our.Umbraco.Look.Model.Location (or null to not index)
-			// eg. return new Location(55.406330, 10.388500);
+			// eg. return new Location(55.406330, 10.388500); (or null to not index)
 
+			// eg. using Terratype			 
 			var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
-
 			var terratypeLatLng = terratype.Position.ToWgs84();
 
-			return new Location(
-				terratypeLatLng.Latitude, 
-				terratypeLatLng.Longitude);
+			return new Location(terratypeLatLng.Latitude, terratypeLatLng.Longitude);
 		});
 	}
 }
@@ -103,7 +116,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` together with an Examine Searcher.
+A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` together with an Examine Searcher.
 
 ```csharp
 var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use default, usually "ExternalSearcher")
@@ -239,5 +252,13 @@ public class Facet
 	/// </summary>
 	public int Count { get;  }
 }
+```
 
+```csharp
+public class LookTag
+{
+	public string Group { get; set; }
+
+	public string Tag { get; set; }
+}
 ```
