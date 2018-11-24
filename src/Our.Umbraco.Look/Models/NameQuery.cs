@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Lucene.Net.QueryParsers;
 
 namespace Our.Umbraco.Look.Models
 {
@@ -9,9 +9,9 @@ namespace Our.Umbraco.Look.Models
     {
         private string _startsWith;
 
-        private string _endsWith;
-
         private string _contains;
+
+        private string _endsWith;
 
         /// <summary>
         /// (Optional) set a string which the name must begin with
@@ -25,36 +25,13 @@ namespace Our.Umbraco.Look.Models
 
             set
             {
-                if (this.IsValid(value))
+                if (value != null)
                 {
-                    this._startsWith = value;
+                    this._startsWith = QueryParser.Escape(value);
                 }
                 else
                 {
-                    throw new Exception($"StartsWith value '{ value }' must not contain any wildcard characters '*', '?'");
-                }
-            }
-        }
-
-        /// <summary>
-        /// (Optional) set a string which the name must end with
-        /// </summary>
-        public string EndsWith
-        {
-            get
-            {
-                return this._endsWith;
-            }
-
-            set
-            {
-                if (this.IsValid(value))
-                {
-                    this._endsWith = value;
-                }
-                else
-                {
-                    throw new Exception($"EndsWith value '{ value }' must not contain any wildcard characters '*', '?'");
+                    this._startsWith = null;
                 }
             }
         }
@@ -71,13 +48,36 @@ namespace Our.Umbraco.Look.Models
 
             set
             {
-                if (this.IsValid(value))
+                if (value != null)
                 {
-                    this._contains = value;
+                    this._contains = QueryParser.Escape(value);
                 }
                 else
                 {
-                    throw new Exception($"Contains value '{ value }' must not contain any wildcard characters '*', '?'");
+                    this._contains = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// (Optional) set a string which the name must end with
+        /// </summary>
+        public string EndsWith
+        {
+            get
+            {
+                return this._endsWith;
+            }
+
+            set
+            {
+                if (value != null)
+                {
+                    this._endsWith = QueryParser.Escape(value);
+                }
+                else
+                {
+                    this._endsWith = null;
                 }
             }
         }
@@ -98,21 +98,5 @@ namespace Our.Umbraco.Look.Models
         //    this.EndsWith = endsWith;
         //    this.CaseSensitive = caseSensitive;
         //}
-
-        /// <summary>
-        /// Helper to parse user set value
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private bool IsValid(string value)
-        {
-            if (value == null)
-            {
-                return true;
-            }
-
-            return !value.Contains("*") 
-                && !value.Contains("?");
-        }
     }
 }

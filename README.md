@@ -22,23 +22,6 @@ To configure the indexing behaviour, custom functions can be set via static meth
 At index-time each of these custom functions will be given the IPublishedContent of the item being indexed and the name of the Exmaine index being used. If a custom function
 returns a value, then it will be stored in custom Lucene field(s) (prefixed with "Look_"), otherwise a null return indicates no change.
 
-The model supplied to the custom functions at index-time:
-
-```csharp
-public class IndexingContext
-{
-	/// <summary>
-	/// The IPublishedContent of the Content, Media or Member being indexed
-	/// </summary>
-	public IPublishedContent Item { get; }
-
-	/// <summary>
-	/// The name of the Examine indexer into which this item is being indexed
-	/// </summary>
-	public string IndexerName { get; }
-}
-```
-
 The static method definitions on the LookService where the custom indexing functions can be set:
 
 ```csharp
@@ -58,7 +41,24 @@ void LookService.SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
 void LookService.SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
 ```
 
-For Example:
+The model supplied to the custom functions at index-time:
+
+```csharp
+public class IndexingContext
+{
+	/// <summary>
+	/// The IPublishedContent of the Content, Media or Member being indexed
+	/// </summary>
+	public IPublishedContent Item { get; }
+
+	/// <summary>
+	/// The name of the Examine indexer into which this item is being indexed
+	/// </summary>
+	public string IndexerName { get; }
+}
+```
+
+Example:
 
 ```csharp
 public class ConfigureIndexing : ApplicationEventHandler
@@ -68,13 +68,13 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{		
-		// return the Name of the content, media or member being indexed
+		// return the Name of the IPublishedContent
 		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
 
-		// return the UpdateDate of the content, media or member being indexed
+		// return the UpdateDate of the IPublishedContent
 		LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
 
-		// eg. for content, trigger a web request and scrape markup to index
+		// eg. if content, trigger a web request and scrape markup to index
 		LookService.SetTextIndexer(indexingContext => { return null; });
 
 		// return a collection of tags
@@ -168,10 +168,10 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 
 ```csharp
 // perform the search
-var lookResult = LookService.Query(lookQuery);
+var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model.LookResult
 
 var totalResults = lookResult.Total; // total number of item expected in the lookResult enumerable
-var results = lookResult.ToArray(); // returns Our.Umbraco.Look.Models.LookMatch[]
+var results = lookResult.ToArray(); // enumerates to return Our.Umbraco.Look.Models.LookMatch[]
 var facets = lookResult.Facets; // returns Our.Umbraco.Look.Models.Facet[]
 ```
 

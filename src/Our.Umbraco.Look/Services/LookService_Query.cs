@@ -28,7 +28,12 @@ namespace Our.Umbraco.Look.Services
         {
             var searchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
 
-            return LookService.Query(lookQuery, searchingContext);
+            if (searchingContext != null)
+            {
+                return LookService.Query(lookQuery, searchingContext);
+            }
+
+            return new LookResult("Unable to perform query, as Examine searcher not found");
         }
 
         /// <summary>
@@ -52,7 +57,7 @@ namespace Our.Umbraco.Look.Services
 
             if (searchingContext == null)
             {
-                return new LookResult("Unable to perform query, as Examine searcher not found");
+                return new LookResult("Unable to perform query, as searchingContext was null");
             }
 
             query = new BooleanQuery();

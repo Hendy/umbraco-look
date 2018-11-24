@@ -33,7 +33,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Defaults to null, used to indicate why a Look Query was not successful
         /// </summary>
-        public string FailureMessage { get; }
+        internal string FailureMessage { get; }
 
         // output for testing
         //internal BooleanQuery Query { get; set; }
