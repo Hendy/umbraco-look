@@ -21,20 +21,14 @@ using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
 ```
 
-```csharp
-void LookService.SetNameIndexer(Func<IndexingContext, string> nameIndexer)
-void LookService.SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
-void LookService.SetTextIndexer(Func<IndexingContext, string> textIndexer)
-void LookService.SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
-void LookService.SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
-```
+The model suppied to custom functions at index-time:
 
 ```csharp
 public class IndexingContext
 {
 	/// <summary>
-    /// The IPublishedContent of the Content, Media or Member being indexed
-    /// </summary>
+	/// The IPublishedContent of the Content, Media or Member being indexed
+	/// </summary>
 	public IPublishedContent Item { get; }
 
 	/// <summary>
@@ -42,6 +36,20 @@ public class IndexingContext
 	/// </summary>
 	public string IndexerName { get; }
 }
+```
+
+The static method definitions on the LookService where custom indexing functions can be set:
+
+```csharp
+void LookService.SetNameIndexer(Func<IndexingContext, string> nameIndexer)
+
+void LookService.SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
+
+void LookService.SetTextIndexer(Func<IndexingContext, string> textIndexer)
+
+void LookService.SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
+
+void LookService.SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
 ```
 
 For Example:
@@ -65,43 +73,30 @@ public class ConfigureIndexing : ApplicationEventHandler
 		});
 
 		LookService.SetTagIndexer(indexingContext => {
-			// eg. return new LookTag[] { new LookTag("colour:Red") }; (or null to not index)
+			// eg. return new LookTag[] { new LookTag("colour:Red") }; // (or null to not index)
 
 			// A tag can be any string and exists within an optionally specified group.
 			// If a group isn't set, then the tag is put into a default un-named group.
+			// A LookTag can be created form a raw string (where the first colon char ':' is
+			// used as an optional delimiter between a group/tag) or via a named group, tag overload.
+			// A LookTag array can also be made via a static helper on the TagQuery mode.
 			// eg.
-			//	"red" - a tag "red" in the default un-named group
-			//	"colour:red" - a tag "red", in group "colour"
-			// 
-			// Using groups allows for targeted facet queries, as each group corresponds
-			// with a custom field. A group must contain only alphanumeric / underscore 
-			// chars and be less than 50 chars.
-			//
-			// The first colon in the string is used as the delimeter, so to use a colon 
-			// char in a tag (in the default un-named group) it must be escaped by 
-			// prefixing with a colon.
-			// eg.
-			//	":red:green" - a tag "red:green" in the default un-named group
-			//	"colour:red:green" - a tag "red:green" in the group "colour"
-			//
-			// A LookTag can be constructed with a raw string, and there is a static helper
-			// as a shorthand to create a LookTag[]
-			// eg.
-			//	var tag = new LookTag("colour:red"); // raw string
-			//	var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue"); 
-
+			//	var tag1 = new LookTag("red"); // tag 'red', in default un-named group ''
+			//	var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
+			//	var tag3 = new LookTag("colour", "red"); // tag 'red', in group 'colour'
+			//	var tags = TagQuery.MakeTags("colour:red", "colour:green"); // tags 'red' and 'green', both in group 'colour'
 
 			// eg a nuPicker
 			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
 
 			return picker
 				.AsPublishedContent()
-				.Select(x => new LookTag("colour:" + x.Name))
+				.Select(x => new LookTag("colour", x.Name))
 				.ToArray();
 		});
 
 		LookService.SetLocationIndexer(indexingContext => {
-			// eg. return new Location(55.406330, 10.388500); (or null to not index)
+			// eg. return new Location(55.406330, 10.388500); // (or null to not index)
 
 			// eg. using Terratype			 
 			var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
@@ -257,8 +252,15 @@ public class Facet
 ```csharp
 public class LookTag
 {
+	/// <summary>
+	/// The tag group - this is used as a custom Lucene field, and must contain only
+	/// alphanumeric / underscore chars and be less than 50 chars.
+	/// </summary>
 	public string Group { get; set; }
 
+	/// <summary>
+	/// The tag name - this can be any string.
+	/// </summary>
 	public string Tag { get; set; }
 }
 ```
