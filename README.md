@@ -7,19 +7,20 @@ Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/refe
   * Examine 0.1.70 (min)
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
-
-## Indexing
-
-Look will automatically hook into all Umbraco Exmaine indexers (by default "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see /config/ExamineSettings.config),
-offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data for every Umbraco content, media or member being indexed. 
-
-To configure the indexing behaviour, custom functions can be set via static methods on the LookService. At index-time each of these functions will be given the IndexingContext 
-which contains the IPublishedContent of the content, media or member being indexed, together with details about the Exmaine index being used.
-
+There are two required namespaces:
 ```csharp
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
 ```
+
+## Indexing
+
+Look automatically hooks into all Umbraco Exmaine indexers (by default "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see /config/ExamineSettings.config)
+offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data for the Umbraco content, media or member being indexed. 
+
+To configure the indexing behaviour, custom functions can be set via static methods on the LookService (all are optional).
+At index-time each of these custom functions will be given the IPublishedContent of the item being indexed and the name of the Exmaine index being used. If a custom function
+returns a value, then it will be stored in custom Lucene field(s) (prefixed with "Look_"), otherwise a null return indicates no change.
 
 The model supplied to the custom functions at index-time:
 
@@ -41,14 +42,19 @@ public class IndexingContext
 The static method definitions on the LookService where the custom indexing functions can be set:
 
 ```csharp
+// creates both case sensitive and case insensitive fields - for use with NameQuery
 void LookService.SetNameIndexer(Func<IndexingContext, string> nameIndexer)
 
+// creates sortable date field - for use with DateQuery
 void LookService.SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
 
+// creates text field (analyzed) - for use with TextQuery
 void LookService.SetTextIndexer(Func<IndexingContext, string> textIndexer)
 
+// creates multiple tag fields (where a tag group corresponds to field) - for use with TagQuery
 void LookService.SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
 
+// creates multple fields - for use with LocationQuery
 void LookService.SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
 ```
 
@@ -62,31 +68,18 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{		
-		// set value of the custom name field to be the name of the content, media or member being indexed
+		// return the Name of the content, media or member being indexed
 		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
 
-		// set value of the custom date field to be the UpdateDate of the content, media or member being indexed
+		// return the UpdateDate of the content, media or member being indexed
 		LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
 
-		LookService.SetTextIndexer(indexingContext => {		
-			// eg. for content, trigger a web request and scrape markup to index
+		// eg. for content, trigger a web request and scrape markup to index
+		LookService.SetTextIndexer(indexingContext => { return null; });
 
-			return null;
-		});
-
+		// return a collection of tags
 		LookService.SetTagIndexer(indexingContext => {
 			// eg. return new LookTag[] { new LookTag("colour:Red") }; // (or null to not index)
-
-			// A tag can be any string and exists within an optionally specified group.
-			// If a group isn't set, then the tag is put into a default un-named group.
-			// A LookTag can be created form a raw string (where the first colon char ':' is
-			// used as an optional delimiter between a group/tag) or via a named group, tag overload.
-			// A LookTag array can also be made via a static helper on the TagQuery mode.
-			// eg.
-			//	var tag1 = new LookTag("red"); // tag 'red', in default un-named group ''
-			//	var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
-			//	var tag3 = new LookTag("colour", "red"); // tag 'red', in group 'colour'
-			//	var tags = TagQuery.MakeTags("colour:red", "colour:green"); // tags 'red' and 'green', both in group 'colour'
 
 			// eg a nuPicker
 			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
@@ -97,6 +90,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 				.ToArray();
 		});
 
+		// return a location
 		LookService.SetLocationIndexer(indexingContext => {
 			// eg. return new Location(55.406330, 10.388500); // (or null to not index)
 
@@ -250,6 +244,21 @@ public class Facet
 	public int Count { get;  }
 }
 ```
+
+### Tags
+
+// A tag can be any string and exists within an optionally specified group.
+// If a group isn't set, then the tag is put into a default un-named group.
+// A LookTag can be created form a raw string (where the first colon char ':' is
+// used as an optional delimiter between a group/tag) or via a named group, tag overload.
+// A LookTag array can also be made via a static helper on the TagQuery mode.
+// eg.
+//	var tag1 = new LookTag("red"); // tag 'red', in default un-named group ''
+//	var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
+//	var tag3 = new LookTag("colour", "red"); // tag 'red', in group 'colour'
+//	var tags = TagQuery.MakeTags("colour:red", "colour:green"); // tags 'red' and 'green', both in group 'colour'
+
+
 
 ```csharp
 public class LookTag
