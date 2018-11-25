@@ -15,22 +15,19 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Supplied with the result of a Lucene query, this method will yield a constructed LookMatch for each in order
         /// </summary>
-        /// <param name="lookQuery"></param>
         /// <param name="indexSearcher">The searcher supplied to get the Lucene doc for each id in the Lucene results (topDocs)</param>
         /// <param name="topDocs">The results of the Lucene query (a collection of ids in an order)</param>
         /// <param name="getHighlight">Function used to get the highlight text for a given result text</param>
+        /// <param name="getText">Flag to indidicate whether the full value of the text field should be returned</param>
         /// <param name="getDistance">Function used to calculate distance (if a location was supplied in the original query)</param>
         /// <returns></returns>
         private static IEnumerable<LookMatch> GetLookMatches(
-                                                    LookQuery lookQuery,
                                                     IndexSearcher indexSearcher,
                                                     TopDocs topDocs,
                                                     Func<string, IHtmlString> getHighlight,
+                                                    bool getText,
                                                     Func<int, double?> getDistance)
         {
-            // flag to indicate that the query has requested the full text to be returned
-            bool getText = lookQuery.TextQuery != null && lookQuery.TextQuery.GetText;
-
             var fields = new List<string>();
 
             fields.Add(LuceneIndexer.IndexNodeIdFieldName); // "__NodeId"

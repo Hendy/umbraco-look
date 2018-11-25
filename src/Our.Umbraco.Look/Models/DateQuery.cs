@@ -8,14 +8,25 @@ namespace Our.Umbraco.Look.Models
     public class DateQuery
     {
         /// <summary>
+        /// If set, only results before this date/time are returned
+        /// </summary>
+        public DateTime? Before { get; set; } = null;
+
+        /// <summary>
         /// If set, only results after this date/time are returned
         /// </summary>
         public DateTime? After { get; set; } = null;
 
-        /// <summary>
-        /// If set, only results before this date/time are returned
-        /// </summary>
-        public DateTime? Before { get; set; } = null;
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="before"></param>
+        ///// <param name="after"></param>
+        //public DateQuery(DateTime? before = null, DateTime? after = null)
+        //{
+        //    this.Before = before;
+        //    this.After = after;
+        //}
 
         public override bool Equals(object obj)
         {

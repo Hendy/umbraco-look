@@ -34,7 +34,7 @@
 
         internal LocationQuery Clone()
         {
-            var clone = (LocationQuery)this.MemberwiseClone();
+            var clone = new LocationQuery();
 
             clone.Location = this.Location?.Clone();
             clone.MaxDistance = this.MaxDistance?.Clone();
