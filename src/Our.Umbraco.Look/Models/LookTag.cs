@@ -115,11 +115,6 @@ namespace Our.Umbraco.Look.Models
             return this.ToString() == obj.ToString();
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         /// <summary>
         /// Serialize using the colon char delimiter to split the group from the tag
         /// </summary>

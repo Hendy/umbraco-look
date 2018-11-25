@@ -29,6 +29,13 @@ namespace Our.Umbraco.Look.Events
                             new UmbracoHelper(UmbracoContext.Current));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="umbracoHelper"></param>
+        /// <param name="indexerName"></param>
         private void Indexer_DocumentWriting(object sender, DocumentWritingEventArgs e, UmbracoHelper umbracoHelper, string indexerName)
         {
             IPublishedContent publishedContent = umbracoHelper.GetPublishedContent(e.NodeId);

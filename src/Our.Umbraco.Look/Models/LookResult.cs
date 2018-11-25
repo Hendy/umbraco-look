@@ -64,17 +64,17 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// Constructor for an error result
+        /// Constructor for an empty result, with message for debug logging
         /// </summary>
-        /// <param name="failureMessage">Failure message to debug log</param>
-        internal LookResult(string failureMessage)
+        /// <param name="loggingMessage">Message to debug log</param>
+        internal LookResult(string loggingMessage)
         {
             this._lookMatches = Enumerable.Empty<LookMatch>();
             this.Total = 0;
             this.Facets = new Facet[] { };
             this.Success = false;
 
-            LogHelper.Debug(typeof(LookResult), failureMessage);
+            LogHelper.Debug(typeof(LookResult), loggingMessage);
         }
 
         public IEnumerator<LookMatch> GetEnumerator()

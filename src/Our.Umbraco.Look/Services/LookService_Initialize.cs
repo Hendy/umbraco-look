@@ -14,7 +14,7 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Setup indexing if configuration valid
         /// </summary>
-        /// <param name="gatheringNodeData">indexing event</param>
+        /// <param name="documentWriting">indexing event</param>
         /// <param name="umbracoHelper"></param>
         internal static void Initialize(
                                 Action<object, DocumentWritingEventArgs, UmbracoHelper, string> documentWriting,
