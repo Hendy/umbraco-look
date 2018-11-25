@@ -129,5 +129,20 @@ namespace Our.Umbraco.Look.Tests
             Assert.IsNull(lookQuery.Compiled);
         }
 
+        [TestMethod]
+        public void Re_Execute_Compiled_Expect_Same_Results()
+        {
+            var lookQuery = new LookQuery();
+
+            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+
+            var results1 = LookService.Query(lookQuery, this._searchingContext);
+            var results2 = LookService.Query(results1.CompiledQuery, this._searchingContext);
+
+            Assert.IsTrue(results1.Success);
+            Assert.IsTrue(results1.Total > 0);
+            Assert.AreNotEqual(results1, results2);
+            Assert.AreEqual(results1.Total, results2.Total);
+        }
     }
 }
