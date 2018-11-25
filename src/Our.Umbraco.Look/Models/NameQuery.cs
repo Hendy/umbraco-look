@@ -87,17 +87,20 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         public bool CaseSensitive { get; set; } = true;
 
-        //public NameQuery()
-        //{
-        //}
-
-        //public NameQuery(string startsWith = null, string contains = null, string endsWith = null, bool caseSensitive = true)
-        //{
-        //    this.StartsWith = startsWith;
-        //    this.Contains = contains;
-        //    this.EndsWith = endsWith;
-        //    this.CaseSensitive = caseSensitive;
-        //}
+        /// <summary>
+        /// Create a new NameQuery search criteria
+        /// </summary>
+        /// <param name="startsWith"></param>
+        /// <param name="contains"></param>
+        /// <param name="endsWith"></param>
+        /// <param name="caseSensitive"></param>
+        public NameQuery(string startsWith = null, string contains = null, string endsWith = null, bool caseSensitive = true)
+        {
+            this.StartsWith = startsWith;
+            this.Contains = contains;
+            this.EndsWith = endsWith;
+            this.CaseSensitive = caseSensitive;
+        }
 
         public override bool Equals(object obj)
         {
