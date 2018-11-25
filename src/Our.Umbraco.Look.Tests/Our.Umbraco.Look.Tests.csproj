@@ -55,11 +55,13 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoSiteTests\BaseDemoSiteTests.cs" />
     <Compile Include="DemoSiteTests\CompiledQueryTests.cs" />
     <Compile Include="DemoSiteTests\NameQueryTests.cs" />
+    <Compile Include="DemoSiteTests\TextQueryTests.cs" />
     <Compile Include="DemoSiteTests\NodeQueryTests.cs" />
     <Compile Include="LookTagComparrisonTests.cs" />
     <Compile Include="LookTagConstructorTests.cs" />

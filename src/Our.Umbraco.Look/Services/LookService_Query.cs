@@ -29,7 +29,7 @@ namespace Our.Umbraco.Look.Services
                 return new LookResult("Unable to perform query, as supplied LookQuery object was null");
             }
 
-            if (lookQuery.SearchingContext == null)
+            if (lookQuery.SearchingContext == null) // if not supplied by a unit test
             {
                 // attempt to get searching context from examine searcher name
                 lookQuery.SearchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
