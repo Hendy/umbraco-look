@@ -27,7 +27,7 @@ namespace Our.Umbraco.Look.Tests
 
             var lookResult = LookService.Query(lookQuery, this._searchingContext);
 
-            Assert.IsNotNull(lookResult.LookQuery.Compiled);
+            Assert.IsNotNull(lookResult.CompiledQuery.Compiled);
         }
 
 
@@ -38,7 +38,7 @@ namespace Our.Umbraco.Look.Tests
 
             lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
 
-            lookQuery = LookService.Query(lookQuery, this._searchingContext).LookQuery;
+            lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
             lookQuery.RawQuery = "+field:value";
 
@@ -52,7 +52,7 @@ namespace Our.Umbraco.Look.Tests
 
             lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
 
-            lookQuery = LookService.Query(lookQuery, this._searchingContext).LookQuery;
+            lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
             lookQuery.NodeQuery = new NodeQuery(); // reset the original
 
@@ -66,7 +66,7 @@ namespace Our.Umbraco.Look.Tests
 
             lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
 
-            lookQuery = LookService.Query(lookQuery, this._searchingContext).LookQuery;
+            lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
             lookQuery.NameQuery.StartsWith = "new value";
 
@@ -80,7 +80,7 @@ namespace Our.Umbraco.Look.Tests
 
             lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
 
-            lookQuery = LookService.Query(lookQuery, this._searchingContext).LookQuery;
+            lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
             lookQuery.DateQuery.Before = DateTime.MaxValue;
 
@@ -94,7 +94,7 @@ namespace Our.Umbraco.Look.Tests
 
             lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
 
-            lookQuery = LookService.Query(lookQuery, this._searchingContext).LookQuery;
+            lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
             lookQuery.TextQuery.GetText = true;
 
@@ -108,7 +108,7 @@ namespace Our.Umbraco.Look.Tests
 
             lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
 
-            lookQuery = LookService.Query(lookQuery, this._searchingContext).LookQuery;
+            lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
             lookQuery.TagQuery.GetFacets = new string[] { };
 
@@ -122,7 +122,7 @@ namespace Our.Umbraco.Look.Tests
 
             lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
 
-            lookQuery = LookService.Query(lookQuery, this._searchingContext).LookQuery;
+            lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
             lookQuery.LocationQuery.MaxDistance = new Distance(1, DistanceUnit.Miles);
 

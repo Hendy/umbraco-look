@@ -173,6 +173,7 @@ var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model
 var totalResults = lookResult.Total; // total number of item expected in the lookResult enumerable
 var results = lookResult.ToArray(); // enumerates to return Our.Umbraco.Look.Models.LookMatch[]
 var facets = lookResult.Facets; // returns Our.Umbraco.Look.Models.Facet[]
+var query = lookResult.CompiledQuery; // returns Our.Umbraco.Look.Models.LookQuery (useful for paging re-queries)
 ```
 
 ```csharp

@@ -6,6 +6,11 @@
     public class LookQuery
     {
         /// <summary>
+        /// 
+        /// </summary>
+        private LookQueryCompiled _compiled = null;
+
+        /// <summary>
         /// (Optional) set a raw Lucene query
         /// </summary>
         public string RawQuery { get; set; }
@@ -49,11 +54,6 @@
         /// Name of searcher (index) to use
         /// </summary>
         internal string SearcherName { get; private set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private LookQueryCompiled _compiled = null;
 
         /// <summary>
         /// Model representing collection of properties that have been processed from the raw LookQuery properties, and ready for a lucene query

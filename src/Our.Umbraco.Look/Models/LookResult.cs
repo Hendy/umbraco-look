@@ -33,7 +33,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// returns the compiled look query, (optimised for being returned back into the query)
         /// </summary>
-        internal LookQuery LookQuery { get; }
+        public LookQuery CompiledQuery { get; }
 
         /// <summary>
         /// Defaults to null, used to indicate why a Look Query was not successful
@@ -45,13 +45,15 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         /// <param name="lookMatches"></param>
         /// <param name="total"></param>
+        /// <param name="facets"></param>
+        /// <param name="lookQuery"></param>
         internal LookResult(IEnumerable<LookMatch> lookMatches, int total, Facet[] facets, LookQuery lookQuery)
         {            
             this._lookMatches = lookMatches;
             this.Total = total;
             this.Facets = facets ?? new Facet[] { };
             this.Success = true;
-            this.LookQuery = lookQuery;
+            this.CompiledQuery = lookQuery;
         }
 
         /// <summary>
