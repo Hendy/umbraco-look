@@ -301,7 +301,6 @@ namespace Our.Umbraco.Look.Services
                     });
                 }
 
-                // sorting (distance sort may already have been set)
                 switch (lookQuery.SortOn)
                 {
                     case SortOn.Name: // a -> z
@@ -315,6 +314,9 @@ namespace Our.Umbraco.Look.Services
                     case SortOn.DateDescending: // newest -> oldest
                         sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
                         break;
+
+                    //case SortOn.Distance: // already set if valid
+                    //    break;
                 }
                 
                 lookQuery.Compiled = new LookQueryCompiled(lookQuery, query, filter, sort, getHighlight, getDistance);
