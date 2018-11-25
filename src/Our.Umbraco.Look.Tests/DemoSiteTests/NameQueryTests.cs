@@ -15,7 +15,13 @@ namespace Our.Umbraco.Look.Tests.DemoSiteTests
         [TestMethod]
         public void Starts_With()
         {
-            var lookResult = LookService.Query(new LookQuery() { NameQuery = new NameQuery() { StartsWith = "T", CaseSensitive = true } }, this._searchingContext);
+            var lookResult = LookService.Query(
+                                new LookQuery(this._searchingContext) {
+                                        NameQuery = new NameQuery() {
+                                            StartsWith = "T",
+                                            CaseSensitive = true
+                                        }
+                                });
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.Total > 0);

@@ -24,32 +24,20 @@ namespace Our.Umbraco.Look.Services
         /// <returns>A LookResult model for the search response</returns>
         public static LookResult Query(LookQuery lookQuery)
         {
-            var searchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
-
-            if (searchingContext != null)
-            {
-                return LookService.Query(lookQuery, searchingContext);
-            }
-
-            return new LookResult("Unable to perform query, as Examine searcher not found");
-        }
-
-        /// <summary>
-        /// Seam for unit testing, so can pass in searchingContext, without going via Umbraco Examine
-        /// </summary>
-        /// <param name="lookQuery"></param>
-        /// <param name="searchingContext"></param>
-        /// <returns></returns>
-        internal static LookResult Query(LookQuery lookQuery, SearchingContext searchingContext)
-        {
             if (lookQuery == null)
             {
                 return new LookResult("Unable to perform query, as supplied LookQuery object was null");
             }
 
-            if (searchingContext == null)
+            if (lookQuery.SearchingContext == null)
             {
-                return new LookResult("Unable to perform query, as searchingContext was null");
+                // attempt to get searching context from examine searcher name
+                lookQuery.SearchingContext = LookService.GetSearchingContext(lookQuery.SearcherName);
+
+                if (lookQuery.SearchingContext == null)
+                {
+                    return new LookResult("Unable to perform query, as searchingContext was null");
+                }
             }
 
             if (lookQuery.Compiled == null)
@@ -65,7 +53,7 @@ namespace Our.Umbraco.Look.Services
                 if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
                 {
                     query.Add(
-                            new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, searchingContext.Analyzer).Parse(lookQuery.RawQuery),
+                            new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, lookQuery.SearchingContext.Analyzer).Parse(lookQuery.RawQuery),
                             BooleanClause.Occur.MUST);
                 }
 
@@ -162,7 +150,7 @@ namespace Our.Umbraco.Look.Services
                 {
                     if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                     {
-                        var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer);
+                        var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, lookQuery.SearchingContext.Analyzer);
 
                         Query searchTextQuery = null;
 
@@ -183,13 +171,13 @@ namespace Our.Umbraco.Look.Services
                             {
                                 var queryScorer = new QueryScorer(queryParser
                                                                     .Parse(lookQuery.TextQuery.SearchText)
-                                                                    .Rewrite(searchingContext.IndexSearcher.GetIndexReader()));
+                                                                    .Rewrite(lookQuery.SearchingContext.IndexSearcher.GetIndexReader()));
 
                                 var highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
 
                                 getHighlight = (x) =>
                                 {
-                                    var tokenStream = searchingContext.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
+                                    var tokenStream = lookQuery.SearchingContext.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
 
                                     var highlight = highlighter.GetBestFragments(
                                                                     tokenStream,
@@ -323,13 +311,13 @@ namespace Our.Umbraco.Look.Services
             }
 
             // look query compiled, so do the Lucene search
-            var topDocs = searchingContext
-                                .IndexSearcher
-                                .Search(
-                                    lookQuery.Compiled.Query,
-                                    lookQuery.Compiled.Filter,
-                                    LookService.MaxLuceneResults,
-                                    lookQuery.Compiled.Sort ?? new Sort(SortField.FIELD_SCORE));
+            var topDocs = lookQuery.SearchingContext
+                                    .IndexSearcher
+                                    .Search(
+                                        lookQuery.Compiled.Query,
+                                        lookQuery.Compiled.Filter,
+                                        LookService.MaxLuceneResults,
+                                        lookQuery.Compiled.Sort ?? new Sort(SortField.FIELD_SCORE));
 
             if (topDocs.TotalHits > 0)
             {
@@ -347,7 +335,7 @@ namespace Our.Umbraco.Look.Services
                     foreach (var group in lookQuery.TagQuery.GetFacets)
                     {
                         var simpleFacetedSearch = new SimpleFacetedSearch(
-                                                        searchingContext.IndexSearcher.GetIndexReader(),
+                                                        lookQuery.SearchingContext.IndexSearcher.GetIndexReader(),
                                                         LookConstants.TagsField + group);
 
                         var facetResult = simpleFacetedSearch.Search(facetQuery);
@@ -367,7 +355,7 @@ namespace Our.Umbraco.Look.Services
 
                 return new LookResult(LookService.GetLookMatches(
                                                         lookQuery,
-                                                        searchingContext.IndexSearcher,
+                                                        lookQuery.SearchingContext.IndexSearcher,
                                                         topDocs,
                                                         lookQuery.Compiled.GetHighlight,
                                                         lookQuery.Compiled.GetDistance),

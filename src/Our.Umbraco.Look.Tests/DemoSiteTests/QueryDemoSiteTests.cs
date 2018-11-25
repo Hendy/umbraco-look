@@ -13,12 +13,12 @@ namespace Our.Umbraco.Look.Tests.DemoSiteTests
         [TestMethod]
         public void Get_A_Thing()
         {
-            var lookQuery = new LookQuery();
+            var lookQuery = new LookQuery(this._searchingContext);
 
             //lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
             lookQuery.NodeQuery = new NodeQuery("thing");
             
-            var lookResult = LookService.Query(lookQuery, this._searchingContext);
+            var lookResult = LookService.Query(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.Total > 0);

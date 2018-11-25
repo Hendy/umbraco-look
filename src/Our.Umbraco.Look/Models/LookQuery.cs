@@ -87,6 +87,11 @@
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        internal SearchingContext SearchingContext { get; set; }
+
+        /// <summary>
         /// Create a new Look query using the default Examine searcher (usually "ExternalSearcher", see config/ExamineSettings.config)
         /// </summary>
         public LookQuery()
@@ -100,6 +105,14 @@
         public LookQuery(string searcherName)
         {
             this.SearcherName = searcherName;
+        }
+
+        /// <summary>
+        /// internal constructor for unit testing, allows tests to supply context bypassing Examine
+        /// </summary>
+        internal LookQuery(SearchingContext searchingContext)
+        {
+            this.SearchingContext = searchingContext;
         }
 
         internal LookQuery Clone()

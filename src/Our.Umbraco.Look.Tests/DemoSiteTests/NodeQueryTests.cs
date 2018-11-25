@@ -15,8 +15,8 @@ namespace Our.Umbraco.Look.Tests.DemoSiteTests
         [TestMethod]
         public void Not_Id()
         {
-            var lookResult1 = LookService.Query(new LookQuery() { NodeQuery = new NodeQuery("thing") },  this._searchingContext);
-            var lookResult2 = LookService.Query(new LookQuery() {NodeQuery = new NodeQuery("thing") { NotIds = new int[] { 1081 } } }, this._searchingContext);
+            var lookResult1 = LookService.Query(new LookQuery(this._searchingContext) { NodeQuery = new NodeQuery("thing") });
+            var lookResult2 = LookService.Query(new LookQuery(this._searchingContext) { NodeQuery = new NodeQuery("thing") { NotIds = new int[] { 1081 } } });
 
             Assert.IsTrue(lookResult1.Success);
             Assert.IsTrue(lookResult2.Success);
@@ -30,8 +30,8 @@ namespace Our.Umbraco.Look.Tests.DemoSiteTests
         [TestMethod]
         public void Not_Ids()
         {
-            var lookResult1 = LookService.Query(new LookQuery() { NodeQuery = new NodeQuery("thing") }, this._searchingContext);
-            var lookResult2 = LookService.Query(new LookQuery() { NodeQuery = new NodeQuery("thing") { NotIds = new int[] { 1081, 1075 } } }, this._searchingContext);
+            var lookResult1 = LookService.Query(new LookQuery(this._searchingContext) { NodeQuery = new NodeQuery("thing") });
+            var lookResult2 = LookService.Query(new LookQuery(this._searchingContext) { NodeQuery = new NodeQuery("thing") { NotIds = new int[] { 1081, 1075 } } });
 
             Assert.IsTrue(lookResult1.Success);
             Assert.IsTrue(lookResult2.Success);
