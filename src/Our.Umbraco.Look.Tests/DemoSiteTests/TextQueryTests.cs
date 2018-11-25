@@ -13,7 +13,7 @@ namespace Our.Umbraco.Look.Tests.DemoSiteTests
         {
             var lookQuery = new LookQuery(this._searchingContext);
 
-            lookQuery.TextQuery = new TextQuery() { SearchText = "base", GetHighlight = true, GetText = false };
+            lookQuery.TextQuery = new TextQuery("base", true);
 
             var lookResult = LookService.Query(lookQuery);
 

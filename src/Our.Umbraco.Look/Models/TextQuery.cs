@@ -7,11 +7,6 @@
         /// </summary>
         public string SearchText { get; set; } = null;
 
-        ///// <summary>
-        ///// Optional fuzzyness factor
-        ///// </summary>
-        //public float Fuzzyness { get; set; } = 0;
-
         /// <summary>
         /// When true (and SearchText provided), a hightlight extract containing the search text will be returned
         /// </summary>
@@ -22,17 +17,18 @@
         /// </summary>
         public bool GetText { get; set; } = false;
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public TextQuery()
-        //{
-        //}
-
-        //public TextQuery(string searchText)
-        //{
-        //	this.SearchText = searchText;
-        //}	
+        /// <summary>
+        /// Create a new TextQuery search criteria
+        /// </summary>
+        /// <param name="searchText">The text to search for - can include wildcards</param>
+        /// <param name="getHighlight">Set to true to return highlight fragment per result</param>
+        /// <param name="getText">Set to true to return the full value of the custom Text field (potentailly a large document)</param>
+        public TextQuery(string searchText = null, bool getHighlight = false, bool getText = false)
+        {
+            this.SearchText = searchText;
+            this.GetHighlight = getHighlight;
+            this.GetText = getText;
+        }
 
         public override bool Equals(object obj)
         {

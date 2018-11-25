@@ -36,11 +36,6 @@ namespace Our.Umbraco.Look.Models
         public LookQuery CompiledQuery { get; }
 
         /// <summary>
-        /// Defaults to null, used to indicate why a Look Query was not successful
-        /// </summary>
-        internal string FailureMessage { get; }
-
-        /// <summary>
         /// Constructor for populated result
         /// </summary>
         /// <param name="lookMatches"></param>
@@ -71,14 +66,13 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Constructor for an error result
         /// </summary>
-        /// <param name="failureMessage">Failure message to return to consumer</param>
+        /// <param name="failureMessage">Failure message to debug log</param>
         internal LookResult(string failureMessage)
         {
             this._lookMatches = Enumerable.Empty<LookMatch>();
             this.Total = 0;
             this.Facets = new Facet[] { };
             this.Success = false;
-            this.FailureMessage = failureMessage;
 
             LogHelper.Debug(typeof(LookResult), failureMessage);
         }
