@@ -52,14 +52,11 @@ namespace Our.Umbraco.Look.Services
                 return new LookResult("Unable to perform query, as searchingContext was null");
             }
 
-            if (lookQuery.Compiled == null) // if this query hasn't yet been compiled
+            if (lookQuery.Compiled == null)
             {
-                // vars to get the result set
                 BooleanQuery query = null; // the lucene query being built                                            
                 Filter filter = null; // used for geospatial queries
                 Sort sort = null;
-
-                // vars to process items in result set
                 Func<string, IHtmlString> getHighlight = null;
                 Func<int, double?> getDistance = x => null;
 
@@ -165,21 +162,13 @@ namespace Our.Umbraco.Look.Services
                 {
                     if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                     {
-                        //if (lookQuery.TextQuery.Fuzzyness > 0)
-                        //{
-                        //    query.Add(
-                        //            new FuzzyQuery(
-                        //                new Term(LookConstants.TextField, lookQuery.TextQuery.SearchText),
-                        //                lookQuery.TextQuery.Fuzzyness),
-                        //            BooleanClause.Occur.MUST);
-                        //}
+                        var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer);
 
                         Query searchTextQuery = null;
 
                         try
                         {
-                            searchTextQuery = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer)
-                                                    .Parse(lookQuery.TextQuery.SearchText);
+                            searchTextQuery = queryParser.Parse(lookQuery.TextQuery.SearchText);
                         }
                         catch
                         {
@@ -192,15 +181,12 @@ namespace Our.Umbraco.Look.Services
 
                             if (lookQuery.TextQuery.GetHighlight)
                             {
-                                var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, searchingContext.Analyzer);
-
                                 var queryScorer = new QueryScorer(queryParser
                                                                     .Parse(lookQuery.TextQuery.SearchText)
                                                                     .Rewrite(searchingContext.IndexSearcher.GetIndexReader()));
 
                                 var highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
 
-                                // update the getHightlight func
                                 getHighlight = (x) =>
                                 {
                                     var tokenStream = searchingContext.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
@@ -294,19 +280,16 @@ namespace Our.Umbraco.Look.Services
                                                 LookConstants.LocationTierFieldPrefix,
                                                 true);
 
-                    // update filter
                     filter = distanceQueryBuilder.Filter;
 
                     if (lookQuery.SortOn == SortOn.Distance)
                     {
-                        // update sort
                         sort = new Sort(
                                     new SortField(
                                         LookConstants.DistanceField,
                                         new DistanceFieldComparatorSource(distanceQueryBuilder.DistanceFilter)));
                     }
 
-                    // update getDistance func
                     getDistance = new Func<int, double?>(x =>
                     {
                         if (distanceQueryBuilder.DistanceFilter.Distances.ContainsKey(x))
