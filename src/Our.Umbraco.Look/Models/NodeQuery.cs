@@ -14,17 +14,21 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         public int[] NotIds { get; set; } = null;
 
-        ///// <summary>
-        ///// Constructor
-        ///// </summary>
-        //public NodeQuery()
-        //{
-        //}
+        /// <summary>
+        /// 
+        /// </summary>
+        public NodeQuery()
+        {
+        }
 
-        //public NodeQuery(string typeAlias)
-        //{
-        //    this.TypeAliases = new string[] { typeAlias };
-        //}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="typeAlias"></param>
+        public NodeQuery(string typeAlias)
+        {
+            this.TypeAliases = new string[] { typeAlias };
+        }
 
         //public NodeQuery(int notId)
         //{

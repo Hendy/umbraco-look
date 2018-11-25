@@ -20,7 +20,8 @@ namespace Our.Umbraco.Look.Tests.DemoSiteTests
         {
             var lookQuery = new LookQuery();
 
-            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+            //lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+            lookQuery.NodeQuery = new NodeQuery("thing");
             
             var lookResult = LookService.Query(lookQuery, this._searchingContext);
 
