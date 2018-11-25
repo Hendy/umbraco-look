@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="DemoSiteTests\BaseDemoSiteTests.cs" />
     <Compile Include="DemoSiteTests\CompiledQueryTests.cs" />
+    <Compile Include="DemoSiteTests\NodeQueryTests.cs" />
     <Compile Include="LookTagComparrisonTests.cs" />
     <Compile Include="LookTagConstructorTests.cs" />
     <Compile Include="DemoSiteTests\QueryDemoSiteTests.cs" />

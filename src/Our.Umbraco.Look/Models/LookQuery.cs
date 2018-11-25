@@ -104,7 +104,6 @@
 
         internal LookQuery Clone()
         {
-            //var clone = (LookQuery)this.MemberwiseClone();
             var clone = new LookQuery();
 
             clone.RawQuery = this.RawQuery;

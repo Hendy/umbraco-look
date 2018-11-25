@@ -91,7 +91,7 @@ namespace Our.Umbraco.Look.Services
                         {
                             query.Add(
                                     new TermQuery(new Term(UmbracoContentIndexer.IndexNodeIdFieldName, exculudeId.ToString())),
-                                    BooleanClause.Occur.MUST);
+                                    BooleanClause.Occur.MUST_NOT);
                         }
                     }
                 }
