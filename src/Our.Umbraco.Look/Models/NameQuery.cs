@@ -109,6 +109,13 @@ namespace Our.Umbraco.Look.Models
         public bool CaseSensitive { get; set; } = true;
 
         /// <summary>
+        /// Create a new NameQuery search criteria
+        /// </summary>
+        public NameQuery()
+        {
+        }
+
+        /// <summary>
         /// Create a new NameQuery search criteria where the name must be the value supplied
         /// </summary>
         /// <param name="is">The value that the name should be</param>
