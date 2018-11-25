@@ -51,9 +51,40 @@
         internal string SearcherName { get; private set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        private LookQueryCompiled _lookQueryCompiled = null;
+
+        /// <summary>
         /// Model representing collection of properties that have been processed from the raw LookQuery properties, and ready for a lucene query
         /// </summary>
-        internal LookQueryCompiled Compiled { get; set; } = null;
+        internal LookQueryCompiled Compiled
+        {
+            get
+            {
+                if (this._lookQueryCompiled != null)
+                {
+                    if (this._lookQueryCompiled.Source.RawQuery == this.RawQuery
+                        && this._lookQueryCompiled.Source.NodeQuery.Equals(this.NodeQuery)
+                        && this._lookQueryCompiled.Source.NameQuery.Equals(this.NameQuery)
+                        && this._lookQueryCompiled.Source.DateQuery.Equals(this.DateQuery)
+                        && this._lookQueryCompiled.Source.TextQuery.Equals(this.TextQuery)
+                        && this._lookQueryCompiled.Source.TagQuery.Equals(this.TagQuery)
+                        && this._lookQueryCompiled.Source.LocationQuery.Equals(this.LocationQuery))
+                    {
+                        return this._lookQueryCompiled;
+                    }
+
+                    this._lookQueryCompiled = null; // remove compiled as query has changed
+                }
+
+                return null;
+            }
+            set
+            {
+                this._lookQueryCompiled = value;
+            }
+        }
 
         /// <summary>
         /// Create a new Look query using the default Examine searcher (usually "ExternalSearcher", see config/ExamineSettings.config)
@@ -69,6 +100,22 @@
         public LookQuery(string searcherName)
         {
             this.SearcherName = searcherName;
+        }
+
+        internal LookQuery Clone()
+        {
+            //var clone = (LookQuery)this.MemberwiseClone();
+            var clone = new LookQuery();
+
+            clone.RawQuery = this.RawQuery;
+            clone.NodeQuery = this.NodeQuery?.Clone();
+            clone.NameQuery = this.NameQuery?.Clone();
+            clone.DateQuery = this.DateQuery?.Clone();
+            clone.TextQuery = this.TextQuery?.Clone();
+            clone.TagQuery = this.TagQuery?.Clone();
+            clone.LocationQuery = this.LocationQuery?.Clone();
+
+            return clone;
         }
     }
 }

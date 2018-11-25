@@ -219,6 +219,7 @@
     <Compile Include="Models\IndexingContext.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\LocationQuery.cs" />
+    <Compile Include="Models\LookQueryCompiled.cs" />
     <Compile Include="Models\LookResult.cs" />
     <Compile Include="Models\NameQuery.cs" />
     <Compile Include="Models\NodeQuery.cs" />

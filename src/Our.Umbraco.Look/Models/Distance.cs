@@ -19,6 +19,24 @@ namespace Our.Umbraco.Look.Models
             this.DistanceUnit = unit;
         }
 
+        public override bool Equals(object obj)
+        {
+            var distance = obj as Distance;
+
+            return distance != null
+                && distance.DistanceValue == this.DistanceValue
+                && distance.DistanceUnit == this.DistanceUnit;
+        }
+
+        internal Distance Clone()
+        {
+            var clone = (Distance)this.MemberwiseClone();
+
+            clone.DistanceUnit = this.DistanceUnit;
+
+            return clone;
+        }
+
         internal double GetMiles()
         {
             switch (this.DistanceUnit)

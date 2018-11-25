@@ -98,5 +98,21 @@ namespace Our.Umbraco.Look.Models
         //    this.EndsWith = endsWith;
         //    this.CaseSensitive = caseSensitive;
         //}
+
+        public override bool Equals(object obj)
+        {
+            NameQuery nameQuery = obj as NameQuery;
+
+            return nameQuery != null
+                && nameQuery.StartsWith == this.StartsWith
+                && nameQuery.Contains == this.Contains
+                && nameQuery.EndsWith == this.EndsWith
+                && nameQuery.CaseSensitive == this.CaseSensitive;
+        }
+
+        internal NameQuery Clone()
+        {
+            return (NameQuery)this.MemberwiseClone();
+        }
     }
 }

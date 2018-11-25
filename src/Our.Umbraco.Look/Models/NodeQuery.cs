@@ -1,4 +1,6 @@
-﻿namespace Our.Umbraco.Look.Models
+﻿using System.Linq;
+
+namespace Our.Umbraco.Look.Models
 {
     public class NodeQuery
     {
@@ -34,5 +36,21 @@
         //    this.TypeAliases = new string[] { typeAlias };
         //    this.ExcludeIds = new int[] { notId };
         //}
+
+        public override bool Equals(object obj)
+        {
+            NodeQuery nodeQuery = obj as NodeQuery;
+
+            return nodeQuery != null
+                && ((nodeQuery.TypeAliases == null && this.TypeAliases == null)
+                    || (nodeQuery.TypeAliases != null && this.TypeAliases != null && nodeQuery.TypeAliases.SequenceEqual(this.TypeAliases)))
+                && ((nodeQuery.NotIds == null && this.NotIds == null)
+                    || (nodeQuery.NotIds != null && this.NotIds != null && nodeQuery.NotIds.SequenceEqual(this.NotIds)));
+        }
+
+        internal NodeQuery Clone()
+        {
+            return (NodeQuery)this.MemberwiseClone();
+        }
     }
 }

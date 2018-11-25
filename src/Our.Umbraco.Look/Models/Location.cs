@@ -37,6 +37,19 @@ namespace Our.Umbraco.Look.Models
             return this.Latitude.ToString() + "|" + this.Longitude.ToString();
         }
 
+        public override bool Equals(object obj)
+        {
+            var locationQuery = obj as LocationQuery;
+
+            return locationQuery != null
+                && locationQuery.ToString() == this.ToString();
+        }
+
+        internal Location Clone()
+        {
+            return (Location)this.MemberwiseClone();
+        }
+
         internal static Location FromString(string value)
         {
             Location location = null;

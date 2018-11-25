@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Our.Umbraco.Look.Models
 {
@@ -34,6 +35,25 @@ namespace Our.Umbraco.Look.Models
             }
 
             return lookTags.ToArray();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var tagQuery = obj as TagQuery;
+
+            return tagQuery != null
+                && ((tagQuery.AllTags == null && this.AllTags == null)
+                    || (tagQuery.AllTags != null && this.AllTags != null && tagQuery.AllTags.SequenceEqual(this.AllTags)))
+                && ((tagQuery.AnyTags == null && this.AnyTags == null)
+                    || (tagQuery.AnyTags != null && this.AnyTags != null && tagQuery.AnyTags.SequenceEqual(this.AnyTags)))
+                && ((tagQuery.NotTags == null && this.NotTags == null)
+                    || (tagQuery.NotTags != null && this.NotTags != null && tagQuery.NotTags.SequenceEqual(this.NotTags)))
+                && tagQuery.GetFacets == this.GetFacets;
+        }
+
+        internal TagQuery Clone()
+        {
+            return (TagQuery)this.MemberwiseClone();
         }
     }
 }

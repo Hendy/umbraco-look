@@ -33,5 +33,20 @@
         //{
         //	this.SearchText = searchText;
         //}	
+
+        public override bool Equals(object obj)
+        {
+            var textQuery = obj as TextQuery;
+
+            return textQuery != null
+                && textQuery.SearchText == this.SearchText
+                && textQuery.GetHighlight == this.GetHighlight
+                && textQuery.GetText == this.GetText;
+        }
+
+        internal TextQuery Clone()
+        {
+            return (TextQuery)this.MemberwiseClone();
+        }
     }
 }

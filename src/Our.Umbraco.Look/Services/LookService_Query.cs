@@ -333,12 +333,11 @@ namespace Our.Umbraco.Look.Services
                         sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
                         break;
                 }
-
-                lookQuery.Compiled = new LookQueryCompiled(query, filter, sort, getHighlight, getDistance);
+                
+                lookQuery.Compiled = new LookQueryCompiled(lookQuery.Clone(), query, filter, sort, getHighlight, getDistance);
             }
 
-            // look query now compiled
-            // do the Lucene search
+            // look query compiled, so do the Lucene search
             var topDocs = searchingContext
                                 .IndexSearcher
                                 .Search(
