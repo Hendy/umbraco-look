@@ -120,6 +120,7 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	},
 
 	NameQuery = new NameQuery() {
+		Is = "Abc123Xyz", // the name must be equal to this string
 		StartsWith = "Abc", // the name must start with this string
 		EndsWith = "Xyz",  // the name must end with this string
 		Contains = "123", // the name must contain this string

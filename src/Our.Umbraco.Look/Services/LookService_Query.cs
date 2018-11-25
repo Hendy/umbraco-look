@@ -91,45 +91,60 @@ namespace Our.Umbraco.Look.Services
 
                     if (!string.IsNullOrEmpty(lookQuery.NameQuery.StartsWith))
                     {
-                        if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is) && !lookQuery.NameQuery.Is.StartsWith(lookQuery.NameQuery.StartsWith))
+                        if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is))
                         {
-                            return new LookResult("Conlict in NameQuery");
+                            if (!lookQuery.NameQuery.Is.StartsWith(lookQuery.NameQuery.StartsWith))
+                            {
+                                return new LookResult("Conlict in NameQuery");
+                            }
                         }
-
-                        wildcard1 = lookQuery.NameQuery.StartsWith + "*";
+                        else
+                        {
+                            wildcard1 = lookQuery.NameQuery.StartsWith + "*";
+                        }
                     }
 
                     if (!string.IsNullOrEmpty(lookQuery.NameQuery.EndsWith))
                     {
-                        if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is) && !lookQuery.NameQuery.Is.EndsWith(lookQuery.NameQuery.EndsWith))
+                        if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is))                            
                         {
-                            return new LookResult("Conlict in NameQuery");
-                        }
-
-                        if (wildcard1 == null)
-                        {
-                            wildcard1 = "*" + lookQuery.NameQuery.EndsWith;
+                            if (!lookQuery.NameQuery.Is.EndsWith(lookQuery.NameQuery.EndsWith))
+                            {
+                                return new LookResult("Conlict in NameQuery");
+                            }                            
                         }
                         else
                         {
-                            wildcard1 += lookQuery.NameQuery.EndsWith;
+                            if (wildcard1 == null)
+                            {
+                                wildcard1 = "*" + lookQuery.NameQuery.EndsWith;
+                            }
+                            else
+                            {
+                                wildcard1 += lookQuery.NameQuery.EndsWith;
+                            }
                         }
                     }
 
                     if (!string.IsNullOrEmpty(lookQuery.NameQuery.Contains))
                     {
-                        if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is) && !lookQuery.NameQuery.Is.Contains(lookQuery.NameQuery.Contains))
+                        if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is))
                         {
-                            return new LookResult("Conlict in NameQuery");
-                        }
-
-                        if (wildcard1 == null)
-                        {
-                            wildcard1 = "*" + lookQuery.NameQuery.Contains + "*";
+                            if (!lookQuery.NameQuery.Is.Contains(lookQuery.NameQuery.Contains))
+                            {
+                                return new LookResult("Conlict in NameQuery");
+                            }
                         }
                         else
                         {
-                            wildcard2 = "*" + lookQuery.NameQuery.Contains + "*";
+                            if (wildcard1 == null)
+                            {
+                                wildcard1 = "*" + lookQuery.NameQuery.Contains + "*";
+                            }
+                            else
+                            {
+                                wildcard2 = "*" + lookQuery.NameQuery.Contains + "*";
+                            }
                         }
                     }
 
