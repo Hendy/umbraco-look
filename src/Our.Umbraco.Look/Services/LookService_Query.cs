@@ -337,7 +337,9 @@ namespace Our.Umbraco.Look.Services
                 {
                     facets = new List<Facet>();
 
-                    Query facetQuery = lookQuery.Compiled.Filter != null ? (Query)new FilteredQuery(lookQuery.Compiled.Query, lookQuery.Compiled.Filter) : lookQuery.Compiled.Query;
+                    Query facetQuery = lookQuery.Compiled.Filter != null 
+                                            ? (Query)new FilteredQuery(lookQuery.Compiled.Query, lookQuery.Compiled.Filter) 
+                                            : lookQuery.Compiled.Query;
 
                     // do a facet query for each group in the array
                     foreach (var group in lookQuery.TagQuery.GetFacets)
@@ -372,7 +374,7 @@ namespace Our.Umbraco.Look.Services
                                         lookQuery);
             }
 
-            return new LookResult();
+            return new LookResult(lookQuery);
         }
     }
 }

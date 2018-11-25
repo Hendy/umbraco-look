@@ -59,12 +59,13 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Constructor for an empty result
         /// </summary>
-        internal LookResult()
+        internal LookResult(LookQuery lookQuery)
         {
             this._lookMatches = Enumerable.Empty<LookMatch>();
             this.Total = 0;
             this.Facets = new Facet[] { };
             this.Success = true;
+            this.CompiledQuery = lookQuery;
         }
 
         /// <summary>
