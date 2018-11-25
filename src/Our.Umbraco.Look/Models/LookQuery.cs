@@ -51,6 +51,11 @@
         internal string SearcherName { get; private set; }
 
         /// <summary>
+        /// Model representing collection of properties that have been processed from the raw LookQuery properties, and ready for a lucene query
+        /// </summary>
+        internal LookQueryCompiled Compiled { get; set; } = null;
+
+        /// <summary>
         /// Create a new Look query using the default Examine searcher (usually "ExternalSearcher", see config/ExamineSettings.config)
         /// </summary>
         public LookQuery()

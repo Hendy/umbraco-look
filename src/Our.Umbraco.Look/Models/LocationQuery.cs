@@ -17,7 +17,7 @@
         ///// </summary>
         ///// <param name="location"></param>
         ///// <param name="maxDistance"></param>
-        //public LocationQuery(Location location, Distance maxDistance)
+        //public LocationQuery(Location location, Distance maxDistance = null)
         //{
         //	this.Location = location;
         //	this.MaxDistance = maxDistance;
