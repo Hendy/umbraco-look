@@ -53,7 +53,7 @@
         /// <summary>
         /// 
         /// </summary>
-        private LookQueryCompiled _lookQueryCompiled = null;
+        private LookQueryCompiled _compiled = null;
 
         /// <summary>
         /// Model representing collection of properties that have been processed from the raw LookQuery properties, and ready for a lucene query
@@ -62,27 +62,27 @@
         {
             get
             {
-                if (this._lookQueryCompiled != null)
+                if (this._compiled != null)
                 {
-                    if (this._lookQueryCompiled.Source.RawQuery == this.RawQuery
-                        && this._lookQueryCompiled.Source.NodeQuery.Equals(this.NodeQuery)
-                        && this._lookQueryCompiled.Source.NameQuery.Equals(this.NameQuery)
-                        && this._lookQueryCompiled.Source.DateQuery.Equals(this.DateQuery)
-                        && this._lookQueryCompiled.Source.TextQuery.Equals(this.TextQuery)
-                        && this._lookQueryCompiled.Source.TagQuery.Equals(this.TagQuery)
-                        && this._lookQueryCompiled.Source.LocationQuery.Equals(this.LocationQuery))
+                    if (this._compiled.Source.RawQuery == this.RawQuery                        
+                        && ((this._compiled.Source.NodeQuery == null && this.NodeQuery == null) || this.NodeQuery != null && this.NodeQuery.Equals(this._compiled.Source.NodeQuery))
+                        && ((this._compiled.Source.NameQuery == null && this.NameQuery == null) || this.NameQuery != null && this.NameQuery.Equals(this._compiled.Source.NameQuery))
+                        && ((this._compiled.Source.DateQuery == null && this.DateQuery == null) || this.DateQuery != null && this.DateQuery.Equals(this._compiled.Source.DateQuery))
+                        && ((this._compiled.Source.TextQuery == null && this.TextQuery == null) || this.TextQuery != null && this.TextQuery.Equals(this._compiled.Source.TextQuery))
+                        && ((this._compiled.Source.TagQuery == null && this.TagQuery == null) || this.TagQuery != null && this.TagQuery.Equals(this._compiled.Source.TagQuery))
+                        && ((this._compiled.Source.LocationQuery == null && this.LocationQuery == null) || this.LocationQuery != null && this.LocationQuery.Equals(this._compiled.Source.LocationQuery)))
                     {
-                        return this._lookQueryCompiled;
+                        return this._compiled;
                     }
 
-                    this._lookQueryCompiled = null; // remove compiled as query has changed
+                    this._compiled = null; // remove compiled as query has changed
                 }
 
                 return null;
             }
             set
             {
-                this._lookQueryCompiled = value;
+                this._compiled = value;
             }
         }
 

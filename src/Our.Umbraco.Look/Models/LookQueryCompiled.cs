@@ -56,7 +56,7 @@ namespace Our.Umbraco.Look.Models
                     Func<string, IHtmlString> getHighlight, 
                     Func<int, double?> getDistance)
         {
-            this.Source = source;
+            this.Source = source.Clone();
             this.Query = query;
             this.Filter = filter;
             this.Sort = sort;

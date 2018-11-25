@@ -334,7 +334,7 @@ namespace Our.Umbraco.Look.Services
                         break;
                 }
                 
-                lookQuery.Compiled = new LookQueryCompiled(lookQuery.Clone(), query, filter, sort, getHighlight, getDistance);
+                lookQuery.Compiled = new LookQueryCompiled(lookQuery, query, filter, sort, getHighlight, getDistance);
             }
 
             // look query compiled, so do the Lucene search

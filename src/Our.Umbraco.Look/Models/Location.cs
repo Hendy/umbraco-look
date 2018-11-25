@@ -39,10 +39,10 @@ namespace Our.Umbraco.Look.Models
 
         public override bool Equals(object obj)
         {
-            var locationQuery = obj as LocationQuery;
+            var location = obj as Location;
 
-            return locationQuery != null
-                && locationQuery.ToString() == this.ToString();
+            return location != null
+                && location.ToString() == this.ToString();
         }
 
         internal Location Clone()
