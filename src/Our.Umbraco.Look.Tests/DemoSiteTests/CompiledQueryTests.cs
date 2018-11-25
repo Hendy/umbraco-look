@@ -20,10 +20,7 @@ namespace Our.Umbraco.Look.Tests
         [TestMethod]
         public void New_Query_Executed_To_Make_Compiled()
         {
-            var lookQuery = new LookQuery();
-
-            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
-            //lookQuery.NodeQuery = new NodeQuery("thing");
+            var lookQuery = new LookQuery() { NodeQuery = new NodeQuery("thing") };
 
             var lookResult = LookService.Query(lookQuery, this._searchingContext);
 
@@ -34,9 +31,7 @@ namespace Our.Umbraco.Look.Tests
         [TestMethod]
         public void Invalidate_Compiled_By_Raw_Query_Change()
         {
-            var lookQuery = new LookQuery();
-
-            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+            var lookQuery = new LookQuery() { NodeQuery = new NodeQuery("thing") };
 
             lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
@@ -48,9 +43,7 @@ namespace Our.Umbraco.Look.Tests
         [TestMethod]
         public void Invalidate_Compiled_By_Node_Query_Change()
         {
-            var lookQuery = new LookQuery();
-
-            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+            var lookQuery = new LookQuery() { NodeQuery = new NodeQuery("thing") };
 
             lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
@@ -62,9 +55,7 @@ namespace Our.Umbraco.Look.Tests
         [TestMethod]
         public void Invalidate_Compiled_By_Name_Query_Change()
         {
-            var lookQuery = new LookQuery();
-
-            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+            var lookQuery = new LookQuery() { NodeQuery = new NodeQuery("thing") };
 
             lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
@@ -76,9 +67,7 @@ namespace Our.Umbraco.Look.Tests
         [TestMethod]
         public void Invalidate_Compiled_By_Date_Query_Change()
         {
-            var lookQuery = new LookQuery();
-
-            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+            var lookQuery = new LookQuery() { NodeQuery = new NodeQuery("thing") };
 
             lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
@@ -90,9 +79,7 @@ namespace Our.Umbraco.Look.Tests
         [TestMethod]
         public void Invalidate_Compiled_By_Text_Query_Change()
         {
-            var lookQuery = new LookQuery();
-
-            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+            var lookQuery = new LookQuery() { NodeQuery = new NodeQuery("thing") };
 
             lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
@@ -104,9 +91,7 @@ namespace Our.Umbraco.Look.Tests
         [TestMethod]
         public void Invalidate_Compiled_By_Tag_Query_Change()
         {
-            var lookQuery = new LookQuery();
-
-            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+            var lookQuery = new LookQuery() { NodeQuery = new NodeQuery("thing") };
 
             lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
@@ -118,9 +103,7 @@ namespace Our.Umbraco.Look.Tests
         [TestMethod]
         public void Invalidate_Compiled_By_Location_Query_Change()
         {
-            var lookQuery = new LookQuery();
-
-            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+            var lookQuery = new LookQuery() { NodeQuery = new NodeQuery("thing") };
 
             lookQuery = LookService.Query(lookQuery, this._searchingContext).CompiledQuery;
 
@@ -132,9 +115,7 @@ namespace Our.Umbraco.Look.Tests
         [TestMethod]
         public void Re_Execute_Compiled_Expect_Same_Results()
         {
-            var lookQuery = new LookQuery();
-
-            lookQuery.NodeQuery.TypeAliases = new string[] { "thing" };
+            var lookQuery = new LookQuery() { NodeQuery = new NodeQuery("thing") };
 
             var results1 = LookService.Query(lookQuery, this._searchingContext);
             var results2 = LookService.Query(results1.CompiledQuery, this._searchingContext);

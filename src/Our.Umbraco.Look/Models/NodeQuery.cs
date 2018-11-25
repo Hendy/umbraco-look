@@ -15,16 +15,16 @@ namespace Our.Umbraco.Look.Models
         public int[] NotIds { get; set; } = null;
 
         /// <summary>
-        /// 
+        /// Create new empty NodeQuery search criteria
         /// </summary>
         public NodeQuery()
         {
         }
 
         /// <summary>
-        /// 
+        /// Create new NodeQuery search criteria, by content, media or member alias
         /// </summary>
-        /// <param name="typeAlias"></param>
+        /// <param name="typeAlias">the alias of the content, media or member</param>
         public NodeQuery(string typeAlias)
         {
             this.TypeAliases = new string[] { typeAlias };
