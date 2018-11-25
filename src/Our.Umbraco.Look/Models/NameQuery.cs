@@ -7,11 +7,32 @@ namespace Our.Umbraco.Look.Models
     /// </summary>
     public class NameQuery
     {
+        private string _is;
+
         private string _startsWith;
 
         private string _contains;
 
         private string _endsWith;
+
+        public string Is
+        {
+            get
+            {
+                return this._is;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    this._is = QueryParser.Escape(value);
+                }
+                else
+                {
+                    this._is = null;
+                }
+            }
+        }
 
         /// <summary>
         /// (Optional) set a string which the name must begin with
@@ -88,12 +109,23 @@ namespace Our.Umbraco.Look.Models
         public bool CaseSensitive { get; set; } = true;
 
         /// <summary>
-        /// Create a new NameQuery search criteria
+        /// Create a new NameQuery search criteria where the name must be the value supplied
+        /// </summary>
+        /// <param name="is">The value that the name should be</param>
+        /// <param name="caseSensitive">When true, the name search is case sensitive</param>
+        public NameQuery(string @is, bool caseSensitive = true)
+        {
+            this.Is = @is;
+            this.CaseSensitive = caseSensitive;
+        }
+
+        /// <summary>
+        /// Create a new NameQuery search criteria where the name is made up of the values supplied
         /// </summary>
         /// <param name="startsWith"></param>
         /// <param name="contains"></param>
         /// <param name="endsWith"></param>
-        /// <param name="caseSensitive"></param>
+        /// <param name="caseSensitive">When true, the name search is case sensitive</param>
         public NameQuery(string startsWith = null, string contains = null, string endsWith = null, bool caseSensitive = true)
         {
             this.StartsWith = startsWith;
@@ -107,6 +139,7 @@ namespace Our.Umbraco.Look.Models
             NameQuery nameQuery = obj as NameQuery;
 
             return nameQuery != null
+                && nameQuery.Is == this.Is
                 && nameQuery.StartsWith == this.StartsWith
                 && nameQuery.Contains == this.Contains
                 && nameQuery.EndsWith == this.EndsWith

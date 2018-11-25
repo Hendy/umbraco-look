@@ -91,11 +91,21 @@ namespace Our.Umbraco.Look.Services
 
                     if (!string.IsNullOrEmpty(lookQuery.NameQuery.StartsWith))
                     {
+                        if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is) && !lookQuery.NameQuery.Is.StartsWith(lookQuery.NameQuery.StartsWith))
+                        {
+                            return new LookResult("Conlict in NameQuery");
+                        }
+
                         wildcard1 = lookQuery.NameQuery.StartsWith + "*";
                     }
 
                     if (!string.IsNullOrEmpty(lookQuery.NameQuery.EndsWith))
                     {
+                        if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is) && !lookQuery.NameQuery.Is.EndsWith(lookQuery.NameQuery.EndsWith))
+                        {
+                            return new LookResult("Conlict in NameQuery");
+                        }
+
                         if (wildcard1 == null)
                         {
                             wildcard1 = "*" + lookQuery.NameQuery.EndsWith;
@@ -108,6 +118,11 @@ namespace Our.Umbraco.Look.Services
 
                     if (!string.IsNullOrEmpty(lookQuery.NameQuery.Contains))
                     {
+                        if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is) && !lookQuery.NameQuery.Is.Contains(lookQuery.NameQuery.Contains))
+                        {
+                            return new LookResult("Conlict in NameQuery");
+                        }
+
                         if (wildcard1 == null)
                         {
                             wildcard1 = "*" + lookQuery.NameQuery.Contains + "*";
@@ -118,9 +133,10 @@ namespace Our.Umbraco.Look.Services
                         }
                     }
 
+                    var nameField = lookQuery.NameQuery.CaseSensitive ? LookConstants.NameField : LookConstants.NameField + "_Lowered";
+
                     if (wildcard1 != null)
-                    {
-                        var nameField = lookQuery.NameQuery.CaseSensitive ? LookConstants.NameField : LookConstants.NameField + "_Lowered";
+                    {                        
                         var wildcard = lookQuery.NameQuery.CaseSensitive ? wildcard1 : wildcard1.ToLower();
 
                         query.Add(new WildcardQuery(new Term(nameField, wildcard)), BooleanClause.Occur.MUST);
@@ -131,6 +147,13 @@ namespace Our.Umbraco.Look.Services
 
                             query.Add(new WildcardQuery(new Term(nameField, wildcard)), BooleanClause.Occur.MUST);
                         }
+                    }
+
+                    if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is))
+                    {
+                        var isText = lookQuery.NameQuery.CaseSensitive ? lookQuery.NameQuery.Is : lookQuery.NameQuery.Is.ToLower();
+
+                        query.Add(new TermQuery(new Term(nameField, isText)), BooleanClause.Occur.MUST);
                     }
                 }
 
@@ -354,10 +377,10 @@ namespace Our.Umbraco.Look.Services
                 }
 
                 return new LookResult(LookService.GetLookMatches(
-                                                        lookQuery,
                                                         lookQuery.SearchingContext.IndexSearcher,
                                                         topDocs,
                                                         lookQuery.Compiled.GetHighlight,
+                                                        lookQuery.TextQuery != null && lookQuery.TextQuery.GetText,
                                                         lookQuery.Compiled.GetDistance),
                                         topDocs.TotalHits,
                                         facets != null ? facets.ToArray() : new Facet[] { },

@@ -13,7 +13,8 @@ namespace Our.Umbraco.Look.Tests.DemoSiteTests
             var lookResult = LookService.Query(
                                 new LookQuery(this._searchingContext) {
                                         NameQuery = new NameQuery() {
-                                            StartsWith = "T",
+                                            Is = "Baseball",
+                                            StartsWith = "B",
                                             CaseSensitive = true
                                         }
                                 });
