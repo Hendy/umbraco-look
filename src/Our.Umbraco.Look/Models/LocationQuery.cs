@@ -13,14 +13,22 @@
         public Distance MaxDistance { get; set; } = null;
 
         ///// <summary>
-        ///// Constructor - used to ensure both location & max distance supplied
+        ///// 
+        ///// </summary>
+        //public LocationQuery()
+        //{
+
+        //}
+
+        ///// <summary>
+        ///// 
         ///// </summary>
         ///// <param name="location"></param>
         ///// <param name="maxDistance"></param>
         //public LocationQuery(Location location, Distance maxDistance = null)
         //{
-        //	this.Location = location;
-        //	this.MaxDistance = maxDistance;
+        //    this.Location = location;
+        //    this.MaxDistance = maxDistance;
         //}
 
         public override bool Equals(object obj)

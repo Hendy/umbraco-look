@@ -124,7 +124,7 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 		StartsWith = "Abc", // the name must start with this string
 		EndsWith = "Xyz",  // the name must end with this string
 		Contains = "123", // the name must contain this string
-		CaseSenstive = true // applies to all StartsWith, EndsWith, Contains
+		CaseSenstive = true // applies to all: Is, StartsWith, EndsWith & Contains
 	},
 
 	DateQuery = new DateQuery() {
@@ -138,20 +138,11 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 		GetText = true // raw text field should be returned (potentially a large document)
 	},
 
-	TagQuery = new TagQuery() {
-
-		// all of these tags must be present
-		AllTags = TagQuery.MakeTags("size:large"),
-		
-		// at least one of these tags must be present (if single tag, then it's deemed mandatory as per AllTags)
-		AnyTags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue")
-
-		// none of these tags must be present 
-		// ('not' always takes priority - any query contradictions will return an empty result with message)
-		NotTags = TagQuery.MakeTags("colour:black"),
-
-		// request facet counts for all tags in the following groups
-		GetFacets = new string[] { "colour", "size", "shape" }
+	TagQuery = new TagQuery() {		
+		AllTags = TagQuery.MakeTags("size:large"), // all of these tags must be present
+		AnyTags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags must be present (if single tag, then it's deemed mandatory as per AllTags)
+		NotTags = TagQuery.MakeTags("colour:black"), // none of these tags must be present ('not' always takes priority - any query contradictions will return an empty result with message)
+		GetFacets = new string[] { "colour", "size", "shape" } // request facet counts for all tags in the following groups
 	},
 
 	LocationQuery = new LocationQuery() {

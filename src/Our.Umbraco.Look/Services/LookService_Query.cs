@@ -345,17 +345,24 @@ namespace Our.Umbraco.Look.Services
                     //    break;
                 }
                 
-                lookQuery.Compiled = new LookQueryCompiled(lookQuery, query, filter, sort, getHighlight, getDistance);
+                lookQuery.Compiled = new LookQueryCompiled(
+                                                    lookQuery, 
+                                                    query, 
+                                                    filter, 
+                                                    sort ?? new Sort(SortField.FIELD_SCORE), 
+                                                    getHighlight, 
+                                                    getDistance);
             }
 
             // look query compiled, so do the Lucene search
-            var topDocs = lookQuery.SearchingContext
-                                    .IndexSearcher
-                                    .Search(
-                                        lookQuery.Compiled.Query,
-                                        lookQuery.Compiled.Filter,
-                                        LookService.MaxLuceneResults,
-                                        lookQuery.Compiled.Sort ?? new Sort(SortField.FIELD_SCORE));
+            var topDocs = lookQuery
+                            .SearchingContext
+                            .IndexSearcher
+                            .Search(
+                                lookQuery.Compiled.Query,
+                                lookQuery.Compiled.Filter,
+                                LookService.MaxLuceneResults,
+                                lookQuery.Compiled.Sort);
 
             if (topDocs.TotalHits > 0)
             {
