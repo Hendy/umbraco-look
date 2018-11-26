@@ -70,8 +70,7 @@ namespace Our.Umbraco.Look.Services
                     doc.Get(LookConstants.DateField).LuceneStringToDate(),
                     doc.Get(LookConstants.NameField),
                     doc.Get(LookConstants.LocationField) != null ? Location.FromString(doc.Get(LookConstants.LocationField)) : null,
-                    getDistance(docId),
-                    scoreDoc.score
+                    getDistance(docId)
                 );
                 
                 yield return lookMatch;

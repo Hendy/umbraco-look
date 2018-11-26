@@ -244,11 +244,6 @@ public class LookMatch
 	/// The calculated distance (only returned if a location supplied in query)
 	/// </summary>
 	public double? Distance { get; }
-
-	/// <summary>
-	/// The Lucene score for this match
-	/// </summary>
-	public float Score { get; }
 }
 ```
 

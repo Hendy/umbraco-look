@@ -61,11 +61,6 @@ namespace Our.Umbraco.Look.Models
         public double? Distance { get; }
 
         /// <summary>
-        /// The Lucene score for this match
-        /// </summary>
-        public float Score { get; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="id"></param>
@@ -77,7 +72,6 @@ namespace Our.Umbraco.Look.Models
         /// <param name="name"></param>
         /// <param name="location"></param>
         /// <param name="distance"></param>
-        /// <param name="score"></param>
         internal LookMatch(
                     int id,
                     NodeType nodeType,
@@ -87,8 +81,7 @@ namespace Our.Umbraco.Look.Models
                     DateTime? date,
                     string name,
                     Location location,
-                    double? distance,
-                    float score)
+                    double? distance)
         {
             this.Id = id;
             this.NodeType = nodeType;
@@ -99,7 +92,6 @@ namespace Our.Umbraco.Look.Models
             this.Name = name;
             this.Location = location;
             this.Distance = distance;
-            this.Score = score;
 
             this._node = new Lazy<IPublishedContent>(() => {
 
