@@ -16,11 +16,11 @@ using Our.Umbraco.Look.Models;
 ## Indexing
 
 Look automatically hooks into all Umbraco Exmaine indexers (by default "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see /config/ExamineSettings.config)
-offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data for the Umbraco content, media or member being indexed. 
+offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data. 
 
 To configure the indexing behaviour, custom functions can be set via static methods on the LookService (all are optional).
-At index-time each of these custom functions will be given the IPublishedContent of the item being indexed and the name of the Exmaine index being used. If a custom function
-returns a value, then it will be stored in custom Lucene field(s) (prefixed with "Look_"), otherwise a null return indicates no change.
+At index-time each of these custom functions will be given the IPublishedContent of the content, media or member being indexed and the name of the Exmaine index being used. If a custom function
+is not set, or returns a null, then no change takes place, otherwise a returned value will be indexed into custom Lucene field(s) (prefixed with "Look_").
 
 The static method definitions on the LookService where the custom indexing functions can be set:
 
@@ -161,11 +161,31 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 ```csharp
 // perform the search
 var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model.LookResult
+```
 
-var totalResults = lookResult.Total; // total number of item expected in the lookResult enumerable
-var results = lookResult.ToArray(); // enumerates to return Our.Umbraco.Look.Models.LookMatch[]
-var facets = lookResult.Facets; // returns Our.Umbraco.Look.Models.Facet[]
-var query = lookResult.CompiledQuery; // returns Our.Umbraco.Look.Models.LookQuery (useful for paging re-queries)
+```csharp
+ public class LookResult : IEnumerable<LookMatch>
+{
+        /// <summary>
+        /// Expected total number of results expected in the enumerable of LookMatch results
+        /// </summary>
+        public int Total { get; }
+
+        /// <summary>
+        /// Any returned facets
+        /// </summary>
+        public Facet[] Facets { get; }
+
+        /// <summary>
+        /// When true, indicates the Look Query was parsed and executed correctly
+        /// </summary>
+        public bool Success { get; }
+
+        /// <summary>
+        /// Returns the compiled look query (useful for subsequent paging queries)
+        /// </summary>
+        public LookQuery CompiledQuery { get; }
+}
 ```
 
 ```csharp
@@ -240,25 +260,23 @@ public class Facet
 
 ### Tags
 
-// A tag can be any string and exists within an optionally specified group.
-// If a group isn't set, then the tag is put into a default un-named group.
-// A LookTag can be created form a raw string (where the first colon char ':' is
-// used as an optional delimiter between a group/tag) or via a named group, tag overload.
-// A LookTag array can also be made via a static helper on the TagQuery mode.
-// eg.
-//	var tag1 = new LookTag("red"); // tag 'red', in default un-named group ''
-//	var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
-//	var tag3 = new LookTag("colour", "red"); // tag 'red', in group 'colour'
-//	var tags = TagQuery.MakeTags("colour:red", "colour:green"); // tags 'red' and 'green', both in group 'colour'
+A tag can be any string and exists within an optionally specified group. If a group isn't set, then the tag is put into a default un-named group.
+A LookTag can be created form a raw string (where the first colon char ':' is used as an optional delimiter between a group/tag) or via a named group, tag overload.
+A LookTag array can also be made via a static helper on the TagQuery mode.
+eg.
 
-
+```csharp
+var tag1 = new LookTag("red"); // tag 'red', in default un-named group ''
+var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
+var tag3 = new LookTag("colour", "red"); // tag 'red', in group 'colour'
+var tags = TagQuery.MakeTags("colour:red", "colour:green"); // tags 'red' and 'green', both in group 'colour'
+```
 
 ```csharp
 public class LookTag
 {
 	/// <summary>
-	/// The tag group - this is used as a custom Lucene field, and must contain only
-	/// alphanumeric / underscore chars and be less than 50 chars.
+	/// The tag group - this is used as a custom Lucene field, and must contain only alphanumeric / underscore chars and be less than 50 chars.
 	/// </summary>
 	public string Group { get; set; }
 
