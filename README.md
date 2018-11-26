@@ -204,6 +204,11 @@ public class LookMatch
 	/// Lazy evaluation of the associated IPublishedContent
 	/// </summary>
 	public IPublishedContent Node { get; }
+
+	/// <summary>
+	/// Enum flag to indicate if the IPublishedContent node is Content, Media or a Member
+	/// </summary>
+	public NodeType NodeType { get; }
 	
 	/// <summary>
 	/// The custom name field

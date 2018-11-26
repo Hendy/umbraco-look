@@ -1,11 +1,13 @@
 ﻿using Examine.LuceneEngine;
 using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
+using System;
 using System.IO;
 using System.Web;
 using System.Web.Hosting;
 using Umbraco.Core;
 using Umbraco.Core.Configuration;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 using Umbraco.Web.Routing;
@@ -60,9 +62,9 @@ namespace Our.Umbraco.Look.Events
                     {
                         publishedContent = umbracoHelper.TypedMember(e.NodeId);
                     }
-                    catch
+                    catch (Exception exception)
                     {
-                        // suppress error
+                        LogHelper.WarnWithException(typeof(Indexing), "Handling legacy Umbraco exception - failed to get member by id", exception);
                     }
 
                     if (publishedContent != null)

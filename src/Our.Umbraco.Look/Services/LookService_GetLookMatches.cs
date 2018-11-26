@@ -31,6 +31,7 @@ namespace Our.Umbraco.Look.Services
             var fields = new List<string>();
 
             fields.Add(LuceneIndexer.IndexNodeIdFieldName); // "__NodeId"
+            fields.Add(LookConstants.NodeTypeField);
             fields.Add(LookConstants.NameField);
             fields.Add(LookConstants.DateField);
 
@@ -41,6 +42,9 @@ namespace Our.Umbraco.Look.Services
             fields.Add(LookConstants.LocationField);
 
             var mapFieldSelector = new MapFieldSelector(fields.ToArray());
+
+            // there should always be a valid node type value to parse
+            var getNodeType = new Func<string, NodeType>(x => { Enum.TryParse(x, out NodeType nodeType); return nodeType; });
 
             // if highlight func does not exist, then create one to always return null
             if (getHighlight == null) { getHighlight = x => null; }
@@ -59,6 +63,7 @@ namespace Our.Umbraco.Look.Services
 
                 var lookMatch = new LookMatch(
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
+                    getNodeType(doc.Get(LookConstants.NodeTypeField)),
                     getHighlight(doc.Get(LookConstants.TextField)),
                     getText ? doc.Get(LookConstants.TextField) : null,
                     getTags(doc.GetFields(LookConstants.AllTagsField)),

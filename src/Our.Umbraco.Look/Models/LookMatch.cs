@@ -21,6 +21,11 @@ namespace Our.Umbraco.Look.Models
         public IPublishedContent Node => this._node.Value;
 
         /// <summary>
+        /// Enum flag to indicate if the IPublishedContent node is Content, Media or a Member
+        /// </summary>
+        public NodeType NodeType { get; }
+
+        /// <summary>
         /// Highlight text (containing search text) extracted from from the full text
         /// </summary>
         public IHtmlString Highlight { get; }
@@ -64,6 +69,7 @@ namespace Our.Umbraco.Look.Models
         /// Constructor
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="nodeType"></param>
         /// <param name="highlight"></param>
         /// <param name="text"></param>
         /// <param name="tags"></param>
@@ -74,6 +80,7 @@ namespace Our.Umbraco.Look.Models
         /// <param name="score"></param>
         internal LookMatch(
                     int id,
+                    NodeType nodeType,
                     IHtmlString highlight,
                     string text,
                     LookTag[] tags,
@@ -84,6 +91,7 @@ namespace Our.Umbraco.Look.Models
                     float score)
         {
             this.Id = id;
+            this.NodeType = nodeType;
             this.Highlight = highlight;
             this.Text = text;
             this.Tags = tags;
