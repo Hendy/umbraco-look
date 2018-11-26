@@ -173,6 +173,11 @@ var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model
  public class LookResult : IEnumerable<LookMatch>
 {
 	/// <summary>
+	/// When true, indicates the Look Query was parsed and executed correctly
+	/// </summary>
+	public bool Success { get; }
+	
+	/// <summary>
 	/// Expected total number of results expected in the enumerable of LookMatch results
 	/// </summary>
 	public int Total { get; }
@@ -181,11 +186,6 @@ var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model
 	/// Any returned facets
 	/// </summary>
 	public Facet[] Facets { get; }
-
-	/// <summary>
-	/// When true, indicates the Look Query was parsed and executed correctly
-	/// </summary>
-	public bool Success { get; }
 
 	/// <summary>
 	/// Returns the compiled look query (useful for subsequent paging queries)

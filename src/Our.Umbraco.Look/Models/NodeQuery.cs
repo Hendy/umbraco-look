@@ -26,39 +26,36 @@ namespace Our.Umbraco.Look.Models
         {
         }
 
-        ///// <summary>
-        ///// Create new NodeQuery search criteria for nodes of a given type, eg content, media or members
-        ///// </summary>
-        ///// <param name="nodeType"></param>
-        //public NodeQuery(NodeType nodeType)
-        //{
-        //    this.NodeTypes = new NodeType[] { nodeType };
-        //}
-
         /// <summary>
-        /// Create new NodeQuery search criteria, by content, media or member alias
+        /// Create new NodeQuery search criteria for nodes of a given type, eg content, media or members
         /// </summary>
-        /// <param name="typeAlias">the alias of the content, media or member</param>
-        public NodeQuery(string typeAlias)
+        /// <param name="nodeType">The node type. eg. content, media or member</param>
+        public NodeQuery(NodeType nodeType)
         {
-            this.Aliases = new string[] { typeAlias };
+            this.Types = new NodeType[] { nodeType };
         }
 
-        //public NodeQuery(NodeType nodeType, string alias)
-        //{
+        /// <summary>
+        /// Create new NodeQuery search criteria for nodes of a given alias
+        /// </summary>
+        /// <param name="alias">the alias of the content, media or member</param>
+        public NodeQuery(string alias)
+        {
+            this.Aliases = new string[] { alias };
+        }
 
-        //}
+        /// <summary>
+        /// Create new NodeQuery search critera for nodes of a given type and alias
+        /// </summary>
+        /// <param name="nodeType">The node type. eg. content, media or member</param>
+        /// <param name="alias">the alias of the content, media or member</param>
+        public NodeQuery(NodeType nodeType, string alias)
+        {
+            this.Types = new NodeType[] { nodeType };
+            this.Aliases = new string[] { alias };
+        }
 
-        //public NodeQuery(int notId)
-        //{
-        //    this.ExcludeIds = new int[] { notId };
-        //}
-
-        //public NodeQuery(string typeAlias, int notId)
-        //{
-        //    this.TypeAliases = new string[] { typeAlias };
-        //    this.ExcludeIds = new int[] { notId };
-        //}
+        // TODO: overloads for not id(s) ?
 
         public override bool Equals(object obj)
         {
