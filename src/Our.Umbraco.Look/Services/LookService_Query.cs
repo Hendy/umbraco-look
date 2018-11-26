@@ -247,11 +247,11 @@ namespace Our.Umbraco.Look.Services
 
                 if (lookQuery.TagQuery != null)
                 {
-                    if (lookQuery.TagQuery.AllTags != null)
+                    if (lookQuery.TagQuery.All != null)
                     {
-                        if (lookQuery.TagQuery.NotTags != null)
+                        if (lookQuery.TagQuery.Not != null)
                         {
-                            var conflictTags = lookQuery.TagQuery.AllTags.Where(x => !lookQuery.TagQuery.NotTags.Contains(x));
+                            var conflictTags = lookQuery.TagQuery.All.Where(x => !lookQuery.TagQuery.Not.Contains(x));
 
                             if (conflictTags.Any())
                             {
@@ -259,7 +259,7 @@ namespace Our.Umbraco.Look.Services
                             }
                         }
 
-                        foreach (var tag in lookQuery.TagQuery.AllTags)
+                        foreach (var tag in lookQuery.TagQuery.All)
                         {
                             query.Add(
                                     new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
@@ -267,11 +267,11 @@ namespace Our.Umbraco.Look.Services
                         }
                     }
 
-                    if (lookQuery.TagQuery.AnyTags != null)
+                    if (lookQuery.TagQuery.Any != null)
                     {
-                        if (lookQuery.TagQuery.NotTags != null)
+                        if (lookQuery.TagQuery.Not != null)
                         {
-                            var conflictTags = lookQuery.TagQuery.AnyTags.Where(x => !lookQuery.TagQuery.NotTags.Contains(x));
+                            var conflictTags = lookQuery.TagQuery.Any.Where(x => !lookQuery.TagQuery.Not.Contains(x));
 
                             if (conflictTags.Any())
                             {
@@ -281,7 +281,7 @@ namespace Our.Umbraco.Look.Services
 
                         var anyTagQuery = new BooleanQuery();
 
-                        foreach (var tag in lookQuery.TagQuery.AnyTags)
+                        foreach (var tag in lookQuery.TagQuery.Any)
                         {
                             anyTagQuery.Add(
                                             new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
@@ -291,9 +291,9 @@ namespace Our.Umbraco.Look.Services
                         query.Add(anyTagQuery, BooleanClause.Occur.MUST);
                     }
 
-                    if (lookQuery.TagQuery.NotTags != null)
+                    if (lookQuery.TagQuery.Not != null)
                     {
-                        foreach (var tag in lookQuery.TagQuery.NotTags)
+                        foreach (var tag in lookQuery.TagQuery.Not)
                         {
                             query.Add(
                                 new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),

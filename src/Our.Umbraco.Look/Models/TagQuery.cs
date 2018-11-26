@@ -5,11 +5,11 @@ namespace Our.Umbraco.Look.Models
 {
     public class TagQuery
     {
-        public LookTag[] AllTags { get; set; }
+        public LookTag[] All { get; set; }
 
-        public LookTag[] AnyTags { get; set; }
+        public LookTag[] Any { get; set; }
 
-        public LookTag[] NotTags { get; set; }
+        public LookTag[] Not { get; set; }
 
         /// <summary>
         /// when null, facets are not calculated, but when string[], each string value represents the tag group field to facet on, the empty string or whitespace = empty group
@@ -47,12 +47,9 @@ namespace Our.Umbraco.Look.Models
             var tagQuery = obj as TagQuery;
 
             return tagQuery != null
-                && ((tagQuery.AllTags == null && this.AllTags == null)
-                    || (tagQuery.AllTags != null && this.AllTags != null && tagQuery.AllTags.SequenceEqual(this.AllTags)))
-                && ((tagQuery.AnyTags == null && this.AnyTags == null)
-                    || (tagQuery.AnyTags != null && this.AnyTags != null && tagQuery.AnyTags.SequenceEqual(this.AnyTags)))
-                && ((tagQuery.NotTags == null && this.NotTags == null)
-                    || (tagQuery.NotTags != null && this.NotTags != null && tagQuery.NotTags.SequenceEqual(this.NotTags)))
+                && ((tagQuery.All == null && this.All == null) || (tagQuery.All != null && this.All != null && tagQuery.All.SequenceEqual(this.All)))
+                && ((tagQuery.Any == null && this.Any == null) || (tagQuery.Any != null && this.Any != null && tagQuery.Any.SequenceEqual(this.Any)))
+                && ((tagQuery.Not == null && this.Not == null) || (tagQuery.Not != null && this.Not != null && tagQuery.Not.SequenceEqual(this.Not)))
                 && tagQuery.GetFacets == this.GetFacets;
         }
 
