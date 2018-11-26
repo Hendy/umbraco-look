@@ -16,6 +16,15 @@ namespace Our.Umbraco.Look.Services
         /// <param name="document"></param>
         internal static void Index(IndexingContext indexingContext, Document document)
         {
+            var nodeTypeField = new Field(
+                                        LookConstants.NodeTypeField,
+                                        indexingContext.NodeType.ToString(),
+                                        Field.Store.NO,
+                                        Field.Index.NOT_ANALYZED,
+                                        Field.TermVector.NO);
+
+            document.Add(nodeTypeField);
+
             if (LookService.Instance.NameIndexer != null)
             {
                 string name = null;

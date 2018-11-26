@@ -5,6 +5,11 @@ namespace Our.Umbraco.Look.Models
     public class NodeQuery
     {
         /// <summary>
+        /// The types of node to find, eg. Content, Media, Members
+        /// </summary>
+        public NodeType[] Types { get; set; } = null;
+
+        /// <summary>
         /// Collection of Node type aliases that a results can be any one of (when empty = has no effect)
         /// </summary>
         public string[] TypeAliases { get; set; } = null; // TODO: rename to aliases ?
@@ -21,6 +26,15 @@ namespace Our.Umbraco.Look.Models
         {
         }
 
+        ///// <summary>
+        ///// Create new NodeQuery search criteria for nodes of a given type, eg content, media or members
+        ///// </summary>
+        ///// <param name="nodeType"></param>
+        //public NodeQuery(NodeType nodeType)
+        //{
+        //    this.NodeTypes = new NodeType[] { nodeType };
+        //}
+
         /// <summary>
         /// Create new NodeQuery search criteria, by content, media or member alias
         /// </summary>
@@ -29,6 +43,11 @@ namespace Our.Umbraco.Look.Models
         {
             this.TypeAliases = new string[] { typeAlias };
         }
+
+        //public NodeQuery(NodeType nodeType, string alias)
+        //{
+
+        //}
 
         //public NodeQuery(int notId)
         //{

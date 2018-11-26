@@ -59,6 +59,21 @@ namespace Our.Umbraco.Look.Services
 
                 if (lookQuery.NodeQuery != null)
                 {
+                    if (lookQuery.NodeQuery.Types != null)
+                    {
+                        var nodeTypeQuery = new BooleanQuery();
+
+                        foreach(var nodeType in lookQuery.NodeQuery.Types)
+                        {
+                            nodeTypeQuery.Add(
+                                new TermQuery(
+                                    new Term(LookConstants.NodeTypeField, nodeType.ToString())),
+                                    BooleanClause.Occur.SHOULD);
+                        }
+
+                        query.Add(nodeTypeQuery, BooleanClause.Occur.MUST);
+                    }
+
                     if (lookQuery.NodeQuery.TypeAliases != null)
                     {
                         var typeAliasQuery = new BooleanQuery();

@@ -1,5 +1,4 @@
 ﻿using Examine.LuceneEngine;
-using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
 using System.IO;
@@ -38,13 +37,45 @@ namespace Our.Umbraco.Look.Events
         /// <param name="indexerName"></param>
         private void Indexer_DocumentWriting(object sender, DocumentWritingEventArgs e, UmbracoHelper umbracoHelper, string indexerName)
         {
-            IPublishedContent publishedContent = umbracoHelper.GetPublishedContent(e.NodeId);
+            IPublishedContent publishedContent = null;
+            NodeType? nodeType = null;
+
+            publishedContent = umbracoHelper.TypedContent(e.NodeId);
 
             if (publishedContent != null)
             {
+                nodeType = NodeType.Content;
+            }
+            else // attempt to get as media
+            {
+                publishedContent = umbracoHelper.TypedMedia(e.NodeId);
+
+                if (publishedContent != null)
+                {
+                    nodeType = NodeType.Media;
+                }
+                else // attempt to get as member
+                { 
+                    try
+                    {
+                        publishedContent = umbracoHelper.TypedMember(e.NodeId);
+                    }
+                    catch
+                    {
+                        // suppress error
+                    }
+
+                    if (publishedContent != null)
+                    {
+                        nodeType = NodeType.Member;
+                    }
+                }
+            }
+            if (publishedContent != null && nodeType.HasValue)
+            {
                 this.EnsureUmbracoContext();
 
-                var indexingContext = new IndexingContext(publishedContent, indexerName);
+                var indexingContext = new IndexingContext(publishedContent, nodeType.Value, indexerName);
 
                 LookService.Index(indexingContext, e.Document);
             }

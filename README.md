@@ -52,6 +52,11 @@ public class IndexingContext
 	public IPublishedContent Item { get; }
 
 	/// <summary>
+    /// Enum to indicate whether the IPublishedContent is Content, Media or Member
+    /// </summary>
+    public NodeType NodeType { get; }
+
+	/// <summary>
 	/// The name of the Examine indexer into which this item is being indexed
 	/// </summary>
 	public string IndexerName { get; }
@@ -115,7 +120,8 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	RawQuery = "+path: 1059",
 
 	NodeQuery = new NodeQuery() {
-		TypeAliases = new string[] { "myDocTypeAlias" },
+		Types = new NodeType[] { NodeType.Content, NodeType.Media, NodeType.Member },
+		TypeAliases = new string[] { "myDocTypeAlias" }, // TODO: rename to Aliases
 		NotIds = new int[] { 123 } // (eg. exclude current page)
 	},
 
@@ -130,6 +136,7 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	DateQuery = new DateQuery() {
 		After = new DateTime(2005, 02, 16),
 		Before = null
+		//TODO: boundary mode
 	},
 
 	TextQuery = new TextQuery() {
@@ -148,6 +155,7 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	LocationQuery = new LocationQuery() {
 		Location = new Location(55.406330, 10.388500), // a location means distance results can be set
 		MaxDistance = new Distance(500, DistanceUnit.Miles)  // limits the results to within this distance
+		// TODO: GetFacets = Distance[]
 	},
 
 	SortOn = SortOn.Distance // other sorts are: Score (default), Name, DateAscending, DateDescending
