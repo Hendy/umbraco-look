@@ -203,9 +203,9 @@ public class LookMatch
 	public int Id { get; }
 	
 	/// <summary>
-	/// Lazy evaluation of the associated IPublishedContent item
+	/// Lazy evaluation of the associated IPublishedContent
 	/// </summary>
-	public IPublishedContent Item { get; }
+	public IPublishedContent Node { get; }
 	
 	/// <summary>
 	/// The custom name field

@@ -8,7 +8,7 @@ namespace Our.Umbraco.Look.Models
 {
     public class LookMatch
     {
-        private Lazy<IPublishedContent> _item;
+        private Lazy<IPublishedContent> _node;
 
         /// <summary>
         /// The Umbraco (content, media or member) Id of the matched item
@@ -18,7 +18,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Lazy evaluation of Item for IPublishedContent
         /// </summary>
-        public IPublishedContent Item => this._item.Value;
+        public IPublishedContent Node => this._node.Value;
 
         /// <summary>
         /// Highlight text (containing search text) extracted from from the full text
@@ -93,7 +93,7 @@ namespace Our.Umbraco.Look.Models
             this.Distance = distance;
             this.Score = score;
 
-            this._item = new Lazy<IPublishedContent>(() => {
+            this._node = new Lazy<IPublishedContent>(() => {
 
                 var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
 
