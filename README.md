@@ -79,26 +79,24 @@ public class ConfigureIndexing : ApplicationEventHandler
 		// return the UpdateDate of the IPublishedContent
 		LookService.SetDateIndexer(indexingContext => { return indexingContext.Node.UpdateDate; });
 
-		// eg. if content, trigger a web request and scrape markup to index
-		LookService.SetTextIndexer(indexingContext => { return null; });
+		// return text string or null
+		LookService.SetTextIndexer(indexingContext => { 
+			if (indexingContext.NodeType == NodeType.Content) {
+			 // eg. make web request and scrape markup to index
+			}
+			return null; 
+		});
 
-		// return a collection of tags
+		// return an Our.Umbraco.Look.Models.LookTag[] or null (see tags section below)
 		LookService.SetTagIndexer(indexingContext => {
-			// eg. return new LookTag[] { new LookTag("colour:Red") }; // (or null to not index)
-
 			// eg a nuPicker
 			var picker = indexingContext.Node.GetPropertyValue<Picker>("colours");
 
-			return picker
-				.AsPublishedContent()
-				.Select(x => new LookTag("colour", x.Name))
-				.ToArray();
+			return picker.PickedKeys.Select(x => new LookTag("colour", x)).ToArray();
 		});
 
-		// return a location
+		// return an Our.Umbraco.Look.Model.Location or null
 		LookService.SetLocationIndexer(indexingContext => {
-			// eg. return new Location(55.406330, 10.388500); // (or null to not index)
-
 			// eg. using Terratype			 
 			var terratype = indexingContext.Node.GetPropertyValue<Terratype.Models.Model>("location");
 			var terratypeLatLng = terratype.Position.ToWgs84();
@@ -172,25 +170,25 @@ var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model
 ```csharp
  public class LookResult : IEnumerable<LookMatch>
 {
-        /// <summary>
-        /// Expected total number of results expected in the enumerable of LookMatch results
-        /// </summary>
-        public int Total { get; }
+	/// <summary>
+	/// Expected total number of results expected in the enumerable of LookMatch results
+	/// </summary>
+	public int Total { get; }
 
-        /// <summary>
-        /// Any returned facets
-        /// </summary>
-        public Facet[] Facets { get; }
+	/// <summary>
+	/// Any returned facets
+	/// </summary>
+	public Facet[] Facets { get; }
 
-        /// <summary>
-        /// When true, indicates the Look Query was parsed and executed correctly
-        /// </summary>
-        public bool Success { get; }
+	/// <summary>
+	/// When true, indicates the Look Query was parsed and executed correctly
+	/// </summary>
+	public bool Success { get; }
 
-        /// <summary>
-        /// Returns the compiled look query (useful for subsequent paging queries)
-        /// </summary>
-        public LookQuery CompiledQuery { get; }
+	/// <summary>
+	/// Returns the compiled look query (useful for subsequent paging queries)
+	/// </summary>
+	public LookQuery CompiledQuery { get; }
 }
 ```
 
