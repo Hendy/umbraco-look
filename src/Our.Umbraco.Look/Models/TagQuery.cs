@@ -15,7 +15,22 @@ namespace Our.Umbraco.Look.Models
         /// when null, facets are not calculated, but when string[], each string value represents the tag group field to facet on, the empty string or whitespace = empty group
         /// The count value for a returned tag indicates how may results would be expected should that tag be added into the AllTags collection of this query
         /// </summary>
-        public string[] GetFacets { get; set; } = null;
+        public string[] GetFacets { get; set; }
+
+        /// <summary>
+        /// Create a new TagQuery
+        /// </summary>
+        /// <param name="all">All of these tags</param>
+        /// <param name="any">Any of these tags</param>
+        /// <param name="not">None of these tags</param>
+        /// <param name="getFacets">string array of tag groups to return facet counts for</param>
+        public TagQuery(LookTag[] all = null, LookTag[] any = null, LookTag[] not = null, string[] getFacets = null)
+        {
+            this.All = all;
+            this.Any = any;
+            this.Not = not;
+            this.GetFacets = getFacets;
+        }
 
         /// <summary>
         /// Helper to simplify the construction of LookTag array, by being able to supply a raw collection of tag strings
