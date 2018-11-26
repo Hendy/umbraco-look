@@ -74,11 +74,11 @@ namespace Our.Umbraco.Look.Services
                         query.Add(nodeTypeQuery, BooleanClause.Occur.MUST);
                     }
 
-                    if (lookQuery.NodeQuery.TypeAliases != null)
+                    if (lookQuery.NodeQuery.Aliases != null)
                     {
                         var typeAliasQuery = new BooleanQuery();
 
-                        foreach (var typeAlias in lookQuery.NodeQuery.TypeAliases)
+                        foreach (var typeAlias in lookQuery.NodeQuery.Aliases)
                         {
                             typeAliasQuery.Add(
                                                 new TermQuery(new Term(UmbracoContentIndexer.NodeTypeAliasFieldName, typeAlias.ToLower())), // TODO: store alias in a custom field to keep casing ?

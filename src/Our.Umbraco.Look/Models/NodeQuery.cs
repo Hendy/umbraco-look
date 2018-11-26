@@ -12,10 +12,10 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Collection of Node type aliases that a results can be any one of (when empty = has no effect)
         /// </summary>
-        public string[] TypeAliases { get; set; } = null; // TODO: rename to aliases ?
+        public string[] Aliases { get; set; } = null;
 
         /// <summary>
-        /// Any umbraco ids that should be exlcuded from the results (performed as part of the Lucene query so as to get an accurate result count)
+        /// Any umbraco ids that should be exlcuded from the results
         /// </summary>
         public int[] NotIds { get; set; } = null;
 
@@ -41,7 +41,7 @@ namespace Our.Umbraco.Look.Models
         /// <param name="typeAlias">the alias of the content, media or member</param>
         public NodeQuery(string typeAlias)
         {
-            this.TypeAliases = new string[] { typeAlias };
+            this.Aliases = new string[] { typeAlias };
         }
 
         //public NodeQuery(NodeType nodeType, string alias)
@@ -65,8 +65,8 @@ namespace Our.Umbraco.Look.Models
             NodeQuery nodeQuery = obj as NodeQuery;
 
             return nodeQuery != null
-                && ((nodeQuery.TypeAliases == null && this.TypeAliases == null)
-                    || (nodeQuery.TypeAliases != null && this.TypeAliases != null && nodeQuery.TypeAliases.SequenceEqual(this.TypeAliases)))
+                && ((nodeQuery.Aliases == null && this.Aliases == null)
+                    || (nodeQuery.Aliases != null && this.Aliases != null && nodeQuery.Aliases.SequenceEqual(this.Aliases)))
                 && ((nodeQuery.NotIds == null && this.NotIds == null)
                     || (nodeQuery.NotIds != null && this.NotIds != null && nodeQuery.NotIds.SequenceEqual(this.NotIds)));
         }
