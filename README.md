@@ -49,12 +49,12 @@ public class IndexingContext
 	/// <summary>
 	/// The IPublishedContent of the Content, Media or Member being indexed
 	/// </summary>
-	public IPublishedContent Item { get; }
+	public IPublishedContent Node { get; }
 
 	/// <summary>
-    /// Enum to indicate whether the IPublishedContent is Content, Media or Member
-    /// </summary>
-    public NodeType NodeType { get; }
+	/// Enum to indicate whether the IPublishedContent is Content, Media or Member
+	/// </summary>
+	public NodeType NodeType { get; }
 
 	/// <summary>
 	/// The name of the Examine indexer into which this item is being indexed
@@ -74,10 +74,10 @@ public class ConfigureIndexing : ApplicationEventHandler
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{		
 		// return the Name of the IPublishedContent
-		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
+		LookService.SetNameIndexer(indexingContext => { return indexingContext.Node.Name; });
 
 		// return the UpdateDate of the IPublishedContent
-		LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
+		LookService.SetDateIndexer(indexingContext => { return indexingContext.Node.UpdateDate; });
 
 		// eg. if content, trigger a web request and scrape markup to index
 		LookService.SetTextIndexer(indexingContext => { return null; });
@@ -87,7 +87,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 			// eg. return new LookTag[] { new LookTag("colour:Red") }; // (or null to not index)
 
 			// eg a nuPicker
-			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
+			var picker = indexingContext.Node.GetPropertyValue<Picker>("colours");
 
 			return picker
 				.AsPublishedContent()
@@ -100,7 +100,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 			// eg. return new Location(55.406330, 10.388500); // (or null to not index)
 
 			// eg. using Terratype			 
-			var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
+			var terratype = indexingContext.Node.GetPropertyValue<Terratype.Models.Model>("location");
 			var terratypeLatLng = terratype.Position.ToWgs84();
 
 			return new Location(terratypeLatLng.Latitude, terratypeLatLng.Longitude);
@@ -121,22 +121,21 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 
 	NodeQuery = new NodeQuery() {
 		Types = new NodeType[] { NodeType.Content, NodeType.Media, NodeType.Member },
-		TypeAliases = new string[] { "myDocTypeAlias" }, // TODO: rename to Aliases
+		Aliases = new string[] { "myDocTypeAlias", "myMediaTypeAlias" },
 		NotIds = new int[] { 123 } // (eg. exclude current page)
 	},
 
 	NameQuery = new NameQuery() {
 		Is = "Abc123Xyz", // the name must be equal to this string
 		StartsWith = "Abc", // the name must start with this string
-		EndsWith = "Xyz",  // the name must end with this string
 		Contains = "123", // the name must contain this string
+		EndsWith = "Xyz",  // the name must end with this string
 		CaseSenstive = true // applies to all: Is, StartsWith, EndsWith & Contains
 	},
 
 	DateQuery = new DateQuery() {
 		After = new DateTime(2005, 02, 16),
 		Before = null
-		//TODO: boundary mode
 	},
 
 	TextQuery = new TextQuery() {
@@ -155,7 +154,6 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	LocationQuery = new LocationQuery() {
 		Location = new Location(55.406330, 10.388500), // a location means distance results can be set
 		MaxDistance = new Distance(500, DistanceUnit.Miles)  // limits the results to within this distance
-		// TODO: GetFacets = Distance[]
 	},
 
 	SortOn = SortOn.Distance // other sorts are: Score (default), Name, DateAscending, DateDescending

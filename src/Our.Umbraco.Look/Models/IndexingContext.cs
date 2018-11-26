@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// The IPublishedContent representation of the Content, Media or Member being indexed
         /// </summary>
-        public IPublishedContent Item { get; }
+        public IPublishedContent Node { get; }
 
         /// <summary>
         /// Enum to indicate whether the IPublishedContent is Content, Media or Member
@@ -25,12 +25,12 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="node"></param>
         /// <param name="nodeType"></param>
         /// <param name="indexerName"></param>
-        internal IndexingContext(IPublishedContent item, NodeType nodeType, string indexerName)
+        internal IndexingContext(IPublishedContent node, NodeType nodeType, string indexerName)
         {
-            this.Item = item;
+            this.Node = node;
             this.NodeType = nodeType;
             this.IndexerName = indexerName;
         }
