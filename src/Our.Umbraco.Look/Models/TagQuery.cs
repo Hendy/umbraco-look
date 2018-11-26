@@ -37,6 +37,11 @@ namespace Our.Umbraco.Look.Models
             return lookTags.ToArray();
         }
 
+        public static LookTag[] MakeTags(IEnumerable<string> tags)
+        {
+            return TagQuery.MakeTags(tags.ToArray());
+        }
+
         public override bool Equals(object obj)
         {
             var tagQuery = obj as TagQuery;

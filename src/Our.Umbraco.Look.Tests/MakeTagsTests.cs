@@ -40,5 +40,22 @@ namespace Our.Umbraco.Look.Tests
             Assert.AreEqual("colour", tags[2].Group);
             Assert.AreEqual("blue", tags[2].Name);
         }
+
+        [TestMethod]
+        public void String_Enumerable()
+        {
+            var tags = TagQuery.MakeTags(new string[] { "colour:red", "colour:green", "colour:blue" }.Select(x => x));
+
+            Assert.AreEqual(3, tags.Length);
+
+            Assert.AreEqual("colour", tags[0].Group);
+            Assert.AreEqual("red", tags[0].Name);
+
+            Assert.AreEqual("colour", tags[1].Group);
+            Assert.AreEqual("green", tags[1].Name);
+
+            Assert.AreEqual("colour", tags[2].Group);
+            Assert.AreEqual("blue", tags[2].Name);
+        }
     }
 }

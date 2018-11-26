@@ -93,6 +93,8 @@ public class ConfigureIndexing : ApplicationEventHandler
 			var picker = indexingContext.Node.GetPropertyValue<Picker>("colours");
 
 			return picker.PickedKeys.Select(x => new LookTag("colour", x)).ToArray();
+
+			// or return TagQuery.MakeTags(picker.PickedKeys.Select(x => "colour" + x))
 		});
 
 		// return an Our.Umbraco.Look.Model.Location or null
