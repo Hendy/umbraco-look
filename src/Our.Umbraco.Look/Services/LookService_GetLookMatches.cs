@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -62,6 +63,7 @@ namespace Our.Umbraco.Look.Services
                 var doc = indexSearcher.Doc(docId, mapFieldSelector);
 
                 var lookMatch = new LookMatch(
+                    LookService.Instance.UmbracoHelper,
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     getNodeType(doc.Get(LookConstants.NodeTypeField)),
                     getHighlight(doc.Get(LookConstants.TextField)),

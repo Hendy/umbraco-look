@@ -64,6 +64,7 @@ namespace Our.Umbraco.Look.Models
         /// Constructor
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="umbracoHelper"></param>
         /// <param name="nodeType"></param>
         /// <param name="highlight"></param>
         /// <param name="text"></param>
@@ -73,6 +74,7 @@ namespace Our.Umbraco.Look.Models
         /// <param name="location"></param>
         /// <param name="distance"></param>
         internal LookMatch(
+                    UmbracoHelper umbracoHelper,
                     int id,
                     NodeType nodeType,
                     IHtmlString highlight,
@@ -95,16 +97,17 @@ namespace Our.Umbraco.Look.Models
 
             this._node = new Lazy<IPublishedContent>(() => {
 
-                var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
-
-                switch (this.NodeType)
+                if (umbracoHelper != null) // will be null for unit tests (as not initialized via Umbraco startup)
                 {
-                    case NodeType.Content: return umbracoHelper.TypedContent(id);
-                    case NodeType.Media: return umbracoHelper.TypedMedia(id);
-                    case NodeType.Member: return umbracoHelper.SafeTypedMember(id);
+                    switch (this.NodeType)
+                    {
+                        case NodeType.Content: return umbracoHelper.TypedContent(id);
+                        case NodeType.Media: return umbracoHelper.TypedMedia(id);
+                        case NodeType.Member: return umbracoHelper.SafeTypedMember(id);
+                    }
                 }
 
-                throw new Exception("Unknown NodeType");
+                return null;
             });
         }
     }

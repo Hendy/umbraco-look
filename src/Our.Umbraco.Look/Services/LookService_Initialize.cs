@@ -22,6 +22,8 @@ namespace Our.Umbraco.Look.Services
         {
             LogHelper.Info(typeof(LookService), "Initializing...");
 
+            LookService.Instance.UmbracoHelper = umbracoHelper;
+
             var indexProviders = ExamineManager
                                     .Instance
                                     .IndexProviderCollection

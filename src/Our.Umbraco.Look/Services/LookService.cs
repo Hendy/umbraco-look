@@ -3,6 +3,7 @@ using Lucene.Net.Store;
 using Our.Umbraco.Look.Models;
 using System;
 using System.Collections.Generic;
+using Umbraco.Web;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -49,9 +50,14 @@ namespace Our.Umbraco.Look.Services
         private static double MaxDistance => 10000; // 12450 = half circumfrence of earth TODO: make configuration
 
         /// <summary>
-        /// max numnber of results to request for a lucene query
+        /// max number of results to request for a lucene query
         /// </summary>
         private static int MaxLuceneResults => 5000; // TODO: make configurable (maybe part of the SearchQuery obj)
+
+        /// <summary>
+        /// Supplied by the initialization event (for re-use by the LookMatch)
+        /// </summary>
+        private UmbracoHelper UmbracoHelper { get; set; }
 
         /// <summary>
         /// Access the singleton instance of this search service
