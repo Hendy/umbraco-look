@@ -5,10 +5,19 @@ namespace Our.Umbraco.Look.Models
 {
     public class TagQuery
     {
+        /// <summary>
+        /// Must have all these tags
+        /// </summary>
         public LookTag[] All { get; set; }
 
+        /// <summary>
+        /// Must have at least one of these tags
+        /// </summary>
         public LookTag[] Any { get; set; }
 
+        /// <summary>
+        /// Must not have any of these tags
+        /// </summary>
         public LookTag[] Not { get; set; }
 
         /// <summary>
@@ -52,6 +61,11 @@ namespace Our.Umbraco.Look.Models
             return lookTags.ToArray();
         }
 
+        /// <summary>
+        /// Helper to simplify the construction of LookTag array
+        /// </summary>
+        /// <param name="tags"></param>
+        /// <returns></returns>
         public static LookTag[] MakeTags(IEnumerable<string> tags)
         {
             return TagQuery.MakeTags(tags.ToArray());
