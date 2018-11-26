@@ -1,13 +1,12 @@
 ﻿using Examine.LuceneEngine;
+using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
-using System;
 using System.IO;
 using System.Web;
 using System.Web.Hosting;
 using Umbraco.Core;
 using Umbraco.Core.Configuration;
-using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 using Umbraco.Web.Routing;
@@ -58,14 +57,7 @@ namespace Our.Umbraco.Look.Events
                 }
                 else // attempt to get as member
                 { 
-                    try
-                    {
-                        publishedContent = umbracoHelper.TypedMember(e.NodeId);
-                    }
-                    catch (Exception exception)
-                    {
-                        LogHelper.WarnWithException(typeof(Indexing), "Handling legacy Umbraco exception - failed to get member by id", exception);
-                    }
+                    publishedContent = umbracoHelper.SafeTypedMember(e.NodeId);
 
                     if (publishedContent != null)
                     {
@@ -96,7 +88,7 @@ namespace Our.Umbraco.Look.Events
                                 ApplicationContext.Current,
                                 new WebSecurity(dummyHttpContext, ApplicationContext.Current),
                                 //UmbracoConfig.For.UmbracoSettings(),
-                                //UrlProviderResolver.Current.Providers,
+                                //UrlProviderResolver.Current.Providers,                                
                                 true,
                                 false);
         }

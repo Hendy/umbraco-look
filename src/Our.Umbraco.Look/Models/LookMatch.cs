@@ -105,7 +105,14 @@ namespace Our.Umbraco.Look.Models
 
                 var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
 
-                return umbracoHelper.GetPublishedContent(id);
+                switch (this.NodeType)
+                {
+                    case NodeType.Content: return umbracoHelper.TypedContent(id);
+                    case NodeType.Media: return umbracoHelper.TypedMedia(id);
+                    case NodeType.Member: return umbracoHelper.SafeTypedMember(id);
+                }
+
+                throw new Exception("Unknown NodeType");
             });
         }
     }
