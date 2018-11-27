@@ -111,30 +111,13 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Create a new NameQuery search criteria
         /// </summary>
-        public NameQuery()
-        {
-        }
-
-        /// <summary>
-        /// Create a new NameQuery search criteria where the name must be the value supplied
-        /// </summary>
-        /// <param name="is">The value that the name should be</param>
-        /// <param name="caseSensitive">When true, the name search is case sensitive</param>
-        public NameQuery(string @is, bool caseSensitive = true)
-        {
-            this.Is = @is;
-            this.CaseSensitive = caseSensitive;
-        }
-
-        /// <summary>
-        /// Create a new NameQuery search criteria where the name is made up of the values supplied
-        /// </summary>
         /// <param name="startsWith"></param>
         /// <param name="contains"></param>
         /// <param name="endsWith"></param>
         /// <param name="caseSensitive">When true, the name search is case sensitive</param>
-        public NameQuery(string startsWith = null, string contains = null, string endsWith = null, bool caseSensitive = true)
+        public NameQuery(string @is = null, string startsWith = null, string contains = null, string endsWith = null, bool caseSensitive = true)
         {
+            this.Is = @is;
             this.StartsWith = startsWith;
             this.Contains = contains;
             this.EndsWith = endsWith;
