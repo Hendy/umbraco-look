@@ -7,33 +7,35 @@ Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/refe
   * Examine 0.1.70 (min)
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
-There are two required namespaces:
+Namespaces:
 ```csharp
+using Umbraco.Core.Models;
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
+
 ```
 
 ## Indexing
 
 Look automatically hooks into all Umbraco Exmaine indexers offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data.
-(The indexers are usually "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see /config/ExamineSettings.config).
+(The indexers are usually "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" by default - see _/config/ExamineSettings.config_).
 
 To configure the indexing behaviour, custom functions can be set via static methods on the LookService (all are optional).
-If a custom function is set and returns a value, the value will be indexed into custom Lucene field(s) prefixed with "Look_".
+If a custom function is set and returns a value, that value will be indexed into custom Lucene field(s) prefixed with "Look_".
 
-The static method definitions on the LookService where the custom indexing functions can be set:
+The static method definitions on the LookService where custom indexing functions can be set:
 
 ```csharp
-// creates both case sensitive and case insensitive fields - for use with NameQuery
+// creates both case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
 void LookService.SetNameIndexer(Func<IndexingContext, string> nameIndexer)
 
-// creates sortable date field - for use with DateQuery
+// creates a date & sorting fields - for use with DateQuery
 void LookService.SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
 
-// creates text field (analyzed) - for use with TextQuery
+// creates a text field (analyzed) - for use with TextQuery
 void LookService.SetTextIndexer(Func<IndexingContext, string> textIndexer)
 
-// creates multiple tag fields (where a tag group corresponds to field) - for use with TagQuery
+// creates a tag field for each tag group - for use with TagQuery
 void LookService.SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
 
 // creates multple fields - for use with LocationQuery
@@ -57,59 +59,51 @@ public class IndexingContext
 }
 ```
 
-Example:
+The index setters would typically be set in an Umbraco startup event (but they can be changed at any-time).
+
+Examples:
 
 ```csharp
-public class ConfigureIndexing : ApplicationEventHandler
-{	
-	/// <summary>
-	/// Umbraco has started event
-	/// </summary>
-	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-	{		
-		// return the Name of the IPublishedContent
-		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
+// return the Name of the IPublishedContent
+LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
 
-		// return the UpdateDate of the IPublishedContent
-		LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
+// return the UpdateDate of the IPublishedContent
+LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
 
-		// return text string or null
-		LookService.SetTextIndexer(indexingContext => { 
-			if (indexingContext.Item.ItemType == PublishedItemType.Content) {
-			 // eg. make web request and scrape markup to index
-			}
-			return null; 
-		});
-
-		// return an Our.Umbraco.Look.Models.LookTag[] or null (see tags section below)
-		LookService.SetTagIndexer(indexingContext => {
-			// eg a nuPicker
-			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
-
-			return picker.PickedKeys.Select(x => new LookTag("colour", x)).ToArray();
-
-			// or return TagQuery.MakeTags(picker.PickedKeys.Select(x => "colour" + x))
-		});
-
-		// return an Our.Umbraco.Look.Model.Location or null
-		LookService.SetLocationIndexer(indexingContext => {
-			// eg. using Terratype			 
-			var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
-			var terratypeLatLng = terratype.Position.ToWgs84();
-
-			return new Location(terratypeLatLng.Latitude, terratypeLatLng.Longitude);
-		});
+// return text string or null
+LookService.SetTextIndexer(indexingContext => { 
+	if (indexingContext.Item.ItemType == PublishedItemType.Content) {
+		// eg. make web request and scrape markup to index
 	}
-}
+	return null; 
+});
 
+// return an Our.Umbraco.Look.Models.LookTag[] or null (see tags section below)
+LookService.SetTagIndexer(indexingContext => {
+	// eg a nuPicker
+	var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
+
+	return picker.PickedKeys.Select(x => new LookTag("colour", x)).ToArray();
+
+	// or return TagQuery.MakeTags(picker.PickedKeys.Select(x => "colour" + x))
+});
+
+// return an Our.Umbraco.Look.Model.Location or null
+LookService.SetLocationIndexer(indexingContext => {
+	// eg. using Terratype			 
+	var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
+	var terratypeLatLng = terratype.Position.ToWgs84();
+
+	return new Location(terratypeLatLng.Latitude, terratypeLatLng.Longitude);
+});
 ```
 
 ## Searching
 
-A Look query consists of any combinations of these query types: `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
+A LookQuery consists of any combinations of these query types: `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
 (all optional), together with an Examine Searcher.
 
-The LookQuery constructor is used to specify which Examine searcher to use:
+The constructor is used to specify which Examine searcher to use:
 
 ```csharp
 var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalSearcher")
