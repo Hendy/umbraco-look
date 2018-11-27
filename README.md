@@ -7,10 +7,15 @@ Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/refe
   * Examine 0.1.70 (min)
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
-Namespaces in code examples:
+Namespaces used in examples:
+```csharp
+using System;
+````
 ```csharp
 using Umbraco.Core;
 using Umbraco.Core.Models;
+```
+```csharp
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
 ```
@@ -26,18 +31,22 @@ If a custom function is set and returns a value, that value will be indexed into
 The static method definitions on the LookService where custom indexing functions can be set:
 
 ```csharp
-// creates both case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
+// creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
 void LookService.SetNameIndexer(Func<IndexingContext, string> nameIndexer)
-
+```
+```csharp
 // creates a date & sorting fields - for use with DateQuery
 void LookService.SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
-
+```
+```csharp
 // creates a text field (analyzed) - for use with TextQuery
 void LookService.SetTextIndexer(Func<IndexingContext, string> textIndexer)
-
+```
+```csharp
 // creates a tag field for each tag group - for use with TagQuery
 void LookService.SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
-
+```
+```csharp
 // creates multple fields - for use with LocationQuery
 void LookService.SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
 ```
@@ -123,10 +132,13 @@ var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalS
 var lookQuery = new LookQuery("InternalSearcher"); // use named searcher
 ```
 
+
+
+
 Example of all query properties (all are optional, and the query type constructors have helper overloads):
 
 ```csharp
-var lookQuery = new LookQuery("InternalSearcher")
+var lookQuery = new LookQuery()
 {
 	RawQuery = "+path: 1059",
 
