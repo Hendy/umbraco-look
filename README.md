@@ -123,10 +123,6 @@ var lookQuery = new LookQuery();
 
 ```csharp
 // use named searcher
-var lookQuery = new LookQuery("InternalSearcher");
-```
-
-```csharp
 var lookQuery = new LookQuery("InternalSearcher")
 {
 	RawQuery = "+path: 1059",
