@@ -15,12 +15,11 @@ using Our.Umbraco.Look.Models;
 
 ## Indexing
 
-Look automatically hooks into all Umbraco Exmaine indexers (by default "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see /config/ExamineSettings.config)
-offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data. 
+Look automatically hooks into all Umbraco Exmaine indexers offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data,
+(the indexers are usually "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see /config/ExamineSettings.config).
 
 To configure the indexing behaviour, custom functions can be set via static methods on the LookService (all are optional).
-At index-time each of these custom functions will be given the IPublishedContent of the content, media or member being indexed and the name of the Exmaine index being used. If a custom function
-is not set, or returns a null, then no change takes place, otherwise a returned value will be indexed into custom Lucene field(s) (prefixed with "Look_").
+If a custom function is set and returns a value, the value will be indexed into custom Lucene field(s) prefixed with "Look_".
 
 The static method definitions on the LookService where the custom indexing functions can be set:
 
@@ -57,7 +56,7 @@ public class IndexingContext
 	public NodeType NodeType { get; }
 
 	/// <summary>
-	/// The name of the Examine indexer into which this item is being indexed
+	/// The name of the Examine indexer into which this node is being indexed
 	/// </summary>
 	public string IndexerName { get; }
 }
@@ -112,10 +111,23 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A Look query consists of any combinations of the following (optional) query types: `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery` together with an Examine Searcher.
+A Look query consists of any combinations of these query types: `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
+(all optional), together with an Examine Searcher.
+
+The LookQuery constructor is used to specify which Examine searcher to use:
 
 ```csharp
-var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use default, usually "ExternalSearcher")
+// use the default searcher (usually "ExternalSearcher")
+var lookQuery = new LookQuery();
+```
+
+```csharp
+// use named searcher
+var lookQuery = new LookQuery("InternalSearcher");
+```
+
+```csharp
+var lookQuery = new LookQuery("InternalSearcher")
 {
 	RawQuery = "+path: 1059",
 
@@ -130,7 +142,7 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 		StartsWith = "Abc", // the name must start with this string
 		Contains = "123", // the name must contain this string
 		EndsWith = "Xyz",  // the name must end with this string
-		CaseSensitive = true // applies to all: Is, StartsWith, EndsWith & Contains
+		CaseSensitive = true // applies to all: Is, StartsWith, Contains & EndsWith
 	},
 
 	DateQuery = new DateQuery() {
@@ -145,10 +157,10 @@ var lookQuery = new LookQuery("InternalSearcher") // (omit seracher name to use 
 	},
 
 	TagQuery = new TagQuery() {		
-		All = TagQuery.MakeTags("size:large"), // all of these tags must be present
-		Any = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags must be present (if single tag, then it's deemed mandatory as per AllTags)
-		Not = TagQuery.MakeTags("colour:black"), // none of these tags must be present ('not' always takes priority - any query contradictions will return an empty result with message)
-		GetFacets = new string[] { "colour", "size", "shape" } // request facet counts for all tags in the following groups
+		All = TagQuery.MakeTags("size:large"), // all of these tags
+		Any = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags
+		Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority, (contradictions return an empty result)
+		GetFacets = new string[] { "colour", "size", "shape" } // request counts for all tags in the supplied groups
 	},
 
 	LocationQuery = new LocationQuery() {
@@ -292,3 +304,7 @@ public class LookTag
 	public string Tag { get; set; }
 }
 ```
+
+
+### Facets
+

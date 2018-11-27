@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.Models
         public NodeType[] Types { get; set; } = null;
 
         /// <summary>
-        /// Collection of Node type aliases that a results can be any one of (when empty = has no effect)
+        /// The document type, media type or member type aliases
         /// </summary>
         public string[] Aliases { get; set; } = null;
 
