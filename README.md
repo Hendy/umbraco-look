@@ -15,8 +15,8 @@ using Our.Umbraco.Look.Models;
 
 ## Indexing
 
-Look automatically hooks into all Umbraco Exmaine indexers offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data,
-(the indexers are usually "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see /config/ExamineSettings.config).
+Look automatically hooks into all Umbraco Exmaine indexers offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data.
+(The indexers are usually "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see /config/ExamineSettings.config).
 
 To configure the indexing behaviour, custom functions can be set via static methods on the LookService (all are optional).
 If a custom function is set and returns a value, the value will be indexed into custom Lucene field(s) prefixed with "Look_".
@@ -181,6 +181,10 @@ var lookQuery = new LookQuery("InternalSearcher")
 ```csharp
 // perform the search
 var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model.LookResult
+
+var totalResults = lookResult.Total; // total number of item expected in the lookResult enumerable
+var results = lookResult.ToArray(); // enumerates to return Our.Umbraco.Look.Models.LookMatch[]
+var facets = lookResult.Facets; // returns Our.Umbraco.Look.Models.Facet[]
 ```
 
 ```csharp
@@ -200,11 +204,6 @@ var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model
 	/// Any returned facets
 	/// </summary>
 	public Facet[] Facets { get; }
-
-	/// <summary>
-	/// Returns the compiled look query (useful for subsequent paging queries)
-	/// </summary>
-	public LookQuery CompiledQuery { get; }
 }
 ```
 

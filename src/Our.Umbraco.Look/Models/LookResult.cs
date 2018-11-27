@@ -33,7 +33,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// returns the compiled look query, (optimised for being returned back into the query)
         /// </summary>
-        public LookQuery CompiledQuery { get; }
+        internal LookQuery CompiledQuery { get; }
 
         /// <summary>
         /// Constructor for populated result

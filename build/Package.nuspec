@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Our.Umbraco.Look</id>
-    <version>0.9.0</version>
+    <version>0.10.0</version>
     <authors>Hendy Racher</authors>
     <owners>Hendy Racher</owners>
     <licenseUrl>https://github.com/Hendy/umbraco-look/blob/master/LICENSE</licenseUrl>
@@ -10,7 +10,7 @@
     <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      Look sits on top of Umbraco Examine adding support for: text match highlighting, geospatial querying and tag faceting.
+      Look sits on top of Umbraco Examine adding support for: tag faceting, geospatial querying and text match highlighting.
     </description>
     <releaseNotes></releaseNotes>
     <copyright>Copyright 2018</copyright>
