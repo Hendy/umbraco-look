@@ -123,6 +123,12 @@ var lookQuery = new LookQuery();
 
 ```csharp
 // use named searcher
+var lookQuery = new LookQuery("InternalSearcher");
+```
+
+Example of all query properties (all are optional, and the query type constructors have helper overloads):
+
+```csharp
 var lookQuery = new LookQuery("InternalSearcher")
 {
 	RawQuery = "+path: 1059",
