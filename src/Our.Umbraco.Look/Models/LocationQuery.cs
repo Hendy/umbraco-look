@@ -12,24 +12,16 @@
         /// </summary>
         public Distance MaxDistance { get; set; } = null;
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public LocationQuery()
-        //{
-
-        //}
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="location"></param>
-        ///// <param name="maxDistance"></param>
-        //public LocationQuery(Location location, Distance maxDistance = null)
-        //{
-        //    this.Location = location;
-        //    this.MaxDistance = maxDistance;
-        //}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="maxDistance"></param>
+        public LocationQuery(Location location = null, Distance maxDistance = null)
+        {
+            this.Location = location;
+            this.MaxDistance = maxDistance;
+        }
 
         public override bool Equals(object obj)
         {
