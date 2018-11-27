@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.Services
             var mapFieldSelector = new MapFieldSelector(fields.ToArray());
 
             // there should always be a valid node type value to parse
-            var getNodeType = new Func<string, NodeType>(x => { Enum.TryParse(x, out NodeType nodeType); return nodeType; });
+            var getNodeType = new Func<string, PublishedItemType>(x => { Enum.TryParse(x, out PublishedItemType type); return type; });
 
             // if highlight func does not exist, then create one to always return null
             if (getHighlight == null) { getHighlight = x => null; }

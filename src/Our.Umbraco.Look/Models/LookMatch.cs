@@ -8,7 +8,7 @@ namespace Our.Umbraco.Look.Models
 {
     public class LookMatch
     {
-        private Lazy<IPublishedContent> _node;
+        private Lazy<IPublishedContent> _item;
 
         /// <summary>
         /// The Umbraco (content, media or member) Id of the matched item
@@ -18,12 +18,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Lazy evaluation of Item for IPublishedContent
         /// </summary>
-        public IPublishedContent Node => this._node.Value;
-
-        /// <summary>
-        /// Enum flag to indicate if the IPublishedContent node is Content, Media or a Member
-        /// </summary>
-        public NodeType NodeType { get; }
+        public IPublishedContent Item => this._item.Value;
 
         /// <summary>
         /// Highlight text (containing search text) extracted from from the full text
@@ -65,7 +60,7 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         /// <param name="id"></param>
         /// <param name="umbracoHelper"></param>
-        /// <param name="nodeType"></param>
+        /// <param name="publishedItemType"></param>
         /// <param name="highlight"></param>
         /// <param name="text"></param>
         /// <param name="tags"></param>
@@ -76,7 +71,7 @@ namespace Our.Umbraco.Look.Models
         internal LookMatch(
                     UmbracoHelper umbracoHelper,
                     int id,
-                    NodeType nodeType,
+                    PublishedItemType publishedItemType,
                     IHtmlString highlight,
                     string text,
                     LookTag[] tags,
@@ -86,7 +81,6 @@ namespace Our.Umbraco.Look.Models
                     double? distance)
         {
             this.Id = id;
-            this.NodeType = nodeType;
             this.Highlight = highlight;
             this.Text = text;
             this.Tags = tags;
@@ -95,15 +89,15 @@ namespace Our.Umbraco.Look.Models
             this.Location = location;
             this.Distance = distance;
 
-            this._node = new Lazy<IPublishedContent>(() => {
+            this._item = new Lazy<IPublishedContent>(() => {
 
                 if (umbracoHelper != null) // will be null for unit tests (as not initialized via Umbraco startup)
                 {
-                    switch (this.NodeType)
+                    switch (publishedItemType)
                     {
-                        case NodeType.Content: return umbracoHelper.TypedContent(id);
-                        case NodeType.Media: return umbracoHelper.TypedMedia(id);
-                        case NodeType.Member: return umbracoHelper.SafeTypedMember(id);
+                        case PublishedItemType.Content: return umbracoHelper.TypedContent(id);
+                        case PublishedItemType.Media: return umbracoHelper.TypedMedia(id);
+                        case PublishedItemType.Member: return umbracoHelper.SafeTypedMember(id);
                     }
                 }
 

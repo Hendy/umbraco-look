@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Models
 {
@@ -7,7 +8,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// The types of node to find, eg. Content, Media, Members
         /// </summary>
-        public NodeType[] Types { get; set; } = null;
+        public PublishedItemType[] Types { get; set; } = null;
 
         /// <summary>
         /// The document type, media type or member type aliases
@@ -29,10 +30,10 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Create new NodeQuery search criteria for nodes of a given type, eg content, media or members
         /// </summary>
-        /// <param name="nodeType">The node type. eg. content, media or member</param>
-        public NodeQuery(NodeType nodeType)
+        /// <param name="type">The node type. eg. content, media or member</param>
+        public NodeQuery(PublishedItemType type)
         {
-            this.Types = new NodeType[] { nodeType };
+            this.Types = new PublishedItemType[] { type };
         }
 
         /// <summary>
@@ -49,9 +50,9 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         /// <param name="nodeType">The node type. eg. content, media or member</param>
         /// <param name="alias">the alias of the content, media or member</param>
-        public NodeQuery(NodeType nodeType, string alias)
+        public NodeQuery(PublishedItemType type, string alias)
         {
-            this.Types = new NodeType[] { nodeType };
+            this.Types = new PublishedItemType[] { type };
             this.Aliases = new string[] { alias };
         }
 

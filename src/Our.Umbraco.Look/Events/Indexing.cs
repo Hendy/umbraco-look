@@ -39,37 +39,23 @@ namespace Our.Umbraco.Look.Events
         private void Indexer_DocumentWriting(object sender, DocumentWritingEventArgs e, UmbracoHelper umbracoHelper, string indexerName)
         {
             IPublishedContent publishedContent = null;
-            NodeType? nodeType = null;
 
             publishedContent = umbracoHelper.TypedContent(e.NodeId);
 
-            if (publishedContent != null)
-            {
-                nodeType = NodeType.Content;
-            }
-            else // attempt to get as media
+            if (publishedContent == null) // attempt to get as media
             {
                 publishedContent = umbracoHelper.TypedMedia(e.NodeId);
 
-                if (publishedContent != null)
+                if (publishedContent == null) // attempt to get as member
                 {
-                    nodeType = NodeType.Media;
-                }
-                else // attempt to get as member
-                { 
                     publishedContent = umbracoHelper.SafeTypedMember(e.NodeId);
-
-                    if (publishedContent != null)
-                    {
-                        nodeType = NodeType.Member;
-                    }
                 }
             }
-            if (publishedContent != null && nodeType.HasValue)
+            if (publishedContent != null)
             {
                 this.EnsureUmbracoContext();
 
-                var indexingContext = new IndexingContext(publishedContent, nodeType.Value, indexerName);
+                var indexingContext = new IndexingContext(publishedContent, indexerName);
 
                 LookService.Index(indexingContext, e.Document);
             }

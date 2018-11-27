@@ -18,7 +18,7 @@ namespace Our.Umbraco.Look.Services
         {
             var nodeTypeField = new Field(
                                         LookConstants.NodeTypeField,
-                                        indexingContext.NodeType.ToString(),
+                                        indexingContext.Item.ItemType.ToString(),
                                         Field.Store.YES,
                                         Field.Index.NOT_ANALYZED,
                                         Field.TermVector.NO);

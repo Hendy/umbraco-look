@@ -48,12 +48,7 @@ public class IndexingContext
 	/// <summary>
 	/// The IPublishedContent of the Content, Media or Member being indexed
 	/// </summary>
-	public IPublishedContent Node { get; }
-
-	/// <summary>
-	/// Enum to indicate whether the IPublishedContent is Content, Media or Member
-	/// </summary>
-	public NodeType NodeType { get; }
+	public IPublishedContent Item { get; }
 
 	/// <summary>
 	/// The name of the Examine indexer into which this node is being indexed
@@ -73,14 +68,14 @@ public class ConfigureIndexing : ApplicationEventHandler
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{		
 		// return the Name of the IPublishedContent
-		LookService.SetNameIndexer(indexingContext => { return indexingContext.Node.Name; });
+		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
 
 		// return the UpdateDate of the IPublishedContent
-		LookService.SetDateIndexer(indexingContext => { return indexingContext.Node.UpdateDate; });
+		LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
 
 		// return text string or null
 		LookService.SetTextIndexer(indexingContext => { 
-			if (indexingContext.NodeType == NodeType.Content) {
+			if (indexingContext.Item.ItemType == PublishedItemType.Content) {
 			 // eg. make web request and scrape markup to index
 			}
 			return null; 
@@ -89,7 +84,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 		// return an Our.Umbraco.Look.Models.LookTag[] or null (see tags section below)
 		LookService.SetTagIndexer(indexingContext => {
 			// eg a nuPicker
-			var picker = indexingContext.Node.GetPropertyValue<Picker>("colours");
+			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
 
 			return picker.PickedKeys.Select(x => new LookTag("colour", x)).ToArray();
 
@@ -99,7 +94,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 		// return an Our.Umbraco.Look.Model.Location or null
 		LookService.SetLocationIndexer(indexingContext => {
 			// eg. using Terratype			 
-			var terratype = indexingContext.Node.GetPropertyValue<Terratype.Models.Model>("location");
+			var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
 			var terratypeLatLng = terratype.Position.ToWgs84();
 
 			return new Location(terratypeLatLng.Latitude, terratypeLatLng.Longitude);
@@ -134,7 +129,7 @@ var lookQuery = new LookQuery("InternalSearcher")
 	RawQuery = "+path: 1059",
 
 	NodeQuery = new NodeQuery() {
-		Types = new NodeType[] { NodeType.Content, NodeType.Media, NodeType.Member },
+		Types = new PublishedItemType[] { PublishedItemType.Content, PublishedItemType.Media, PublishedItemType.Member },
 		Aliases = new string[] { "myDocTypeAlias", "myMediaTypeAlias" },
 		NotIds = new int[] { 123 } // (eg. exclude current page)
 	},
@@ -218,12 +213,7 @@ public class LookMatch
 	/// <summary>
 	/// Lazy evaluation of the associated IPublishedContent
 	/// </summary>
-	public IPublishedContent Node { get; }
-
-	/// <summary>
-	/// Enum flag to indicate if the IPublishedContent node is Content, Media or a Member
-	/// </summary>
-	public NodeType NodeType { get; }
+	public IPublishedContent Item { get; }
 	
 	/// <summary>
 	/// The custom name field
