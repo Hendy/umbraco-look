@@ -81,7 +81,7 @@ namespace Our.Umbraco.Look.Services
                         foreach (var typeAlias in lookQuery.NodeQuery.Aliases)
                         {
                             typeAliasQuery.Add(
-                                                new TermQuery(new Term(UmbracoContentIndexer.NodeTypeAliasFieldName, typeAlias.ToLower())), // TODO: store alias in a custom field to keep casing ?
+                                                new TermQuery(new Term(UmbracoContentIndexer.NodeTypeAliasFieldName, typeAlias.ToLower())),
                                                 BooleanClause.Occur.SHOULD);
                         }
 
@@ -222,9 +222,7 @@ namespace Our.Umbraco.Look.Services
 
                             if (lookQuery.TextQuery.GetHighlight)
                             {
-                                var queryScorer = new QueryScorer(queryParser
-                                                                    .Parse(lookQuery.TextQuery.SearchText)
-                                                                    .Rewrite(lookQuery.SearchingContext.IndexSearcher.GetIndexReader()));
+                                var queryScorer = new QueryScorer(searchTextQuery.Rewrite(lookQuery.SearchingContext.IndexSearcher.GetIndexReader()));
 
                                 var highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
 

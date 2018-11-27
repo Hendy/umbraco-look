@@ -112,13 +112,11 @@ A Look query consists of any combinations of these query types: `RawQuery`, `Nod
 The LookQuery constructor is used to specify which Examine searcher to use:
 
 ```csharp
-// use the default searcher (usually "ExternalSearcher")
-var lookQuery = new LookQuery();
+var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalSearcher")
 ```
 
 ```csharp
-// use named searcher
-var lookQuery = new LookQuery("InternalSearcher");
+var lookQuery = new LookQuery("InternalSearcher"); // use named searcher
 ```
 
 Example of all query properties (all are optional, and the query type constructors have helper overloads):
@@ -267,20 +265,6 @@ public class Facet
 }
 ```
 
-### Tags
-
-A tag can be any string and exists within an optionally specified group. If a group isn't set, then the tag is put into a default un-named group.
-A LookTag can be created form a raw string (where the first colon char ':' is used as an optional delimiter between a group/tag) or via a named group, tag overload.
-A LookTag array can also be made via a static helper on the TagQuery mode.
-eg.
-
-```csharp
-var tag1 = new LookTag("red"); // tag 'red', in default un-named group ''
-var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
-var tag3 = new LookTag("colour", "red"); // tag 'red', in group 'colour'
-var tags = TagQuery.MakeTags("colour:red", "colour:green"); // tags 'red' and 'green', both in group 'colour'
-```
-
 ```csharp
 public class LookTag
 {
@@ -294,6 +278,20 @@ public class LookTag
 	/// </summary>
 	public string Tag { get; set; }
 }
+```
+
+### Tags
+
+A tag can be any string and exists within an optionally specified group. If a group isn't set, then the tag is put into a default un-named group.
+A LookTag can be created form a raw string (where the first colon char ':' is used as an optional delimiter between a group/tag) or via a named group, tag overload.
+A LookTag array can also be made via a static helper on the TagQuery mode.
+eg.
+
+```csharp
+var tag1 = new LookTag("red"); // tag 'red', in default un-named group ''
+var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
+var tag3 = new LookTag("colour", "red"); // tag 'red', in group 'colour'
+var tags = TagQuery.MakeTags("colour:red", "colour:green"); // tags 'red' and 'green', both in group 'colour'
 ```
 
 
