@@ -7,12 +7,12 @@ Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/refe
   * Examine 0.1.70 (min)
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
-Namespaces:
+Namespaces in code examples:
 ```csharp
+using Umbraco.Core;
 using Umbraco.Core.Models;
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
-
 ```
 
 ## Indexing
@@ -64,38 +64,48 @@ The index setters would typically be set in an Umbraco startup event (but they c
 Examples:
 
 ```csharp
-// return the Name of the IPublishedContent
-LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
+public class ConfigureIndexing : ApplicationEventHandler
+{	
+	/// <summary>
+	/// Umbraco has started event
+	/// </summary>
+	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+	{		
 
-// return the UpdateDate of the IPublishedContent
-LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
+		// return the Name of the IPublishedContent
+		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
 
-// return text string or null
-LookService.SetTextIndexer(indexingContext => { 
-	if (indexingContext.Item.ItemType == PublishedItemType.Content) {
-		// eg. make web request and scrape markup to index
+		// return the UpdateDate of the IPublishedContent
+		LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
+
+		// return text string or null
+		LookService.SetTextIndexer(indexingContext => { 
+			if (indexingContext.Item.ItemType == PublishedItemType.Content) {
+				// eg. make web request and scrape markup to index
+			}
+			return null; 
+		});
+
+		// return an Our.Umbraco.Look.Models.LookTag[] or null (see tags section below)
+		LookService.SetTagIndexer(indexingContext => {
+			// eg a nuPicker
+			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
+
+			return picker.PickedKeys.Select(x => new LookTag("colour", x)).ToArray();
+
+			// or return TagQuery.MakeTags(picker.PickedKeys.Select(x => "colour" + x))
+		});
+
+		// return an Our.Umbraco.Look.Model.Location or null
+		LookService.SetLocationIndexer(indexingContext => {
+			// eg. using Terratype			 
+			var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
+			var terratypeLatLng = terratype.Position.ToWgs84();
+
+			return new Location(terratypeLatLng.Latitude, terratypeLatLng.Longitude);
+		});
 	}
-	return null; 
-});
-
-// return an Our.Umbraco.Look.Models.LookTag[] or null (see tags section below)
-LookService.SetTagIndexer(indexingContext => {
-	// eg a nuPicker
-	var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
-
-	return picker.PickedKeys.Select(x => new LookTag("colour", x)).ToArray();
-
-	// or return TagQuery.MakeTags(picker.PickedKeys.Select(x => "colour" + x))
-});
-
-// return an Our.Umbraco.Look.Model.Location or null
-LookService.SetLocationIndexer(indexingContext => {
-	// eg. using Terratype			 
-	var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
-	var terratypeLatLng = terratype.Position.ToWgs84();
-
-	return new Location(terratypeLatLng.Latitude, terratypeLatLng.Longitude);
-});
+}
 ```
 
 ## Searching
@@ -161,7 +171,6 @@ var lookQuery = new LookQuery("InternalSearcher")
 };
 
 ```
-
 
 ### Search Results
 
