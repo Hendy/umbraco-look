@@ -188,6 +188,7 @@
   <ItemGroup>
     <Compile Include="DemoSiteTests\BaseDemoSiteTests.cs" />
     <Compile Include="DemoSiteTests\CompiledQueryTests.cs" />
+    <Compile Include="DemoSiteTests\LookQueryTests.cs" />
     <Compile Include="DemoSiteTests\NameQueryTests.cs" />
     <Compile Include="DemoSiteTests\TextQueryTests.cs" />
     <Compile Include="DemoSiteTests\NodeQueryTests.cs" />
