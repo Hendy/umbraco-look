@@ -10,6 +10,7 @@ Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/refe
 Namespaces used in examples:
 ```csharp
 using System;
+using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 using Our.Umbraco.Look.Services;
@@ -236,7 +237,48 @@ lookQuery.LocationQuery = new LocationQuery() {
 
 #### SortOn
 
-If not specified then the reults will be sorted on the Lucene score, otherwise sorting can be performed on the custom name or date fields.
+If not specified then the reults will be sorted on the Lucene score, otherwise sorting can be performed on the custom name, date or distance fields:
+```csharp
+public enum SortOn
+{
+    /// <summary>
+    /// The Lucene result score (default)
+    /// </summary>
+    Score,
+
+    /// <summary>
+    /// A Custom Name field (alpha-numeric sorting)
+    /// </summary>
+    Name,
+
+    /// <summary>
+    /// A Custom Date field - Old to New
+    /// </summary>
+    DateAscending,
+
+    /// <summary>
+    /// A Custom Date field - New to Old
+    /// </summary>
+    DateDescending,
+
+    /// <summary>
+    /// Orders by distance (only if distance data avaialble, otherwise reverts back to score)
+    /// </summary>
+    Distance
+}
+```
+
+Examples:
+
+The most recent five case studies queryied on docTypeAlias (using custom date indexing)
+```csharp
+var caseStudies = LookService.Query(
+		new LookQuery() { 
+			NodeQuery = new NodeQuery("caseStudy"),
+			SortOn = DateDescending
+		})
+		.Take(5);
+```
 
 
 ### Search Results
