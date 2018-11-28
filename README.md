@@ -245,7 +245,7 @@ The search is performed by passing in the LookQuery model into the static Query 
 
 ```csharp
 var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model.LookResult
-````
+```
 
 ````csharp
 var totalResults = lookResult.Total; // total number of item expected in the lookResult enumerable
