@@ -141,7 +141,7 @@ var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalS
 var lookQuery = new LookQuery("InternalSearcher"); // use a named searcher
 ```
 
-All query types are optional, but when set they becomes a required clauses. All queries will return a LookResult, which has a boolean Success flag property. The flag
+All query types are optional, but when set they become a required clause. All queries will return a LookResult, which has a boolean Success flag property. The flag
 is set to true when a query with at least one clause is executed sucessfully.
 
 #### RawQuery
@@ -199,7 +199,12 @@ lookQuery.NameQuery = new NameQuery() {
 Optional constructor params:
 
 ````csharp
-public NameQuery(string @is = null, string startsWith = null, string contains = null, string endsWith = null, bool caseSensitive = true)
+NameQuery(
+	string @is = null, 
+	string startsWith = null, 
+	string contains = null, 
+	string endsWith = null, 
+	bool caseSensitive = true)
 ````
 
 #### DateQuery
@@ -230,15 +235,18 @@ lookQuery.TextQuery = new TextQuery() {
 Optional constructor params:
 
 ````csharp
-public TextQuery(string searchText = null, bool getHighlight = false, bool getText = false)
+TextQuery(string searchText = null, bool getHighlight = false, bool getText = false)
 ````
 
 #### TagQuery
 
 A tag query is used together with a custom tag indexer.
+
 The All, Any and Not properties expect LookTag[] values (see LookTags section below). 
+
 If there are any query contradictions (such as a tag exsing in both All and Not), then
 an empty result is returned with the success flag as false.
+
 The GetFacets string[] indcates which tag groups to return facet counts for.
 
 ````csharp
@@ -253,7 +261,7 @@ lookQuery.TagQuery = new TagQuery() {
 Optional constructor params:
 
 ````csharp
-public TagQuery(LookTag[] all = null, LookTag[] any = null, LookTag[] not = null, string[] getFacets = null)
+TagQuery(LookTag[] all = null, LookTag[] any = null, LookTag[] not = null, string[] getFacets = null)
 ````
 
 #### LocationQuery
@@ -272,7 +280,7 @@ lookQuery.LocationQuery = new LocationQuery() {
 Optional constructor params:
 
 ````csharp
-public LocationQuery(Location location = null, Distance maxDistance = null)
+LocationQuery(Location location = null, Distance maxDistance = null)
 ````
 
 #### SortOn
