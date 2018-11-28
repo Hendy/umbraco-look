@@ -131,9 +131,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 ## Searching
 
 A LookQuery consists of any combinations of these query types: `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
-together with an Examine Searcher.
-
-The constructor is used to specify which Examine searcher to use:
+together with an Examine Searcher. The LookQuery constructor is used to specify which Examine searcher to use:
 
 ```csharp
 var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalSearcher")
@@ -143,7 +141,8 @@ var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalS
 var lookQuery = new LookQuery("InternalSearcher"); // use a named searcher
 ```
 
-All query types are optional, but when set each becomes a required clause.
+All query types are optional, but when set they becomes a required clauses. All queries will return a LookResult, which has a boolean Success flag property. The flag
+is set to true when a query with at least one clause is executed sucessfully.
 
 #### RawQuery
 
@@ -171,7 +170,7 @@ lookQuery.NodeQuery = new NodeQuery() {
 };
 ````
 
-There are also some constructor overloads on the NodeQuery for a shorter syntax.
+Constructor overloads:
 
 ````csharp
 NodeQuery(PublishedItemType type)
@@ -195,6 +194,12 @@ lookQuery.NameQuery = new NameQuery() {
 	EndsWith = "Xyz",
 	CaseSensitive = true // applies to all: Is, StartsWith, Contains & EndsWith
 };
+````
+
+Optional constructor params:
+
+````csharp
+public NameQuery(string @is = null, string startsWith = null, string contains = null, string endsWith = null, bool caseSensitive = true)
 ````
 
 #### DateQuery
@@ -222,17 +227,33 @@ lookQuery.TextQuery = new TextQuery() {
 }
 ````
 
+Optional constructor params:
+
+````csharp
+public TextQuery(string searchText = null, bool getHighlight = false, bool getText = false)
+````
+
 #### TagQuery
 
 A tag query is used together with a custom tag indexer.
+The All, Any and Not properties expect LookTag[] values (see LookTags section below). 
+If there are any query contradictions (such as a tag exsing in both All and Not), then
+an empty result is returned with the success flag as false.
+The GetFacets string[] indcates which tag groups to return facet counts for.
 
 ````csharp
 lookQuery.TagQuery = new TagQuery() {
 	All = TagQuery.MakeTags("size:large"), // all of these tags
 	Any = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags
 	Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority
-	GetFacets = new string[] { "colour", "size", "shape" } // request facets for all tags in named groups
+	GetFacets = new string[] { "colour", "size", "shape" } 
 };
+````
+
+Optional constructor params:
+
+````csharp
+public TagQuery(LookTag[] all = null, LookTag[] any = null, LookTag[] not = null, string[] getFacets = null)
 ````
 
 #### LocationQuery
@@ -248,38 +269,15 @@ lookQuery.LocationQuery = new LocationQuery() {
 };
 ````
 
+Optional constructor params:
+
+````csharp
+public LocationQuery(Location location = null, Distance maxDistance = null)
+````
+
 #### SortOn
 
-If not specified then the reults will be sorted on the Lucene score, otherwise sorting can be performed on the custom name, date or distance fields:
-```csharp
-public enum SortOn
-{
-    /// <summary>
-    /// The Lucene result score (default)
-    /// </summary>
-    Score,
-
-    /// <summary>
-    /// A Custom Name field (alpha-numeric sorting)
-    /// </summary>
-    Name,
-
-    /// <summary>
-    /// A Custom Date field - Old to New
-    /// </summary>
-    DateAscending,
-
-    /// <summary>
-    /// A Custom Date field - New to Old
-    /// </summary>
-    DateDescending,
-
-    /// <summary>
-    /// Orders by distance (only if distance data avaialble, otherwise reverts back to score)
-    /// </summary>
-    Distance
-}
-```
+If not specified then the reults will be sorted on the Lucene score, otherwise sorting can be set by the SortOn enum to use the custom name, date or distance fields.
 
 ### Search Results
 
@@ -384,7 +382,7 @@ public class Facet
 public class LookTag
 {
 	/// <summary>
-	/// The tag group - this is used as a custom Lucene field, and must contain only alphanumeric / underscore chars and be less than 50 chars.
+	/// The tag group - must contain only alphanumeric / underscore chars and be less than 50 chars.
 	/// </summary>
 	public string Group { get; set; }
 
@@ -395,28 +393,35 @@ public class LookTag
 }
 ```
 
-### Tags
+### LookTags
 
+A tag can be any string and exists within an optionally specified group (if a group isn't set, then the tag is put into a default un-named group - String.Empty).
+A group has can be any string that contains only aphanumberic/underscore chars, as is less than 50 chars (as it is also used to generate a custom Lucene field name).
 
+A LookTag can be constructed from specified group and tag values:
 
+````csharp
+LookTag(string group, string name)
+````
 
-			// or return TagQuery.MakeTags(picker.PickedKeys.Select(x => "colour" + x))
+or from a raw string value:
 
+````csharp
+LookTag(string value)
+````
 
-
-
-A tag can be any string and exists within an optionally specified group. If a group isn't set, then the tag is put into a default un-named group.
-A LookTag can be created form a raw string (where the first colon char ':' is used as an optional delimiter between a group/tag) or via a named group, tag overload.
-A LookTag array can also be made via a static helper on the TagQuery mode.
+When constructing from a raw string value, the first colon char ':' is used as an optional delimited between a group and tag.
 eg.
 
-```csharp
-var tag1 = new LookTag("red"); // tag 'red', in default un-named group ''
+````csharp
+var tag1 = new LookTag("red"); // tag 'red', in default un-named group
+var tag2 = new LookTag(":red"); // tag 'red', in default un-named group
 var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
 var tag3 = new LookTag("colour", "red"); // tag 'red', in group 'colour'
-var tags = TagQuery.MakeTags("colour:red", "colour:green"); // tags 'red' and 'green', both in group 'colour'
-```
+````
 
+There is also a static helper on the TagQuery model which can be used as a shorthand to create a LookTag array. Eg.
 
-### Facets
-
+````csharp
+var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue", "size:large");
+````
