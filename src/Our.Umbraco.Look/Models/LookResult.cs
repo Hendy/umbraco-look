@@ -52,7 +52,7 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// Constructor for an empty result
+        /// Constructor for an empty (success) result
         /// </summary>
         internal LookResult(LookQuery lookQuery)
         {
@@ -64,7 +64,7 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// Constructor for an empty result, with message for debug logging
+        /// Constructor for an empty (failed) result with message for debug logging
         /// </summary>
         /// <param name="loggingMessage">Message to debug log</param>
         internal LookResult(string loggingMessage)

@@ -3,14 +3,9 @@
     internal static class LookConstants
     {
         /// <summary>
-        /// Stored in custom field
+        /// Gets the field name to use for the node type (content || media || member)
         /// </summary>
         internal static string NodeTypeField => "Look_NodeType";
-
-        ///// <summary>
-        ///// Stored in a custom field
-        ///// </summary>
-        //internal static string NodeAliasField => "Look_NodeAlias";
 
         /// <summary>
         /// Gets the field name to use for the name
@@ -43,12 +38,12 @@
         internal static string LocationField => "Look_Location";
 
         /// <summary>
-        /// 
+        /// Gets the field prefix to use for location fields
         /// </summary>
         internal static string LocationTierFieldPrefix => "Look_Location_Tier_";
 
         /// <summary>
-        /// not stored in index, but used as a result field
+        /// Not stored in index, but used as a result field
         /// </summary>
         internal static string DistanceField => "Look_Distance";
     }

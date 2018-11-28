@@ -1,5 +1,6 @@
 # Umbraco Look (Alpha)
 Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for: text match highlighting, geospatial querying and tag faceting.
+Examine manages the indexes, whilst Look adds 'config-file-free' C# indexing and a lightweight querying API.
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
 
@@ -20,12 +21,12 @@ using Our.Umbraco.Look.Models;
 ## Indexing
 
 Look automatically hooks into all Umbraco Exmaine indexers offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data.
-(The indexers are usually "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" by default - see _/config/ExamineSettings.config_).
+(On a new Umbraco install, the indexers are: "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see [_/config/ExamineSettings.config_](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)).
 
-To configure the indexing behaviour, custom functions can be set via static methods on the LookService (all are optional).
-If a custom function is set and returns a value, that value will be indexed into custom Lucene field(s) prefixed with "Look_".
+To configure the indexing behaviour, functions can be set via static methods on the LookService (all are optional).
+If a function is set and returns a value then that value will be indexed into custom Lucene field(s) prefixed with "Look_".
 
-The static method definitions on the LookService where custom indexing functions can be set:
+The static method definitions on the LookService where indexing functions can be set:
 
 ```csharp
 // creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
@@ -44,7 +45,7 @@ void LookService.SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
 void LookService.SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
 ```
 
-The model supplied to the custom functions at index-time:
+The model supplied to the indexing functions:
 
 ```csharp
 public class IndexingContext
@@ -72,35 +73,48 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// Umbraco has started event
 	/// </summary>
 	protected override void ApplicationStarted(
-				UmbracoApplicationBase umbracoApplication, 
-				ApplicationContext applicationContext)
+					UmbracoApplicationBase umbracoApplication, 
+					ApplicationContext applicationContext)
 	{		
-		// return the Name of the IPublishedContent
+		// always return the Name of the IPublishedContent
 		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
-
-		// return the UpdateDate of the IPublishedContent
-		LookService.SetDateIndexer(indexingContext => { return indexingContext.Item.UpdateDate; });
-
-		// return text string or null
-		LookService.SetTextIndexer(indexingContext => { 
-			if (indexingContext.Item.ItemType == PublishedItemType.Content) {
-				// eg. make web request and scrape markup to index
+		
+		LookService.SetDateIndexer(indexingContext => { 
+			
+			// eg. news articles use a different date
+			if (indexingContext.Item.DocumentTypeAlias == "newsArticle") 
+			{
+				return indexingItem.GetPropertyValue<DateTime>("releaseDate");
 			}
-			return null; 
+
+			return indexingContext.Item.UpdateDate; 
 		});
 
-		// return an Our.Umbraco.Look.Models.LookTag[] or null (see tags section below)
+		LookService.SetTextIndexer(indexingContext => { 
+
+			// eg. if content, render page and scrape markup
+			if (indexingContext.Item.ItemType == PublishedItemType.Content) 
+			{				
+				// (could pass in httpContext to render page without http web request)
+				// return string
+			}
+
+			return null; // don't index
+		});
+		
 		LookService.SetTagIndexer(indexingContext => {
+			// return LookTag[] or null (see tags section below)
+
 			// eg a nuPicker
 			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
 
 			return picker.PickedKeys.Select(x => new LookTag("colour", x)).ToArray();
-
-			// or return TagQuery.MakeTags(picker.PickedKeys.Select(x => "colour" + x))
 		});
 
-		// return an Our.Umbraco.Look.Model.Location or null
+		
 		LookService.SetLocationIndexer(indexingContext => {
+			// return Location or null
+
 			// eg. using Terratype			 
 			var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
 			var terratypeLatLng = terratype.Position.ToWgs84();
@@ -123,14 +137,14 @@ var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalS
 ```
 
 ```csharp
-var lookQuery = new LookQuery("InternalSearcher"); // use named searcher
+var lookQuery = new LookQuery("InternalSearcher"); // use a named searcher
 ```
 
 All query types are optional, but when set each becomes a required clause.
 
 #### RawQuery
 
-A raw query is a string value and can be any valid Lucene raw query (this can also be a way to pass in an Examine built query).
+A raw query is a string value and can be any valid [Lucene raw query](http://www.lucenetutorial.com/lucene-query-syntax.html) (this can be a way to pass in an Examine built query).
 
 ````csharp
 lookQuery.RawQuery = "+myField: myValue";
@@ -383,6 +397,14 @@ public class LookTag
 ```
 
 ### Tags
+
+
+
+
+			// or return TagQuery.MakeTags(picker.PickedKeys.Select(x => "colour" + x))
+
+
+
 
 A tag can be any string and exists within an optionally specified group. If a group isn't set, then the tag is put into a default un-named group.
 A LookTag can be created form a raw string (where the first colon char ':' is used as an optional delimiter between a group/tag) or via a named group, tag overload.
