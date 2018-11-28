@@ -24,7 +24,7 @@ Look automatically hooks into all Umbraco Exmaine indexers offering the ability 
 (On a new Umbraco install, the indexers are: "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see [_/config/ExamineSettings.config_](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)).
 
 To configure the indexing behaviour, functions can be set via static methods on the LookService (all are optional).
-If a function is set and returns a value then that value will be indexed into custom Lucene field(s) prefixed with "Look_".
+If a function is set and returns a value then a custom Lucene field(s) prefixed with "Look_" will be used.
 
 The static method definitions on the LookService where indexing functions can be set:
 
@@ -56,7 +56,7 @@ public class IndexingContext
 	public IPublishedContent Item { get; }
 
 	/// <summary>
-	/// The name of the Examine indexer into which this node is being indexed
+	/// The name of the Examine indexer into which this item is being indexed
 	/// </summary>
 	public string IndexerName { get; }
 }
@@ -74,12 +74,17 @@ public class ConfigureIndexing : ApplicationEventHandler
 				UmbracoApplicationBase umbracoApplication, 
 				ApplicationContext applicationContext)
 	{				
+```
+```csharp
+
 		LookService.SetNameIndexer(indexingContext => { 
 			
 			// eg. always return the Name of the IPublishedContent
 			return indexingContext.Item.Name; 
 		});
-		
+```
+```csharp
+
 		LookService.SetDateIndexer(indexingContext => { 
 			
 			// eg. news articles use a different date
@@ -90,6 +95,8 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 			return indexingContext.Item.UpdateDate; 
 		});
+```
+```csharp
 
 		LookService.SetTextIndexer(indexingContext => { 
 
@@ -102,6 +109,8 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 			return null; // don't index
 		});
+```
+```csharp
 		
 		LookService.SetTagIndexer(indexingContext => {
 			// return LookTag[] or null (see tags section below)
@@ -114,6 +123,8 @@ public class ConfigureIndexing : ApplicationEventHandler
 				.Select(x => new LookTag("colour", x))
 				.ToArray();
 		});
+```
+```csharp
 		
 		LookService.SetLocationIndexer(indexingContext => {
 			// return Location or null
@@ -146,16 +157,16 @@ is set to true when a query with at least one clause is executed sucessfully.
 
 #### RawQuery
 
-A raw query is a string value and can be any valid [Lucene raw query](http://www.lucenetutorial.com/lucene-query-syntax.html) (this can be a way to pass in an Examine built query).
+String property for any [Lucene raw query](http://www.lucenetutorial.com/lucene-query-syntax.html) (this can be a way to pass in an Examine built query).
 
-````csharp
+```csharp
 lookQuery.RawQuery = "+myField: myValue";
-````
+```
 
 #### NodeQuery
 A node query is used to set search criteria based on the IPublishedContent type, alias and any Ids that should be excluded (all properties are optional).
 
-````csharp
+```csharp
 lookQuery.NodeQuery = new NodeQuery() {
 	Types = new PublishedItemType[] { 
 		PublishedItemType.Content, 
@@ -168,17 +179,17 @@ lookQuery.NodeQuery = new NodeQuery() {
 	},
 	NotIds = new int[] { 123 } // (eg. exclude current page)
 };
-````
+```
 
 Constructor overloads:
 
-````csharp
+```csharp
 NodeQuery(PublishedItemType type)
 NodeQuery(string alias)
 NodeQuery(params string[] aliases)
 NodeQuery(PublishedItemType type, string alias)
 NodeQuery(PublishedItemType type, params string[] aliases)
-````
+```
 
 #### NameQuery
 A name query is used together with a custom name indexer and enables string comparrison queries (wildcards are not allowed and all properties are optional).
@@ -186,7 +197,7 @@ If a name query is contradictory (for example, Is = "Must be this" and StartsWit
 an empty result will be returned with the Success flag being false. The NameQuery also has constructor overloads 
 for all properties where each is optional (defaulting to a case sensitive search).
 
-````csharp
+```csharp
 lookQuery.NameQuery = new NameQuery() {
 	Is = "Abc123Xyz",
 	StartsWith = "Abc",
@@ -194,29 +205,29 @@ lookQuery.NameQuery = new NameQuery() {
 	EndsWith = "Xyz",
 	CaseSensitive = true // applies to all: Is, StartsWith, Contains & EndsWith
 };
-````
+```
 
 Optional constructor params:
 
-````csharp
+```csharp
 NameQuery(
 	string @is = null, 
 	string startsWith = null, 
 	string contains = null, 
 	string endsWith = null, 
 	bool caseSensitive = true)
-````
+```
 
 #### DateQuery
 
 A date query is used together with a custom date indexer and enables date range queries (both date properties are optional).
 
-````csharp
+```csharp
 lookQuery.DateQuery = new DateQuery() {
 	After = new DateTime(2005, 02, 16),
 	Before = null
 }
-````
+```
 
 #### TextQuery
 
@@ -224,19 +235,19 @@ A text query is used together with a custom text indexer and allows for wildcard
 Highlighting gives the ability to return an html snippet of text indiciating the part of the full text that the match was made on. All properties
 are optional, and there is a constructor where all properties are optional (by default GetHighlight and GetText are false).
 
-````csharp
+```csharp
 lookQuery.TextQuery = new TextQuery() {
 	SearchText = "some text to search for",
 	GetHighlight = true, // return highlight extract from the text field containing the search text
 	GetText = true // raw text field should be returned (potentially a large document)
 }
-````
+```
 
 Optional constructor params:
 
-````csharp
+```csharp
 TextQuery(string searchText = null, bool getHighlight = false, bool getText = false)
-````
+```
 
 #### TagQuery
 
@@ -249,20 +260,20 @@ an empty result is returned with the success flag as false.
 
 The GetFacets string[] indcates which tag groups to return facet counts for.
 
-````csharp
+```csharp
 lookQuery.TagQuery = new TagQuery() {
 	All = TagQuery.MakeTags("size:large"), // all of these tags
 	Any = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags
 	Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority
 	GetFacets = new string[] { "colour", "size", "shape" } 
 };
-````
+```
 
 Optional constructor params:
 
-````csharp
+```csharp
 TagQuery(LookTag[] all = null, LookTag[] any = null, LookTag[] not = null, string[] getFacets = null)
-````
+```
 
 #### LocationQuery
 
@@ -270,18 +281,18 @@ A location query is used together with a custom location indexer. If a Location 
 have a location indexed will have a distance value returned. However if a MaxDistance is also set, then only nodes
 within that range are returned.
 
-````csharp
+```csharp
 lookQuery.LocationQuery = new LocationQuery() {
 	Location = new Location(55.406330, 10.388500),
 	MaxDistance = new Distance(500, DistanceUnit.Miles)
 };
-````
+```
 
 Optional constructor params:
 
-````csharp
+```csharp
 LocationQuery(Location location = null, Distance maxDistance = null)
-````
+```
 
 #### SortOn
 
@@ -408,28 +419,28 @@ A group has can be any string that contains only aphanumberic/underscore chars, 
 
 A LookTag can be constructed from specified group and tag values:
 
-````csharp
+```csharp
 LookTag(string group, string name)
-````
+```
 
 or from a raw string value:
 
-````csharp
-LookTag(string value)
+```csharp
+LokTag(string value)
 ````
 
-When constructing from a raw string value, the first colon char ':' is used as an optional delimited between a group and tag.
+When constructing from a raw string value, the first colon char ':' is used as an optional delimiter between a group and tag.
 eg.
 
-````csharp
+```csharp
 var tag1 = new LookTag("red"); // tag 'red', in default un-named group
 var tag2 = new LookTag(":red"); // tag 'red', in default un-named group
 var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
 var tag3 = new LookTag("colour", "red"); // tag 'red', in group 'colour'
-````
+```
 
 There is also a static helper on the TagQuery model which can be used as a shorthand to create a LookTag array. Eg.
 
-````csharp
+```csharp
 var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue", "size:large");
-````
+```
