@@ -268,19 +268,6 @@ public enum SortOn
 }
 ```
 
-Examples:
-
-The most recent five case studies queryied on docTypeAlias (using custom date indexing)
-```csharp
-var caseStudies = LookService.Query(
-		new LookQuery() { 
-			NodeQuery = new NodeQuery("caseStudy"),
-			SortOn = DateDescending
-		})
-		.Take(5);
-```
-
-
 ### Search Results
 
 The search is performed by passing in the LookQuery model into the static Query method on the LookService.
