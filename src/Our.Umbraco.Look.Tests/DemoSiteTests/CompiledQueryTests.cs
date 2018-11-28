@@ -22,9 +22,9 @@ namespace Our.Umbraco.Look.Tests
         {
             var lookQuery = new LookQuery(this._searchingContext) { NodeQuery = new NodeQuery("thing") };
 
-            var lookResult = LookService.Query(lookQuery);
+            lookQuery = LookService.Query(lookQuery).CompiledQuery;
 
-            Assert.IsNotNull(lookResult.CompiledQuery.Compiled);
+            Assert.IsNotNull(lookQuery.Compiled);
         }
 
 
@@ -47,7 +47,7 @@ namespace Our.Umbraco.Look.Tests
 
             lookQuery = LookService.Query(lookQuery).CompiledQuery;
 
-            lookQuery.NodeQuery = new NodeQuery(); // reset the original
+            lookQuery.NodeQuery = new NodeQuery();
 
             Assert.IsNull(lookQuery.Compiled);
         }

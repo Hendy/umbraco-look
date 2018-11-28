@@ -62,9 +62,7 @@ public class IndexingContext
 }
 ```
 
-The index setters would typically be set in an Umbraco startup event (but they can be changed at any-time).
-
-Example:
+The index setters would typically be set in an Umbraco startup event (but they can be changed at any-time). Eg.
 
 ```csharp
 public class ConfigureIndexing : ApplicationEventHandler
