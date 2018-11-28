@@ -62,7 +62,7 @@ public class IndexingContext
 
 The index setters would typically be set in an Umbraco startup event (but they can be changed at any-time).
 
-Examples:
+Example:
 
 ```csharp
 public class ConfigureIndexing : ApplicationEventHandler
@@ -70,7 +70,9 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// <summary>
 	/// Umbraco has started event
 	/// </summary>
-	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
+	protected override void ApplicationStarted(
+				UmbracoApplicationBase umbracoApplication, 
+				ApplicationContext applicationContext)
 	{		
 		// return the Name of the IPublishedContent
 		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
@@ -138,8 +140,15 @@ A node query is used to set search criteria based on the IPublishedContent type,
 
 ````csharp
 lookQuery.NodeQuery = new NodeQuery() {
-	Types = new PublishedItemType[] { PublishedItemType.Content, PublishedItemType.Media, PublishedItemType.Member },
-	Aliases = new string[] { "myDocTypeAlias", "myMediaTypeAlias" },
+	Types = new PublishedItemType[] { 
+		PublishedItemType.Content, 
+		PublishedItemType.Media, 
+		PublishedItemType.Member 
+	},
+	Aliases = new string[] { 
+		"myDocTypeAlias", 
+		"myMediaTypeAlias" 
+	},
 	NotIds = new int[] { 123 } // (eg. exclude current page)
 };
 ````
@@ -208,7 +217,7 @@ lookQuery.TagQuery = new TagQuery() {
 	All = TagQuery.MakeTags("size:large"), // all of these tags
 	Any = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags
 	Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority
-	GetFacets = new string[] { "colour", "size", "shape" } // request counts for all tags in the supplied groups
+	GetFacets = new string[] { "colour", "size", "shape" } // request facets for all tags in named groups
 };
 ````
 
@@ -232,17 +241,20 @@ If not specified then the reults will be sorted on the Lucene score, otherwise s
 
 ### Search Results
 
-```csharp
-// perform the search
-var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model.LookResult
+The search is performed by passing in the LookQuery model into the static Query method on the LookService.
 
+```csharp
+var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model.LookResult
+````
+
+````csharp
 var totalResults = lookResult.Total; // total number of item expected in the lookResult enumerable
 var results = lookResult.ToArray(); // enumerates to return Our.Umbraco.Look.Models.LookMatch[]
 var facets = lookResult.Facets; // returns Our.Umbraco.Look.Models.Facet[]
 ```
 
 ```csharp
- public class LookResult : IEnumerable<LookMatch>
+public class LookResult : IEnumerable<LookMatch>
 {
 	/// <summary>
 	/// When true, indicates the Look Query was parsed and executed correctly
