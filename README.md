@@ -72,7 +72,6 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// </summary>
 	protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
 	{		
-
 		// return the Name of the IPublishedContent
 		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
 
@@ -112,7 +111,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 ## Searching
 
 A LookQuery consists of any combinations of these query types: `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
-(all optional), together with an Examine Searcher.
+together with an Examine Searcher.
 
 The constructor is used to specify which Examine searcher to use:
 
@@ -124,57 +123,112 @@ var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalS
 var lookQuery = new LookQuery("InternalSearcher"); // use named searcher
 ```
 
+All query types are optional, but when set each becomes a required clause.
 
+#### RawQuery
 
+A raw query is a string value and can be any valid Lucene raw query (this can also be a way to pass in an Examine built query).
 
-Example of all query properties (all are optional, and the query type constructors have helper overloads):
+````csharp
+lookQuery.RawQuery = "+myField: myValue";
+````
 
-```csharp
-var lookQuery = new LookQuery()
-{
-	RawQuery = "+path: 1059",
+#### NodeQuery
+A node query is used to set search criteria based on the IPublishedContent type, alias and any Ids that should be excluded (all properties are optional).
 
-	NodeQuery = new NodeQuery() {
-		Types = new PublishedItemType[] { PublishedItemType.Content, PublishedItemType.Media, PublishedItemType.Member },
-		Aliases = new string[] { "myDocTypeAlias", "myMediaTypeAlias" },
-		NotIds = new int[] { 123 } // (eg. exclude current page)
-	},
-
-	NameQuery = new NameQuery() {
-		Is = "Abc123Xyz", // the name must be equal to this string
-		StartsWith = "Abc", // the name must start with this string
-		Contains = "123", // the name must contain this string
-		EndsWith = "Xyz",  // the name must end with this string
-		CaseSensitive = true // applies to all: Is, StartsWith, Contains & EndsWith
-	},
-
-	DateQuery = new DateQuery() {
-		After = new DateTime(2005, 02, 16),
-		Before = null
-	},
-
-	TextQuery = new TextQuery() {
-		SearchText = "some text to search for",
-		GetHighlight = true, // return highlight extract from the text field containing the search text
-		GetText = true // raw text field should be returned (potentially a large document)
-	},
-
-	TagQuery = new TagQuery() {		
-		All = TagQuery.MakeTags("size:large"), // all of these tags
-		Any = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags
-		Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority, (contradictions return an empty result)
-		GetFacets = new string[] { "colour", "size", "shape" } // request counts for all tags in the supplied groups
-	},
-
-	LocationQuery = new LocationQuery() {
-		Location = new Location(55.406330, 10.388500), // a location means distance results can be set
-		MaxDistance = new Distance(500, DistanceUnit.Miles)  // limits the results to within this distance
-	},
-
-	SortOn = SortOn.Distance // other sorts are: Score (default), Name, DateAscending, DateDescending
+````csharp
+lookQuery.NodeQuery = new NodeQuery() {
+	Types = new PublishedItemType[] { PublishedItemType.Content, PublishedItemType.Media, PublishedItemType.Member },
+	Aliases = new string[] { "myDocTypeAlias", "myMediaTypeAlias" },
+	NotIds = new int[] { 123 } // (eg. exclude current page)
 };
+````
 
-```
+There are also some constructor overloads on the NodeQuery for a shorter syntax.
+
+````csharp
+lookQuery.NodeQuery = new NodeQuery(PublishedContentType.Content);
+````
+
+````csharp
+lookQuery.NodeQuery = new NodeQuery("myMediaAlias");
+````
+
+````csharp
+lookQuery.NodeQuery = new NodeQuery(PublishedContentType.Media, "myMediaAlias");
+````
+
+#### NameQuery
+A name query is used together with a custom name indexer and enables string comparrison queries (wildcards are not allowed and all properties are optional).
+If a name query is contradictory (for example, Is = "Must be this" and StartsWith = "Something else"), then
+an empty result will be returned with the Success flag being false. The NameQuery also has constructor overloads 
+for all properties where each is optional (defaulting to a case sensitive search).
+
+````csharp
+lookQuery.NameQuery = new NameQuery() {
+	Is = "Abc123Xyz",
+	StartsWith = "Abc",
+	Contains = "123",
+	EndsWith = "Xyz",
+	CaseSensitive = true // applies to all: Is, StartsWith, Contains & EndsWith
+};
+````
+
+#### DateQuery
+
+A date query is used together with a custom date indexer and enables date range queries (both date properties are optional).
+
+````csharp
+lookQuery.DateQuery = new DateQuery() {
+	After = new DateTime(2005, 02, 16),
+	Before = null
+}
+````
+
+#### TextQuery
+
+A text query is used together with a custom text indexer and allows for wildcard searching using the analyzer specified by Exmaine.
+Highlighting gives the ability to return an html snippet of text indiciating the part of the full text that the match was made on. All properties
+are optional, and there is a constructor where all properties are optional (by default GetHighlight and GetText are false).
+
+````csharp
+lookQuery.TextQuery = new TextQuery() {
+	SearchText = "some text to search for",
+	GetHighlight = true, // return highlight extract from the text field containing the search text
+	GetText = true // raw text field should be returned (potentially a large document)
+}
+````
+
+#### TagQuery
+
+A tag query is used together with a custom tag indexer.
+
+````csharp
+lookQuery.TagQuery = new TagQuery() {
+	All = TagQuery.MakeTags("size:large"), // all of these tags
+	Any = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags
+	Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority
+	GetFacets = new string[] { "colour", "size", "shape" } // request counts for all tags in the supplied groups
+};
+````
+
+#### LocationQuery
+
+A location query is used together with a custom location indexer. If a Location alone is set, then all nodes which 
+have a location indexed will have a distance value returned. However if a MaxDistance is also set, then only nodes
+within that range are returned.
+
+````csharp
+lookQuery.LocationQuery = new LocationQuery() {
+	Location = new Location(55.406330, 10.388500),
+	MaxDistance = new Distance(500, DistanceUnit.Miles)
+};
+````
+
+#### SortOn
+
+If not specified then the reults will be sorted on the Lucene score, otherwise sorting can be performed on the custom name or date fields.
+
 
 ### Search Results
 
