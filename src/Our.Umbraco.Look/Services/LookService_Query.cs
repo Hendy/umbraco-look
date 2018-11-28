@@ -402,7 +402,7 @@ namespace Our.Umbraco.Look.Services
 
             if (!hasQuery)
             {
-                return new LookResult("No query clauses supplied"); // failure
+                return new LookResult("No query clauses supplied"); // empty failure
             }
 
             TopDocs topDocs = lookQuery

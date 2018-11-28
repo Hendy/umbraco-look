@@ -71,11 +71,14 @@ public class ConfigureIndexing : ApplicationEventHandler
 	/// Umbraco has started event
 	/// </summary>
 	protected override void ApplicationStarted(
-					UmbracoApplicationBase umbracoApplication, 
-					ApplicationContext applicationContext)
-	{		
-		// always return the Name of the IPublishedContent
-		LookService.SetNameIndexer(indexingContext => { return indexingContext.Item.Name; });
+				UmbracoApplicationBase umbracoApplication, 
+				ApplicationContext applicationContext)
+	{				
+		LookService.SetNameIndexer(indexingContext => { 
+			
+			// eg. always return the Name of the IPublishedContent
+			return indexingContext.Item.Name; 
+		});
 		
 		LookService.SetDateIndexer(indexingContext => { 
 			
@@ -106,9 +109,11 @@ public class ConfigureIndexing : ApplicationEventHandler
 			// eg a nuPicker
 			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
 
-			return picker.PickedKeys.Select(x => new LookTag("colour", x)).ToArray();
+			return picker
+				.PickedKeys
+				.Select(x => new LookTag("colour", x))
+				.ToArray();
 		});
-
 		
 		LookService.SetLocationIndexer(indexingContext => {
 			// return Location or null
@@ -169,15 +174,11 @@ lookQuery.NodeQuery = new NodeQuery() {
 There are also some constructor overloads on the NodeQuery for a shorter syntax.
 
 ````csharp
-lookQuery.NodeQuery = new NodeQuery(PublishedContentType.Content);
-````
-
-````csharp
-lookQuery.NodeQuery = new NodeQuery("myMediaAlias");
-````
-
-````csharp
-lookQuery.NodeQuery = new NodeQuery(PublishedContentType.Media, "myMediaAlias");
+NodeQuery(PublishedItemType type)
+NodeQuery(string alias)
+NodeQuery(params string[] aliases)
+NodeQuery(PublishedItemType type, string alias)
+NodeQuery(PublishedItemType type, params string[] aliases)
 ````
 
 #### NameQuery

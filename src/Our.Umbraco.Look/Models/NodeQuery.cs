@@ -46,6 +46,15 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
+        /// Create new NodeQuery search criterai for all nodes of any of these aliases
+        /// </summary>
+        /// <param name="aliases"></param>
+        public NodeQuery(params string[] aliases)
+        {
+            this.Aliases = aliases;
+        }
+
+        /// <summary>
         /// Create new NodeQuery search critera for nodes of a given type and alias
         /// </summary>
         /// <param name="nodeType">The node type. eg. content, media or member</param>
@@ -54,6 +63,17 @@ namespace Our.Umbraco.Look.Models
         {
             this.Types = new PublishedItemType[] { type };
             this.Aliases = new string[] { alias };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="aliases"></param>
+        public NodeQuery(PublishedItemType type, params string[] aliases)
+        {
+            this.Types = new PublishedItemType[] { type };
+            this.Aliases = aliases;
         }
 
         // TODO: overloads for not id(s) ?
