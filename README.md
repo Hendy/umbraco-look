@@ -21,10 +21,9 @@ using Our.Umbraco.Look.Models;
 ## Indexing
 
 Look automatically hooks into all Umbraco Exmaine indexers offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data.
-(On a new Umbraco install, the indexers are: "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer" - see [_/config/ExamineSettings.config_](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)).
-
 To configure the indexing behaviour, functions can be set via static methods on the LookService (all are optional).
-If a function is set and returns a value then a custom Lucene field(s) prefixed with "Look_" will be used.
+If a function is set and returns a value then custom Lucene field(s) prefixed with "Look_" will be used.
+(On a default Umbraco install, the indexers are: "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer", see [/config/ExamineSettings.config](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)).
 
 The static method definitions on the LookService where indexing functions can be set:
 
@@ -74,16 +73,11 @@ public class ConfigureIndexing : ApplicationEventHandler
 				UmbracoApplicationBase umbracoApplication, 
 				ApplicationContext applicationContext)
 	{				
-```
-```csharp
-
 		LookService.SetNameIndexer(indexingContext => { 
 			
 			// eg. always return the Name of the IPublishedContent
 			return indexingContext.Item.Name; 
 		});
-```
-```csharp
 
 		LookService.SetDateIndexer(indexingContext => { 
 			
@@ -95,8 +89,6 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 			return indexingContext.Item.UpdateDate; 
 		});
-```
-```csharp
 
 		LookService.SetTextIndexer(indexingContext => { 
 
@@ -109,8 +101,6 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 			return null; // don't index
 		});
-```
-```csharp
 		
 		LookService.SetTagIndexer(indexingContext => {
 			// return LookTag[] or null (see tags section below)
@@ -123,8 +113,6 @@ public class ConfigureIndexing : ApplicationEventHandler
 				.Select(x => new LookTag("colour", x))
 				.ToArray();
 		});
-```
-```csharp
 		
 		LookService.SetLocationIndexer(indexingContext => {
 			// return Location or null
@@ -152,7 +140,7 @@ var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalS
 var lookQuery = new LookQuery("InternalSearcher"); // use a named searcher
 ```
 
-All query types are optional, but when set they become a required clause. All queries will return a LookResult, which has a boolean Success flag property. The flag
+All query types are optional, but when set, they become a required clause. All queries will return a LookResult, which has a boolean Success flag property. The flag
 is set to true when a query with at least one clause is executed sucessfully.
 
 #### RawQuery
@@ -175,7 +163,8 @@ lookQuery.NodeQuery = new NodeQuery() {
 	},
 	Aliases = new string[] { 
 		"myDocTypeAlias", 
-		"myMediaTypeAlias" 
+		"myMediaTypeAlias",
+		"myMemberTypeAlias"
 	},
 	NotIds = new int[] { 123 } // (eg. exclude current page)
 };
@@ -300,7 +289,7 @@ If not specified then the reults will be sorted on the Lucene score, otherwise s
 
 ### Search Results
 
-The search is performed by passing in the LookQuery model into the static Query method on the LookService.
+The search is performed by calling the static Query method on the LookService:
 
 ```csharp
 var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model.LookResult
