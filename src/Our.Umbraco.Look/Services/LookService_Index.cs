@@ -16,14 +16,17 @@ namespace Our.Umbraco.Look.Services
         /// <param name="document"></param>
         internal static void Index(IndexingContext indexingContext, Document document)
         {
-            var nodeTypeField = new Field(
-                                        LookConstants.NodeTypeField,
-                                        indexingContext.Item.ItemType.ToString(),
-                                        Field.Store.YES,
-                                        Field.Index.NOT_ANALYZED,
-                                        Field.TermVector.NO);
+            if (indexingContext.Item != null)
+            {
+                var nodeTypeField = new Field(
+                                            LookConstants.NodeTypeField,
+                                            indexingContext.Item.ItemType.ToString(),
+                                            Field.Store.YES,
+                                            Field.Index.NOT_ANALYZED,
+                                            Field.TermVector.NO);
 
-            document.Add(nodeTypeField);
+                document.Add(nodeTypeField);
+            }
 
             if (LookService.Instance.NameIndexer != null)
             {
