@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Our.Umbraco.Look.Services;
+using System.Linq;
 
 namespace Our.Umbraco.Look.Models
 {
@@ -71,13 +72,16 @@ namespace Our.Umbraco.Look.Models
             {
                 if (this._compiled != null)
                 {
-                    if (this._compiled.Source.RawQuery == this.RawQuery                        
-                        && ((this._compiled.Source.NodeQuery == null && this.NodeQuery == null) || this.NodeQuery != null && this.NodeQuery.Equals(this._compiled.Source.NodeQuery))
-                        && ((this._compiled.Source.NameQuery == null && this.NameQuery == null) || this.NameQuery != null && this.NameQuery.Equals(this._compiled.Source.NameQuery))
-                        && ((this._compiled.Source.DateQuery == null && this.DateQuery == null) || this.DateQuery != null && this.DateQuery.Equals(this._compiled.Source.DateQuery))
-                        && ((this._compiled.Source.TextQuery == null && this.TextQuery == null) || this.TextQuery != null && this.TextQuery.Equals(this._compiled.Source.TextQuery))
-                        && ((this._compiled.Source.TagQuery == null && this.TagQuery == null) || this.TagQuery != null && this.TagQuery.Equals(this._compiled.Source.TagQuery))
-                        && ((this._compiled.Source.LocationQuery == null && this.LocationQuery == null) || this.LocationQuery != null && this.LocationQuery.Equals(this._compiled.Source.LocationQuery)))
+                    var source = this._compiled.Source; // must exist, else it couldn't have been compiled
+
+                    // if the current query hasn't changed since being compiled
+                    if (source.RawQuery == this.RawQuery                        
+                        && ((source.NodeQuery == null && this.NodeQuery == null) || this.NodeQuery != null && this.NodeQuery.Equals(source.NodeQuery))
+                        && ((source.NameQuery == null && this.NameQuery == null) || this.NameQuery != null && this.NameQuery.Equals(source.NameQuery))
+                        && ((source.DateQuery == null && this.DateQuery == null) || this.DateQuery != null && this.DateQuery.Equals(source.DateQuery))
+                        && ((source.TextQuery == null && this.TextQuery == null) || this.TextQuery != null && this.TextQuery.Equals(source.TextQuery))
+                        && ((source.TagQuery == null && this.TagQuery == null) || this.TagQuery != null && this.TagQuery.Equals(source.TagQuery))
+                        && ((source.LocationQuery == null && this.LocationQuery == null) || this.LocationQuery != null && this.LocationQuery.Equals(source.LocationQuery)))
                     {
                         return this._compiled;
                     }
@@ -142,6 +146,15 @@ namespace Our.Umbraco.Look.Models
                     this.TagQuery.All = this.TagQuery.All.Concat(new LookTag[] { facet.Tag }).ToArray();
                 }
             }
+        }
+
+        /// <summary>
+        /// Shorthand method to LookService.Query(this) - rename to Execute() ?
+        /// </summary>
+        /// <returns></returns>
+        internal LookResult Query()
+        {
+            return LookService.Query(this);
         }
 
         internal LookQuery Clone()

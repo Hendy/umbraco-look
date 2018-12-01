@@ -10,8 +10,6 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            //TestHelper.DeleteIndex();
-
             TestHelper.IndexThings(new Thing[] {
                 new Thing() { Name = "123" },
                 new Thing() { Name = "xyz" },
@@ -19,6 +17,18 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             });
         }
 
+        [TestMethod]
+        public void Is()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.NameQuery.Is = "123";
+
+            var lookResult = LookService.Query(lookQuery);
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.IsTrue(lookResult.Total > 0);
+        }
 
         [TestMethod]
         public void Is_And_Starts_With()
@@ -27,6 +37,19 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.StartsWith = "12";
+
+            var lookResult = LookService.Query(lookQuery);
+
+            Assert.IsTrue(lookResult.Total > 0);
+        }
+
+        [TestMethod]
+        public void Is_And_Ends_With()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.NameQuery.Is = "123";
+            lookQuery.NameQuery.EndsWith= "23";
 
             var lookResult = LookService.Query(lookQuery);
 
@@ -45,6 +68,32 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             var lookResult = LookService.Query(lookQuery);
 
             Assert.IsTrue(lookResult.Total > 0);
+        }
+
+        [TestMethod]
+        public void Conflicting_Query_Is_And_Starts_With()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.NameQuery.Is = "123";
+            lookQuery.NameQuery.StartsWith = "xyz";
+
+            var lookResult = LookService.Query(lookQuery);
+
+            Assert.IsFalse(lookResult.Success);
+        }
+
+        [TestMethod]
+        public void Conflicting_Query_Is_And_Ends_With()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.NameQuery.Is = "123";
+            lookQuery.NameQuery.EndsWith = "xyz";
+
+            var lookResult = LookService.Query(lookQuery);
+
+            Assert.IsFalse(lookResult.Success);
         }
 
     }

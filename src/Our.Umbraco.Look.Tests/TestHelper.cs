@@ -69,7 +69,7 @@ namespace Our.Umbraco.Look.Tests
         /// 
         /// </summary>
         /// <param name="documents"></param>
-        internal static void IndexDocuments(IEnumerable<Document> documents)
+        private static void IndexDocuments(IEnumerable<Document> documents)
         {
             var luceneDirectory = FSDirectory.Open(System.IO.Directory.CreateDirectory(TestHelper.DirectoryPath));
             var analyzer = new WhitespaceAnalyzer();
@@ -94,12 +94,22 @@ namespace Our.Umbraco.Look.Tests
         //    System.IO.Directory.Delete(TestHelper.DirectoryPath, true);
         //}
 
-        internal static SearchingContext GetSearchingContext()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path">if supplied, allows test to use a specifc index</param>
+        /// <returns></returns>
+        internal static SearchingContext GetSearchingContext(string path = null)
         {
+            if (path == null)
+            {
+                path = TestHelper.DirectoryPath; // use the default test index
+            }
+
             return new SearchingContext() { 
                         Analyzer = new WhitespaceAnalyzer(),
                         EnableLeadingWildcards = true,
-                        IndexSearcher = new IndexSearcher(new SimpleFSDirectory(new DirectoryInfo(TestHelper.DirectoryPath)), true)
+                        IndexSearcher = new IndexSearcher(new SimpleFSDirectory(new DirectoryInfo(path)), true)
             };
         }
     }

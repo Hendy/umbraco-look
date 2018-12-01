@@ -247,7 +247,7 @@ The All, Any and Not properties expect LookTag[] values (see LookTags section be
 If there are any query contradictions (such as a tag exsing in both All and Not), then
 an empty result is returned with the success flag as false.
 
-The GetFacets string[] indcates which tag groups to return facet counts for.
+The GetFacets string[] indcates which tag groups to return facet counts for (see Facets section below).
 
 ```csharp
 lookQuery.TagQuery = new TagQuery() {
@@ -404,7 +404,7 @@ public class LookTag
 ### LookTags
 
 A tag can be any string and exists within an optionally specified group (if a group isn't set, then the tag is put into a default un-named group - String.Empty).
-A group has can be any string that contains only aphanumberic/underscore chars, as is less than 50 chars (as it is also used to generate a custom Lucene field name).
+A group string must only contain aphanumberic/underscore chars, and be less than 50 chars (as it is also used to generate a custom Lucene field name).
 
 A LookTag can be constructed from specified group and tag values:
 
@@ -425,7 +425,6 @@ eg.
 var tag1 = new LookTag("red"); // tag 'red', in default un-named group
 var tag2 = new LookTag(":red"); // tag 'red', in default un-named group
 var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
-var tag3 = new LookTag("colour", "red"); // tag 'red', in group 'colour'
 ```
 
 There is also a static helper on the TagQuery model which can be used as a shorthand to create a LookTag array. Eg.
@@ -433,3 +432,7 @@ There is also a static helper on the TagQuery model which can be used as a short
 ```csharp
 var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue", "size:large");
 ```
+
+### Facets
+
+Look interprets facets to mean: "if the current query asked something slightly different (the facet being the difference), then how many results would be returned instead ?".

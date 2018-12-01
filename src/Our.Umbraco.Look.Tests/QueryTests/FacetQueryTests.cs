@@ -9,7 +9,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
     [TestClass]
     public class FacetQueryTests
     {
-        private string _colour;
+        private string _colour = Guid.NewGuid().ToString("N"); // create new group of tags for these tests (rather than clear index - let it bulk out)
 
         private LookTag _red;
         private LookTag _orange;
@@ -22,8 +22,6 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestInitialize]
         public void Initialize()
         {
-            _colour = Guid.NewGuid().ToString("N"); // create new group of tags for these tests (rather than clear index - let it bulk out)
-
             _red = new LookTag(_colour, "red");
             _orange = new LookTag(_colour, "orange");
             _yellow = new LookTag(_colour, "yellow");
