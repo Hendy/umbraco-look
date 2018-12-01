@@ -110,40 +110,39 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// internal constructor for unit testing, allows tests to supply context bypassing Examine
+        /// internal constructor for unit testing, allows tests to supply context bypassing Umbraco Examine
         /// </summary>
         internal LookQuery(SearchingContext searchingContext)
         {
             this.SearchingContext = searchingContext;
         }
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="facet"></param>
-        ///// <returns></returns>
-        //public LookQuery ApplyFacet(Facet facet)
-        //{
-        //    if (facet != null)
-        //    {
-        //        if (this.TagQuery == null)
-        //        {
-        //            this.TagQuery = new TagQuery();
-        //        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="facet"></param>
+        /// <returns></returns>
+        public void ApplyFacet(Facet facet)
+        {
+            if (facet != null)
+            {
+                this._compiled = null;
 
-        //        if (this.TagQuery.All == null)
-        //        {
-        //            this.TagQuery.All = new LookTag[] { facet.Tag }; 
-        //        }
-        //        else
-        //        {
-        //            this.TagQuery.All = this.TagQuery.All.Concat(new LookTag[] { facet.Tag }).ToArray();
-        //        }
+                if (this.TagQuery == null)
+                {
+                    this.TagQuery = new TagQuery();
+                }
 
-        //    }
-
-        //    return this;
-        //}
+                if (this.TagQuery.All == null)
+                {
+                    this.TagQuery.All = new LookTag[] { facet.Tag };
+                }
+                else
+                {
+                    this.TagQuery.All = this.TagQuery.All.Concat(new LookTag[] { facet.Tag }).ToArray();
+                }
+            }
+        }
 
         internal LookQuery Clone()
         {

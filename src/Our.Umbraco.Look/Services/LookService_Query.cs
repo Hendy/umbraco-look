@@ -386,8 +386,7 @@ namespace Our.Umbraco.Look.Services
                             sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
                             break;
 
-                            //case SortOn.Distance: // already set if valid
-                            //    break;
+                        // SortOn.Distance already set (if valid)
                     }
 
                     lookQuery.Compiled = new LookQueryCompiled(

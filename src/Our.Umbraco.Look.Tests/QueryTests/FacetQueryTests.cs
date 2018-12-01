@@ -9,38 +9,48 @@ namespace Our.Umbraco.Look.Tests.QueryTests
     [TestClass]
     public class FacetQueryTests
     {
-        //[ClassInitialize]
-        //public static void ClassInitialize(TestContext testContext)
-        //{
-        //}
+        private string _colour;
+
+        private LookTag _red;
+        private LookTag _orange;
+        private LookTag _yellow;
+        private LookTag _green;
+        private LookTag _blue;
+        private LookTag _indigo;
+        private LookTag _violet;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _colour = Guid.NewGuid().ToString("N"); // create new group of tags for these tests (rather than clear index - let it bulk out)
+
+            _red = new LookTag(_colour, "red");
+            _orange = new LookTag(_colour, "orange");
+            _yellow = new LookTag(_colour, "yellow");
+            _green = new LookTag(_colour, "green");
+            _blue = new LookTag(_colour, "blue");
+            _indigo = new LookTag(_colour, "indigo");
+            _violet = new LookTag(_colour, "violet");
+
+            TestHelper.IndexThings(new Thing[] {
+                new Thing() { Tags = new LookTag[] { _red, _orange, _yellow, _green, _blue, _indigo, _violet } },
+                new Thing() { Tags = new LookTag[] { _red, _orange, _yellow, _green, _blue, _indigo } },
+                new Thing() { Tags = new LookTag[] { _red, _orange, _yellow, _green, _blue} },
+                new Thing() { Tags = new LookTag[] { _red, _orange, _yellow, _green} },
+                new Thing() { Tags = new LookTag[] { _red, _orange, _yellow } },
+                new Thing() { Tags = new LookTag[] { _red, _orange } },
+                new Thing() { Tags = new LookTag[] { _red } }
+            });
+        }
 
         [TestMethod]
         public void Facet_Counts()
         {
-            var colour = Guid.NewGuid().ToString("N");
-
-            var red = new LookTag(colour, "red");
-            var orange = new LookTag(colour, "orange");
-            var yellow = new LookTag(colour, "yellow");
-            var green = new LookTag(colour, "green");
-            var blue = new LookTag(colour, "blue");
-            var indigo = new LookTag(colour, "indigo");
-            var violet = new LookTag(colour, "violet");
-
-            TestHelper.IndexThings(new Thing[] {
-                new Thing() { Tags = new LookTag[] { red, orange, yellow, green, blue, indigo, violet } },
-                new Thing() { Tags = new LookTag[] { red, orange, yellow, green, blue, indigo } },
-                new Thing() { Tags = new LookTag[] { red, orange, yellow, green, blue} },
-                new Thing() { Tags = new LookTag[] { red, orange, yellow, green} },
-                new Thing() { Tags = new LookTag[] { red, orange, yellow } },
-                new Thing() { Tags = new LookTag[] { red, orange } },
-                new Thing() { Tags = new LookTag[] { red } }
-            });
-
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.TagQuery.All = new LookTag[] { red };
-            lookQuery.TagQuery.GetFacets = new string[] { colour };
+            lookQuery.TagQuery.All = new LookTag[] { _red };
+
+            lookQuery.TagQuery.GetFacets = new string[] { _colour };
 
             var lookResult = LookService.Query(lookQuery);
 
@@ -48,20 +58,46 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.Total > 0);
             Assert.IsTrue(lookResult.Facets.Length == 7);
-            Assert.IsTrue(lookResult.Facets.Single(x => red.Equals(x.Tag)).Count == 7);
-            Assert.IsTrue(lookResult.Facets.Single(x => orange.Equals(x.Tag)).Count == 6);
-            Assert.IsTrue(lookResult.Facets.Single(x => yellow.Equals(x.Tag)).Count == 5);
-            Assert.IsTrue(lookResult.Facets.Single(x => green.Equals(x.Tag)).Count == 4);
-            Assert.IsTrue(lookResult.Facets.Single(x => blue.Equals(x.Tag)).Count == 3);
-            Assert.IsTrue(lookResult.Facets.Single(x => indigo.Equals(x.Tag)).Count == 2);
-            Assert.IsTrue(lookResult.Facets.Single(x => violet.Equals(x.Tag)).Count == 1);
+            Assert.IsTrue(lookResult.Facets.Single(x => _red.Equals(x.Tag)).Count == 7);
+            Assert.IsTrue(lookResult.Facets.Single(x => _orange.Equals(x.Tag)).Count == 6);
+            Assert.IsTrue(lookResult.Facets.Single(x => _yellow.Equals(x.Tag)).Count == 5);
+            Assert.IsTrue(lookResult.Facets.Single(x => _green.Equals(x.Tag)).Count == 4);
+            Assert.IsTrue(lookResult.Facets.Single(x => _blue.Equals(x.Tag)).Count == 3);
+            Assert.IsTrue(lookResult.Facets.Single(x => _indigo.Equals(x.Tag)).Count == 2);
+            Assert.IsTrue(lookResult.Facets.Single(x => _violet.Equals(x.Tag)).Count == 1);
         }
 
         [TestMethod]
-        public void Bl()
+        public void Apply_Facet_Then_Re_Query()
         {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.TagQuery.All = new LookTag[] { _red };
+
+            lookQuery.TagQuery.GetFacets = new string[] { _colour };
+
+            var lookResult = LookService.Query(lookQuery);
+
+            Assert.IsNotNull(lookResult);
+            Assert.IsTrue(lookResult.Success);
+            Assert.IsTrue(lookResult.Total == 7);
+            Assert.IsTrue(lookResult.Facets.Length == 7);
+
+            var facet = lookResult.Facets.Single(x => _green.Equals(x.Tag));
+
+            Assert.IsTrue(facet.Count == 4);
+
+            lookQuery.ApplyFacet(facet);
+
+            Assert.IsNull(lookQuery.Compiled);
+
+            lookResult = LookService.Query(lookQuery);
+
+            Assert.IsNotNull(lookQuery.Compiled);
+
+            Assert.IsNotNull(lookResult);
+            Assert.IsTrue(lookResult.Success);
+            Assert.IsTrue(lookResult.Total == 4);
         }
-
     }
 }
