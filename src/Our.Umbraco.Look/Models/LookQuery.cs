@@ -149,7 +149,7 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// Shorthand method to LookService.Query(this) - rename to Execute() ?
+        /// Perform the query - this does the same thing as LookService.Query(this)
         /// </summary>
         /// <returns></returns>
         internal LookResult Query()

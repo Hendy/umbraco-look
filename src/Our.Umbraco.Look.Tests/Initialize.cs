@@ -9,6 +9,7 @@ namespace Our.Umbraco.Look.Tests
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext testContext)
         {
+            // Wire up the location indexers
             LookService.Initialize();
         }    
     }

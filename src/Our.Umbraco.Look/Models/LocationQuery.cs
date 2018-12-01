@@ -29,7 +29,7 @@
 
             return locationQuery != null
                 && ((locationQuery.Location == null && this.Location == null) || (locationQuery.Location != null && this.Location.Equals(locationQuery.Location)))
-                && ((locationQuery.MaxDistance == null && this.MaxDistance == null) || locationQuery.MaxDistance != null && this.Location.Equals(locationQuery.MaxDistance));
+                && ((locationQuery.MaxDistance == null && this.MaxDistance == null) || locationQuery.MaxDistance != null && this.MaxDistance.Equals(locationQuery.MaxDistance));
         }
 
         internal LocationQuery Clone()
