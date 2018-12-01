@@ -125,6 +125,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsTrue(results1.Total > 0);
             Assert.AreNotEqual(results1, results2);
             Assert.AreEqual(results1.Total, results2.Total);
+            Assert.AreEqual(lookQuery, results1.CompiledQuery);
         }
     }
 }
