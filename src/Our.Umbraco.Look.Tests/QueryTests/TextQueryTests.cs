@@ -6,7 +6,7 @@ using System.Linq;
 namespace Our.Umbraco.Look.Tests.QueryTests
 {
     [TestClass]
-    public class TextQueryTests : BaseQueryTest
+    public class TextQueryTests
     {
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -22,7 +22,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Highlighting()
         {
-            var lookQuery = new LookQuery(this._searchingContext);
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
             lookQuery.TextQuery = new TextQuery("dolor", true);
 

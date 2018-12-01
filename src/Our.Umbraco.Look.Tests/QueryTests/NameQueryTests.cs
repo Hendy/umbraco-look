@@ -5,7 +5,7 @@ using Our.Umbraco.Look.Services;
 namespace Our.Umbraco.Look.Tests.QueryTests
 {
     [TestClass]
-    public class NameQueryTests : BaseQueryTest
+    public class NameQueryTests
     {
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
@@ -23,7 +23,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Is_And_Starts_With()
         {
-            var lookQuery = new LookQuery(this._searchingContext);
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.StartsWith = "12";
@@ -33,6 +33,19 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsTrue(lookResult.Total > 0);
         }
 
+        [TestMethod]
+        public void Is_And_Starts_With_And_Ends_With()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.NameQuery.Is = "123";
+            lookQuery.NameQuery.StartsWith = "12";
+            lookQuery.NameQuery.EndsWith = "23";
+
+            var lookResult = LookService.Query(lookQuery);
+
+            Assert.IsTrue(lookResult.Total > 0);
+        }
 
     }
 }

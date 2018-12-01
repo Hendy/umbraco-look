@@ -186,7 +186,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseQueryTest.cs" />
+    <Compile Include="QueryTests\FacetQueryTests.cs" />
     <Compile Include="QueryTests\LookQueryCompiledTests.cs" />
     <Compile Include="QueryTests\TextQueryTests.cs" />
     <Compile Include="QueryTests\LookQueryTests.cs" />

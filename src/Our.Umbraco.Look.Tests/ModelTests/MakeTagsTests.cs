@@ -7,6 +7,12 @@ namespace Our.Umbraco.Look.Tests.ModelTests
     [TestClass]
     public class MakeTagsTests
     {
+        //[ClassInitialize]
+        //public static void ClassInitialize(TestContext testContext)
+        //{
+
+        //}
+
         [TestMethod]
         public void String_Params()
         {

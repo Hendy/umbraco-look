@@ -8,6 +8,12 @@ namespace Our.Umbraco.Look.Tests
     /// </summary>
     internal class Thing
     {
+        internal Thing()
+        {
+            this.Name = Guid.NewGuid().ToString();
+            this.Date = DateTime.Now;
+        }
+
         internal string Name { get; set; }
 
         internal DateTime? Date { get; set; }

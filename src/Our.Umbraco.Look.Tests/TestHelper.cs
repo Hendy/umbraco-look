@@ -1,6 +1,7 @@
 ﻿using Lucene.Net.Analysis;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
+using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
@@ -22,21 +23,9 @@ namespace Our.Umbraco.Look.Tests
         }
 
         /// <summary>
-        /// Make a new thing with random values
+        /// Add supplied collection into the test index
         /// </summary>
-        /// <returns></returns>
-        internal static Thing MakeRandomThing()
-        {
-            return new Thing()
-            {
-                Name = Guid.NewGuid().ToString(),
-                Date = DateTime.Now,
-                Text = null,
-                Tags = null,
-                Location = null
-            };
-        }
-
+        /// <param name="things"></param>
         internal static void IndexThings(IEnumerable<Thing> things)
         {
             var nameStack = new Stack<string>(things.Select(x => x.Name));
@@ -57,7 +46,7 @@ namespace Our.Umbraco.Look.Tests
 
             List<Document> documents = new List<Document>();
 
-            foreach(var thing in things)
+            foreach (var thing in things)
             {
                 var document = new Document();
 
@@ -73,8 +62,17 @@ namespace Our.Umbraco.Look.Tests
             LookService.SetTagIndexer(null);
             LookService.SetLocationIndexer(null);
 
+            TestHelper.IndexDocuments(documents);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="documents"></param>
+        internal static void IndexDocuments(IEnumerable<Document> documents)
+        {
             var luceneDirectory = FSDirectory.Open(System.IO.Directory.CreateDirectory(TestHelper.DirectoryPath));
-            var  analyzer = new WhitespaceAnalyzer();
+            var analyzer = new WhitespaceAnalyzer();
 
             var indexWriter = new IndexWriter(luceneDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
 
@@ -88,12 +86,22 @@ namespace Our.Umbraco.Look.Tests
             indexWriter.Close();
         }
 
-        /// <summary>
-        /// Delete the test index from the file system
-        /// </summary>
-        internal static void DeleteIndex()
+        ///// <summary>
+        ///// Delete the test index from the file system
+        ///// </summary>
+        //internal static void DeleteIndex()
+        //{
+        //    System.IO.Directory.Delete(TestHelper.DirectoryPath, true);
+        //}
+
+        internal static SearchingContext GetSearchingContext()
         {
-            System.IO.Directory.Delete(TestHelper.DirectoryPath, true);
+            return new SearchingContext() { 
+                        Analyzer = new WhitespaceAnalyzer(),
+                        EnableLeadingWildcards = true,
+                        IndexSearcher = new IndexSearcher(new SimpleFSDirectory(new DirectoryInfo(TestHelper.DirectoryPath)), true)
+            };
         }
     }
+
 }

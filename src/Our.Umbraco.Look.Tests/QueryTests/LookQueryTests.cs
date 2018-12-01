@@ -6,7 +6,7 @@ using Umbraco.Core.Models;
 namespace Our.Umbraco.Look.Tests.QueryTests
 {
     [TestClass]
-    public class LookQueryTests : BaseQueryTest
+    public class LookQueryTests
     {
         [TestMethod]
         public void Null_Query()
@@ -21,7 +21,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Empty_Query()
         {
-            var lookQuery = new LookQuery(this._searchingContext);
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
             var lookResult = LookService.Query(lookQuery);
 
@@ -33,7 +33,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Query_With_Node_Type_Clause()
         {
-            var lookQuery = new LookQuery(this._searchingContext);
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
             lookQuery.NodeQuery.Types = new PublishedItemType[] { PublishedItemType.Content };
 
