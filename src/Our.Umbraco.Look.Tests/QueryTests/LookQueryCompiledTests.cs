@@ -16,12 +16,25 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsNull(lookQuery.Compiled);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [TestMethod]
+        public void New_Query_No_Clauses_Not_Compiled()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            var lookResult = LookService.Query(lookQuery);
+
+            Assert.IsNull(lookQuery.Compiled);
+        }
+
         [TestMethod]
         public void New_Query_Executed_To_Make_Compiled()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            lookQuery = LookService.Query(lookQuery).CompiledQuery;
+            var lookResult = LookService.Query(lookQuery);
 
             Assert.IsNotNull(lookQuery.Compiled);
         }
@@ -32,7 +45,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            lookQuery = LookService.Query(lookQuery).CompiledQuery;
+            var lookResult = LookService.Query(lookQuery);
 
             lookQuery.RawQuery = "+field:value";
 
@@ -44,7 +57,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            lookQuery = LookService.Query(lookQuery).CompiledQuery;
+            var lookResult = LookService.Query(lookQuery);
 
             lookQuery.NodeQuery = new NodeQuery();
 
@@ -56,7 +69,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            lookQuery = LookService.Query(lookQuery).CompiledQuery;
+            var lookResult = LookService.Query(lookQuery);
 
             lookQuery.NameQuery.StartsWith = "new value";
 
@@ -68,7 +81,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            lookQuery = LookService.Query(lookQuery).CompiledQuery;
+            var lookResult = LookService.Query(lookQuery);
 
             lookQuery.DateQuery.Before = DateTime.MaxValue;
 
@@ -80,7 +93,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            lookQuery = LookService.Query(lookQuery).CompiledQuery;
+            var lookResult = LookService.Query(lookQuery);
 
             lookQuery.TextQuery.GetText = true;
 
@@ -92,7 +105,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            lookQuery = LookService.Query(lookQuery).CompiledQuery;
+            var lookResult = LookService.Query(lookQuery);
 
             lookQuery.TagQuery.GetFacets = new string[] { };
 
@@ -104,7 +117,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            lookQuery = LookService.Query(lookQuery).CompiledQuery;
+            var lookResult = LookService.Query(lookQuery);
 
             lookQuery.LocationQuery.MaxDistance = new Distance(1, DistanceUnit.Miles);
 
@@ -118,14 +131,15 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NameQuery = new NameQuery("thing") };
 
-            var results1 = LookService.Query(lookQuery);
-            var results2 = LookService.Query(results1.CompiledQuery);
+            Assert.IsNull(lookQuery.Compiled);
 
-            Assert.IsTrue(results1.Success);
-            Assert.IsTrue(results1.Total > 0);
-            Assert.AreNotEqual(results1, results2);
-            Assert.AreEqual(results1.Total, results2.Total);
-            Assert.AreEqual(lookQuery, results1.CompiledQuery);
+            var lookResults = LookService.Query(lookQuery);
+            var total = lookResults.Total;
+
+            Assert.IsNotNull(lookQuery.Compiled);
+            Assert.IsTrue(total > 0);
+
+            Assert.AreEqual(total, LookService.Query(lookQuery).Total);            
         }
     }
 }
