@@ -186,17 +186,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DemoSiteTests\BaseDemoSiteTests.cs" />
-    <Compile Include="DemoSiteTests\CompiledQueryTests.cs" />
-    <Compile Include="DemoSiteTests\LookQueryTests.cs" />
-    <Compile Include="DemoSiteTests\NameQueryTests.cs" />
-    <Compile Include="DemoSiteTests\TextQueryTests.cs" />
-    <Compile Include="DemoSiteTests\NodeQueryTests.cs" />
-    <Compile Include="LookTagComparrisonTests.cs" />
-    <Compile Include="LookTagConstructorTests.cs" />
-    <Compile Include="DemoSiteTests\QueryDemoSiteTests.cs" />
-    <Compile Include="MakeTagsTests.cs" />
+    <Compile Include="BaseQueryTest.cs" />
+    <Compile Include="QueryTests\LookQueryCompiledTests.cs" />
+    <Compile Include="QueryTests\TextQueryTests.cs" />
+    <Compile Include="QueryTests\LookQueryTests.cs" />
+    <Compile Include="ModelTests\LookTagComparrisonTests.cs" />
+    <Compile Include="ModelTests\LookTagConstructorTests.cs" />
+    <Compile Include="ModelTests\MakeTagsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestHelper.cs" />
+    <Compile Include="Thing.cs" />
+    <Compile Include="QueryTests\NameQueryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -208,6 +208,7 @@
       <Name>Our.Umbraco.Look</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -3,14 +3,11 @@ using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Our.Umbraco.Look.Models;
-using Our.Umbraco.Look.Services;
-using System.Configuration;
 using System.IO;
 
-namespace Our.Umbraco.Look.Tests.DemoSiteTests
+namespace Our.Umbraco.Look.Tests
 {
-    [TestClass]
-    public abstract class BaseDemoSiteTests
+    public abstract class BaseQueryTest
     {
         internal SearchingContext _searchingContext;
 
@@ -21,7 +18,11 @@ namespace Our.Umbraco.Look.Tests.DemoSiteTests
             {
                 Analyzer = new WhitespaceAnalyzer(),
                 EnableLeadingWildcards = true,
-                IndexSearcher = new IndexSearcher(new SimpleFSDirectory(new DirectoryInfo(ConfigurationManager.AppSettings["DemoSiteLuceneDirectory"])), true)
+                IndexSearcher = new IndexSearcher(
+                                    new SimpleFSDirectory(
+                                        new DirectoryInfo(
+                                           TestHelper.DirectoryPath)),
+                                    true)
             };
         }
     }

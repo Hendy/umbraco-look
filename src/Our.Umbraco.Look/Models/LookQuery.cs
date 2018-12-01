@@ -1,4 +1,6 @@
-﻿namespace Our.Umbraco.Look.Models
+﻿using System.Linq;
+
+namespace Our.Umbraco.Look.Models
 {
     /// <summary>
     /// Model used to specify the search query criteria for a LookService.Query
@@ -114,6 +116,34 @@
         {
             this.SearchingContext = searchingContext;
         }
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="facet"></param>
+        ///// <returns></returns>
+        //public LookQuery ApplyFacet(Facet facet)
+        //{
+        //    if (facet != null)
+        //    {
+        //        if (this.TagQuery == null)
+        //        {
+        //            this.TagQuery = new TagQuery();
+        //        }
+
+        //        if (this.TagQuery.All == null)
+        //        {
+        //            this.TagQuery.All = new LookTag[] { facet.Tag }; 
+        //        }
+        //        else
+        //        {
+        //            this.TagQuery.All = this.TagQuery.All.Concat(new LookTag[] { facet.Tag }).ToArray();
+        //        }
+
+        //    }
+
+        //    return this;
+        //}
 
         internal LookQuery Clone()
         {

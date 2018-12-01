@@ -1,13 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
-using Our.Umbraco.Look.Tests.DemoSiteTests;
 using System;
 
-namespace Our.Umbraco.Look.Tests
+namespace Our.Umbraco.Look.Tests.QueryTests
 {
     [TestClass]
-    public class QueryDemoSiteTests : BaseDemoSiteTests
+    public class LookQueryCompiled : BaseQueryTest
     {
         [TestMethod]
         public void New_Query_Not_Compiled()
@@ -115,7 +114,9 @@ namespace Our.Umbraco.Look.Tests
         [TestMethod]
         public void Re_Execute_Compiled_Expect_Same_Results()
         {
-            var lookQuery = new LookQuery(this._searchingContext) { NodeQuery = new NodeQuery("thing") };
+            TestHelper.IndexThings(new Thing[] { new Thing() { Name = "thing" } });
+
+            var lookQuery = new LookQuery(this._searchingContext) { NameQuery = new NameQuery("thing") };
 
             var results1 = LookService.Query(lookQuery);
             var results2 = LookService.Query(results1.CompiledQuery);

@@ -3,10 +3,10 @@ using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
 using Umbraco.Core.Models;
 
-namespace Our.Umbraco.Look.Tests.DemoSiteTests
+namespace Our.Umbraco.Look.Tests.QueryTests
 {
     [TestClass]
-    public class LookQueryTests : BaseDemoSiteTests
+    public class LookQueryTests : BaseQueryTest
     {
         [TestMethod]
         public void Null_Query()

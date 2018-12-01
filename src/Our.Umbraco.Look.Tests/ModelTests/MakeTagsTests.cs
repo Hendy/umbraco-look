@@ -2,7 +2,7 @@
 using Our.Umbraco.Look.Models;
 using System.Linq;
 
-namespace Our.Umbraco.Look.Tests
+namespace Our.Umbraco.Look.Tests.ModelTests
 {
     [TestClass]
     public class MakeTagsTests

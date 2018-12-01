@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Our.Umbraco.Look.Models;
 
-namespace Our.Umbraco.Look.Tests
+namespace Our.Umbraco.Look.Tests.ModelTests
 {
     [TestClass]
     public class LookTagComparrisonTests
