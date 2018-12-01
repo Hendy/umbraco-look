@@ -12,6 +12,14 @@ namespace Our.Umbraco.Look.Services
     public partial class LookService
     {
         /// <summary>
+        /// For unit tests (skips Umbraco Examine dependency)
+        /// </summary>
+        internal static void Initialize()
+        {
+            InitializeCartesianTierPlotters();
+        }
+
+        /// <summary>
         /// Setup indexing if configuration valid
         /// </summary>
         /// <param name="documentWriting">indexing event</param>
@@ -38,6 +46,20 @@ namespace Our.Umbraco.Look.Services
                 return;
             }
 
+            // cache the collection of Lucene Directory objs (so don't have to at query time)
+            LookService.Instance.IndexSetDirectories = indexProviders.ToDictionary(x => x.IndexSetName, x => x.GetLuceneDirectory());
+
+            // hook into all index providers
+            foreach(var indexProvider in indexProviders)
+            {
+                indexProvider.DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper, indexProvider.Name);
+            }
+
+            InitializeCartesianTierPlotters();
+        }
+
+        private static void InitializeCartesianTierPlotters()
+        {
             // init collection of cartesian tier plotters
             IProjector projector = new SinusoidalProjector();
             var plotter = new CartesianTierPlotter(0, projector, LookConstants.LocationTierFieldPrefix);
@@ -54,15 +76,6 @@ namespace Our.Umbraco.Look.Services
                                         tier,
                                         projector,
                                         LookConstants.LocationTierFieldPrefix));
-            }
-
-            // cache the collection of Lucene Directory objs (so don't have to at query time)
-            LookService.Instance.IndexSetDirectories = indexProviders.ToDictionary(x => x.IndexSetName, x => x.GetLuceneDirectory());
-
-            // hook into all index providers
-            foreach(var indexProvider in indexProviders)
-            {
-                indexProvider.DocumentWriting += (sender, e) => documentWriting(sender, e, umbracoHelper, indexProvider.Name);
             }
         }
     }

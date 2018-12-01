@@ -16,11 +16,30 @@ namespace Our.Umbraco.Look.Tests
     {
         internal static string DirectoryPath => Path.GetTempPath() + "LookTestData";
 
-
-        internal static void GenerateTestData()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path">if supplied, allows test to use a specifc index</param>
+        /// <returns></returns>
+        internal static SearchingContext GetSearchingContext(string path = null)
         {
-            // generate a load of random test data, just to bulk it out
+            if (path == null)
+            {
+                path = TestHelper.DirectoryPath; // use the default test index
+            }
+
+            return new SearchingContext()
+            {
+                Analyzer = new WhitespaceAnalyzer(),
+                EnableLeadingWildcards = true,
+                IndexSearcher = new IndexSearcher(new SimpleFSDirectory(new DirectoryInfo(path)), true)
+            };
         }
+
+        //internal static void GenerateTestData()
+        //{
+        //    // generate a load of random test data, just to bulk it out
+        //}
 
         /// <summary>
         /// Add supplied collection into the test index
@@ -83,6 +102,8 @@ namespace Our.Umbraco.Look.Tests
 
             indexWriter.Optimize();
 
+            indexWriter.Commit();
+            
             indexWriter.Close();
         }
 
@@ -93,25 +114,5 @@ namespace Our.Umbraco.Look.Tests
         //{
         //    System.IO.Directory.Delete(TestHelper.DirectoryPath, true);
         //}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path">if supplied, allows test to use a specifc index</param>
-        /// <returns></returns>
-        internal static SearchingContext GetSearchingContext(string path = null)
-        {
-            if (path == null)
-            {
-                path = TestHelper.DirectoryPath; // use the default test index
-            }
-
-            return new SearchingContext() { 
-                        Analyzer = new WhitespaceAnalyzer(),
-                        EnableLeadingWildcards = true,
-                        IndexSearcher = new IndexSearcher(new SimpleFSDirectory(new DirectoryInfo(path)), true)
-            };
-        }
     }
-
 }

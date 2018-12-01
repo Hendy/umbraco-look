@@ -186,6 +186,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Initialize.cs" />
     <Compile Include="QueryTests\FacetQueryTests.cs" />
     <Compile Include="QueryTests\LocationQueryTests.cs" />
     <Compile Include="QueryTests\LookQueryCompiledTests.cs" />

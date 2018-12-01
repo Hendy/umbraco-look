@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Our.Umbraco.Look.Services;
 
 namespace Our.Umbraco.Look.Tests
 {
@@ -8,7 +9,7 @@ namespace Our.Umbraco.Look.Tests
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext testContext)
         {
-
+            LookService.Initialize();
         }    
     }
 }

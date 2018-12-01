@@ -24,7 +24,6 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             TestHelper.IndexThings(new Thing[]
             {
-                new Thing() { Name = _name, Location = _umbracoHQ },
                 new Thing() { Name = _name, Location = _copenhagen },
                 new Thing() { Name = _name, Location = _london },
                 new Thing() { Name = _name, Location = _paris },
@@ -32,23 +31,27 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             });
         }
 
-        //[TestMethod]
-        //public void Distance_Calculations()
-        //{
-        //    var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
-            
-        //    lookQuery.NameQuery.Is = _name;
-        //    lookQuery.LocationQuery.Location = _paris;
-            
-        //    //lookQuery.LocationQuery.MaxDistance = 1000
-        //    //lookQuery.SortOn = SortOn.Distance;
+        [TestMethod]
+        public void Distance_Calculations()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-        //    var lookResult = LookService.Query(lookQuery);
+            lookQuery.NameQuery.Is = _name;
+            lookQuery.LocationQuery.Location = _london;
 
-        //    Assert.IsTrue(lookResult.Success);
-        //    Assert.IsTrue(lookResult.Total > 0);
-        //    //Assert.IsTrue(lookResult.First().Location.Equals(_umbracoHQ));
-        //    //Assert.IsTrue(lookResult.Last().Location.Equals(_newYork));
-        //}
+            lookQuery.SortOn = SortOn.Distance;
+
+            var lookResult = LookService.Query(lookQuery);
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.IsTrue(lookResult.Total > 0);
+
+            var results = lookResult.Select(x => x.Location).ToArray();
+
+            Assert.IsTrue(results[0].Equals(_london));
+            Assert.IsTrue(results[1].Equals(_paris));
+            Assert.IsTrue(results[2].Equals(_copenhagen));
+            Assert.IsTrue(results[3].Equals(_newYork));
+        }
     }
 }
