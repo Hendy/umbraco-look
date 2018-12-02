@@ -91,9 +91,6 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             // get the expected count
             var facetCount = facet.Count;
 
-            // not required for next query
-            lookQuery.TagQuery.GetFacets = null;
-
             // apply facet to query
             lookQuery.ApplyFacet(facet);
 

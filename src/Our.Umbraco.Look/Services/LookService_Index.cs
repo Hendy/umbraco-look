@@ -189,8 +189,7 @@ namespace Our.Umbraco.Look.Services
                                                 LookConstants.HasLocationField,
                                                 Boolean.TrueString,
                                                 Field.Store.NO,
-                                                Field.Index.NOT_ANALYZED,
-                                                Field.TermVector.NO);
+                                                Field.Index.NOT_ANALYZED);
 
                     var locationField = new Field(
                                                 LookConstants.LocationField,

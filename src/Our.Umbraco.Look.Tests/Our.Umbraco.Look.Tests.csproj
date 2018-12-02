@@ -191,6 +191,7 @@
     <Compile Include="QueryTests\FacetQueryTests.cs" />
     <Compile Include="QueryTests\LocationQueryTests.cs" />
     <Compile Include="QueryTests\LookQueryCompiledTests.cs" />
+    <Compile Include="QueryTests\TagQueryTests.cs" />
     <Compile Include="QueryTests\TextQueryTests.cs" />
     <Compile Include="QueryTests\LookQueryTests.cs" />
     <Compile Include="ModelTests\LookTagComparrisonTests.cs" />
