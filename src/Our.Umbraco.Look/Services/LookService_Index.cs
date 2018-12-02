@@ -185,6 +185,13 @@ namespace Our.Umbraco.Look.Services
 
                 if (location != null)
                 {
+                    var hasLocationField = new Field(
+                                                LookConstants.HasLocationField,
+                                                Boolean.TrueString,
+                                                Field.Store.NO,
+                                                Field.Index.NOT_ANALYZED,
+                                                Field.TermVector.NO);
+
                     var locationField = new Field(
                                                 LookConstants.LocationField,
                                                 location.ToString(),
@@ -203,6 +210,7 @@ namespace Our.Umbraco.Look.Services
                                         Field.Store.YES,
                                         Field.Index.NOT_ANALYZED);
 
+                    document.Add(hasLocationField);
                     document.Add(locationField);
                     document.Add(locationLatitudeField);
                     document.Add(locationLongitudeField);

@@ -9,25 +9,20 @@ namespace Our.Umbraco.Look.Tests.QueryTests
     [TestClass]
     public class LocationQueryTests
     {
-        private string _name; 
+        private readonly static Location _umbracoHQ = new Location(55.406330, 10.388500);
+        private readonly static Location _copenhagen = new Location(55.6761, 12.5683);
+        private readonly static Location _london = new Location(51.5074, 0.1278);
+        private readonly static Location _paris = new Location(48.8566, 2.3522);
+        private readonly static Location _newYork = new Location(40.7128, -74.0060);
 
-        private Location _umbracoHQ = new Location(55.406330, 10.388500);
-        private Location _copenhagen = new Location(55.6761, 12.5683);
-        private Location _london = new Location(51.5074, 0.1278);
-        private Location _paris = new Location(48.8566, 2.3522);
-        private Location _newYork = new Location(40.7128, -74.0060);
-
-        [TestInitialize]
-        public void Initialize()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
         {
-            _name = Guid.NewGuid().ToString("N");
-
-            TestHelper.IndexThings(new Thing[]
-            {
-                new Thing() { Name = _name, Location = _copenhagen },
-                new Thing() { Name = _name, Location = _london },
-                new Thing() { Name = _name, Location = _paris },
-                new Thing() { Name = _name, Location = _newYork },
+            TestHelper.IndexThings(new Thing[] {
+                new Thing() { Location = _copenhagen },
+                new Thing() { Location = _london },
+                new Thing() { Location = _paris },
+                new Thing() { Location = _newYork },
             });
         }
 
@@ -36,7 +31,6 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.NameQuery.Is = _name;
             lookQuery.LocationQuery.Location = _london;
 
             lookQuery.SortOn = SortOn.Distance;
@@ -59,7 +53,6 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.NameQuery.Is = _name;
             lookQuery.LocationQuery.Location = _london;
             lookQuery.LocationQuery.MaxDistance = new Distance(300, DistanceUnit.Miles);
 

@@ -331,6 +331,10 @@ namespace Our.Umbraco.Look.Services
                 // Location
                 if (lookQuery.LocationQuery != null && lookQuery.LocationQuery.Location != null)
                 {
+                    query.Add(
+                        new TermQuery(new Term(LookConstants.HasLocationField, Boolean.TrueString)),
+                        BooleanClause.Occur.SHOULD);
+
                     hasQuery = true;
 
                     double maxDistance = LookService.MaxDistance;

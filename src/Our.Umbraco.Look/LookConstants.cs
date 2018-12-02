@@ -33,6 +33,11 @@
         internal static string TagsField => "Look_Tags_";
 
         /// <summary>
+        /// Gets the field name to use to mark that the item being indexed has a location
+        /// </summary>
+        internal static string HasLocationField => "Look_HasLocation";
+
+        /// <summary>
         /// Gets the field name to use for the location
         /// </summary>
         internal static string LocationField => "Look_Location";
