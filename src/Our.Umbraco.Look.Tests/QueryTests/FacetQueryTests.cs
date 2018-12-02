@@ -9,27 +9,19 @@ namespace Our.Umbraco.Look.Tests.QueryTests
     [TestClass]
     public class FacetQueryTests
     {
-        private string _colour = Guid.NewGuid().ToString("N"); // create new group of tags for these tests (rather than clear index - let it bulk out)
+        private static string _colour = "colour";
 
-        private LookTag _red;
-        private LookTag _orange;
-        private LookTag _yellow;
-        private LookTag _green;
-        private LookTag _blue;
-        private LookTag _indigo;
-        private LookTag _violet;
+        private static LookTag _red = new LookTag(_colour, "red");
+        private static LookTag _orange = new LookTag(_colour, "orange");
+        private static LookTag _yellow = new LookTag(_colour, "yellow");
+        private static LookTag _green = new LookTag(_colour, "green");
+        private static LookTag _blue = new LookTag(_colour, "blue");
+        private static LookTag _indigo = new LookTag(_colour, "indigo");
+        private static LookTag _violet = new LookTag(_colour, "violet");
 
-        [TestInitialize]
-        public void Initialize()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
         {
-            _red = new LookTag(_colour, "red");
-            _orange = new LookTag(_colour, "orange");
-            _yellow = new LookTag(_colour, "yellow");
-            _green = new LookTag(_colour, "green");
-            _blue = new LookTag(_colour, "blue");
-            _indigo = new LookTag(_colour, "indigo");
-            _violet = new LookTag(_colour, "violet");
-
             TestHelper.IndexThings(new Thing[] {
                 new Thing() { Tags = new LookTag[] { _red, _orange, _yellow, _green, _blue, _indigo, _violet } },
                 new Thing() { Tags = new LookTag[] { _red, _orange, _yellow, _green, _blue, _indigo } },

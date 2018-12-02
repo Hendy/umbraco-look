@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
-using System;
 using System.Linq;
 
 namespace Our.Umbraco.Look.Tests.QueryTests
@@ -30,7 +29,8 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         public void Distance_Sorting()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
-
+            
+            //lookQuery.LocationQuery.HasLocation = true; // indicate any items with a location can be returned
             lookQuery.LocationQuery.Location = _london;
 
             lookQuery.SortOn = SortOn.Distance;
