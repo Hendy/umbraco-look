@@ -14,7 +14,7 @@ namespace Our.Umbraco.Look.Tests
 {
     internal class TestHelper
     {
-        internal static string DirectoryPath => Path.GetTempPath() + "LookTestData";
+        private static string DirectoryPath => Path.GetTempPath() + "LookTestData";
 
         /// <summary>
         /// 
@@ -107,12 +107,12 @@ namespace Our.Umbraco.Look.Tests
             indexWriter.Close();
         }
 
-        ///// <summary>
-        ///// Delete the test index from the file system
-        ///// </summary>
-        //internal static void DeleteIndex()
-        //{
-        //    System.IO.Directory.Delete(TestHelper.DirectoryPath, true);
-        //}
+        /// <summary>
+        /// Delete the test index from the file system
+        /// </summary>
+        internal static void DeleteIndex()
+        {
+            System.IO.Directory.Delete(TestHelper.DirectoryPath, true);
+        }
     }
 }

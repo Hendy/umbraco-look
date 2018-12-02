@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         public void Facet_Counts()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
-
+            
             lookQuery.TagQuery.All = new LookTag[] { _red };
 
             lookQuery.TagQuery.GetFacets = new string[] { _colour };
@@ -66,14 +66,14 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         }
 
         [TestMethod]
-        public void Apply_Facet_Then_Re_Query()
+        public void Query_Apply_Random_Facet_Then_Re_Query()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
             lookQuery.TagQuery.All = new LookTag[] { _red };
-
             lookQuery.TagQuery.GetFacets = new string[] { _colour };
 
+            // first query
             var lookResult = LookService.Query(lookQuery);
 
             Assert.IsNotNull(lookResult);
@@ -81,21 +81,28 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsTrue(lookResult.Total == 7);
             Assert.IsTrue(lookResult.Facets.Length == 7);
 
-            var facet = lookResult.Facets.Single(x => _green.Equals(x.Tag));
+            // pick a random facet
+            var random = new Random();
+            var facet = lookResult
+                            .Facets
+                            .OrderBy(x => random.Next())
+                            .First();
 
-            Assert.IsTrue(facet.Count == 4);
+            // get the expected count
+            var facetCount = facet.Count;
 
+            // not required for next query
+            lookQuery.TagQuery.GetFacets = null;
+
+            // apply facet to query
             lookQuery.ApplyFacet(facet);
 
-            Assert.IsNull(lookQuery.Compiled);
-
+            // second query
             lookResult = LookService.Query(lookQuery);
-
-            Assert.IsNotNull(lookQuery.Compiled);
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);
-            Assert.IsTrue(lookResult.Total == 4);
+            Assert.AreEqual(facetCount, lookResult.Total);
         }
     }
 }

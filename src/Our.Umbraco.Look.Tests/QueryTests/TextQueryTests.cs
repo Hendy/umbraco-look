@@ -12,12 +12,27 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         public static void ClassInitialize(TestContext testContext)
         {
             TestHelper.IndexThings(new Thing[] {
-                new Thing() { Name = "name 1", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae." },
-                new Thing() { Name = "name 2", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit." },
-                new Thing() { Name = "name 3", Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget." },
-                new Thing() { Name = "name 4", Text = "Maecenas pretium ipsum nec vestibulum pulvinar. Nulla ultrices fringilla mi." }
+                new Thing() { Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae." },
+                new Thing() { Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed hendrerit." },
+                new Thing() { Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget." },
+                new Thing() { Text = "Maecenas pretium ipsum nec vestibulum pulvinar. Nulla ultrices fringilla mi." }
             });
         }
+
+        [TestMethod]
+        public void No_Highlighting()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TextQuery = new TextQuery("dolor");
+
+            var lookResult = LookService.Query(lookQuery);
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.IsTrue(lookResult.Total > 0);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(lookResult.First().Highlight?.ToString()));
+        }
+
 
         [TestMethod]
         public void Highlighting()
