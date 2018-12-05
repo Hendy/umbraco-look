@@ -48,7 +48,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Create new NodeQuery search criteria for all nodes of any of these aliases
         /// </summary>
-        /// <param name="aliases"></param>
+        /// <param name="aliases">array of string aliases for the content, media or members</param>
         public NodeQuery(params string[] aliases)
         {
             this.Aliases = aliases;
