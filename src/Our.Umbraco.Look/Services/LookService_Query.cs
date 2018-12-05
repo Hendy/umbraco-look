@@ -69,6 +69,8 @@ namespace Our.Umbraco.Look.Services
 
                     if (luceneSearchCriteria.Query != null)
                     {
+                        hasQuery = true;
+
                         query.Add(luceneSearchCriteria.Query, BooleanClause.Occur.MUST);
                     }
                 }
