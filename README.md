@@ -310,6 +310,11 @@ var results = lookResult.ToArray(); // enumerates to return Our.Umbraco.Look.Mod
 var facets = lookResult.Facets; // returns Our.Umbraco.Look.Models.Facet[]
 ```
 
+The results can also be returned as Examine ISearchResults for compatability
+```charp
+var searchResults = lookResult.ExamineResults;
+```
+
 ```csharp
 public class LookResult : IEnumerable<LookMatch>
 {
