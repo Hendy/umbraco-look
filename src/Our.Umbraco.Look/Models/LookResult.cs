@@ -25,6 +25,8 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         public Facet[] Facets { get; }
 
+        //public Examine.ISearchResults ExamineSearchResults { get; }
+
         /// <summary>
         /// When true, indicates the Look Query was parsed and executed correctly
         /// </summary>

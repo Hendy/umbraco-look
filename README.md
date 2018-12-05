@@ -14,6 +14,7 @@ using System;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Models;
+using Examine.SearchCriteria;
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
 ```
@@ -129,7 +130,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A LookQuery consists of any combinations of these query types: `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
+A LookQuery consists of any combinations of these query types: `RawQuery`, `ExamineQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
 together with an Examine Searcher. The LookQuery constructor is used to specify which Examine searcher to use:
 
 ```csharp
@@ -142,6 +143,14 @@ var lookQuery = new LookQuery("InternalSearcher"); // use a named searcher
 
 All query types are optional, but when set, they become a required clause. All queries will return a LookResult, which has a boolean Success flag property. The flag
 is set to true when a query with at least one clause is executed sucessfully.
+
+#### ExamineQuery
+
+The Exmaine ISearchCriteria can be passed into a LookQuery.
+
+```charp
+lookQuery.ExamineQuery = myExamineQuery.Compile();
+```
 
 #### RawQuery
 
