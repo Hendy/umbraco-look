@@ -1,4 +1,5 @@
-﻿using Our.Umbraco.Look.Services;
+﻿using Examine.SearchCriteria;
+using Our.Umbraco.Look.Services;
 using System.Linq;
 
 namespace Our.Umbraco.Look.Models
@@ -17,6 +18,11 @@ namespace Our.Umbraco.Look.Models
         /// (Optional) set a raw Lucene query
         /// </summary>
         public string RawQuery { get; set; }
+
+        /// <summary>
+        /// (Optional) set a Examine query
+        /// </summary>
+        public ISearchCriteria ExamineQuery { get; set; }
 
         /// <summary>
         /// (Optional) set search critera for Umbraco aliases and/or ids

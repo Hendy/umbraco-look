@@ -1,4 +1,5 @@
 ﻿using Examine.LuceneEngine.Providers;
+using Examine.LuceneEngine.SearchCriteria;
 using Lucene.Net.Highlight;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
@@ -60,6 +61,16 @@ namespace Our.Umbraco.Look.Services
                     query.Add(
                             new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, lookQuery.SearchingContext.Analyzer).Parse(lookQuery.RawQuery),
                             BooleanClause.Occur.MUST);
+                }
+
+                if (lookQuery.ExamineQuery != null)
+                {
+                    var luceneSearchCriteria = lookQuery.ExamineQuery as LuceneSearchCriteria;
+
+                    if (luceneSearchCriteria.Query != null)
+                    {
+                        query.Add(luceneSearchCriteria.Query, BooleanClause.Occur.MUST);
+                    }
                 }
 
                 if (lookQuery.NodeQuery != null)
