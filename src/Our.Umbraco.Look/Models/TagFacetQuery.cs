@@ -7,6 +7,14 @@ namespace Our.Umbraco.Look.Models
         public string[] TagGroups { get; set; }
 
         /// <summary>
+        /// New facet query for tags in the default un-named group
+        /// </summary>
+        public TagFacetQuery()
+        {
+            this.TagGroups = new string[] { "" };
+        }
+
+        /// <summary>
         /// Create a new facet query for tags in groups
         /// </summary>
         /// <param name="tagGroups">All tags in the supplied tag groups will be returned with facet counts</param>

@@ -146,7 +146,7 @@ is set to true when a query with at least one clause is executed sucessfully.
 
 #### ExamineQuery
 
-The Exmaine ISearchCriteria can be passed into a LookQuery.
+Examine ISearchCriteria can be passed into a LookQuery.
 
 ```charp
 lookQuery.ExamineQuery = myExamineQuery.Compile();
