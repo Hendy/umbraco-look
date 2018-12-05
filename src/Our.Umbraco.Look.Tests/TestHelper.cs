@@ -61,7 +61,7 @@ namespace Our.Umbraco.Look.Tests
             LookService.SetLocationIndexer(x => locationStack.Pop());
 
             // null for IPublishedContent as not required
-            var indexingContext = new IndexingContext(null, "TEST_CONTEXT");
+            var indexingContext = new IndexingContext(null, null);
 
             List<Document> documents = new List<Document>();
 
@@ -112,7 +112,10 @@ namespace Our.Umbraco.Look.Tests
         /// </summary>
         internal static void DeleteIndex()
         {
-            System.IO.Directory.Delete(TestHelper.DirectoryPath, true);
+            if (System.IO.Directory.Exists(TestHelper.DirectoryPath))
+            {
+                System.IO.Directory.Delete(TestHelper.DirectoryPath, true);
+            }
         }
     }
 }
