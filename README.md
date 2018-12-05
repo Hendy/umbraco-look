@@ -270,7 +270,7 @@ lookQuery.TagQuery = new TagQuery() {
 Optional constructor params:
 
 ```csharp
-TagQuery(LookTag[] all = null, LookTag[] any = null, LookTag[] not = null, string[] getFacets = null)
+TagQuery(LookTag[] all = null, LookTag[] any = null, LookTag[] not = null, TagFacetQuery tagFacetQuery = null)
 ```
 
 #### LocationQuery
