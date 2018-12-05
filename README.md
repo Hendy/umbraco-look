@@ -247,14 +247,14 @@ The All, Any and Not properties expect LookTag[] values (see LookTags section be
 If there are any query contradictions (such as a tag exsing in both All and Not), then
 an empty result is returned with the success flag as false.
 
-The GetFacets string[] indcates which tag groups to return facet counts for (see Facets section below).
+The FacetOn proeperty is used to specify how tag faceting is caluculated (see Facets section below).
 
 ```csharp
 lookQuery.TagQuery = new TagQuery() {
 	All = TagQuery.MakeTags("size:large"), // all of these tags
 	Any = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags
-	Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority
-	GetFacets = new string[] { "colour", "size", "shape" } 
+	Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority,
+	FacetOn = new TagFacetQuery("colour", "size", "shape")
 };
 ```
 

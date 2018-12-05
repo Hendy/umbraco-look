@@ -432,7 +432,7 @@ namespace Our.Umbraco.Look.Services
             {
                 List<Facet> facets = null;
 
-                if (lookQuery.TagQuery != null && lookQuery.TagQuery.GetFacets != null)
+                if (lookQuery.TagQuery != null && lookQuery.TagQuery.FacetOn != null)
                 {
                     facets = new List<Facet>();
 
@@ -441,7 +441,7 @@ namespace Our.Umbraco.Look.Services
                                             : lookQuery.Compiled.Query;
 
                     // do a facet query for each group in the array
-                    foreach (var group in lookQuery.TagQuery.GetFacets)
+                    foreach (var group in lookQuery.TagQuery.FacetOn.TagGroups)
                     {
                         var simpleFacetedSearch = new SimpleFacetedSearch(
                                                         lookQuery.SearchingContext.IndexSearcher.GetIndexReader(),

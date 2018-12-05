@@ -228,6 +228,7 @@
     <Compile Include="Models\SearchingContext.cs" />
     <Compile Include="Models\SortOn.cs" />
     <Compile Include="Models\LookTag.cs" />
+    <Compile Include="Models\TagFacetQuery.cs" />
     <Compile Include="Models\TagQuery.cs" />
     <Compile Include="Models\TextQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

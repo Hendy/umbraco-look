@@ -40,7 +40,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             
             lookQuery.TagQuery.All = new LookTag[] { _red };
 
-            lookQuery.TagQuery.GetFacets = new string[] { _colour };
+            lookQuery.TagQuery.FacetOn = new TagFacetQuery(_colour);
 
             var lookResult = LookService.Query(lookQuery);
 
@@ -63,7 +63,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
             lookQuery.TagQuery.All = new LookTag[] { _red };
-            lookQuery.TagQuery.GetFacets = new string[] { _colour };
+            lookQuery.TagQuery.FacetOn = new TagFacetQuery(_colour);
 
             // first query
             var lookResult = LookService.Query(lookQuery);

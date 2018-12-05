@@ -107,7 +107,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             var lookResult = LookService.Query(lookQuery);
 
-            lookQuery.TagQuery.GetFacets = new string[] { };
+            lookQuery.TagQuery.FacetOn = new TagFacetQuery();
 
             Assert.IsNull(lookQuery.Compiled);
         }
