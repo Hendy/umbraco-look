@@ -1,4 +1,5 @@
-﻿using Examine.LuceneEngine.Providers;
+﻿using Examine;
+using Examine.LuceneEngine.Providers;
 using Examine.LuceneEngine.SearchCriteria;
 using Lucene.Net.Highlight;
 using Lucene.Net.Index;
@@ -464,14 +465,16 @@ namespace Our.Umbraco.Look.Services
                     }
                 }
 
-                return new LookResult(LookService.GetLookMatches(
+                return new LookResult(
+                                LookService.GetLookMatches(
                                                         lookQuery.SearchingContext.IndexSearcher,
                                                         topDocs,
                                                         lookQuery.Compiled.GetHighlight,
                                                         lookQuery.TextQuery != null && lookQuery.TextQuery.GetText,
                                                         lookQuery.Compiled.GetDistance),
-                                        topDocs.TotalHits,
-                                        facets != null ? facets.ToArray() : new Facet[] { });
+                                topDocs.TotalHits,
+                                facets != null ? facets.ToArray() : new Facet[] { },
+                                LookService.GetExamineResults(lookQuery.SearchingContext.IndexSearcher, topDocs));
             }
 
             return new LookResult(); // empty success

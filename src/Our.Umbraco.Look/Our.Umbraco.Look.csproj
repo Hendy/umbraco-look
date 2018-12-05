@@ -215,6 +215,7 @@
     <Compile Include="Models\DateQuery.cs" />
     <Compile Include="Models\Distance.cs" />
     <Compile Include="Models\DistanceUnit.cs" />
+    <Compile Include="Models\ExamineResults.cs" />
     <Compile Include="Models\Facet.cs" />
     <Compile Include="Models\IndexingContext.cs" />
     <Compile Include="Models\Location.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Models\TextQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LookService.cs" />
+    <Compile Include="Services\LookService_GetExamineResults.cs" />
     <Compile Include="Services\LookService_GetLookMatches.cs" />
     <Compile Include="Services\LookService_GetSearchingContext.cs" />
     <Compile Include="Services\LookService_Index.cs" />
