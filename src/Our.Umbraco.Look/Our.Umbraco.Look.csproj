@@ -215,7 +215,6 @@
     <Compile Include="Models\DateQuery.cs" />
     <Compile Include="Models\Distance.cs" />
     <Compile Include="Models\DistanceUnit.cs" />
-    <Compile Include="Models\ExamineResults.cs" />
     <Compile Include="Models\Facet.cs" />
     <Compile Include="Models\IndexingContext.cs" />
     <Compile Include="Models\Location.cs" />
