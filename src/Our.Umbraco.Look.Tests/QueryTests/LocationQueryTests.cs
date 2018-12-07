@@ -38,9 +38,9 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             var lookResult = LookService.Query(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
-            Assert.IsTrue(lookResult.Total == 4);
+            Assert.IsTrue(lookResult.TotalItemCount == 4);
 
-            var locations = lookResult.Select(x => x.Location).ToArray();
+            var locations = lookResult.Select(x => ((LookMatch)x).Location).ToArray();
 
             Assert.IsTrue(locations[0].Equals(_london));
             Assert.IsTrue(locations[1].Equals(_paris));
@@ -59,10 +59,10 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             var lookResult = LookService.Query(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
-            Assert.IsTrue(lookResult.Total == 2);
+            Assert.IsTrue(lookResult.TotalItemCount == 2);
 
-            Assert.IsTrue(lookResult.Any(x => x.Location.Equals(_london)));
-            Assert.IsTrue(lookResult.Any(x => x.Location.Equals(_paris)));
+            Assert.IsTrue(lookResult.Any(x => ((LookMatch)x).Location.Equals(_london)));
+            Assert.IsTrue(lookResult.Any(x => ((LookMatch)x).Location.Equals(_paris)));
         }
     }
 }

@@ -134,12 +134,12 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsNull(lookQuery.Compiled);
 
             var lookResults = LookService.Query(lookQuery);
-            var total = lookResults.Total;
+            var total = lookResults.TotalItemCount;
 
             Assert.IsNotNull(lookQuery.Compiled);
             Assert.IsTrue(total > 0);
 
-            Assert.AreEqual(total, LookService.Query(lookQuery).Total);            
+            Assert.AreEqual(total, LookService.Query(lookQuery).TotalItemCount);            
         }
     }
 }

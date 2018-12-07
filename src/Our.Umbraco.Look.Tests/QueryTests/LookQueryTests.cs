@@ -15,7 +15,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsNotNull(lookResult);
             Assert.IsFalse(lookResult.Success);
-            Assert.IsTrue(lookResult.Total == 0);
+            Assert.IsTrue(lookResult.TotalItemCount == 0);
         }
 
         [TestMethod]
@@ -27,7 +27,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsNotNull(lookResult);
             Assert.IsFalse(lookResult.Success);
-            Assert.IsTrue(lookResult.Total == 0);
+            Assert.IsTrue(lookResult.TotalItemCount == 0);
         }
 
         [TestMethod]

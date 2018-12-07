@@ -46,7 +46,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);
-            Assert.IsTrue(lookResult.Total > 0);
+            Assert.IsTrue(lookResult.TotalItemCount > 0);
             Assert.IsTrue(lookResult.Facets.Length == 7);
             Assert.IsTrue(lookResult.Facets.Single(x => _red.Equals(x.Tag)).Count == 7);
             Assert.IsTrue(lookResult.Facets.Single(x => _orange.Equals(x.Tag)).Count == 6);
@@ -70,7 +70,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);
-            Assert.IsTrue(lookResult.Total == 7);
+            Assert.IsTrue(lookResult.TotalItemCount == 7);
             Assert.IsTrue(lookResult.Facets.Length == 7);
 
             // pick a random facet
@@ -91,7 +91,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);
-            Assert.AreEqual(facetCount, lookResult.Total);
+            Assert.AreEqual(facetCount, lookResult.TotalItemCount);
         }
     }
 }

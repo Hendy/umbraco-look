@@ -1,4 +1,5 @@
 ﻿using Examine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Our.Umbraco.Look.Models
     /// <summary>
     /// Model returned as a response to a Look query
     /// </summary>
-    public class LookResult : IEnumerable<LookMatch>
+    public class LookResult : ISearchResults
     {
         /// <summary>
         /// The wrapped enumerable
@@ -19,7 +20,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Expected total number of results in the enumerable
         /// </summary>
-        public int Total { get; } // TODO: rename to TotalItemCount (to match that in any ExamineResults)
+        public int TotalItemCount { get; } // TODO: rename to TotalItemCount (to match that in any ExamineResults)
 
         /// <summary>
         /// 
@@ -46,7 +47,7 @@ namespace Our.Umbraco.Look.Models
         internal LookResult(IEnumerable<LookMatch> lookMatches, int total, Facet[] facets, IEnumerable<SearchResult> examineResults)
         {            
             this._lookMatches = lookMatches;
-            this.Total = total;
+            this.TotalItemCount = total;
             this.Facets = facets ?? new Facet[] { };
             this.ExamineResults = new ExamineResults(total, examineResults);
             this.Success = true;
@@ -58,7 +59,7 @@ namespace Our.Umbraco.Look.Models
         internal LookResult()
         {
             this._lookMatches = Enumerable.Empty<LookMatch>();
-            this.Total = 0;
+            this.TotalItemCount = 0;
             this.Facets = new Facet[] { };
             this.Success = true;
         }
@@ -70,14 +71,19 @@ namespace Our.Umbraco.Look.Models
         internal LookResult(string loggingMessage)
         {
             this._lookMatches = Enumerable.Empty<LookMatch>();
-            this.Total = 0;
+            this.TotalItemCount = 0;
             this.Facets = new Facet[] { };
             this.Success = false;
 
             LogHelper.Debug(typeof(LookResult), loggingMessage);
         }
 
-        public IEnumerator<LookMatch> GetEnumerator()
+        public IEnumerable<SearchResult> Skip(int skip)
+        {
+            return this._lookMatches.Skip(skip);
+        }
+
+        public IEnumerator<SearchResult> GetEnumerator()
         {
             return this._lookMatches.GetEnumerator();
         }

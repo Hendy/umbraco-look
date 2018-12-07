@@ -31,7 +31,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             var lookResult = LookService.Query(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
-            Assert.AreEqual(3, lookResult.Total);
+            Assert.AreEqual(3, lookResult.TotalItemCount);
         }
 
         [TestMethod]
@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             var lookResult = LookService.Query(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
-            Assert.AreEqual(2, lookResult.Total);
+            Assert.AreEqual(2, lookResult.TotalItemCount);
         }
     }
 }

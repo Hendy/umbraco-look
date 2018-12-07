@@ -27,7 +27,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.DateQuery.Before = new DateTime(2000, 1, 2);
 
-            Assert.AreEqual(2, lookQuery.Query().Total);
+            Assert.AreEqual(2, lookQuery.Query().TotalItemCount);
         }
     }
 }

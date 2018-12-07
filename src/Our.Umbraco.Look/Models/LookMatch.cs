@@ -1,4 +1,5 @@
-﻿using Our.Umbraco.Look.Extensions;
+﻿using Examine;
+using Our.Umbraco.Look.Extensions;
 using System;
 using System.Web;
 using Umbraco.Core.Models;
@@ -6,14 +7,9 @@ using Umbraco.Web;
 
 namespace Our.Umbraco.Look.Models
 {
-    public class LookMatch
+    public class LookMatch : SearchResult
     {
         private Lazy<IPublishedContent> _item;
-
-        /// <summary>
-        /// The Umbraco (content, media or member) Id of the matched item
-        /// </summary>
-        public int Id { get; }
 
         /// <summary>
         /// Lazy evaluation of Item for IPublishedContent

@@ -29,8 +29,8 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             var lookResult = LookService.Query(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
-            Assert.IsTrue(lookResult.Total > 0);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(lookResult.First().Highlight?.ToString()));
+            Assert.IsTrue(lookResult.TotalItemCount > 0);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(((LookMatch)lookResult.First()).Highlight?.ToString()));
         }
 
 
@@ -44,8 +44,8 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             var lookResult = LookService.Query(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
-            Assert.IsTrue(lookResult.Total > 0);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(lookResult.First().Highlight.ToString()));
+            Assert.IsTrue(lookResult.TotalItemCount > 0);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(((LookMatch)lookResult.First()).Highlight.ToString()));
         }
     }
 }
