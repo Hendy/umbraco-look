@@ -69,20 +69,20 @@ namespace Our.Umbraco.Look.Models
                     UmbracoHelper umbracoHelper,
                     int id,
                     PublishedItemType publishedItemType,
-                    IHtmlString highlight,
-                    string text,
-                    LookTag[] tags,
-                    DateTime? date,
                     string name,
+                    DateTime? date,
+                    string text,
+                    IHtmlString highlight,
+                    LookTag[] tags,
                     Location location,
                     double? distance)
         {
             this.Id = id;
-            this.Highlight = highlight;
-            this.Text = text;
-            this.Tags = tags;
-            this.Date = date;
             this.Name = name;
+            this.Date = date;
+            this.Text = text;
+            this.Highlight = highlight;
+            this.Tags = tags;
             this.Location = location;
             this.Distance = distance;
 

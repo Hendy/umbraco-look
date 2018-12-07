@@ -65,11 +65,11 @@ namespace Our.Umbraco.Look.Services
                     LookService.Instance.UmbracoHelper,
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     getNodeType(doc.Get(LookConstants.NodeTypeField)),
-                    getHighlight(doc.Get(LookConstants.TextField)),
-                    doc.Get(LookConstants.TextField),
-                    getTags(doc.GetFields(LookConstants.AllTagsField)),
-                    doc.Get(LookConstants.DateField).LuceneStringToDate(),
                     doc.Get(LookConstants.NameField),
+                    doc.Get(LookConstants.DateField).LuceneStringToDate(),
+                    doc.Get(LookConstants.TextField),
+                    getHighlight(doc.Get(LookConstants.TextField)),
+                    getTags(doc.GetFields(LookConstants.AllTagsField)),
                     doc.Get(LookConstants.LocationField) != null ? Location.FromString(doc.Get(LookConstants.LocationField)) : null,
                     getDistance(docId)
                 );
