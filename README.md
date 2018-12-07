@@ -14,6 +14,7 @@ using System;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Models;
+using Examine;
 using Examine.SearchCriteria;
 using Our.Umbraco.Look.Services;
 using Our.Umbraco.Look.Models;
@@ -130,7 +131,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 
 ## Searching
 
-A LookQuery consists of any combinations of these query types: `RawQuery`, `ExamineQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
+A LookQuery consists of any combinations of these query types: `ExamineQuery`, `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
 together with an Examine Searcher. The LookQuery constructor is used to specify which Examine searcher to use:
 
 ```csharp
@@ -297,25 +298,28 @@ If not specified then the reults will be sorted on the Lucene score, otherwise s
 
 ### Search Results
 
-The search is performed by calling the static Query method on the LookService:
+The search can be performed by calling the static Query method on the LookService:
 
 ```csharp
-var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model.LookResult
+var lookResult = LookService.Query(lookQuery); // returns Our.Umbraco.Look.Model.LookResult (which implements Examine ISearchResults).
 ```
 
+or by using the shortcut helper method on the LookQuery:
+
 ```csharp
-var totalResults = lookResult.Total; // total number of item expected in the lookResult enumerable
+var lookResult = lookQuery.Query();
+```
+
+The results:
+
+```csharp
+var totalResults = lookResult.TotalItemCount; // total number of item expected in the lookResult enumerable
 var results = lookResult.ToArray(); // enumerates to return Our.Umbraco.Look.Models.LookMatch[]
 var facets = lookResult.Facets; // returns Our.Umbraco.Look.Models.Facet[]
 ```
 
-The results can also be returned as Examine ISearchResults for compatability
-```charp
-var searchResults = lookResult.ExamineResults;
-```
-
 ```csharp
-public class LookResult : IEnumerable<LookMatch>
+public class LookResult : ISearchResults
 {
 	/// <summary>
 	/// When true, indicates the Look Query was parsed and executed correctly
@@ -325,7 +329,7 @@ public class LookResult : IEnumerable<LookMatch>
 	/// <summary>
 	/// Expected total number of results expected in the enumerable of LookMatch results
 	/// </summary>
-	public int Total { get; }
+	public int TotalItemCount { get; }
 
 	/// <summary>
 	/// Any returned facets
@@ -334,14 +338,11 @@ public class LookResult : IEnumerable<LookMatch>
 }
 ```
 
+Whilst the enumeration on the LookResult returns items as Exmaine SearchResult, they can be cast to LookMatch objects:
+
 ```csharp
-public class LookMatch
+public class LookMatch : SearchResult
 {
-	/// <summary>
-	/// The Umbraco node Id of the matched item
-	/// </summary>
-	public int Id { get; }
-	
 	/// <summary>
 	/// Lazy evaluation of the associated IPublishedContent
 	/// </summary>
