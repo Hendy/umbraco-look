@@ -1,5 +1,4 @@
 ﻿using Examine;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +19,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Expected total number of results in the enumerable
         /// </summary>
-        public int TotalItemCount { get; } // TODO: rename to TotalItemCount (to match that in any ExamineResults)
+        public int TotalItemCount { get; }
 
         /// <summary>
         /// 
@@ -28,12 +27,7 @@ namespace Our.Umbraco.Look.Models
         public Facet[] Facets { get; }
 
         /// <summary>
-        /// Return the results of the query in the same way as Examine does
-        /// </summary>
-        public ISearchResults ExamineResults { get; }
-
-        /// <summary>
-        /// When true, indicates the Look Query was parsed and executed correctly
+        /// When true, indicates the Look Query was parsed, contained a query clause and was executed correctly
         /// </summary>
         public bool Success { get; }
 
@@ -44,12 +38,11 @@ namespace Our.Umbraco.Look.Models
         /// <param name="total"></param>
         /// <param name="facets"></param>
         /// <param name="examineResults"></param>
-        internal LookResult(IEnumerable<LookMatch> lookMatches, int total, Facet[] facets, IEnumerable<SearchResult> examineResults)
+        internal LookResult(IEnumerable<LookMatch> lookMatches, int total, Facet[] facets)
         {            
             this._lookMatches = lookMatches;
             this.TotalItemCount = total;
             this.Facets = facets ?? new Facet[] { };
-            this.ExamineResults = new ExamineResults(total, examineResults);
             this.Success = true;
         }
 

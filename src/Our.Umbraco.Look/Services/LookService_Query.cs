@@ -473,8 +473,7 @@ namespace Our.Umbraco.Look.Services
                                                         lookQuery.TextQuery != null && lookQuery.TextQuery.GetText,
                                                         lookQuery.Compiled.GetDistance),
                                 topDocs.TotalHits,
-                                facets != null ? facets.ToArray() : new Facet[] { },
-                                LookService.GetExamineResults(lookQuery.SearchingContext.IndexSearcher, topDocs));
+                                facets != null ? facets.ToArray() : new Facet[] { });
             }
 
             return new LookResult(); // empty success
