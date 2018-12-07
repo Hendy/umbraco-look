@@ -2,10 +2,10 @@
 using Our.Umbraco.Look.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using Umbraco.Core.Models;
 using Umbraco.Web;
-using System.Linq;
 
 namespace Our.Umbraco.Look.Models
 {
@@ -63,7 +63,7 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         /// <param name="docId"></param>
         /// <param name="score"></param>
-        /// <param name="umbracoHelper"></param>
+        /// <param name="fieldValues"></param>
         /// <param name="id"></param>
         /// <param name="publishedItemType"></param>
         /// <param name="name"></param>
@@ -73,11 +73,11 @@ namespace Our.Umbraco.Look.Models
         /// <param name="tags"></param>
         /// <param name="location"></param>
         /// <param name="distance"></param>
-        /// <param name="fieldValues"></param>
+        /// <param name="umbracoHelper"></param>
         internal LookMatch(
                     int docId,
                     float score,
-                    UmbracoHelper umbracoHelper,
+                    Dictionary<string, string[]> fieldValues,
                     int id,
                     PublishedItemType publishedItemType,
                     string name,
@@ -87,15 +87,14 @@ namespace Our.Umbraco.Look.Models
                     LookTag[] tags,
                     Location location,
                     double? distance,
-                    Dictionary<string, string[]> fieldValues)
+                    UmbracoHelper umbracoHelper)
         {
-            //this.DocId = docId; // added in a later version of Umbraco
+            //this.DocId = docId; // added in a later version of Examine
             this.Score = score;
-            this.Id = id;
-
+            this._fieldValues = fieldValues;
             // populate the inherited field collection (note multi-field values take the first - TODO: may need to remove multi values to be 100% compatable with how Examine does it)
-            this.Fields = fieldValues.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault());
-
+            this.Fields = this._fieldValues.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault());
+            this.Id = id;
             this.Name = name;
             this.Date = date;
             this.Text = text;
@@ -103,7 +102,6 @@ namespace Our.Umbraco.Look.Models
             this.Tags = tags;
             this.Location = location;
             this.Distance = distance;
-            this._fieldValues = fieldValues;
 
             this._item = new Lazy<IPublishedContent>(() => {
 

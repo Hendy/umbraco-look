@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
+using System.Linq;
 
 namespace Our.Umbraco.Look.Tests.QueryTests
 {
@@ -27,7 +28,8 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             var lookResult = LookService.Query(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
-            Assert.IsTrue(lookResult.TotalItemCount > 0);
+            Assert.IsTrue(lookResult.TotalItemCount == 1);
+            Assert.AreEqual("123", ((LookMatch)lookResult.First()).Name);
         }
 
         [TestMethod]

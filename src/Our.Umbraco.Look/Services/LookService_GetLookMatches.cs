@@ -81,7 +81,7 @@ namespace Our.Umbraco.Look.Services
                 var lookMatch = new LookMatch(
                     scoreDoc.doc,
                     scoreDoc.score,
-                    LookService.Instance.UmbracoHelper,
+                    fieldValues,
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     getNodeType(doc.Get(LookConstants.NodeTypeField)),
                     doc.Get(LookConstants.NameField),
@@ -90,8 +90,8 @@ namespace Our.Umbraco.Look.Services
                     getHighlight(doc.Get(LookConstants.TextField)),
                     getTags(doc.GetFields(LookConstants.AllTagsField)),
                     doc.Get(LookConstants.LocationField) != null ? Location.FromString(doc.Get(LookConstants.LocationField)) : null,
-                    getDistance(docId),
-                    fieldValues
+                    getDistance(docId),                    
+                    LookService.Instance.UmbracoHelper
                 );
                 
                 yield return lookMatch;
