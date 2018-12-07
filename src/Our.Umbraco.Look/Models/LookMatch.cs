@@ -16,12 +16,22 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// 
         /// </summary>
-        private Dictionary<string, string[]> _fieldValues;
+        private Dictionary<string, string> _fieldSingleValues;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private Dictionary<string, string[]> _fieldMultiValues;
 
         /// <summary>
         /// Lazy evaluation of Item for IPublishedContent
         /// </summary>
-        public IPublishedContent Item => this._item.Value;
+        public IPublishedContent Item => this._item.Value; // TODO: rename to Node
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public new int DocId { get; set; } // get a& set, as replacing that in derived class
 
         /// <summary>
         /// The custom name field
@@ -59,7 +69,38 @@ namespace Our.Umbraco.Look.Models
         public double? Distance { get; }
 
         /// <summary>
-        /// Constructor
+        /// 
+        /// </summary>
+        public new IDictionary<string, string> Fields
+        {
+            get
+            {
+                return this._fieldSingleValues;
+            }
+
+            protected set
+            {
+                throw new NotSupportedException("Setting the Fields property is not supported");
+            }
+        }
+
+        //public KeyValuePair<string, string> this[int index] => this._fieldSingleValues[index];
+
+        //public new string this[string key]
+        //{
+        //    get
+        //    {
+        //        if (this._fieldSingleValues.TryGetValue(key, out string value))
+        //        {
+        //            return value;
+        //        }
+
+        //        return null;
+        //    }
+        //}
+
+        /// <summary>
+        /// 
         /// </summary>
         /// <param name="docId"></param>
         /// <param name="score"></param>
@@ -71,7 +112,8 @@ namespace Our.Umbraco.Look.Models
         /// <param name="tags"></param>
         /// <param name="location"></param>
         /// <param name="distance"></param>
-        /// <param name="fieldValues"></param>
+        /// <param name="fieldSingleValues"></param>
+        /// <param name="fieldMultiValues"></param>
         /// <param name="publishedItemType"></param>
         /// <param name="umbracoHelper"></param>
         internal LookMatch(
@@ -85,11 +127,12 @@ namespace Our.Umbraco.Look.Models
                     LookTag[] tags,
                     Location location,
                     double? distance,
-                    Dictionary<string, string[]> fieldValues, // TODO: may need to split into two collections (to separate single / multi-value fields as per Examine)
+                    Dictionary<string, string> fieldSingleValues,
+                    Dictionary<string, string[]> fieldMultiValues,
                     PublishedItemType publishedItemType,
                     UmbracoHelper umbracoHelper)
         {
-            //this.DocId = docId; // added in a later version of Examine
+            this.DocId = docId; // not in Examine 0.1.70, but in more recent versions
             this.Score = score;
             this.Id = id;
             this.Name = name;
@@ -99,8 +142,8 @@ namespace Our.Umbraco.Look.Models
             this.Tags = tags;
             this.Location = location;
             this.Distance = distance;
-            this.Fields = fieldValues.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault()); // single value fields (may need to remove multi-value fields)
-            this._fieldValues = fieldValues;
+            this._fieldSingleValues = fieldSingleValues;
+            this._fieldMultiValues = fieldMultiValues;
 
             this._item = new Lazy<IPublishedContent>(() => {
 
@@ -125,7 +168,17 @@ namespace Our.Umbraco.Look.Models
         /// <returns></returns>
         public new IEnumerable<string> GetValues(string key)
         {
-            return this._fieldValues[key];
+            if (this._fieldMultiValues.TryGetValue(key, out string[] values))
+            {
+                return values;
+            }
+
+            if (this._fieldSingleValues.TryGetValue(key, out string value))
+            {
+                return new string[] { value };
+            }
+
+            return new string[] { };
         }
     }
 }

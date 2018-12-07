@@ -80,26 +80,37 @@ namespace Our.Umbraco.Look.Services
                     fieldNames = lookFieldNames;
                 }
 
-                var fieldValues = new Dictionary<string, string[]>();
+                var fieldSingleValues = new Dictionary<string, string>();
+                var fieldMultiValues = new Dictionary<string, string[]>();
 
                 foreach (var fieldName in fieldNames)
                 {
-                    fieldValues.Add(fieldName, doc.GetValues(fieldName));
+                    var values = doc.GetValues(fieldName);
+
+                    if (!(values.Length > 1))
+                    {
+                        fieldSingleValues.Add(fieldName, values.FirstOrDefault());
+                    }
+                    else
+                    {
+                        fieldMultiValues.Add(fieldName, values);
+                    }
                 }
 
                 var lookMatch = new LookMatch(
                     scoreDoc.doc,
                     scoreDoc.score,
-                    Convert.ToInt32(fieldValues[LuceneIndexer.IndexNodeIdFieldName].SingleOrDefault()),
-                    fieldValues[LookConstants.NameField].SingleOrDefault(),
-                    fieldValues[LookConstants.DateField].SingleOrDefault().LuceneStringToDate(),
-                    fieldValues[LookConstants.TextField].SingleOrDefault(),
-                    getHighlight(fieldValues[LookConstants.TextField].SingleOrDefault()),
+                    Convert.ToInt32(fieldSingleValues[LuceneIndexer.IndexNodeIdFieldName]),
+                    fieldSingleValues[LookConstants.NameField],
+                    fieldSingleValues[LookConstants.DateField].LuceneStringToDate(),
+                    fieldSingleValues[LookConstants.TextField],
+                    getHighlight(fieldSingleValues[LookConstants.TextField]),
                     getTags(doc.GetFields(LookConstants.AllTagsField)),
-                    fieldValues[LookConstants.LocationField].Any() ? Location.FromString(fieldValues[LookConstants.LocationField].Single()) : null,
+                    fieldSingleValues[LookConstants.LocationField] != null ? Location.FromString(fieldSingleValues[LookConstants.LocationField]) : null,
                     getDistance(docId),
-                    fieldValues,
-                    getNodeType(fieldValues[LookConstants.NodeTypeField].SingleOrDefault()),
+                    fieldSingleValues,
+                    fieldMultiValues,
+                    getNodeType(fieldSingleValues[LookConstants.NodeTypeField]),
                     LookService.Instance.UmbracoHelper
                 );
                 

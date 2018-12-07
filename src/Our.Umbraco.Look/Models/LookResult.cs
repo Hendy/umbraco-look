@@ -37,7 +37,6 @@ namespace Our.Umbraco.Look.Models
         /// <param name="lookMatches"></param>
         /// <param name="total"></param>
         /// <param name="facets"></param>
-        /// <param name="examineResults"></param>
         internal LookResult(IEnumerable<LookMatch> lookMatches, int total, Facet[] facets)
         {            
             this._lookMatches = lookMatches;
@@ -71,11 +70,20 @@ namespace Our.Umbraco.Look.Models
             LogHelper.Debug(typeof(LookResult), loggingMessage);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="skip"></param>
+        /// <returns></returns>
         public IEnumerable<SearchResult> Skip(int skip)
         {
             return this._lookMatches.Skip(skip);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<SearchResult> GetEnumerator()
         {
             return this._lookMatches.GetEnumerator();
