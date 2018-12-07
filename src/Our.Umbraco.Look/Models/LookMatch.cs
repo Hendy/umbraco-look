@@ -59,13 +59,11 @@ namespace Our.Umbraco.Look.Models
         public double? Distance { get; }
 
         /// <summary>
-        /// 
+        /// Constructor
         /// </summary>
         /// <param name="docId"></param>
         /// <param name="score"></param>
-        /// <param name="fieldValues"></param>
         /// <param name="id"></param>
-        /// <param name="publishedItemType"></param>
         /// <param name="name"></param>
         /// <param name="date"></param>
         /// <param name="text"></param>
@@ -73,13 +71,13 @@ namespace Our.Umbraco.Look.Models
         /// <param name="tags"></param>
         /// <param name="location"></param>
         /// <param name="distance"></param>
+        /// <param name="fieldValues"></param>
+        /// <param name="publishedItemType"></param>
         /// <param name="umbracoHelper"></param>
         internal LookMatch(
                     int docId,
                     float score,
-                    Dictionary<string, string[]> fieldValues,
                     int id,
-                    PublishedItemType publishedItemType,
                     string name,
                     DateTime? date,
                     string text,
@@ -87,13 +85,12 @@ namespace Our.Umbraco.Look.Models
                     LookTag[] tags,
                     Location location,
                     double? distance,
+                    Dictionary<string, string[]> fieldValues, // TODO: may need to split into two collections (to separate single / multi-value fields as per Examine)
+                    PublishedItemType publishedItemType,
                     UmbracoHelper umbracoHelper)
         {
             //this.DocId = docId; // added in a later version of Examine
             this.Score = score;
-            this._fieldValues = fieldValues;
-            // populate the inherited field collection (note multi-field values take the first - TODO: may need to remove multi values to be 100% compatable with how Examine does it)
-            this.Fields = this._fieldValues.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault());
             this.Id = id;
             this.Name = name;
             this.Date = date;
@@ -102,6 +99,8 @@ namespace Our.Umbraco.Look.Models
             this.Tags = tags;
             this.Location = location;
             this.Distance = distance;
+            this.Fields = fieldValues.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault()); // single value fields (may need to remove multi-value fields)
+            this._fieldValues = fieldValues;
 
             this._item = new Lazy<IPublishedContent>(() => {
 

@@ -30,23 +30,22 @@ namespace Our.Umbraco.Look.Services
                                                     Func<int, double?> getDistance)
         {
             MapFieldSelector mapFieldSelector = null; // when null, all fields are returned
-            var fieldNames = new string[] { };
 
-            if (requestFields == RequestFields.LookFields) // limit fields to be returned
+            // these fields are always requested
+            var lookFieldNames = new string[] {
+                LuceneIndexer.IndexNodeIdFieldName,  // "__NodeId"
+                LookConstants.NodeTypeField,
+                LookConstants.NameField,
+                LookConstants.DateField,
+                LookConstants.TextField,
+                LookConstants.AllTagsField,
+                LookConstants.LocationField
+            };
+
+            if (requestFields == RequestFields.LookFields) 
             {
-                var lookFieldNames = new List<string>();
-
-                lookFieldNames.Add(LuceneIndexer.IndexNodeIdFieldName); // "__NodeId"
-                lookFieldNames.Add(LookConstants.NodeTypeField);
-                lookFieldNames.Add(LookConstants.NameField);
-                lookFieldNames.Add(LookConstants.DateField);
-                lookFieldNames.Add(LookConstants.TextField);
-                lookFieldNames.Add(LookConstants.AllTagsField); // single field used to store all tags (for quick re-construction)
-                lookFieldNames.Add(LookConstants.LocationField);
-
-                fieldNames = lookFieldNames.ToArray();
-
-                mapFieldSelector = new MapFieldSelector(fieldNames);
+                // limit fields to be returned
+                mapFieldSelector = new MapFieldSelector(lookFieldNames);
             }
 
             // there should always be a valid node type value to parse
@@ -58,20 +57,30 @@ namespace Our.Umbraco.Look.Services
                 return new LookTag[] { };
             });
 
-            Dictionary<string, string[]> fieldValues;
-
             foreach (var scoreDoc in topDocs.ScoreDocs)
             {
                 var docId = scoreDoc.doc;
 
                 var doc = indexSearcher.Doc(docId, mapFieldSelector);
 
+                string[] fieldNames;
+
                 if (requestFields == RequestFields.AllFields)
                 {
-                    fieldNames = doc.GetFields().Cast<Field>().Select(x => x.Name()).ToArray();
+                    fieldNames = doc
+                                    .GetFields()
+                                    .Cast<Field>()
+                                    .Select(x => x.Name())
+                                    .Union(lookFieldNames)
+                                    .Distinct()
+                                    .ToArray();
+                }
+                else
+                {
+                    fieldNames = lookFieldNames;
                 }
 
-                fieldValues = new Dictionary<string, string[]>();
+                var fieldValues = new Dictionary<string, string[]>();
 
                 foreach (var fieldName in fieldNames)
                 {
@@ -81,16 +90,16 @@ namespace Our.Umbraco.Look.Services
                 var lookMatch = new LookMatch(
                     scoreDoc.doc,
                     scoreDoc.score,
-                    fieldValues,
-                    Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
-                    getNodeType(doc.Get(LookConstants.NodeTypeField)),
-                    doc.Get(LookConstants.NameField),
-                    doc.Get(LookConstants.DateField).LuceneStringToDate(),
-                    doc.Get(LookConstants.TextField),
-                    getHighlight(doc.Get(LookConstants.TextField)),
+                    Convert.ToInt32(fieldValues[LuceneIndexer.IndexNodeIdFieldName].SingleOrDefault()),
+                    fieldValues[LookConstants.NameField].SingleOrDefault(),
+                    fieldValues[LookConstants.DateField].SingleOrDefault().LuceneStringToDate(),
+                    fieldValues[LookConstants.TextField].SingleOrDefault(),
+                    getHighlight(fieldValues[LookConstants.TextField].SingleOrDefault()),
                     getTags(doc.GetFields(LookConstants.AllTagsField)),
-                    doc.Get(LookConstants.LocationField) != null ? Location.FromString(doc.Get(LookConstants.LocationField)) : null,
-                    getDistance(docId),                    
+                    fieldValues[LookConstants.LocationField].Any() ? Location.FromString(fieldValues[LookConstants.LocationField].Single()) : null,
+                    getDistance(docId),
+                    fieldValues,
+                    getNodeType(fieldValues[LookConstants.NodeTypeField].SingleOrDefault()),
                     LookService.Instance.UmbracoHelper
                 );
                 
