@@ -95,7 +95,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             var lookResult = LookService.Query(lookQuery);
 
-            lookQuery.TextQuery.GetText = true;
+            lookQuery.TextQuery.GetHighlight = true;
 
             Assert.IsNull(lookQuery.Compiled);
         }

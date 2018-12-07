@@ -50,7 +50,7 @@ namespace Our.Umbraco.Look.Services
                 BooleanQuery query = null; // the lucene query being built                                            
                 Filter filter = null; // used for geospatial queries
                 Sort sort = null;
-                Func<string, IHtmlString> getHighlight = null;
+                Func<string, IHtmlString> getHighlight = x => null;
                 Func<int, double?> getDistance = x => null;
 
                 query = new BooleanQuery();
@@ -469,8 +469,8 @@ namespace Our.Umbraco.Look.Services
                                 LookService.GetLookMatches(
                                                         lookQuery.SearchingContext.IndexSearcher,
                                                         topDocs,
+                                                        lookQuery.RequestFields ?? LookService.Instance.RequestFields,
                                                         lookQuery.Compiled.GetHighlight,
-                                                        lookQuery.TextQuery != null && lookQuery.TextQuery.GetText,
                                                         lookQuery.Compiled.GetDistance),
                                 topDocs.TotalHits,
                                 facets != null ? facets.ToArray() : new Facet[] { });

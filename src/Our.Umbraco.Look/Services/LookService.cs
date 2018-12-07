@@ -15,6 +15,11 @@ namespace Our.Umbraco.Look.Services
         private Dictionary<string, Directory> IndexSetDirectories { get; set; } = null;
 
         /// <summary>
+        /// Enum used to indicate which Lucene fields should be returned
+        /// </summary>
+        private RequestFields RequestFields { get; set; } = RequestFields.AllFields;
+
+        /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
         /// </summary>
         private Func<IndexingContext, string> NameIndexer { get; set; } = null;

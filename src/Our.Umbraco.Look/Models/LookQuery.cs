@@ -15,6 +15,11 @@ namespace Our.Umbraco.Look.Models
         private LookQueryCompiled _compiled = null;
 
         /// <summary>
+        /// Property to override the default RequestFields behaviour
+        /// </summary>
+        public RequestFields? RequestFields { get; set; } = null;
+
+        /// <summary>
         /// (Optional) set a raw Lucene query
         /// </summary>
         public string RawQuery { get; set; }

@@ -7,7 +7,7 @@ using Umbraco.Core.Logging;
 namespace Our.Umbraco.Look.Models
 {
     /// <summary>
-    /// Model returned as a response to a Look query
+    /// Response model for a LookQuery (this can be cast into Examine.ISearchResults for compatability)
     /// </summary>
     public class LookResult : ISearchResults
     {
@@ -22,7 +22,7 @@ namespace Our.Umbraco.Look.Models
         public int TotalItemCount { get; }
 
         /// <summary>
-        /// 
+        /// Always returned as an array (which may be empty)
         /// </summary>
         public Facet[] Facets { get; }
 

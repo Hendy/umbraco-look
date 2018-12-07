@@ -236,8 +236,7 @@ are optional, and there is a constructor where all properties are optional (by d
 ```csharp
 lookQuery.TextQuery = new TextQuery() {
 	SearchText = "some text to search for",
-	GetHighlight = true, // return highlight extract from the text field containing the search text
-	GetText = true // raw text field should be returned (potentially a large document)
+	GetHighlight = true // return highlight extract from the text field containing the search text
 }
 ```
 

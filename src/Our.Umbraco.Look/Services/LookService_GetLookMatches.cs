@@ -18,37 +18,36 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="indexSearcher">The searcher supplied to get the Lucene doc for each id in the Lucene results (topDocs)</param>
         /// <param name="topDocs">The results of the Lucene query (a collection of ids in an order)</param>
+        /// <param name="requestFields">Enum value specifying which Lucene fields shoudl be returned</param>
         /// <param name="getHighlight">Function used to get the highlight text for a given result text</param>
-        /// <param name="getText">Flag to indidicate whether the full value of the text field should be returned</param>
         /// <param name="getDistance">Function used to calculate distance (if a location was supplied in the original query)</param>
         /// <returns></returns>
         private static IEnumerable<LookMatch> GetLookMatches(
                                                     IndexSearcher indexSearcher,
                                                     TopDocs topDocs,
+                                                    RequestFields requestFields,
                                                     Func<string, IHtmlString> getHighlight,
-                                                    bool getText,
                                                     Func<int, double?> getDistance)
         {
-            var fields = new List<string>();
+            MapFieldSelector mapFieldSelector = null; // when null, all fields are returned
 
-            fields.Add(LuceneIndexer.IndexNodeIdFieldName); // "__NodeId"
-            fields.Add(LookConstants.NodeTypeField);
-            fields.Add(LookConstants.NameField);
-            fields.Add(LookConstants.DateField);
+            if (requestFields == RequestFields.LookFields)
+            {
+                var fields = new List<string>();
 
-            // if a highlight function is supplied (or text requested)
-            if (getHighlight != null || getText) { fields.Add(LookConstants.TextField); }
+                fields.Add(LuceneIndexer.IndexNodeIdFieldName); // "__NodeId"
+                fields.Add(LookConstants.NodeTypeField);
+                fields.Add(LookConstants.NameField);
+                fields.Add(LookConstants.DateField);
+                fields.Add(LookConstants.TextField);
+                fields.Add(LookConstants.AllTagsField); // single field used to store all tags (for quick re-construction)
+                fields.Add(LookConstants.LocationField);
 
-            fields.Add(LookConstants.AllTagsField); // single field used to store all tags (for quick re-construction)
-            fields.Add(LookConstants.LocationField);
-
-            var mapFieldSelector = new MapFieldSelector(fields.ToArray());
+                mapFieldSelector = new MapFieldSelector(fields.ToArray());
+            }
 
             // there should always be a valid node type value to parse
             var getNodeType = new Func<string, PublishedItemType>(x => { Enum.TryParse(x, out PublishedItemType type); return type; });
-
-            // if highlight func does not exist, then create one to always return null
-            if (getHighlight == null) { getHighlight = x => null; }
             
             // helper to simplify call below
             var getTags = new Func<Field[], LookTag[]>(x => {
@@ -67,7 +66,7 @@ namespace Our.Umbraco.Look.Services
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     getNodeType(doc.Get(LookConstants.NodeTypeField)),
                     getHighlight(doc.Get(LookConstants.TextField)),
-                    getText ? doc.Get(LookConstants.TextField) : null,
+                    doc.Get(LookConstants.TextField),
                     getTags(doc.GetFields(LookConstants.AllTagsField)),
                     doc.Get(LookConstants.DateField).LuceneStringToDate(),
                     doc.Get(LookConstants.NameField),

@@ -17,19 +17,9 @@ namespace Our.Umbraco.Look.Models
         public IPublishedContent Item => this._item.Value;
 
         /// <summary>
-        /// Highlight text (containing search text) extracted from from the full text
+        /// The custom name field
         /// </summary>
-        public IHtmlString Highlight { get; }
-
-        /// <summary>
-        /// The full text (only returned if specified)
-        /// </summary>
-        public string Text { get; }
-
-        /// <summary>
-        /// Tag collection (only returned if specified)
-        /// </summary>
-        public LookTag[] Tags { get; }
+        public string Name { get; }
 
         /// <summary>
         /// The custom date field
@@ -37,9 +27,20 @@ namespace Our.Umbraco.Look.Models
         public DateTime? Date { get; }
 
         /// <summary>
-        /// The custom name field
+        /// The full text (only returned if specified)
         /// </summary>
-        public string Name { get; }
+        public string Text { get; }
+
+        /// <summary>
+        /// Highlight text (containing search text) extracted from from the full text
+        /// </summary>
+        public IHtmlString Highlight { get; }
+
+        /// <summary>
+        /// Tag collection (only returned if specified)
+        /// </summary>
+        public LookTag[] Tags { get; }
+
 
         /// <summary>
         /// The custom location (lat|lng) field
