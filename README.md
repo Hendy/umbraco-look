@@ -166,20 +166,20 @@ A node query is used to set search criteria based on the IPublishedContent type,
 
 ```csharp
 lookQuery.NodeQuery = new NodeQuery() {
-	Types = new PublishedItemType[] { 
+	Types = new [] { 
 		PublishedItemType.Content, 
 		PublishedItemType.Media, 
 		PublishedItemType.Member 
 	},
-		Cultures = new Culture[] {
-		
+	Cultures = new [] {
+		new CultureInfo("fr")	
 	},
-	Aliases = new string[] { 
+	Aliases = new [] { 
 		"myDocTypeAlias", 
 		"myMediaTypeAlias",
 		"myMemberTypeAlias"
 	},
-	NotIds = new int[] { 123 } // (eg. exclude current page)
+	NotIds = new [] { 123 } // (eg. exclude current page)
 };
 ```
 
