@@ -1,6 +1,5 @@
 ﻿using Examine.LuceneEngine;
 using Our.Umbraco.Look.Extensions;
-
 using System.IO;
 using System.Web;
 using System.Web.Hosting;

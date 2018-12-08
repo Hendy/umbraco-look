@@ -2,7 +2,6 @@
 using Lucene.Net.Documents;
 using Lucene.Net.Search;
 using Our.Umbraco.Look.Extensions;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;

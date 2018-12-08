@@ -1,6 +1,5 @@
 ﻿using Examine;
 using Lucene.Net.Search;
-
 using Umbraco.Core.Logging;
 using UmbracoExamine;
 

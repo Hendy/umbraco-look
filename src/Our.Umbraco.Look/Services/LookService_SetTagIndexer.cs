@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look
@@ -23,6 +22,5 @@ namespace Our.Umbraco.Look
             
             LookService.Instance.TagIndexer = tagIndexer;
         }
-
     }
 }

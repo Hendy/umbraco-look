@@ -1,6 +1,4 @@
-﻿
-
-namespace Our.Umbraco.Look
+﻿namespace Our.Umbraco.Look
 {
     public partial class LookService
     {

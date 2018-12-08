@@ -1,7 +1,6 @@
 ﻿using Examine.LuceneEngine.Providers;
 using Lucene.Net.Documents;
 using Lucene.Net.Util;
-
 using System;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;

@@ -1,7 +1,5 @@
-﻿
-using System;
+﻿using System;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look
 {

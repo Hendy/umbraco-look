@@ -1,6 +1,5 @@
 ﻿using Lucene.Net.Documents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using System.Linq;
 
 namespace Our.Umbraco.Look.Tests.QueryTests

@@ -6,7 +6,6 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Spatial.Tier;
 using Our.Umbraco.Look.Extensions;
-
 using System;
 using System.Collections.Generic;
 using System.IO;

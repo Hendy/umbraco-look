@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look

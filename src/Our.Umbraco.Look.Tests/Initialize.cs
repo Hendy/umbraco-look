@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-
 namespace Our.Umbraco.Look.Tests
 {
     [TestClass]

@@ -1,6 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using System.Linq;
 using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Tests.ModelTests

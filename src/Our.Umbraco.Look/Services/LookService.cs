@@ -1,6 +1,5 @@
 ﻿using Lucene.Net.Spatial.Tier.Projectors;
 using Lucene.Net.Store;
-
 using System;
 using System.Collections.Generic;
 using Umbraco.Web;
