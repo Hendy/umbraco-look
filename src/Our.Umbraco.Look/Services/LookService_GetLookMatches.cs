@@ -42,7 +42,7 @@ namespace Our.Umbraco.Look.Services
                 LookConstants.LocationField
             };
 
-            if (requestFields == RequestFields.LookFields) 
+            if (requestFields == RequestFields.LookFieldsOnly) 
             {
                 // limit fields to be returned
                 mapFieldSelector = new MapFieldSelector(lookFieldNames);

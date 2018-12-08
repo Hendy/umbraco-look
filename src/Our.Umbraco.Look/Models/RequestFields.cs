@@ -8,7 +8,7 @@
         /// <summary>
         /// Optimised to return only the Lucene fields required for the item to populate the LookMatch obj
         /// </summary>
-        LookFields,
+        LookFieldsOnly,
 
         /// <summary>
         /// Return all Lucene fields associated with the item, this enables the SearchResult.Fields property to be 

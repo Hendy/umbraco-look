@@ -15,11 +15,6 @@ namespace Our.Umbraco.Look.Services
         private Dictionary<string, Directory> IndexSetDirectories { get; set; } = null;
 
         /// <summary>
-        /// Enum used to indicate which Lucene fields should be returned
-        /// </summary>
-        private RequestFields RequestFields { get; set; } = RequestFields.AllFields;
-
-        /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
         /// </summary>
         private Func<IndexingContext, string> NameIndexer { get; set; } = null;
@@ -63,6 +58,11 @@ namespace Our.Umbraco.Look.Services
         /// Supplied by the initialization event (for re-use by the LookMatch)
         /// </summary>
         private UmbracoHelper UmbracoHelper { get; set; }
+
+        /// <summary>
+        /// Enum used to indicate which Lucene fields should be returned
+        /// </summary>
+        private RequestFields RequestFields { get; set; } = RequestFields.AllFields;
 
         /// <summary>
         /// Access the singleton instance of this search service
