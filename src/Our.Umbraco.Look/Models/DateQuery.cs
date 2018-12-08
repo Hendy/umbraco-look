@@ -17,6 +17,11 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         public DateTime? After { get; set; } = null;
 
+        /// <summary>
+        /// Enum flag to specify which date clauses are inclusive or exclusive
+        /// </summary>
+        public DateBoundary Boundary { get; set; } = DateBoundary.Inclusive;
+
         ///// <summary>
         ///// 
         ///// </summary>

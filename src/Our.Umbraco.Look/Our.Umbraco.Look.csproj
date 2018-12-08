@@ -212,6 +212,7 @@
     <Compile Include="Extensions\DateTimeExtensions\DateToLuceneString.cs" />
     <Compile Include="Extensions\UmbracoHelperExtensions\SafeTypedMember.cs" />
     <Compile Include="LookConstants.cs" />
+    <Compile Include="Models\DateBoundary.cs" />
     <Compile Include="Models\DateQuery.cs" />
     <Compile Include="Models\Distance.cs" />
     <Compile Include="Models\DistanceUnit.cs" />

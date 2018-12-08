@@ -206,7 +206,8 @@ A date query is used together with a custom date indexer and enables date range 
 ```csharp
 lookQuery.DateQuery = new DateQuery() {
 	After = new DateTime(2005, 02, 16),
-	Before = null
+	Before = null,
+	Boundary = DateBoundary.Inclusive
 }
 ```
 

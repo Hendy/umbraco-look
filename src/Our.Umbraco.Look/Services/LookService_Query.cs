@@ -236,13 +236,16 @@ namespace Our.Umbraco.Look.Services
                 {
                     hasQuery = true;
 
+                    var includeLower = lookQuery.DateQuery.Boundary == DateBoundary.Inclusive || lookQuery.DateQuery.Boundary == DateBoundary.AfterInclusiveBeforeExclusive;
+                    var includeUpper = lookQuery.DateQuery.Boundary == DateBoundary.Inclusive || lookQuery.DateQuery.Boundary == DateBoundary.AfterExclusiveBeforeInclusive;
+
                     query.Add(
                             new TermRangeQuery(
                                     LookConstants.DateField,
                                     lookQuery.DateQuery.After.DateToLuceneString() ?? DateTime.MinValue.DateToLuceneString(),
                                     lookQuery.DateQuery.Before.DateToLuceneString() ?? DateTime.MaxValue.DateToLuceneString(),
-                                    true,
-                                    true),
+                                    includeLower,
+                                    includeUpper),
                             BooleanClause.Occur.MUST);
                 }
 
