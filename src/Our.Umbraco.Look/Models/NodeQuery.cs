@@ -12,7 +12,7 @@ namespace Our.Umbraco.Look.Models
         public PublishedItemType[] Types { get; set; } = null;
 
         /// <summary>
-        /// 
+        /// The cultures of the content nodes to find
         /// </summary>
         public CultureInfo[] Cultures { get; set; } = null;
 
@@ -43,6 +43,15 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
+        /// Create new NodeQuery search critera (specifying a culture implies that the PublishedItemType will be Content)
+        /// </summary>
+        /// <param name="culture"></param>
+        public NodeQuery(CultureInfo cultureInfo)
+        {
+            this.Cultures = new CultureInfo[] { cultureInfo };
+        }
+
+        /// <summary>
         /// Create new NodeQuery search criteria for all nodes of any of these aliases
         /// </summary>
         /// <param name="aliases">array of string aliases for the content, media or members</param>
@@ -52,7 +61,7 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// 
+        /// Create new NodeQuery search critera 
         /// </summary>
         /// <param name="type"></param>
         /// <param name="aliases"></param>
@@ -62,13 +71,26 @@ namespace Our.Umbraco.Look.Models
             this.Aliases = aliases;
         }
 
-        // TODO: overloads for not id(s) ?
+        /// <summary>
+        /// Create new NodeQuery search critera 
+        /// </summary>
+        /// <param name="cultureInfo"></param>
+        /// <param name="aliases"></param>
+        public NodeQuery(CultureInfo cultureInfo, params string[] aliases)
+        {
+            this.Cultures = new CultureInfo[] { cultureInfo };
+            this.Aliases = aliases;
+        }
 
         public override bool Equals(object obj)
         {
             NodeQuery nodeQuery = obj as NodeQuery;
 
             return nodeQuery != null
+                && ((nodeQuery.Types == null && this.Types == null)
+                    || (nodeQuery.Types != null && this.Types != null && nodeQuery.Types.SequenceEqual(this.Types)))
+                && ((nodeQuery.Cultures == null && this.Cultures == null)
+                    || (nodeQuery.Cultures != null && this.Cultures != null && nodeQuery.Cultures.SequenceEqual(this.Cultures)))
                 && ((nodeQuery.Aliases == null && this.Aliases == null)
                     || (nodeQuery.Aliases != null && this.Aliases != null && nodeQuery.Aliases.SequenceEqual(this.Aliases)))
                 && ((nodeQuery.NotIds == null && this.NotIds == null)

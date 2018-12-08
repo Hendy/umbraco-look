@@ -171,6 +171,9 @@ lookQuery.NodeQuery = new NodeQuery() {
 		PublishedItemType.Media, 
 		PublishedItemType.Member 
 	},
+		Cultures = new Culture[] {
+		
+	},
 	Aliases = new string[] { 
 		"myDocTypeAlias", 
 		"myMediaTypeAlias",
