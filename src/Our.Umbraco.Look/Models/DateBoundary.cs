@@ -13,13 +13,13 @@
         Exclusive,
 
         /// <summary>
-        /// 
+        /// Before date inclusive, after date exclusive
         /// </summary>
-        AfterInclusiveBeforeExclusive,
+        BeforeInclusiveAfterExclusive,
 
         /// <summary>
-        /// 
+        /// Before date exclusive, after date inclusive
         /// </summary>
-        AfterExclusiveBeforeInclusive,
+        BeforeExclusiveAfterInclusive,
     }
 }

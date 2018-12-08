@@ -236,8 +236,8 @@ namespace Our.Umbraco.Look
                 {
                     hasQuery = true;
 
-                    var includeLower = lookQuery.DateQuery.After == null || lookQuery.DateQuery.Boundary == DateBoundary.Inclusive || lookQuery.DateQuery.Boundary == DateBoundary.AfterInclusiveBeforeExclusive;
-                    var includeUpper = lookQuery.DateQuery.Before == null || lookQuery.DateQuery.Boundary == DateBoundary.Inclusive || lookQuery.DateQuery.Boundary == DateBoundary.AfterExclusiveBeforeInclusive;
+                    var includeLower = lookQuery.DateQuery.After == null || lookQuery.DateQuery.Boundary == DateBoundary.Inclusive || lookQuery.DateQuery.Boundary == DateBoundary.BeforeExclusiveAfterInclusive;
+                    var includeUpper = lookQuery.DateQuery.Before == null || lookQuery.DateQuery.Boundary == DateBoundary.Inclusive || lookQuery.DateQuery.Boundary == DateBoundary.BeforeInclusiveAfterExclusive;
 
                     query.Add(
                             new TermRangeQuery(

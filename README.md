@@ -8,16 +8,6 @@ Examine manages the indexes, whilst Look adds 'config-file-free' C# indexing and
   * Examine 0.1.70 (min)
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
-Namespaces used in examples:
-```csharp
-using System;
-using System.Linq;
-using Umbraco.Core;
-using Umbraco.Core.Models;
-using Examine;
-using Examine.SearchCriteria;
-using Our.Umbraco.Look;
-```
 
 ## Indexing
 
@@ -414,3 +404,15 @@ var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue", "size:
 ### Facets
 
 Look interprets facets to mean: "if the current query asked something slightly different (the facet being the difference), then how many results would be returned instead ?".
+
+
+Namespaces used in examples:
+```csharp
+using System;
+using System.Linq;
+using Umbraco.Core;
+using Umbraco.Core.Models;
+using Examine;
+using Examine.SearchCriteria;
+using Our.Umbraco.Look;
+```
