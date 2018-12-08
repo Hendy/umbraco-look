@@ -16,8 +16,7 @@ using Umbraco.Core;
 using Umbraco.Core.Models;
 using Examine;
 using Examine.SearchCriteria;
-
-
+using Our.Umbraco.Look;
 ```
 
 ## Indexing
