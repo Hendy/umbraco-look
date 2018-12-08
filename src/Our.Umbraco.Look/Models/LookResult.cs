@@ -7,15 +7,10 @@ using Umbraco.Core.Logging;
 namespace Our.Umbraco.Look.Models
 {
     /// <summary>
-    /// Response model for a LookQuery (this can be cast into Examine.ISearchResults for compatability)
+    /// Response model for a LookQuery
     /// </summary>
     public class LookResult : ISearchResults
     {
-        /// <summary>
-        /// The wrapped enumerable
-        /// </summary>
-        private readonly IEnumerable<LookMatch> _lookMatches;
-
         /// <summary>
         /// Expected total number of results in the enumerable
         /// </summary>
@@ -24,7 +19,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Get the results enumerable with the LookMatch objects
         /// </summary>
-        public IEnumerable<LookMatch> Matches => this._lookMatches;
+        public IEnumerable<LookMatch> Matches { get; }
 
         /// <summary>
         /// Always returned as an array (which may be empty)
@@ -44,7 +39,7 @@ namespace Our.Umbraco.Look.Models
         /// <param name="facets"></param>
         internal LookResult(IEnumerable<LookMatch> lookMatches, int total, Facet[] facets)
         {            
-            this._lookMatches = lookMatches;
+            this.Matches = lookMatches;
             this.TotalItemCount = total;
             this.Facets = facets ?? new Facet[] { };
             this.Success = true;
@@ -55,7 +50,7 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         internal LookResult()
         {
-            this._lookMatches = Enumerable.Empty<LookMatch>();
+            this.Matches = Enumerable.Empty<LookMatch>();
             this.TotalItemCount = 0;
             this.Facets = new Facet[] { };
             this.Success = true;
@@ -67,7 +62,7 @@ namespace Our.Umbraco.Look.Models
         /// <param name="loggingMessage">Message to debug log</param>
         internal LookResult(string loggingMessage)
         {
-            this._lookMatches = Enumerable.Empty<LookMatch>();
+            this.Matches = Enumerable.Empty<LookMatch>();
             this.TotalItemCount = 0;
             this.Facets = new Facet[] { };
             this.Success = false;
@@ -82,7 +77,7 @@ namespace Our.Umbraco.Look.Models
         /// <returns></returns>
         public IEnumerable<SearchResult> Skip(int skip)
         {
-            return this._lookMatches.Skip(skip);
+            return this.Matches.Skip(skip);
         }
 
         /// <summary>
@@ -91,7 +86,7 @@ namespace Our.Umbraco.Look.Models
         /// <returns></returns>
         public IEnumerator<SearchResult> GetEnumerator()
         {
-            return this._lookMatches.GetEnumerator();
+            return this.Matches.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

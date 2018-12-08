@@ -14,7 +14,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// Lazy evaluation of Item for IPublishedContent
         /// </summary>
-        public IPublishedContent Item => this._item.Value; // TODO: rename to Node
+        public IPublishedContent Item => this._item.Value;
 
         /// <summary>
         /// The custom name field
