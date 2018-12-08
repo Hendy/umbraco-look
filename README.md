@@ -180,16 +180,6 @@ lookQuery.NodeQuery = new NodeQuery() {
 };
 ```
 
-Constructor overloads:
-
-```csharp
-NodeQuery(PublishedItemType type)
-NodeQuery(string alias)
-NodeQuery(params string[] aliases)
-NodeQuery(PublishedItemType type, string alias)
-NodeQuery(PublishedItemType type, params string[] aliases)
-```
-
 #### NameQuery
 A name query is used together with a custom name indexer and enables string comparrison queries (wildcards are not allowed and all properties are optional).
 If a name query is contradictory (for example, Is = "Must be this" and StartsWith = "Something else"), then
@@ -204,17 +194,6 @@ lookQuery.NameQuery = new NameQuery() {
 	EndsWith = "Xyz",
 	CaseSensitive = true // applies to all: Is, StartsWith, Contains & EndsWith
 };
-```
-
-Optional constructor params:
-
-```csharp
-NameQuery(
-	string @is = null, 
-	string startsWith = null, 
-	string contains = null, 
-	string endsWith = null, 
-	bool caseSensitive = true)
 ```
 
 #### DateQuery
@@ -241,12 +220,6 @@ lookQuery.TextQuery = new TextQuery() {
 }
 ```
 
-Optional constructor params:
-
-```csharp
-TextQuery(string searchText = null, bool getHighlight = false, bool getText = false)
-```
-
 #### TagQuery
 
 A tag query is used together with a custom tag indexer.
@@ -267,12 +240,6 @@ lookQuery.TagQuery = new TagQuery() {
 };
 ```
 
-Optional constructor params:
-
-```csharp
-TagQuery(LookTag[] all = null, LookTag[] any = null, LookTag[] not = null, TagFacetQuery tagFacetQuery = null)
-```
-
 #### LocationQuery
 
 A location query is used together with a custom location indexer. If a Location alone is set, then all nodes which 
@@ -284,12 +251,6 @@ lookQuery.LocationQuery = new LocationQuery() {
 	Location = new Location(55.406330, 10.388500),
 	MaxDistance = new Distance(500, DistanceUnit.Miles)
 };
-```
-
-Optional constructor params:
-
-```csharp
-LocationQuery(Location location = null, Distance maxDistance = null)
 ```
 
 #### SortOn
