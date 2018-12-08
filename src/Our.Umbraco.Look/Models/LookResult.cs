@@ -22,6 +22,11 @@ namespace Our.Umbraco.Look.Models
         public int TotalItemCount { get; }
 
         /// <summary>
+        /// Get the results enumerable with the LookMatch objects
+        /// </summary>
+        public IEnumerable<LookMatch> Matches => this._lookMatches;
+
+        /// <summary>
         /// Always returned as an array (which may be empty)
         /// </summary>
         public Facet[] Facets { get; }
