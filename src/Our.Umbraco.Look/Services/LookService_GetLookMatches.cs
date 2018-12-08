@@ -63,57 +63,49 @@ namespace Our.Umbraco.Look.Services
 
                 var doc = indexSearcher.Doc(docId, mapFieldSelector);
 
-                string[] fieldNames;
-
-                if (requestFields == RequestFields.AllFields)
-                {
-                    fieldNames = doc
-                                    .GetFields()
-                                    .Cast<Field>()
-                                    .Select(x => x.Name())
-                                    .Union(lookFieldNames)
-                                    .Distinct()
-                                    .ToArray();
-                }
-                else
-                {
-                    fieldNames = lookFieldNames;
-                }
-
-                var fieldSingleValues = new Dictionary<string, string>();
-                var fieldMultiValues = new Dictionary<string, string[]>();
-
-                foreach (var fieldName in fieldNames)
-                {
-                    var values = doc.GetValues(fieldName);
-
-                    if (!(values.Length > 1))
-                    {
-                        fieldSingleValues.Add(fieldName, values.FirstOrDefault());
-                    }
-                    else
-                    {
-                        fieldMultiValues.Add(fieldName, values);
-                    }
-                }
-
                 var lookMatch = new LookMatch(
                     scoreDoc.doc,
                     scoreDoc.score,
-                    Convert.ToInt32(fieldSingleValues[LuceneIndexer.IndexNodeIdFieldName]),
-                    fieldSingleValues[LookConstants.NameField],
-                    fieldSingleValues[LookConstants.DateField].LuceneStringToDate(),
-                    fieldSingleValues[LookConstants.TextField],
-                    getHighlight(fieldSingleValues[LookConstants.TextField]),
+                    Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
+                    doc.Get(LookConstants.NameField),
+                    doc.Get(LookConstants.DateField).LuceneStringToDate(),
+                    doc.Get(LookConstants.TextField),
+                    getHighlight(doc.Get(LookConstants.TextField)),
                     getTags(doc.GetFields(LookConstants.AllTagsField)),
-                    fieldSingleValues[LookConstants.LocationField] != null ? Location.FromString(fieldSingleValues[LookConstants.LocationField]) : null,
+                    doc.Get(LookConstants.LocationField) != null ? Location.FromString(doc.Get(LookConstants.LocationField)) : null,
                     getDistance(docId),
-                    fieldSingleValues,
-                    fieldMultiValues,
-                    getNodeType(fieldSingleValues[LookConstants.NodeTypeField]),
+                    getNodeType(doc.Get(LookConstants.NodeTypeField)),
                     LookService.Instance.UmbracoHelper
                 );
-                
+
+                // populate the Examine SearchResult.Fields collection
+                if (requestFields == RequestFields.AllFields)
+                {
+                    string[] fieldNames = doc
+                                            .GetFields()
+                                            .Cast<Field>()
+                                            .Select(x => x.Name())
+                                            .Where(x => !lookFieldNames.Contains(x)) // exclude Look fields
+                                            .ToArray();
+
+                    foreach (var fieldName in fieldNames)
+                    {
+                        var values = doc.GetValues(fieldName);
+
+                        // replicating logic from Examine
+                        if (values.Length > 1)
+                        {
+                            // TODO: reflection to set internal MultiValueFields
+
+                            lookMatch.Fields[fieldName] = values[0];
+                        }
+                        else if (values.Length > 0)
+                        {
+                            lookMatch.Fields[fieldName] = values[0];
+                        }
+                    }
+                }
+
                 yield return lookMatch;
             }
         }
