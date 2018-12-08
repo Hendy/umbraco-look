@@ -1,6 +1,6 @@
 ﻿using Lucene.Net.QueryParsers;
 
-namespace Our.Umbraco.Look.Models
+namespace Our.Umbraco.Look
 {
     /// <summary>
     /// Search query criteria for use with the custom name field

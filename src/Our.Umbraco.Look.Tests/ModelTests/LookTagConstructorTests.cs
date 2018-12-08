@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Our.Umbraco.Look.Models;
+
 using System;
 
 namespace Our.Umbraco.Look.Tests.ModelTests

@@ -1,4 +1,4 @@
-﻿using Our.Umbraco.Look.Models;
+﻿
 using System;
 
 namespace Our.Umbraco.Look.Tests

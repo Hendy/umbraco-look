@@ -5,7 +5,7 @@ using System.Web;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 
-namespace Our.Umbraco.Look.Models
+namespace Our.Umbraco.Look
 {
     public class LookMatch : SearchResult
     {

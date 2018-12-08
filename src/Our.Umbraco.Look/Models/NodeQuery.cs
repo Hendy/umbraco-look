@@ -2,7 +2,7 @@
 using System.Linq;
 using Umbraco.Core.Models;
 
-namespace Our.Umbraco.Look.Models
+namespace Our.Umbraco.Look
 {
     public class NodeQuery
     {

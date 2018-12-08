@@ -6,7 +6,7 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Spatial.Tier;
 using Our.Umbraco.Look.Extensions;
-using Our.Umbraco.Look.Models;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Web;
 using UmbracoExamine;
 
-namespace Our.Umbraco.Look.Services
+namespace Our.Umbraco.Look
 {
     public partial class LookService
     {

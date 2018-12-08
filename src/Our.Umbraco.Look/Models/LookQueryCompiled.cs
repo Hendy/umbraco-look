@@ -2,7 +2,7 @@
 using System;
 using System.Web;
 
-namespace Our.Umbraco.Look.Models
+namespace Our.Umbraco.Look
 {
     /// <summary>
     /// represents look query search criteria properties processed into objects ready to query Lucene with

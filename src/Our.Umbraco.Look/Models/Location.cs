@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Our.Umbraco.Look.Models
+namespace Our.Umbraco.Look
 {
     /// <summary>
     /// Currently handles it's own serialization / de-serialization

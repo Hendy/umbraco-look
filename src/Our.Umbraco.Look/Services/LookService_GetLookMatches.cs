@@ -2,14 +2,14 @@
 using Lucene.Net.Documents;
 using Lucene.Net.Search;
 using Our.Umbraco.Look.Extensions;
-using Our.Umbraco.Look.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Umbraco.Core.Models;
 
-namespace Our.Umbraco.Look.Services
+namespace Our.Umbraco.Look
 {
     public partial class LookService
     {

@@ -1,6 +1,6 @@
-﻿using Our.Umbraco.Look.Models;
+﻿
 
-namespace Our.Umbraco.Look.Services
+namespace Our.Umbraco.Look
 {
     public partial class LookService
     {
