@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Models
@@ -9,6 +10,11 @@ namespace Our.Umbraco.Look.Models
         /// The types of node to find, eg. Content, Media, Members
         /// </summary>
         public PublishedItemType[] Types { get; set; } = null;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public CultureInfo[] Cultures { get; set; } = null;
 
         /// <summary>
         /// The document type, media type or member type aliases
@@ -37,32 +43,12 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// Create new NodeQuery search criteria for nodes of a given alias
-        /// </summary>
-        /// <param name="alias">the alias of the content, media or member</param>
-        public NodeQuery(string alias)
-        {
-            this.Aliases = new string[] { alias };
-        }
-
-        /// <summary>
         /// Create new NodeQuery search criteria for all nodes of any of these aliases
         /// </summary>
         /// <param name="aliases">array of string aliases for the content, media or members</param>
         public NodeQuery(params string[] aliases)
         {
             this.Aliases = aliases;
-        }
-
-        /// <summary>
-        /// Create new NodeQuery search critera for nodes of a given type and alias
-        /// </summary>
-        /// <param name="nodeType">The node type. eg. content, media or member</param>
-        /// <param name="alias">the alias of the content, media or member</param>
-        public NodeQuery(PublishedItemType type, string alias)
-        {
-            this.Types = new PublishedItemType[] { type };
-            this.Aliases = new string[] { alias };
         }
 
         /// <summary>
