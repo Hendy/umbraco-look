@@ -14,7 +14,7 @@ using System.Linq;
 using System.Web;
 using UmbracoExamine;
 
-namespace Our.Umbraco.Look.Services
+namespace Our.Umbraco.Look
 {
     public partial class LookService
     {
