@@ -27,10 +27,10 @@ namespace Our.Umbraco.Look.Models
         ///// </summary>
         ///// <param name="before"></param>
         ///// <param name="after"></param>
-        //public DateQuery(DateTime? before = null, DateTime? after = null)
+        //public DateQuery(DateTime? after = null, DateTime? before = null, DateBoundary boundary = DateBoundary.Inclusive)
         //{
-        //    this.Before = before;
         //    this.After = after;
+        //    this.Before = before;
         //}
 
         public override bool Equals(object obj)
