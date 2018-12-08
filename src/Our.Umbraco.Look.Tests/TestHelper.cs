@@ -88,7 +88,7 @@ namespace Our.Umbraco.Look.Tests
         /// 
         /// </summary>
         /// <param name="documents"></param>
-        private static void IndexDocuments(IEnumerable<Document> documents)
+        internal static void IndexDocuments(IEnumerable<Document> documents)
         {
             var luceneDirectory = FSDirectory.Open(System.IO.Directory.CreateDirectory(TestHelper.DirectoryPath));
             var analyzer = new WhitespaceAnalyzer();

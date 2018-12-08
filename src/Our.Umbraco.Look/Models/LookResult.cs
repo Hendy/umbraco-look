@@ -14,7 +14,7 @@ namespace Our.Umbraco.Look.Models
         /// <summary>
         /// The wrapped enumerable
         /// </summary>
-        private IEnumerable<LookMatch> _lookMatches;
+        private readonly IEnumerable<LookMatch> _lookMatches;
 
         /// <summary>
         /// Expected total number of results in the enumerable

@@ -186,6 +186,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="QueryTests\RequestFieldsTests.cs" />
     <Compile Include="Initialize.cs" />
     <Compile Include="ModelTests\TagFacetQueryTests.cs" />
     <Compile Include="QueryTests\DateQueryTests.cs" />
