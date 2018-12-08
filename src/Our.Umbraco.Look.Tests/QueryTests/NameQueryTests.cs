@@ -29,7 +29,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount == 1);
-            Assert.AreEqual("123", ((LookMatch)lookResult.First()).Name);
+            Assert.AreEqual("123", (lookResult.Matches.First()).Name);
         }
 
         [TestMethod]

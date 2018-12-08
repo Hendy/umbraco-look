@@ -30,7 +30,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount > 0);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(((LookMatch)lookResult.First()).Highlight?.ToString()));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(lookResult.Matches.First().Highlight?.ToString()));
         }
 
 
@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount > 0);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(((LookMatch)lookResult.First()).Highlight.ToString()));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(lookResult.Matches.First().Highlight.ToString()));
         }
     }
 }
