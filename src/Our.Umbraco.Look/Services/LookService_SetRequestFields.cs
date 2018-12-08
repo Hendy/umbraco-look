@@ -1,4 +1,4 @@
-﻿using Our.Umbraco.Look.Models;
+﻿
 
 namespace Our.Umbraco.Look
 {

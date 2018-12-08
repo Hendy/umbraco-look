@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Our.Umbraco.Look.Models
+namespace Our.Umbraco.Look
 {
     public class TagQuery
     {

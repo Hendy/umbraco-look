@@ -1,4 +1,4 @@
-﻿namespace Our.Umbraco.Look.Models
+﻿namespace Our.Umbraco.Look
 {
     /// <summary>
     /// Enum to specify which fields should be returned from Lucene

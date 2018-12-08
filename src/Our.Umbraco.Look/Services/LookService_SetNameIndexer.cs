@@ -1,4 +1,4 @@
-﻿using Our.Umbraco.Look.Models;
+﻿
 using System;
 using Umbraco.Core.Logging;
 

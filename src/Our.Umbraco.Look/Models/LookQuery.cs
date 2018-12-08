@@ -2,7 +2,7 @@
 using Our.Umbraco.Look;
 using System.Linq;
 
-namespace Our.Umbraco.Look.Models
+namespace Our.Umbraco.Look
 {
     /// <summary>
     /// Model used to specify the search query criteria for a LookService.Query

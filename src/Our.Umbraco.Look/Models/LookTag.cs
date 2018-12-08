@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Our.Umbraco.Look.Models
+namespace Our.Umbraco.Look
 {
     /// <summary>
     /// A LookTag can be any string value, in an optionally named group

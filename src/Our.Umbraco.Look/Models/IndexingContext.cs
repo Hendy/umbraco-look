@@ -1,6 +1,6 @@
 ﻿using Umbraco.Core.Models;
 
-namespace Our.Umbraco.Look.Models
+namespace Our.Umbraco.Look
 {
     /// <summary>
     /// Model passed into any custom consumer indexing methods - supplies the data, as to what's being indexed, and to where it's being indexed

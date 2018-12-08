@@ -1,6 +1,6 @@
 ﻿using Examine;
 using Lucene.Net.Search;
-using Our.Umbraco.Look.Models;
+
 using Umbraco.Core.Logging;
 using UmbracoExamine;
 

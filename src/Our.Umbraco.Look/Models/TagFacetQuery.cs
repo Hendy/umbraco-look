@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Our.Umbraco.Look.Models
+namespace Our.Umbraco.Look
 {
     public class TagFacetQuery
     {

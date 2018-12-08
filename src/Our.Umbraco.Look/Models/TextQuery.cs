@@ -1,4 +1,4 @@
-﻿namespace Our.Umbraco.Look.Models
+﻿namespace Our.Umbraco.Look
 {
     public class TextQuery
     {
