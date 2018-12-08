@@ -8,6 +8,11 @@
         internal static string NodeTypeField => "Look_NodeType";
 
         /// <summary>
+        /// Gets the field name to use when setting a content node's culture info(s) (if available)
+        /// </summary>
+        internal static string CultureField => "Look_Culture";
+
+        /// <summary>
         /// Gets the field name to use for the name
         /// </summary>
         internal static string NameField => "Look_Name";

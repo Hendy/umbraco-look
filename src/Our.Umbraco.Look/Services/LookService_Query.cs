@@ -94,20 +94,37 @@ namespace Our.Umbraco.Look.Services
                         query.Add(nodeTypeQuery, BooleanClause.Occur.MUST);
                     }
 
+                    if (lookQuery.NodeQuery.Cultures != null && lookQuery.NodeQuery.Cultures.Any())
+                    {
+                        hasQuery = true;
+
+                        var nodeCultureQuery = new BooleanQuery();
+
+                        foreach(var nodeCulture in lookQuery.NodeQuery.Cultures)
+                        {
+                            nodeCultureQuery.Add(
+                                new TermQuery(
+                                    new Term(LookConstants.CultureField, nodeCulture.LCID.ToString())),
+                                    BooleanClause.Occur.SHOULD);
+                        }
+
+                        query.Add(nodeCultureQuery, BooleanClause.Occur.MUST);
+                    }
+
                     if (lookQuery.NodeQuery.Aliases != null && lookQuery.NodeQuery.Aliases.Any())
                     {
                         hasQuery = true;
 
-                        var typeAliasQuery = new BooleanQuery();
+                        var nodeAliasQuery = new BooleanQuery();
 
                         foreach (var typeAlias in lookQuery.NodeQuery.Aliases)
                         {
-                            typeAliasQuery.Add(
+                            nodeAliasQuery.Add(
                                                 new TermQuery(new Term(UmbracoContentIndexer.NodeTypeAliasFieldName, typeAlias.ToLower())),
                                                 BooleanClause.Occur.SHOULD);
                         }
 
-                        query.Add(typeAliasQuery, BooleanClause.Occur.MUST);
+                        query.Add(nodeAliasQuery, BooleanClause.Occur.MUST);
                     }
 
                     if (lookQuery.NodeQuery.NotIds != null && lookQuery.NodeQuery.NotIds.Any())

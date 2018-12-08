@@ -4,6 +4,8 @@ using Lucene.Net.Util;
 using Our.Umbraco.Look.Models;
 using System;
 using Umbraco.Core.Logging;
+using Umbraco.Core.Models;
+using Umbraco.Web;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -26,6 +28,24 @@ namespace Our.Umbraco.Look.Services
                                             Field.TermVector.NO);
 
                 document.Add(nodeTypeField);
+
+                if (indexingContext.Item.ItemType == PublishedItemType.Content)
+                {
+                    // attempt to get any associated culture
+                    var culture = indexingContext.Item.GetCulture();
+
+                    if (culture != null)
+                    {
+                        var cultureField = new Field(
+                                                LookConstants.CultureField,
+                                                culture.LCID.ToString(),
+                                                Field.Store.NO,
+                                                Field.Index.NOT_ANALYZED,
+                                                Field.TermVector.NO);
+
+                        document.Add(cultureField);
+                    }
+                }
             }
 
             if (LookService.Instance.NameIndexer != null)
