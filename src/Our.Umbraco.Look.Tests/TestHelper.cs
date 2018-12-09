@@ -52,11 +52,11 @@ namespace Our.Umbraco.Look.Tests
             var locationStack = new Stack<Location>(things.Select(x => x.Location));
 
             // setup indexers
-            LookService.SetNameIndexer(x => nameStack.Pop());
-            LookService.SetDateIndexer(x => dateStack.Pop());
-            LookService.SetTextIndexer(x => textStack.Pop());
-            LookService.SetTagIndexer(x => tagStack.Pop());
-            LookService.SetLocationIndexer(x => locationStack.Pop());
+            LookConfiguration.NameIndexer = x => nameStack.Pop();
+            LookConfiguration.DateIndexer = x => dateStack.Pop();
+            LookConfiguration.TextIndexer = x => textStack.Pop();
+            LookConfiguration.TagIndexer = x => tagStack.Pop();
+            LookConfiguration.LocationIndexer = x => locationStack.Pop();
 
             // null for IPublishedContent as not required
             var indexingContext = new IndexingContext(null, null);
@@ -73,11 +73,11 @@ namespace Our.Umbraco.Look.Tests
             }
 
             // reset indexers
-            LookService.SetNameIndexer(null);
-            LookService.SetDateIndexer(null);
-            LookService.SetTextIndexer(null);
-            LookService.SetTagIndexer(null);
-            LookService.SetLocationIndexer(null);
+            LookConfiguration.NameIndexer = null;
+            LookConfiguration.DateIndexer = null;
+            LookConfiguration.TextIndexer = null;
+            LookConfiguration.TagIndexer = null;
+            LookConfiguration.LocationIndexer = null;
 
             TestHelper.IndexDocuments(documents);
         }
