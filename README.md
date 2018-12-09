@@ -19,20 +19,23 @@ If a function is set and returns a value then custom Lucene field(s) prefixed wi
 The static properties definitions on LookConfiguration where indexing functions can be set:
 
 ```csharp
-// creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
-Func<IndexingContext, string> NameIndexer { set; }
+public static class LookConfiguration
+{
+	// creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
+	public static Func<IndexingContext, string> NameIndexer { set; }
 
-// creates a date & sorting fields - for use with DateQuery
-Func<IndexingContext, DateTime?> DateIndexer { set; }
+	// creates a date & sorting fields - for use with DateQuery
+	public static Func<IndexingContext, DateTime?> DateIndexer { set; }
 
-// creates a text field (analyzed) - for use with TextQuery
-Func<IndexingContext, string> TextIndexer { set; }
+	// creates a text field (analyzed) - for use with TextQuery
+	public static Func<IndexingContext, string> TextIndexer { set; }
 
-// creates a tag field for each tag group - for use with TagQuery
-Func<IndexingContext, LookTag[]> TagIndexer { set; }
+	// creates a tag field for each tag group - for use with TagQuery
+	public static Func<IndexingContext, LookTag[]> TagIndexer { set; }
 
-// creates multple fields - for use with LocationQuery
-Func<IndexingContext, Location> LocationIndexer { set; }
+	// creates multple fields - for use with LocationQuery
+	public static Func<IndexingContext, Location> LocationIndexer { set; }
+}
 ```
 
 The model supplied to the indexing functions:
