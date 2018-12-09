@@ -74,7 +74,7 @@ namespace Our.Umbraco.Look
         private static readonly Lazy<LookService> _lazy = new Lazy<LookService>(() => new LookService());
 
         /// <summary>
-        /// Singleton constructor (used privately to maintain state for consumer registered indexer functions)
+        /// Singleton constructor
         /// </summary>
         private LookService()
         {
