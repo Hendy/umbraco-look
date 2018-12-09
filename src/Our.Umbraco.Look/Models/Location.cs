@@ -3,7 +3,7 @@
 namespace Our.Umbraco.Look
 {
     /// <summary>
-    /// Currently handles it's own serialization / de-serialization
+    /// Location model, used to specify a latitude and longitude
     /// </summary>
     public class Location
     {
