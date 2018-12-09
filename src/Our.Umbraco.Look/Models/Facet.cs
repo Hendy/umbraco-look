@@ -14,6 +14,13 @@
         /// </summary>
         public int Count { get; internal set; }
 
+        /// <summary>
+        /// Facets are generated as response to a query - so not needed to be public
+        /// </summary>
+        internal Facet()
+        {
+        }
+
         ///// <summary>
         ///// helper to see if the tags collection for this facet is a single item, matching that supplied
         ///// </summary>

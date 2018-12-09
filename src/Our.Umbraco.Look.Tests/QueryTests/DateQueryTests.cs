@@ -51,7 +51,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         }
 
         [TestMethod]
-        public void Boundary_After_Exclusive_Before_Inclusive()
+        public void Boundary_Inclusive_Exclusive()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
@@ -62,7 +62,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         }
 
         [TestMethod]
-        public void Boundary_After_Inclusive_Before_Exclusive()
+        public void Boundary_Exclusive_Inclusive()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 

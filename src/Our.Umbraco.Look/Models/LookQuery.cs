@@ -140,6 +140,8 @@ namespace Our.Umbraco.Look
         {
             if (facet != null)
             {
+                // TODO: check facet originated from this query
+
                 this._compiled = null;
 
                 if (this.TagQuery == null)
