@@ -348,12 +348,12 @@ public class LookMatch : SearchResult
 public class Facet
 {
 	/// <summary>
-	/// The tag
+	/// The tags that would be added into the TagQuery.All clause
 	/// </summary>
-	public LookTag Tag { get; }
+	public LookTag[] Tags { get; }
 
 	/// <summary>
-	/// The total number of results expected should this tag be added to TagQuery.AllTags on the current query
+	/// The total number of results expected should this facet be applied to the curent query
 	/// </summary>
 	public int Count { get;  }
 }

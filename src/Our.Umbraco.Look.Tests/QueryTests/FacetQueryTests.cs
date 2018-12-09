@@ -46,13 +46,13 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount > 0);
             Assert.IsTrue(lookResult.Facets.Length == 7);
-            Assert.IsTrue(lookResult.Facets.Single(x => _red.Equals(x.Tag)).Count == 7);
-            Assert.IsTrue(lookResult.Facets.Single(x => _orange.Equals(x.Tag)).Count == 6);
-            Assert.IsTrue(lookResult.Facets.Single(x => _yellow.Equals(x.Tag)).Count == 5);
-            Assert.IsTrue(lookResult.Facets.Single(x => _green.Equals(x.Tag)).Count == 4);
-            Assert.IsTrue(lookResult.Facets.Single(x => _blue.Equals(x.Tag)).Count == 3);
-            Assert.IsTrue(lookResult.Facets.Single(x => _indigo.Equals(x.Tag)).Count == 2);
-            Assert.IsTrue(lookResult.Facets.Single(x => _violet.Equals(x.Tag)).Count == 1);
+            Assert.IsTrue(lookResult.Facets.Single(x => _red.Equals(x.Tags.Single())).Count == 7);
+            Assert.IsTrue(lookResult.Facets.Single(x => _orange.Equals(x.Tags.Single())).Count == 6);
+            Assert.IsTrue(lookResult.Facets.Single(x => _yellow.Equals(x.Tags.Single())).Count == 5);
+            Assert.IsTrue(lookResult.Facets.Single(x => _green.Equals(x.Tags.Single())).Count == 4);
+            Assert.IsTrue(lookResult.Facets.Single(x => _blue.Equals(x.Tags.Single())).Count == 3);
+            Assert.IsTrue(lookResult.Facets.Single(x => _indigo.Equals(x.Tags.Single())).Count == 2);
+            Assert.IsTrue(lookResult.Facets.Single(x => _violet.Equals(x.Tags.Single())).Count == 1);
         }
 
         [TestMethod]

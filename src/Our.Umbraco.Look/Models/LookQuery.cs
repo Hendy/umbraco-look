@@ -149,11 +149,11 @@ namespace Our.Umbraco.Look
 
                 if (this.TagQuery.All == null)
                 {
-                    this.TagQuery.All = new LookTag[] { facet.Tag };
+                    this.TagQuery.All = facet.Tags;
                 }
                 else
                 {
-                    this.TagQuery.All = this.TagQuery.All.Concat(new LookTag[] { facet.Tag }).ToArray();
+                    this.TagQuery.All = this.TagQuery.All.Concat(facet.Tags).ToArray();
                 }
             }
         }
