@@ -9,7 +9,7 @@ namespace Our.Umbraco.Look
         /// Register consumer code to perform when indexing date
         /// </summary>
         /// <param name="dateIndexer">Your custom date indexing function</param>
-        public static void SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
+        internal static void SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
         {
             if (LookService.Instance.DateIndexer == null)
             {

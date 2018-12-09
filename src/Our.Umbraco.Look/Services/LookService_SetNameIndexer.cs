@@ -9,7 +9,7 @@ namespace Our.Umbraco.Look
         /// Set a custom function to execute at index-time, which will return a string value for the name field (or null to not index)
         /// </summary>
         /// <param name="nameIndexer">The custom name indexing function</param>
-        public static void SetNameIndexer(Func<IndexingContext, string> nameIndexer)
+        internal static void SetNameIndexer(Func<IndexingContext, string> nameIndexer)
         {
             if (LookService.Instance.NameIndexer == null)
             {

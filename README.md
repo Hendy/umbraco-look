@@ -12,27 +12,27 @@ Examine manages the indexes, whilst Look adds 'config-file-free' C# indexing and
 ## Indexing
 
 Look automatically hooks into all Umbraco Exmaine indexers offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data.
-To configure the indexing behaviour, functions can be set via static methods on the LookService (all are optional).
+To configure the indexing behaviour, functions can be set via static methods on the LookConfiguration class (all are optional).
 If a function is set and returns a value then custom Lucene field(s) prefixed with "Look_" will be used.
 (On a default Umbraco install, the indexers are: "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer", see [/config/ExamineSettings.config](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)).
 
-The static method definitions on the LookService where indexing functions can be set:
+The static properties definitions on LookConfiguration where indexing functions can be set:
 
 ```csharp
 // creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
-void LookService.SetNameIndexer(Func<IndexingContext, string> nameIndexer)
+Func<IndexingContext, string> NameIndexer { set; }
 
 // creates a date & sorting fields - for use with DateQuery
-void LookService.SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
+Func<IndexingContext, DateTime?> DateIndexer { set; }
 
 // creates a text field (analyzed) - for use with TextQuery
-void LookService.SetTextIndexer(Func<IndexingContext, string> textIndexer)
+Func<IndexingContext, string> TextIndexer { set; }
 
 // creates a tag field for each tag group - for use with TagQuery
-void LookService.SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
+Func<IndexingContext, LookTag[]> TagIndexer { set; }
 
 // creates multple fields - for use with LocationQuery
-void LookService.SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
+Func<IndexingContext, Location> LocationIndexer { set; }
 ```
 
 The model supplied to the indexing functions:
@@ -64,13 +64,13 @@ public class ConfigureIndexing : ApplicationEventHandler
 				UmbracoApplicationBase umbracoApplication, 
 				ApplicationContext applicationContext)
 	{				
-		LookService.SetNameIndexer(indexingContext => { 
+		LookConfiguration.NameIndexer = indexingContext => { 
 			
 			// eg. always return the Name of the IPublishedContent
 			return indexingContext.Item.Name; 
-		});
+		};
 
-		LookService.SetDateIndexer(indexingContext => { 
+		LookConfiguration.DateIndexer = indexingContext => { 
 			
 			// eg. news articles use a different date
 			if (indexingContext.Item.DocumentTypeAlias == "newsArticle") 
@@ -79,9 +79,9 @@ public class ConfigureIndexing : ApplicationEventHandler
 			}
 
 			return indexingContext.Item.UpdateDate; 
-		});
+		};
 
-		LookService.SetTextIndexer(indexingContext => { 
+		LookConfiguration.TextIndexer = indexingContext => { 
 
 			// eg. if content, render page and scrape markup
 			if (indexingContext.Item.ItemType == PublishedItemType.Content) 
@@ -91,9 +91,9 @@ public class ConfigureIndexing : ApplicationEventHandler
 			}
 
 			return null; // don't index
-		});
+		};
 		
-		LookService.SetTagIndexer(indexingContext => {
+		LookConfiguration.TagIndexer = indexingContext => {
 			// return LookTag[] or null (see tags section below)
 
 			// eg a nuPicker
@@ -103,9 +103,9 @@ public class ConfigureIndexing : ApplicationEventHandler
 				.PickedKeys
 				.Select(x => new LookTag("colour", x))
 				.ToArray();
-		});
+		};
 		
-		LookService.SetLocationIndexer(indexingContext => {
+		LookConfiguration.LocationIndexer = indexingContext => {
 			// return Location or null
 
 			// eg. using Terratype			 
@@ -113,7 +113,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 			var terratypeLatLng = terratype.Position.ToWgs84();
 
 			return new Location(terratypeLatLng.Latitude, terratypeLatLng.Longitude);
-		});
+		};
 	}
 }
 ```
