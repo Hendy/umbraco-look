@@ -161,12 +161,12 @@ namespace Our.Umbraco.Look
         }
 
         /// <summary>
-        /// Perform the query - this is a shortcut to and does the same thing as LookService.Query(this)
+        /// Perform the query - this is a shortcut to and does the same thing as LookService.RunQuery(this)
         /// </summary>
         /// <returns></returns>
-        public LookResult Query()
+        public LookResult Run()
         {
-            return LookService.Query(this);
+            return LookService.RunQuery(this);
         }
 
         internal LookQuery Clone()

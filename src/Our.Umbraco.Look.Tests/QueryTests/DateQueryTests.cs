@@ -37,7 +37,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.DateQuery.Before = new DateTime(2000, 1, 3);
             lookQuery.DateQuery.Boundary = DateBoundary.Inclusive;
 
-            Assert.AreEqual(3, lookQuery.Query().TotalItemCount);
+            Assert.AreEqual(3, lookQuery.Run().TotalItemCount);
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.DateQuery.After = new DateTime(2000, 1, 10);
             lookQuery.DateQuery.Boundary = DateBoundary.Exclusive;
 
-            Assert.AreEqual(3, lookQuery.Query().TotalItemCount);
+            Assert.AreEqual(3, lookQuery.Run().TotalItemCount);
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.DateQuery.Before = new DateTime(2000, 1, 1);
             lookQuery.DateQuery.Boundary = DateBoundary.BeforeInclusiveAfterExclusive;
 
-            Assert.AreEqual(2, lookQuery.Query().TotalItemCount);
+            Assert.AreEqual(2, lookQuery.Run().TotalItemCount);
         }
 
         [TestMethod]
@@ -73,7 +73,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.DateQuery.Before = new DateTime(2000, 1, 1);
             lookQuery.DateQuery.Boundary = DateBoundary.BeforeExclusiveAfterInclusive;
 
-            Assert.AreEqual(1, lookQuery.Query().TotalItemCount);
+            Assert.AreEqual(1, lookQuery.Run().TotalItemCount);
         }
 
     }

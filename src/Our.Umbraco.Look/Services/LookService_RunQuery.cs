@@ -22,7 +22,7 @@ namespace Our.Umbraco.Look
         /// </summary>
         /// <param name="lookQuery">A LookQuery model for the search criteria</param>
         /// <returns>A LookResult model for the search response</returns>
-        public static LookResult Query(LookQuery lookQuery)
+        public static LookResult RunQuery(LookQuery lookQuery)
         {
             // flag to indicate whether there are any query clauses in the supplied LookQuery
             bool hasQuery = lookQuery?.Compiled != null ? true : false;

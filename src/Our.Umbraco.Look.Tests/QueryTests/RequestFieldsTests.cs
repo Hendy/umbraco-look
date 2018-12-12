@@ -34,7 +34,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.RequestFields = RequestFields.LookFieldsOnly;
             lookQuery.RawQuery = $"+{TEST_FIELD}:Not_Look_Value";
 
-            var lookResult = lookQuery.Query();
+            var lookResult = lookQuery.Run();
 
             Assert.AreEqual(1, lookResult.TotalItemCount);
             Assert.IsFalse(lookResult.Single().Fields.ContainsKey(TEST_FIELD));            
@@ -48,7 +48,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.RequestFields = RequestFields.AllFields;
             lookQuery.RawQuery = $"+{TEST_FIELD}:Not_Look_Value";
 
-            var lookResult = lookQuery.Query();
+            var lookResult = lookQuery.Run();
 
             Assert.AreEqual(1, lookResult.TotalItemCount);
             Assert.IsTrue(lookResult.Single().Fields.ContainsKey(TEST_FIELD));

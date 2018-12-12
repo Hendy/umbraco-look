@@ -24,7 +24,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TextQuery = new TextQuery("dolor");
 
-            var lookResult = LookService.Query(lookQuery);
+            var lookResult = LookService.RunQuery(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount > 0);
@@ -39,7 +39,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TextQuery = new TextQuery("dolor", true);
 
-            var lookResult = LookService.Query(lookQuery);
+            var lookResult = LookService.RunQuery(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount > 0);

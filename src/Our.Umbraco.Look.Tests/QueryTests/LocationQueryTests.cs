@@ -33,7 +33,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.SortOn = SortOn.Distance;
 
-            var lookResult = LookService.Query(lookQuery);
+            var lookResult = LookService.RunQuery(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount == 4);
@@ -55,7 +55,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.LocationQuery.Location = _london;
             lookQuery.LocationQuery.MaxDistance = new Distance(300, DistanceUnit.Miles);
 
-            var lookResult = LookService.Query(lookQuery);
+            var lookResult = LookService.RunQuery(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount == 2);

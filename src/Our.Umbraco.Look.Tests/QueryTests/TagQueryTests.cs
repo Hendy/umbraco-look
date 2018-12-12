@@ -27,7 +27,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.TagQuery = new TagQuery();
             lookQuery.TagQuery.All = new LookTag[] { new LookTag("shape", "circle") };
 
-            var lookResult = LookService.Query(lookQuery);
+            var lookResult = LookService.RunQuery(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
             Assert.AreEqual(3, lookResult.TotalItemCount);
@@ -42,7 +42,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.TagQuery.All = TagQuery.MakeTags("shape:circle");
             lookQuery.TagQuery.Any = TagQuery.MakeTags("size:small", "size:medium");
 
-            var lookResult = LookService.Query(lookQuery);
+            var lookResult = LookService.RunQuery(lookQuery);
 
             Assert.IsTrue(lookResult.Success);
             Assert.AreEqual(2, lookResult.TotalItemCount);

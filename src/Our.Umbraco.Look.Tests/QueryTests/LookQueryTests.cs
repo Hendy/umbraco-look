@@ -9,7 +9,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Null_Query()
         {
-            var lookResult = LookService.Query(null);
+            var lookResult = LookService.RunQuery(null);
 
             Assert.IsNotNull(lookResult);
             Assert.IsFalse(lookResult.Success);
@@ -21,7 +21,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            var lookResult = LookService.Query(lookQuery);
+            var lookResult = LookService.RunQuery(lookQuery);
 
             Assert.IsNotNull(lookResult);
             Assert.IsFalse(lookResult.Success);
@@ -36,7 +36,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.NodeQuery = new NodeQuery();
             lookQuery.NodeQuery.Types = new PublishedItemType[] { PublishedItemType.Content };
 
-            var lookResult = LookService.Query(lookQuery);
+            var lookResult = LookService.RunQuery(lookQuery);
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);
