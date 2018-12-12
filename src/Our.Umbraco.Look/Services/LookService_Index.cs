@@ -19,6 +19,12 @@ namespace Our.Umbraco.Look
         {
             if (indexingContext.Item != null)
             {
+                var hasNodeField = new Field(
+                                        LookConstants.HasNodeField,
+                                        "1",
+                                        Field.Store.NO,
+                                        Field.Index.NOT_ANALYZED);
+
                 var nodeTypeField = new Field(
                                             LookConstants.NodeTypeField,
                                             indexingContext.Item.ItemType.ToString(),
@@ -26,6 +32,7 @@ namespace Our.Umbraco.Look
                                             Field.Index.NOT_ANALYZED,
                                             Field.TermVector.NO);
 
+                document.Add(hasNodeField);
                 document.Add(nodeTypeField);
 
                 if (indexingContext.Item.ItemType == PublishedItemType.Content)

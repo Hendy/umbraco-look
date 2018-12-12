@@ -52,7 +52,9 @@ namespace Our.Umbraco.Look
                 Func<int, double?> getDistance = x => null;
 
                 query = new BooleanQuery();
-                
+
+                #region RawQuery
+
                 if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
                 {
                     hasQuery = true;
@@ -61,6 +63,10 @@ namespace Our.Umbraco.Look
                             new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, lookQuery.SearchingContext.Analyzer).Parse(lookQuery.RawQuery),
                             BooleanClause.Occur.MUST);
                 }
+
+                #endregion
+
+                #region ExamineQuery
 
                 if (lookQuery.ExamineQuery != null)
                 {
@@ -74,12 +80,18 @@ namespace Our.Umbraco.Look
                     }
                 }
 
+                #endregion
+
+                #region NodeQuery
+
                 if (lookQuery.NodeQuery != null)
                 {
+                    hasQuery = true;
+
+                    query.Add(new TermQuery(new Term(LookConstants.HasNodeField, "1")), BooleanClause.Occur.MUST);
+
                     if (lookQuery.NodeQuery.Types != null && lookQuery.NodeQuery.Types.Any())
                     {
-                        hasQuery = true;
-
                         var nodeTypeQuery = new BooleanQuery();
 
                         foreach(var nodeType in lookQuery.NodeQuery.Types)
@@ -95,8 +107,6 @@ namespace Our.Umbraco.Look
 
                     if (lookQuery.NodeQuery.Cultures != null && lookQuery.NodeQuery.Cultures.Any())
                     {
-                        hasQuery = true;
-
                         var nodeCultureQuery = new BooleanQuery();
 
                         foreach(var nodeCulture in lookQuery.NodeQuery.Cultures)
@@ -112,8 +122,6 @@ namespace Our.Umbraco.Look
 
                     if (lookQuery.NodeQuery.Aliases != null && lookQuery.NodeQuery.Aliases.Any())
                     {
-                        hasQuery = true;
-
                         var nodeAliasQuery = new BooleanQuery();
 
                         foreach (var typeAlias in lookQuery.NodeQuery.Aliases)
@@ -128,8 +136,6 @@ namespace Our.Umbraco.Look
 
                     if (lookQuery.NodeQuery.NotIds != null && lookQuery.NodeQuery.NotIds.Any())
                     {
-                        hasQuery = true;
-
                         foreach (var exculudeId in lookQuery.NodeQuery.NotIds)
                         {
                             query.Add(
@@ -139,8 +145,16 @@ namespace Our.Umbraco.Look
                     }
                 }
 
+                #endregion
+
+                #region NameQuery
+
                 if (lookQuery.NameQuery != null)
                 {
+                    hasQuery = true;
+
+                    query.Add(new TermQuery(new Term(LookConstants.HasNameField, "1")), BooleanClause.Occur.MUST);
+
                     string wildcard1 = null;
                     string wildcard2 = null; // incase Contains specified with StartsWith and/or EndsWith
 
@@ -207,8 +221,6 @@ namespace Our.Umbraco.Look
 
                     if (wildcard1 != null)
                     {
-                        hasQuery = true;
-
                         var wildcard = lookQuery.NameQuery.CaseSensitive ? wildcard1 : wildcard1.ToLower();
 
                         query.Add(new WildcardQuery(new Term(nameField, wildcard)), BooleanClause.Occur.MUST);
@@ -223,76 +235,100 @@ namespace Our.Umbraco.Look
 
                     if (!string.IsNullOrEmpty(lookQuery.NameQuery.Is))
                     {
-                        hasQuery = true;
-
                         var isText = lookQuery.NameQuery.CaseSensitive ? lookQuery.NameQuery.Is : lookQuery.NameQuery.Is.ToLower();
 
                         query.Add(new TermQuery(new Term(nameField, isText)), BooleanClause.Occur.MUST);
                     }
                 }
 
-                if (lookQuery.DateQuery != null && (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue))
+                #endregion
+
+                #region DateQuery
+
+                if (lookQuery.DateQuery != null)
                 {
                     hasQuery = true;
 
-                    var includeLower = lookQuery.DateQuery.After == null || lookQuery.DateQuery.Boundary == DateBoundary.Inclusive || lookQuery.DateQuery.Boundary == DateBoundary.BeforeExclusiveAfterInclusive;
-                    var includeUpper = lookQuery.DateQuery.Before == null || lookQuery.DateQuery.Boundary == DateBoundary.Inclusive || lookQuery.DateQuery.Boundary == DateBoundary.BeforeInclusiveAfterExclusive;
+                    query.Add(new TermQuery(new Term(LookConstants.HasDateField, "1")), BooleanClause.Occur.MUST);
 
-                    query.Add(
-                            new TermRangeQuery(
-                                    LookConstants.DateField,
-                                    lookQuery.DateQuery.After.DateToLuceneString() ?? DateTime.MinValue.DateToLuceneString(),
-                                    lookQuery.DateQuery.Before.DateToLuceneString() ?? DateTime.MaxValue.DateToLuceneString(),
-                                    includeLower,
-                                    includeUpper),
-                            BooleanClause.Occur.MUST);
+                    if (lookQuery.DateQuery.After.HasValue || lookQuery.DateQuery.Before.HasValue)
+                    {
+                        var includeLower = lookQuery.DateQuery.After == null || lookQuery.DateQuery.Boundary == DateBoundary.Inclusive || lookQuery.DateQuery.Boundary == DateBoundary.BeforeExclusiveAfterInclusive;
+                        var includeUpper = lookQuery.DateQuery.Before == null || lookQuery.DateQuery.Boundary == DateBoundary.Inclusive || lookQuery.DateQuery.Boundary == DateBoundary.BeforeInclusiveAfterExclusive;
+
+                        query.Add(
+                                new TermRangeQuery(
+                                        LookConstants.DateField,
+                                        lookQuery.DateQuery.After.DateToLuceneString() ?? DateTime.MinValue.DateToLuceneString(),
+                                        lookQuery.DateQuery.Before.DateToLuceneString() ?? DateTime.MaxValue.DateToLuceneString(),
+                                        includeLower,
+                                        includeUpper),
+                                BooleanClause.Occur.MUST);
+                    }
                 }
 
-                if (lookQuery.TextQuery != null && !string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
+                #endregion
+
+                #region TextQuery
+
+                if (lookQuery.TextQuery != null)
                 {
                     hasQuery = true;
 
-                    var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, lookQuery.SearchingContext.Analyzer);
+                    query.Add(new TermQuery(new Term(LookConstants.HasTextField, "1")), BooleanClause.Occur.MUST);
 
-                    Query searchTextQuery = null;
-
-                    try
+                    if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
                     {
-                        searchTextQuery = queryParser.Parse(lookQuery.TextQuery.SearchText);
-                    }
-                    catch
-                    {
-                        return new LookResult($"Unable to parse LookQuery.TextQuery.SearchText: '{ lookQuery.TextQuery.SearchText }' into a Lucene query");
-                    }
+                        var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, lookQuery.SearchingContext.Analyzer);
 
-                    if (searchTextQuery != null)
-                    {
-                        query.Add(searchTextQuery, BooleanClause.Occur.MUST);
+                        Query searchTextQuery = null;
 
-                        if (lookQuery.TextQuery.GetHighlight)
+                        try
                         {
-                            var queryScorer = new QueryScorer(searchTextQuery.Rewrite(lookQuery.SearchingContext.IndexSearcher.GetIndexReader()));
+                            searchTextQuery = queryParser.Parse(lookQuery.TextQuery.SearchText);
+                        }
+                        catch
+                        {
+                            return new LookResult($"Unable to parse LookQuery.TextQuery.SearchText: '{ lookQuery.TextQuery.SearchText }' into a Lucene query");
+                        }
 
-                            var highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
+                        if (searchTextQuery != null)
+                        {
+                            query.Add(searchTextQuery, BooleanClause.Occur.MUST);
 
-                            getHighlight = (x) =>
+                            if (lookQuery.TextQuery.GetHighlight)
                             {
-                                var tokenStream = lookQuery.SearchingContext.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
+                                var queryScorer = new QueryScorer(searchTextQuery.Rewrite(lookQuery.SearchingContext.IndexSearcher.GetIndexReader()));
 
-                                var highlight = highlighter.GetBestFragments(
-                                                                tokenStream,
-                                                                x,
-                                                                1, // max number of fragments
-                                                                "...");
+                                var highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
 
-                                return new HtmlString(highlight);
-                            };
+                                getHighlight = (x) =>
+                                {
+                                    var tokenStream = lookQuery.SearchingContext.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
+
+                                    var highlight = highlighter.GetBestFragments(
+                                                                    tokenStream,
+                                                                    x,
+                                                                    1, // max number of fragments
+                                                                    "...");
+
+                                    return new HtmlString(highlight);
+                                };
+                            }
                         }
                     }
                 }
 
+                #endregion
+
+                #region TagQuery
+
                 if (lookQuery.TagQuery != null)
                 {
+                    hasQuery = true;
+
+                    query.Add(new TermQuery(new Term(LookConstants.HasTagsField, "1")), BooleanClause.Occur.MUST);
+
                     if (lookQuery.TagQuery.All != null)
                     {
                         if (lookQuery.TagQuery.Not != null)
@@ -307,8 +343,6 @@ namespace Our.Umbraco.Look
 
                         if (lookQuery.TagQuery.All.Any())
                         {
-                            hasQuery = true;
-
                             foreach (var tag in lookQuery.TagQuery.All)
                             {
                                 query.Add(
@@ -332,8 +366,6 @@ namespace Our.Umbraco.Look
 
                         if (lookQuery.TagQuery.Any.Any())
                         {
-                            hasQuery = true;
-
                             var anyTagQuery = new BooleanQuery();
 
                             foreach (var tag in lookQuery.TagQuery.Any)
@@ -349,8 +381,6 @@ namespace Our.Umbraco.Look
 
                     if (lookQuery.TagQuery.Not != null && lookQuery.TagQuery.Not.Any())
                     {
-                        hasQuery = true;
-
                         foreach (var tag in lookQuery.TagQuery.Not)
                         {
                             query.Add(
@@ -360,51 +390,57 @@ namespace Our.Umbraco.Look
                     }
                 }
 
-                // Location
-                if (lookQuery.LocationQuery != null && lookQuery.LocationQuery.Location != null)
-                {
-                    query.Add(
-                        new TermQuery(new Term(LookConstants.HasLocationField, "1")),
-                        BooleanClause.Occur.SHOULD);
+                #endregion
 
+                #region LocationQuery
+                
+                if (lookQuery.LocationQuery != null)
+                {
                     hasQuery = true;
 
-                    double maxDistance = LookService.MaxDistance;
+                    query.Add(new TermQuery(new Term(LookConstants.HasLocationField, "1")), BooleanClause.Occur.MUST);
 
-                    if (lookQuery.LocationQuery.MaxDistance != null)
+                    if (lookQuery.LocationQuery.Location != null)
                     {
-                        maxDistance = Math.Min(lookQuery.LocationQuery.MaxDistance.GetMiles(), maxDistance);
-                    }
+                        double maxDistance = LookService.MaxDistance;
 
-                    var distanceQueryBuilder = new DistanceQueryBuilder(
-                                                lookQuery.LocationQuery.Location.Latitude,
-                                                lookQuery.LocationQuery.Location.Longitude,
-                                                maxDistance,
-                                                LookConstants.LocationField + "_Latitude",
-                                                LookConstants.LocationField + "_Longitude",
-                                                LookConstants.LocationTierFieldPrefix,
-                                                true);
-
-                    filter = distanceQueryBuilder.Filter;
-
-                    if (lookQuery.SortOn == SortOn.Distance)
-                    {
-                        sort = new Sort(
-                                    new SortField(
-                                        LookConstants.DistanceField,
-                                        new DistanceFieldComparatorSource(distanceQueryBuilder.DistanceFilter)));
-                    }
-
-                    getDistance = new Func<int, double?>(x =>
-                    {
-                        if (distanceQueryBuilder.DistanceFilter.Distances.ContainsKey(x))
+                        if (lookQuery.LocationQuery.MaxDistance != null)
                         {
-                            return distanceQueryBuilder.DistanceFilter.Distances[x];
+                            maxDistance = Math.Min(lookQuery.LocationQuery.MaxDistance.GetMiles(), maxDistance);
                         }
 
-                        return null;
-                    });
+                        var distanceQueryBuilder = new DistanceQueryBuilder(
+                                                    lookQuery.LocationQuery.Location.Latitude,
+                                                    lookQuery.LocationQuery.Location.Longitude,
+                                                    maxDistance,
+                                                    LookConstants.LocationField + "_Latitude",
+                                                    LookConstants.LocationField + "_Longitude",
+                                                    LookConstants.LocationTierFieldPrefix,
+                                                    true);
+
+                        filter = distanceQueryBuilder.Filter;
+
+                        if (lookQuery.SortOn == SortOn.Distance)
+                        {
+                            sort = new Sort(
+                                        new SortField(
+                                            LookConstants.DistanceField,
+                                            new DistanceFieldComparatorSource(distanceQueryBuilder.DistanceFilter)));
+                        }
+
+                        getDistance = new Func<int, double?>(x =>
+                        {
+                            if (distanceQueryBuilder.DistanceFilter.Distances.ContainsKey(x))
+                            {
+                                return distanceQueryBuilder.DistanceFilter.Distances[x];
+                            }
+
+                            return null;
+                        });
+                    }
                 }
+
+                #endregion
 
                 if (hasQuery)
                 {

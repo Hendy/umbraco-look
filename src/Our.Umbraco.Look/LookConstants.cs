@@ -3,6 +3,11 @@
     internal static class LookConstants
     {
         /// <summary>
+        /// Unit tests should be the only ones where this is false
+        /// </summary>
+        internal static string HasNodeField => "Look_HasNode";
+
+        /// <summary>
         /// Gets the field name to use for the node type (content || media || member)
         /// </summary>
         internal static string NodeTypeField => "Look_NodeType";
