@@ -62,6 +62,12 @@ namespace Our.Umbraco.Look
 
                 if (name != null)
                 {
+                    var hasNameField = new Field(
+                            LookConstants.HasNameField,
+                            Boolean.TrueString,                            
+                            Field.Store.NO,
+                            Field.Index.NOT_ANALYZED);
+
                     var nameField = new Field(
                                             LookConstants.NameField,
                                             name,
@@ -84,6 +90,7 @@ namespace Our.Umbraco.Look
                                                 Field.Index.NOT_ANALYZED,
                                                 Field.TermVector.NO);
 
+                    document.Add(hasNameField);
                     document.Add(nameField);
                     document.Add(nameFieldLowered);
                     document.Add(nameSortedField);
@@ -105,6 +112,12 @@ namespace Our.Umbraco.Look
 
                 if (date != null)
                 {
+                    var hasDateField = new Field(
+                                            LookConstants.HasDateField,
+                                            Boolean.TrueString,
+                                            Field.Store.NO,
+                                            Field.Index.NOT_ANALYZED);
+
                     var dateValue = DateTools.DateToString(date.Value, DateTools.Resolution.SECOND);
 
                     var dateField = new Field(
@@ -121,6 +134,7 @@ namespace Our.Umbraco.Look
                                                 Field.Index.NOT_ANALYZED,
                                                 Field.TermVector.NO);
 
+                    document.Add(hasDateField);
                     document.Add(dateField);
                     document.Add(dateSortedField);
                 }
@@ -141,6 +155,12 @@ namespace Our.Umbraco.Look
 
                 if (text != null)
                 {
+                    var hasTextField = new Field(
+                                            LookConstants.HasTextField,
+                                            Boolean.TrueString,
+                                            Field.Store.NO,
+                                            Field.Index.NOT_ANALYZED);
+
                     var textField = new Field(
                                             LookConstants.TextField,
                                             text,
@@ -148,6 +168,7 @@ namespace Our.Umbraco.Look
                                             Field.Index.ANALYZED,
                                             Field.TermVector.YES);
 
+                    document.Add(hasTextField);
                     document.Add(textField);
                 }
             }
@@ -169,6 +190,12 @@ namespace Our.Umbraco.Look
                 {
                     foreach (var tag in tags)
                     {
+                        var hasTagsField = new Field(
+                                                LookConstants.HasTagsField,
+                                                Boolean.TrueString,
+                                                Field.Store.NO,
+                                                Field.Index.NOT_ANALYZED);
+
                         // add all tags to a common field (serialized such that Tag objects can be restored from this)
                         var allTagsField = new Field(
                                             LookConstants.AllTagsField,
@@ -183,6 +210,7 @@ namespace Our.Umbraco.Look
                                             Field.Store.YES,
                                             Field.Index.NOT_ANALYZED);
 
+                        document.Add(hasTagsField);
                         document.Add(allTagsField);
                         document.Add(tagField);
                     }

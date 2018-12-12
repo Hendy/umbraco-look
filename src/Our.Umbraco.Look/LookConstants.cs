@@ -13,9 +13,19 @@
         internal static string CultureField => "Look_Culture";
 
         /// <summary>
+        /// 
+        /// </summary>
+        internal static string HasNameField => "Look_HasName";
+
+        /// <summary>
         /// Gets the field name to use for the name
         /// </summary>
         internal static string NameField => "Look_Name";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        internal static string HasDateField => "Look_HasDate";
 
         /// <summary>
         /// Gets the field name to use for the date - this fieldswill  stores the date as the number of seconds from the year 2000 (so it's a number that can be sorted)
@@ -23,9 +33,19 @@
         internal static string DateField => "Look_Date";
 
         /// <summary>
+        /// 
+        /// </summary>
+        internal static string HasTextField => "Look_HasText";
+
+        /// <summary>
         /// Gets the field name to use for the text - this field is expected to contain a sizeable amount of text
         /// </summary>
         internal static string TextField => "Look_Text";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        internal static string HasTagsField => "Look_HasTags";
 
         /// <summary>
         /// Single field used to store 'group & name' for each tag, so can get all tags without first testing for field names prefixed with x / maintaining a memory state cache
