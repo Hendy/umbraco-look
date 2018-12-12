@@ -31,32 +31,32 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// (Optional) set search critera for Umbraco aliases and/or ids
         /// </summary>
-        public NodeQuery NodeQuery { get; set; } = new NodeQuery();
+        public NodeQuery NodeQuery { get; set; }
 
         /// <summary>
         /// (Optional) set search critera for the custom name field
         /// </summary>
-        public NameQuery NameQuery { get; set; } = new NameQuery();
+        public NameQuery NameQuery { get; set; }
 
         /// <summary>
         /// (Optional) set a before and/or an after date for the custom date field
         /// </summary>
-        public DateQuery DateQuery { get; set; } = new DateQuery();
+        public DateQuery DateQuery { get; set; }
 
         /// <summary>
         /// (Optional) set text search criteria for the custom text field
         /// </summary>
-        public TextQuery TextQuery { get; set; } = new TextQuery();
+        public TextQuery TextQuery { get; set; }
 
         /// <summary>
         /// (Optional) set tag query criteria for the custom tag field
         /// </summary>
-        public TagQuery TagQuery { get; set; } = new TagQuery();
+        public TagQuery TagQuery { get; set; }
 
         /// <summary>
         /// (Optional) set geospatial search criteria
         /// </summary>
-        public LocationQuery LocationQuery { get; set; } = new LocationQuery();
+        public LocationQuery LocationQuery { get; set; }
 
         /// <summary>
         /// (Optional) specify the field to sort on

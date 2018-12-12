@@ -21,6 +21,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.NameQuery = new NameQuery();
             lookQuery.NameQuery.Is = "123";
 
             var lookResult = LookService.Query(lookQuery);
@@ -35,6 +36,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.NameQuery = new NameQuery();
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.StartsWith = "12";
 
@@ -48,6 +50,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.NameQuery = new NameQuery();
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.EndsWith= "23";
 
@@ -61,6 +64,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.NameQuery = new NameQuery();
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.StartsWith = "12";
             lookQuery.NameQuery.EndsWith = "23";
@@ -75,6 +79,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.NameQuery = new NameQuery();
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.StartsWith = "xyz";
 
@@ -88,6 +93,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.NameQuery = new NameQuery();
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.EndsWith = "xyz";
 

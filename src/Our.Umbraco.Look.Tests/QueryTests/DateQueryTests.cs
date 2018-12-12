@@ -32,6 +32,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.DateQuery = new DateQuery();
             lookQuery.DateQuery.After = new DateTime(2000, 1, 1);
             lookQuery.DateQuery.Before = new DateTime(2000, 1, 3);
             lookQuery.DateQuery.Boundary = DateBoundary.Inclusive;
@@ -44,6 +45,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.DateQuery = new DateQuery();
             lookQuery.DateQuery.After = new DateTime(2000, 1, 10);
             lookQuery.DateQuery.Boundary = DateBoundary.Exclusive;
 
@@ -55,6 +57,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.DateQuery = new DateQuery();
             lookQuery.DateQuery.Before = new DateTime(2000, 1, 1);
             lookQuery.DateQuery.Boundary = DateBoundary.BeforeInclusiveAfterExclusive;
 
@@ -66,6 +69,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.DateQuery = new DateQuery();
             lookQuery.DateQuery.Before = new DateTime(2000, 1, 1);
             lookQuery.DateQuery.Boundary = DateBoundary.BeforeExclusiveAfterInclusive;
 

@@ -33,6 +33,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.NodeQuery = new NodeQuery();
             lookQuery.NodeQuery.Types = new PublishedItemType[] { PublishedItemType.Content };
 
             var lookResult = LookService.Query(lookQuery);

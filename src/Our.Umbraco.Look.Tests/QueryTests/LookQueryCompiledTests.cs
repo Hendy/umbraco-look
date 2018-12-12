@@ -69,6 +69,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             var lookResult = LookService.Query(lookQuery);
 
+            lookQuery.NameQuery = new NameQuery();
             lookQuery.NameQuery.StartsWith = "new value";
 
             Assert.IsNull(lookQuery.Compiled);
@@ -81,6 +82,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             var lookResult = LookService.Query(lookQuery);
 
+            lookQuery.DateQuery = new DateQuery();
             lookQuery.DateQuery.Before = DateTime.MaxValue;
 
             Assert.IsNull(lookQuery.Compiled);
@@ -93,6 +95,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             var lookResult = LookService.Query(lookQuery);
 
+            lookQuery.TextQuery = new TextQuery();
             lookQuery.TextQuery.GetHighlight = true;
 
             Assert.IsNull(lookQuery.Compiled);
@@ -105,6 +108,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             var lookResult = LookService.Query(lookQuery);
 
+            lookQuery.TagQuery = new TagQuery();
             lookQuery.TagQuery.FacetOn = new TagFacetQuery();
 
             Assert.IsNull(lookQuery.Compiled);
@@ -117,6 +121,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             var lookResult = LookService.Query(lookQuery);
 
+            lookQuery.LocationQuery = new LocationQuery();
             lookQuery.LocationQuery.MaxDistance = new Distance(1, DistanceUnit.Miles);
 
             Assert.IsNull(lookQuery.Compiled);

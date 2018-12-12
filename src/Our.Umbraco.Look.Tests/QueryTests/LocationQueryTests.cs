@@ -27,8 +27,8 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         public void Distance_Sorting()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
-            
-            //lookQuery.LocationQuery.HasLocation = true; // indicate any items with a location can be returned
+
+            lookQuery.LocationQuery = new LocationQuery();
             lookQuery.LocationQuery.Location = _london;
 
             lookQuery.SortOn = SortOn.Distance;
@@ -51,6 +51,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.LocationQuery = new LocationQuery();
             lookQuery.LocationQuery.Location = _london;
             lookQuery.LocationQuery.MaxDistance = new Distance(300, DistanceUnit.Miles);
 

@@ -35,9 +35,9 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         public void Facet_Counts()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
-            
-            lookQuery.TagQuery.All = new LookTag[] { _red };
 
+            lookQuery.TagQuery = new TagQuery();
+            lookQuery.TagQuery.All = new LookTag[] { _red };
             lookQuery.TagQuery.FacetOn = new TagFacetQuery(_colour);
 
             var lookResult = LookService.Query(lookQuery);
@@ -60,6 +60,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
+            lookQuery.TagQuery = new TagQuery();
             lookQuery.TagQuery.All = new LookTag[] { _red };
             lookQuery.TagQuery.FacetOn = new TagFacetQuery(_colour);
 
