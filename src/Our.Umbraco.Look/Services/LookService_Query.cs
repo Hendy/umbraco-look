@@ -364,7 +364,7 @@ namespace Our.Umbraco.Look
                 if (lookQuery.LocationQuery != null && lookQuery.LocationQuery.Location != null)
                 {
                     query.Add(
-                        new TermQuery(new Term(LookConstants.HasLocationField, Boolean.TrueString)),
+                        new TermQuery(new Term(LookConstants.HasLocationField, "1")),
                         BooleanClause.Occur.SHOULD);
 
                     hasQuery = true;

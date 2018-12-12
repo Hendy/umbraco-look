@@ -64,7 +64,7 @@ namespace Our.Umbraco.Look
                 {
                     var hasNameField = new Field(
                             LookConstants.HasNameField,
-                            Boolean.TrueString,                            
+                            "1",                            
                             Field.Store.NO,
                             Field.Index.NOT_ANALYZED);
 
@@ -114,7 +114,7 @@ namespace Our.Umbraco.Look
                 {
                     var hasDateField = new Field(
                                             LookConstants.HasDateField,
-                                            Boolean.TrueString,
+                                            "1",
                                             Field.Store.NO,
                                             Field.Index.NOT_ANALYZED);
 
@@ -157,7 +157,7 @@ namespace Our.Umbraco.Look
                 {
                     var hasTextField = new Field(
                                             LookConstants.HasTextField,
-                                            Boolean.TrueString,
+                                            "1",
                                             Field.Store.NO,
                                             Field.Index.NOT_ANALYZED);
 
@@ -192,7 +192,7 @@ namespace Our.Umbraco.Look
                     {
                         var hasTagsField = new Field(
                                                 LookConstants.HasTagsField,
-                                                Boolean.TrueString,
+                                                "1",
                                                 Field.Store.NO,
                                                 Field.Index.NOT_ANALYZED);
 
@@ -234,7 +234,7 @@ namespace Our.Umbraco.Look
                 {
                     var hasLocationField = new Field(
                                                 LookConstants.HasLocationField,
-                                                Boolean.TrueString,
+                                                "1",
                                                 Field.Store.NO,
                                                 Field.Index.NOT_ANALYZED);
 
