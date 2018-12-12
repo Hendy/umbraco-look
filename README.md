@@ -255,16 +255,16 @@ If not specified then the reults will be sorted on the Lucene score, otherwise s
 
 ### Search Results
 
-The search can be performed by calling the static Query method on the LookService, passing in the LookQuery model:
+The search can be performed by calling the static RunQuery method on the LookService, passing in the LookQuery model:
 
 ```csharp
-var lookResult = LookService.Query(lookQuery);
+var lookResult = LookService.RunQuery(lookQuery);
 ```
 
-or by using the shortcut helper method on the LookQuery model (which does the same as above):
+or by using the Run method on the LookQuery model (which does the same as above):
 
 ```csharp
-var lookResult = lookQuery.Query();
+var lookResult = lookQuery.Run();
 ```
 
 When the query is performed, the source LookQuery model is compiled, such that it can be useful to hold onto a reference for any subsequent paging queries. The 
