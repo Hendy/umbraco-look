@@ -18,6 +18,12 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         }
 
         [TestMethod]
+        public void Has_Text()
+        {
+            Assert.AreEqual(4, new LookQuery(TestHelper.GetSearchingContext()) { TextQuery = new TextQuery() }.Run().TotalItemCount);
+        }
+
+        [TestMethod]
         public void No_Highlighting()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());

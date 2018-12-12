@@ -20,6 +20,12 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         }
 
         [TestMethod]
+        public void Has_Tags()
+        {
+            Assert.IsTrue(new LookQuery(TestHelper.GetSearchingContext()) { TagQuery = new TagQuery() }.Run().TotalItemCount > 0);
+        }
+
+        [TestMethod]
         public void All_Circles()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());

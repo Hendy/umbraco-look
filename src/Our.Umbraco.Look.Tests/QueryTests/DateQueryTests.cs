@@ -28,6 +28,12 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         }
 
         [TestMethod]
+        public void Has_Date()
+        {
+            Assert.IsTrue(new LookQuery(TestHelper.GetSearchingContext()) { DateQuery = new DateQuery() }.Run().TotalItemCount > 0);
+        }
+
+        [TestMethod]
         public void Boundary_Inclusive()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());

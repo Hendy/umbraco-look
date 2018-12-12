@@ -24,6 +24,12 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         }
 
         [TestMethod]
+        public void Has_Location()
+        {
+            Assert.AreEqual(4, new LookQuery(TestHelper.GetSearchingContext()) { LocationQuery = new LocationQuery() }.Run().TotalItemCount);
+        }
+
+        [TestMethod]
         public void Distance_Sorting()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());

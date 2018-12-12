@@ -17,6 +17,12 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         }
 
         [TestMethod]
+        public void Has_Name()
+        {
+            Assert.IsTrue(new LookQuery(TestHelper.GetSearchingContext()) { NameQuery = new NameQuery() }.Run().TotalItemCount > 0);
+        }
+
+        [TestMethod]
         public void Is()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
