@@ -81,7 +81,7 @@ namespace Our.Umbraco.Look.Events
 
                 var indexingContext = new IndexingContext(publishedContent, indexerName);
 
-                LookService.Index(indexingContext, e.Document);
+                LookService.IndexNode(indexingContext, e.Document);
             }
         }
 

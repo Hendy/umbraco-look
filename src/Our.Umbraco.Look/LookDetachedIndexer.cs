@@ -20,7 +20,6 @@ namespace Our.Umbraco.Look
         protected override void PerformIndexRebuild()
         {
             // triggered from a back office rebuild - but UI get's lost
-
         }
     }
 }

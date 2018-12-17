@@ -113,7 +113,7 @@ namespace Our.Umbraco.Look.Events
 
                     var document = new Document();
 
-                    LookService.Index(indexingContext, document); // will update the doc with the results from any Look indexers
+                    LookService.IndexDetached(publishedContent, indexingContext, document); // will update the doc with the results from any Look indexers
 
                     indexWriter.AddDocument(document);
                 }
@@ -124,9 +124,9 @@ namespace Our.Umbraco.Look.Events
             }
         }
 
-        private void Delete(IPublishedContent publishedContent)
+        private void Delete(int id)
         {
-
+            // TODO: dete from index where host id = id
         }
     }
 }

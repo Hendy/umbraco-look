@@ -5,11 +5,96 @@ using System;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
+using UmbracoExamine;
 
 namespace Our.Umbraco.Look
 {
     public partial class LookService
     {
+        /// <summary>
+        /// Index the IPublishedContent representaion of Umbraco Content, media or member item
+        /// </summary>
+        /// <param name="indexingContext"></param>
+        /// <param name="document"></param>
+        internal static void IndexNode(IndexingContext indexingContext, Document document)
+        {
+            var nodeTypeField = new Field(
+                                        LookConstants.NodeTypeField,
+                                        indexingContext.Item.ItemType.ToString(),
+                                        Field.Store.YES,
+                                        Field.Index.NOT_ANALYZED,
+                                        Field.TermVector.NO);
+
+            document.Add(nodeTypeField);
+
+            if (indexingContext.Item.ItemType == PublishedItemType.Content)
+            {
+                var culture = indexingContext.Item.GetCulture();
+
+                if (culture != null)
+                {
+                    var cultureField = new Field(
+                                            LookConstants.CultureField,
+                                            culture.LCID.ToString(),
+                                            Field.Store.NO,
+                                            Field.Index.NOT_ANALYZED,
+                                            Field.TermVector.NO);
+
+                    document.Add(cultureField);
+                }
+            }
+
+            LookService.Index(indexingContext, document);
+        }
+
+        /// <summary>
+        ///  Index the IPublishedContent representaion of detached content inside of Umbraco Content, media or member item
+        /// </summary>
+        /// <param name="hostItem">The Umbraco content, media or member IPublishedContent hosting this detached content</param>
+        /// <param name="indexingContext"></param>
+        /// <param name="document"></param>
+        internal static void IndexDetached(IPublishedContent hostItem, IndexingContext indexingContext, Document document)
+        {
+            // also store uuid, parent uuid & parent type 
+
+            var nodeTypeField = new Field(
+                                       LookConstants.NodeTypeField,
+                                       hostItem.ItemType.ToString(),
+                                       Field.Store.YES,
+                                       Field.Index.NOT_ANALYZED,
+                                       Field.TermVector.NO);
+
+            var nodeTypeAliasField = new Field(
+                                            UmbracoContentIndexer.NodeTypeAliasFieldName,
+                                            indexingContext.Item.DocumentTypeAlias,
+                                            Field.Store.NO,
+                                            Field.Index.NOT_ANALYZED,
+                                            Field.TermVector.NO);
+
+            document.Add(nodeTypeField);
+            document.Add(nodeTypeAliasField);
+
+            if (hostItem.ItemType == PublishedItemType.Content)
+            {
+                // attempt to get any associated culture
+                var culture = hostItem.GetCulture();
+
+                if (culture != null)
+                {
+                    var cultureField = new Field(
+                                            LookConstants.CultureField,
+                                            culture.LCID.ToString(),
+                                            Field.Store.NO,
+                                            Field.Index.NOT_ANALYZED,
+                                            Field.TermVector.NO);
+
+                    document.Add(cultureField);
+                }
+            }
+
+            LookService.Index(indexingContext, document);
+        }
+
         /// <summary>
         ///  Do the indexing and set the field values onto the Lucene document
         /// </summary>
@@ -25,33 +110,7 @@ namespace Our.Umbraco.Look
                                         Field.Store.NO,
                                         Field.Index.NOT_ANALYZED);
 
-                var nodeTypeField = new Field(
-                                            LookConstants.NodeTypeField,
-                                            indexingContext.Item.ItemType.ToString(),
-                                            Field.Store.YES,
-                                            Field.Index.NOT_ANALYZED,
-                                            Field.TermVector.NO);
-
                 document.Add(hasNodeField);
-                document.Add(nodeTypeField);
-
-                if (indexingContext.Item.ItemType == PublishedItemType.Content)
-                {
-                    // attempt to get any associated culture
-                    var culture = indexingContext.Item.GetCulture();
-
-                    if (culture != null)
-                    {
-                        var cultureField = new Field(
-                                                LookConstants.CultureField,
-                                                culture.LCID.ToString(),
-                                                Field.Store.NO,
-                                                Field.Index.NOT_ANALYZED,
-                                                Field.TermVector.NO);
-
-                        document.Add(cultureField);
-                    }
-                }
             }
 
             if (LookService.Instance.NameIndexer != null)
