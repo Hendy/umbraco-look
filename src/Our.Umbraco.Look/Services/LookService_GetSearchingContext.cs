@@ -2,6 +2,7 @@
 using Lucene.Net.Search;
 using Umbraco.Core.Logging;
 using UmbracoExamine;
+using Examine.LuceneEngine.Providers;
 
 namespace Our.Umbraco.Look
 {
@@ -26,23 +27,23 @@ namespace Our.Umbraco.Look
             }
             else
             {
-                if (!(searcher is UmbracoExamineSearcher))
+                if (!(searcher is LuceneSearcher))
                 {
                     LogHelper.Debug(typeof(LookService), $"Examine searcher of unexpected type '{ searcher.GetType() }'");
                 }
                 else
                 {
-                    var umbracoExamineSearcher = (UmbracoExamineSearcher)searcher;
+                    var luceneSearcher = (LuceneSearcher)searcher;
 
-                    var indexSetDirectory = LookService.Instance.IndexSetDirectories[umbracoExamineSearcher.IndexSetName];
+                    var indexSetDirectory = LookService.Instance.IndexSetDirectories[luceneSearcher.IndexSetName];
 
                     if (indexSetDirectory != null)
                     {
                         return new SearchingContext()
                         {
-                            Analyzer = umbracoExamineSearcher.IndexingAnalyzer,
+                            Analyzer = luceneSearcher.IndexingAnalyzer,
                             IndexSearcher = new IndexSearcher(indexSetDirectory, true), // TODO: handle reuse
-                            EnableLeadingWildcards = umbracoExamineSearcher.EnableLeadingWildcards
+                            EnableLeadingWildcards = luceneSearcher.EnableLeadingWildcards
                         };
                     }
                 }

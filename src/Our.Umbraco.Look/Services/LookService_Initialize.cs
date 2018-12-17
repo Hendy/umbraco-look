@@ -1,4 +1,5 @@
 ﻿using Examine;
+using Examine.LuceneEngine.Providers;
 using Examine.Providers;
 using Lucene.Net.Spatial.Tier.Projectors;
 using System.Linq;
@@ -39,7 +40,8 @@ namespace Our.Umbraco.Look
                         if (indexProviderCollection != null)
                         {
                             var indexProviders = indexProviderCollection
-                                                    .Select(x => x as BaseUmbracoIndexer) // UmbracoContentIndexer, UmbracoMemberIndexer
+                                                    //.Select(x => x as BaseUmbracoIndexer) // UmbracoContentIndexer, UmbracoMemberIndexer
+                                                    .Select(x => x as LuceneIndexer)
                                                     .Where(x => x != null)
                                                     .ToArray();
 
