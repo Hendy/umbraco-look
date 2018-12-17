@@ -92,5 +92,25 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsTrue(lookResult.Success);
             Assert.AreEqual(facetCount, lookResult.TotalItemCount);
         }
+
+        [TestMethod]
+        public void Apply_Facets_In_Turn()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery();
+            lookQuery.TagQuery.All = new LookTag[] { _red };
+            lookQuery.TagQuery.FacetOn = new TagFacetQuery(_colour);
+
+            foreach (var facet in lookQuery.Run().Facets)
+            {
+                // clone the lookQuery (else all facets would be added together)
+                var result = lookQuery.Clone().ApplyFacet(facet).Run(); 
+
+                Assert.IsNotNull(result);
+                Assert.IsTrue(result.Success);
+                Assert.AreEqual(facet.Count, result.TotalItemCount);
+            }
+        }
     }
 }

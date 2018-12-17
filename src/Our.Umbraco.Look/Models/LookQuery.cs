@@ -82,16 +82,7 @@ namespace Our.Umbraco.Look
             {
                 if (this._compiled != null)
                 {
-                    var source = this._compiled.Source; // must exist, else it couldn't have been compiled
-
-                    // if the current query hasn't changed since being compiled
-                    if (source.RawQuery == this.RawQuery                        
-                        && ((source.NodeQuery == null && this.NodeQuery == null) || this.NodeQuery != null && this.NodeQuery.Equals(source.NodeQuery))
-                        && ((source.NameQuery == null && this.NameQuery == null) || this.NameQuery != null && this.NameQuery.Equals(source.NameQuery))
-                        && ((source.DateQuery == null && this.DateQuery == null) || this.DateQuery != null && this.DateQuery.Equals(source.DateQuery))
-                        && ((source.TextQuery == null && this.TextQuery == null) || this.TextQuery != null && this.TextQuery.Equals(source.TextQuery))
-                        && ((source.TagQuery == null && this.TagQuery == null) || this.TagQuery != null && this.TagQuery.Equals(source.TagQuery))
-                        && ((source.LocationQuery == null && this.LocationQuery == null) || this.LocationQuery != null && this.LocationQuery.Equals(source.LocationQuery)))
+                    if (this.Equals(this._compiled.Source)) // .Source must exist, else this couldn't have been compiled
                     {
                         return this._compiled;
                     }
@@ -136,7 +127,7 @@ namespace Our.Umbraco.Look
         /// </summary>
         /// <param name="facet"></param>
         /// <returns></returns>
-        public void ApplyFacet(Facet facet)
+        public LookQuery ApplyFacet(Facet facet)
         {
             if (facet != null)
             {
@@ -158,6 +149,8 @@ namespace Our.Umbraco.Look
                     this.TagQuery.All = this.TagQuery.All.Concat(facet.Tags).ToArray();
                 }
             }
+
+            return this;
         }
 
         /// <summary>
@@ -169,10 +162,34 @@ namespace Our.Umbraco.Look
             return LookService.RunQuery(this);
         }
 
+        /// <summary>
+        /// Compare two LookQuery objects to see if their search criteria match and are using same searcher
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            LookQuery lookQuery = obj as LookQuery;
+
+            return
+                lookQuery != null
+                && lookQuery.RequestFields == this.RequestFields
+                && lookQuery.RawQuery == this.RawQuery
+                && ((lookQuery.NodeQuery == null && this.NodeQuery == null) || this.NodeQuery != null && this.NodeQuery.Equals(lookQuery.NodeQuery))
+                && ((lookQuery.NameQuery == null && this.NameQuery == null) || this.NameQuery != null && this.NameQuery.Equals(lookQuery.NameQuery))
+                && ((lookQuery.DateQuery == null && this.DateQuery == null) || this.DateQuery != null && this.DateQuery.Equals(lookQuery.DateQuery))
+                && ((lookQuery.TextQuery == null && this.TextQuery == null) || this.TextQuery != null && this.TextQuery.Equals(lookQuery.TextQuery))
+                && ((lookQuery.TagQuery == null && this.TagQuery == null) || this.TagQuery != null && this.TagQuery.Equals(lookQuery.TagQuery))
+                && ((lookQuery.LocationQuery == null && this.LocationQuery == null) || this.LocationQuery != null && this.LocationQuery.Equals(lookQuery.LocationQuery))
+                && lookQuery.SortOn == this.SortOn
+                && lookQuery.SearcherName == this.SearcherName;
+        }
+
         internal LookQuery Clone()
         {
             var clone = new LookQuery();
 
+            clone.RequestFields = this.RequestFields;
             clone.RawQuery = this.RawQuery;
             clone.NodeQuery = this.NodeQuery?.Clone();
             clone.NameQuery = this.NameQuery?.Clone();
@@ -180,6 +197,9 @@ namespace Our.Umbraco.Look
             clone.TextQuery = this.TextQuery?.Clone();
             clone.TagQuery = this.TagQuery?.Clone();
             clone.LocationQuery = this.LocationQuery?.Clone();
+            clone.SortOn = this.SortOn;
+            clone.SearcherName = this.SearcherName;
+            clone.SearchingContext = this.SearchingContext; // required for unit tests
 
             return clone;
         }
