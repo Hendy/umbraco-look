@@ -1,4 +1,5 @@
 ﻿using Examine.LuceneEngine;
+using Lucene.Net.Documents;
 using Our.Umbraco.Look.Extensions;
 using System.IO;
 using System.Web;
@@ -56,6 +57,18 @@ namespace Our.Umbraco.Look.Events
                 var indexingContext = new IndexingContext(publishedContent, indexerName);
 
                 LookService.Index(indexingContext, e.Document);
+
+                //// foreach detached indexer found, trigger a node re-index
+                //// does published have any inner/detached content ?
+                //foreach (var detachedPublishedContent in publishedContent.GetFlatDetachedDescendants())
+                //{
+                //    var detachedDocument = new Document();
+
+                //    LookService.Index(indexingContext, detachedDocument);
+
+                //    // tell each of the detached indexers to reindex this node
+                //}
+
             }
         }
 

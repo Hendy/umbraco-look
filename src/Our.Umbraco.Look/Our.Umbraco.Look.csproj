@@ -208,11 +208,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\Indexing.cs" />
+    <Compile Include="Extensions\IPublishedContentExtensions\GetFlatDetachedDescendants.cs" />
     <Compile Include="Extensions\StringExtensions\LuceneStringToDate.cs" />
     <Compile Include="Extensions\DateTimeExtensions\DateToLuceneString.cs" />
     <Compile Include="Extensions\UmbracoHelperExtensions\SafeTypedMember.cs" />
     <Compile Include="LookConfiguration.cs" />
     <Compile Include="LookConstants.cs" />
+    <Compile Include="LookDetachedIndexer.cs" />
+    <Compile Include="LookDetachedSearcher.cs" />
     <Compile Include="Models\DateBoundary.cs" />
     <Compile Include="Models\DateQuery.cs" />
     <Compile Include="Models\Distance.cs" />
@@ -254,4 +257,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)" "C:\Users\Hendy\Documents\Projects\Experiments\Look Demo\Look.Demo.Web\bin\" /Y
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>
