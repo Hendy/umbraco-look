@@ -20,9 +20,8 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="nodeType"></param>
-        /// <param name="indexerName"></param>
+        /// <param name="node">The IPublishedContent representation of the thing being indexed</param>
+        /// <param name="indexerName">The name of the inder being used</param>
         internal IndexingContext(IPublishedContent node, string indexerName)
         {
             this.Item = node;

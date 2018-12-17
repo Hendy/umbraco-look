@@ -9,14 +9,18 @@ namespace Our.Umbraco.Look
 {
     public class LookDetachedIndexer : LuceneIndexer
     {
+
+
         protected override void PerformIndexAll(string type)
         {
-            //throw new NotImplementedException();
+            
+            
         }
 
         protected override void PerformIndexRebuild()
         {
-            //throw new NotImplementedException();
+            // triggered from a back office rebuild - but UI get's lost
+
         }
     }
 }

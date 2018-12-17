@@ -23,10 +23,10 @@ namespace Our.Umbraco.Look.Extensions
             foreach (var property in properties)
             {
                 detachedPublishedContent.AddRange(property);
-
-                // recurse
+                
                 foreach (var propertyItem in property)
                 {
+                    // recurse
                     detachedPublishedContent.AddRange(IPublishedContentExtensions.GetFlatDetachedDescendants(propertyItem));
                 }
             }
