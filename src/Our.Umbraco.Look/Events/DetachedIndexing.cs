@@ -103,9 +103,11 @@ namespace Our.Umbraco.Look.Events
         {
             if (publishedContent == null) return; // content may have been saved, but not yet published
 
-            foreach (var detachedContent in publishedContent.GetFlatDetachedDescendants())
+            foreach (var detachedIndexer in this._detachedIndexers)
             {
-                foreach (var detachedIndexer in this._detachedIndexers)
+                var indexWriter = detachedIndexer.GetIndexWriter();
+
+                foreach (var detachedContent in publishedContent.GetFlatDetachedDescendants())
                 {
                     var indexingContext = new IndexingContext(detachedContent, detachedIndexer.Name);
 
@@ -113,10 +115,12 @@ namespace Our.Umbraco.Look.Events
 
                     LookService.Index(indexingContext, document); // will update the doc with the results from any Look indexers
 
-                    // TODO: Save this document
-                    //detachedIndexer.
-
+                    indexWriter.AddDocument(document);
                 }
+
+                indexWriter.Optimize();
+
+                indexWriter.Commit();
             }
         }
 
