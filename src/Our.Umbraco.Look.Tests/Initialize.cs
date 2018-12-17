@@ -12,7 +12,7 @@ namespace Our.Umbraco.Look.Tests
             TestHelper.DeleteIndex();
 
             // Wire up the location indexers
-            LookService.Initialize();
+            LookService.Initialize(null);
         }    
     }
 }

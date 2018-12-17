@@ -9,6 +9,16 @@ namespace Our.Umbraco.Look
     public partial class LookService
     {
         /// <summary>
+        /// Flag to indicate whether the look service has been initialized
+        /// </summary>
+        private bool Initialized { get; set; } = false;
+
+        /// <summary>
+        /// Locking obj to prevent multiple initialization
+        /// </summary>
+        private object InitializationLock { get; set; } = new object();
+
+        /// <summary>
         /// Lucene directory representations for each of the Examine index sets
         /// </summary>
         private Dictionary<string, Directory> IndexSetDirectories { get; set; } = null;

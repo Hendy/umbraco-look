@@ -1,31 +1,55 @@
-﻿using Examine.LuceneEngine;
-using Lucene.Net.Documents;
+﻿using Examine;
+using Examine.LuceneEngine;
 using Our.Umbraco.Look.Extensions;
 using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using Umbraco.Core;
 using Umbraco.Core.Configuration;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 using Umbraco.Web.Routing;
 using Umbraco.Web.Security;
+using UmbracoExamine;
 
 namespace Our.Umbraco.Look.Events
 {
+    /// <summary>
+    /// Hooks into all configured Exmaine Umbraco indexers, allowing Look to add additional fields
+    /// </summary>
     public class Indexing : ApplicationEventHandler
     {
         /// <summary>
-        /// 
+        /// Umbraco started
         /// </summary>
         /// <param name="umbracoApplication"></param>
         /// <param name="applicationContext"></param>
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            // initialization call validates indexer & searcher and then wires up the events
-            LookService.Initialize(
-                            this.Indexer_DocumentWriting,
-                            new UmbracoHelper(UmbracoContext.Current));
+            var indexProviders = ExamineManager
+                                    .Instance
+                                    .IndexProviderCollection
+                                    .Select(x => x as BaseUmbracoIndexer) // UmbracoContentIndexer, UmbracoMemberIndexer
+                                    .Where(x => x != null)
+                                    .ToArray();
+
+            if (!indexProviders.Any())
+            {
+                LogHelper.Warn(typeof(LookService), "Unable to find any Umbraco Examine indexers to hook into !");
+            }
+            else
+            {
+                var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+
+                LookService.Initialize(umbracoHelper);
+
+                foreach (var indexProvider in indexProviders)
+                {
+                    indexProvider.DocumentWriting += (sender, e) => this.Indexer_DocumentWriting(sender, e, umbracoHelper, indexProvider.Name);
+                }
+            }
         }
 
         /// <summary>
@@ -50,6 +74,7 @@ namespace Our.Umbraco.Look.Events
                     publishedContent = umbracoHelper.SafeTypedMember(e.NodeId);
                 }
             }
+
             if (publishedContent != null)
             {
                 this.EnsureUmbracoContext();
@@ -57,18 +82,6 @@ namespace Our.Umbraco.Look.Events
                 var indexingContext = new IndexingContext(publishedContent, indexerName);
 
                 LookService.Index(indexingContext, e.Document);
-
-                //// foreach detached indexer found, trigger a node re-index
-                //// does published have any inner/detached content ?
-                //foreach (var detachedPublishedContent in publishedContent.GetFlatDetachedDescendants())
-                //{
-                //    var detachedDocument = new Document();
-
-                //    LookService.Index(indexingContext, detachedDocument);
-
-                //    // tell each of the detached indexers to reindex this node
-                //}
-
             }
         }
 

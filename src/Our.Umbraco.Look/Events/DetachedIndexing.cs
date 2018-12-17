@@ -44,9 +44,9 @@ namespace Our.Umbraco.Look.Events
 
             if (this._detachedIndexers.Any())
             {
-                //LookService.Initialize(); //ensure it's been started (as it'll need to setup the location indexes)
-
                 this._umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+
+                LookService.Initialize(this._umbracoHelper); 
 
                 ContentService.Saved += this.ContentService_Saved;
                 MediaService.Saved += this.MediaService_Saved;
@@ -101,7 +101,7 @@ namespace Our.Umbraco.Look.Events
         /// <param name="publishedContent"></param>
         private void Save(IPublishedContent publishedContent)
         {
-            if (publishedContent == null) return;
+            if (publishedContent == null) return; // content may have been saved, but not yet published
 
             foreach (var detachedContent in publishedContent.GetFlatDetachedDescendants())
             {
@@ -115,7 +115,6 @@ namespace Our.Umbraco.Look.Events
 
                     // TODO: Save this document
                     //detachedIndexer.
-
 
                 }
             }
