@@ -215,8 +215,8 @@
     <Compile Include="Extensions\UmbracoHelperExtensions\SafeTypedMember.cs" />
     <Compile Include="LookConfiguration.cs" />
     <Compile Include="LookConstants.cs" />
-    <Compile Include="LookDetachedIndexer.cs" />
-    <Compile Include="LookDetachedSearcher.cs" />
+    <Compile Include="DetachedIndexer.cs" />
+    <Compile Include="DetachedSearcher.cs" />
     <Compile Include="Models\DateBoundary.cs" />
     <Compile Include="Models\DateQuery.cs" />
     <Compile Include="Models\Distance.cs" />

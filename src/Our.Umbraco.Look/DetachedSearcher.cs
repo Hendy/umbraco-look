@@ -8,7 +8,7 @@ using System.Collections.Specialized;
 
 namespace Our.Umbraco.Look
 {
-    public class LookDetachedSearcher : LuceneSearcher
+    public class DetachedSearcher : LuceneSearcher
     {
         //// did this get called ?
         //public override void Initialize(string name, NameValueCollection config)

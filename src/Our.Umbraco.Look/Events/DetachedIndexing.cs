@@ -20,7 +20,7 @@ namespace Our.Umbraco.Look.Events
         /// <summary>
         /// Ask Examine if it has any LookDetachedIndexers (as they may be registered at runtime in future)
         /// </summary>
-        private LookDetachedIndexer[] _detachedIndexers;
+        private DetachedIndexer[] _detachedIndexers;
 
         /// <summary>
         /// shared umbraco helper
@@ -38,7 +38,7 @@ namespace Our.Umbraco.Look.Events
             this._detachedIndexers = ExamineManager
                                         .Instance
                                         .IndexProviderCollection
-                                        .Select(x => x as LookDetachedIndexer)
+                                        .Select(x => x as DetachedIndexer)
                                         .Where(x => x != null)
                                         .ToArray();
 
