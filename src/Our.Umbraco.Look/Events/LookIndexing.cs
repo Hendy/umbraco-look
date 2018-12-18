@@ -15,12 +15,12 @@ namespace Our.Umbraco.Look.Events
     /// By default, Examine will create 1 Lucene document for a Node,
     /// using this Indexer will create 1 Lucene document for each descendant IPublishedContent collection of a node (eg, all NestedContent, or StackedContent items)
     /// </summary>
-    public class DetachedIndexing : ApplicationEventHandler
+    public class LookIndexing : ApplicationEventHandler
     {
         /// <summary>
         /// Ask Examine if it has any LookDetachedIndexers (as they may be registered at runtime in future)
         /// </summary>
-        private LookIndexer[] _detachedIndexers;
+        private LookIndexer[] _lookIndexers;
 
         /// <summary>
         /// shared umbraco helper
@@ -35,14 +35,14 @@ namespace Our.Umbraco.Look.Events
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             // set once, as they will be configured in the config
-            this._detachedIndexers = ExamineManager
+            this._lookIndexers = ExamineManager
                                         .Instance
                                         .IndexProviderCollection
                                         .Select(x => x as LookIndexer)
                                         .Where(x => x != null)
                                         .ToArray();
 
-            if (this._detachedIndexers.Any())
+            if (this._lookIndexers.Any())
             {
                 this._umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
 
@@ -103,19 +103,27 @@ namespace Our.Umbraco.Look.Events
         {
             if (publishedContent == null) return; // content may have been saved, but not yet published
 
-            foreach (var detachedIndexer in this._detachedIndexers)
+            foreach (var detachedIndexer in this._lookIndexers)
             {
                 var indexWriter = detachedIndexer.GetIndexWriter();
 
+                var indexingContext = new IndexingContext(publishedContent, detachedIndexer.Name);
+                
+                var document = new Document();
+
+                LookService.Index(indexingContext, document);
+
+                indexWriter.AddDocument(document);  // index the content, media or memeber node itself
+
                 foreach (var detachedContent in publishedContent.GetFlatDetachedDescendants())
                 {
-                    var indexingContext = new IndexingContext(detachedContent, detachedIndexer.Name);
+                    indexingContext = new IndexingContext(detachedContent, detachedIndexer.Name);
 
-                    var document = new Document();
+                    document = new Document();
 
-                    LookService.IndexDetached(publishedContent, indexingContext, document); // will update the doc with the results from any Look indexers
+                    LookService.IndexDetached(publishedContent, indexingContext, document);
 
-                    indexWriter.AddDocument(document);
+                    indexWriter.AddDocument(document); // index each detached item
                 }
 
                 indexWriter.Optimize();

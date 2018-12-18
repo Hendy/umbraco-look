@@ -16,6 +16,8 @@ namespace Our.Umbraco.Look
         public override void Initialize(string name, NameValueCollection config)
         {
             base.Initialize(name, config);
+
+
         }
 
 
