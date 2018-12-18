@@ -1,8 +1,7 @@
 ﻿using Examine;
+using Examine.LuceneEngine.Providers;
 using Lucene.Net.Search;
 using Umbraco.Core.Logging;
-using UmbracoExamine;
-using Examine.LuceneEngine.Providers;
 
 namespace Our.Umbraco.Look
 {
@@ -17,35 +16,38 @@ namespace Our.Umbraco.Look
         /// <returns>SearchingContext if found, otherwise null</returns>
         private static SearchingContext GetSearchingContext(string searcherName)
         {
-            var searcher = !string.IsNullOrWhiteSpace(searcherName) 
-                            ? ExamineManager.Instance.SearchProviderCollection[searcherName]
-                            : ExamineManager.Instance.DefaultSearchProvider;
+            LuceneSearcher searcher = null;
 
-            if (searcher == null)
+            if (string.IsNullOrWhiteSpace(searcherName))
             {
-                LogHelper.Debug(typeof(LookService), $"Unable to find Examine searcher '{ searcherName }'");
+                searcher = ExamineManager.Instance.DefaultSearchProvider as LuceneSearcher;
             }
             else
             {
-                if (!(searcher is LuceneSearcher))
+                searcher = ExamineManager.Instance.SearchProviderCollection[searcherName] as LuceneSearcher;
+
+                if (searcher == null && !searcherName.EndsWith("Searcher"))
                 {
-                    LogHelper.Debug(typeof(LookService), $"Examine searcher of unexpected type '{ searcher.GetType() }'");
+                    searcher = ExamineManager.Instance.SearchProviderCollection[searcherName + "Searcher"] as LuceneSearcher;
                 }
-                else
+            }
+
+            if (searcher == null)
+            {
+                LogHelper.Debug(typeof(LookService), $"Unable to find Examine Lucene Searcher '{ searcherName }'");
+            }
+            else
+            {
+                var indexSetDirectory = LookService.Instance.IndexSetDirectories[searcher.IndexSetName];
+
+                if (indexSetDirectory != null)
                 {
-                    var luceneSearcher = (LuceneSearcher)searcher;
-
-                    var indexSetDirectory = LookService.Instance.IndexSetDirectories[luceneSearcher.IndexSetName];
-
-                    if (indexSetDirectory != null)
+                    return new SearchingContext()
                     {
-                        return new SearchingContext()
-                        {
-                            Analyzer = luceneSearcher.IndexingAnalyzer,
-                            IndexSearcher = new IndexSearcher(indexSetDirectory, true), // TODO: handle reuse
-                            EnableLeadingWildcards = luceneSearcher.EnableLeadingWildcards
-                        };
-                    }
+                        Analyzer = searcher.IndexingAnalyzer,
+                        IndexSearcher = new IndexSearcher(indexSetDirectory, true), // TODO: handle reuse
+                        EnableLeadingWildcards = searcher.EnableLeadingWildcards
+                    };
                 }
             }
 
