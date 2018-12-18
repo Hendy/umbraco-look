@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace Our.Umbraco.Look
 {
-    public class DetachedIndexer : LuceneIndexer
+    public class LookIndexer : LuceneIndexer
     {
         public override void Initialize(string name, NameValueCollection config)
         {

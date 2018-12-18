@@ -4,7 +4,7 @@ using Examine.SearchCriteria;
 
 namespace Our.Umbraco.Look
 {
-    public class DetachedSearcher : LuceneSearcher
+    public class LookSearcher : LuceneSearcher
     {
         public override ISearchResults Search(ISearchCriteria searchParams)
         {
