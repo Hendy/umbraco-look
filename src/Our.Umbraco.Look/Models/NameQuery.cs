@@ -115,6 +115,7 @@ namespace Our.Umbraco.Look
         /// <param name="contains"></param>
         /// <param name="endsWith"></param>
         /// <param name="caseSensitive">When true, the name search is case sensitive</param>
+        [System.Obsolete("this will be removed as not intuitive overload order")]
         public NameQuery(string @is = null, string startsWith = null, string contains = null, string endsWith = null, bool caseSensitive = true)
         {
             this.Is = @is;
