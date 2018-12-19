@@ -8,27 +8,56 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Xml.Linq;
+using Umbraco.Core;
+using Umbraco.Core.Models;
+using Umbraco.Web;
 
 namespace Our.Umbraco.Look
 {
     public class LookIndexer : LuceneIndexer
     {
+        private UmbracoHelper UmbracoHelper { get; }
+
+        /// <summary>
+        /// Constructor to set privates
+        /// </summary>
+        public LookIndexer()
+        {
+            this.UmbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+        }
+
         public override void Initialize(string name, NameValueCollection config)
         {
             base.Initialize(name, config);
+        }
+
+        ///// <summary>
+        ///// triggered from a back office rebuild 
+        ///// </summary>
+        //public override void RebuildIndex()
+        //{
+        //    base.RebuildIndex(); // does check for cancellation then calls PerformIndexRebuild if ok
+        //}
+
+        protected override void PerformIndexRebuild()
+        {
+            var nodes = new List<IPublishedContent>();
+
+            nodes.AddRange(this.UmbracoHelper.TypedContentAtXPath("//"));
+
+            // TODO: add media & members to the nodes collection
+
+            
+
+
+            this.OnIndexOperationComplete(new EventArgs()); // causes the backoffice rebuild to end (UI thread watches a cache value)
         }
 
         protected override void PerformIndexAll(string type)
         {
         }
 
-        /// <summary>
-        /// triggered from a back office rebuild 
-        /// </summary>
-        protected override void PerformIndexRebuild()
-        {
-            this.OnIndexOperationComplete(new EventArgs()); // causes the backoffice rebuild to end (UI thread watches a cache value)
-        }
+
 
         protected override void AddDocument(Dictionary<string, string> fields, IndexWriter writer, int nodeId, string type)
         {
@@ -160,11 +189,6 @@ namespace Our.Umbraco.Look
         protected override void OnNodesIndexing(IndexingNodesEventArgs e)
         {
             base.OnNodesIndexing(e);
-        }
-
-        public override void RebuildIndex()
-        {
-            base.RebuildIndex();
         }
 
         public override void ReIndexNode(XElement node, string type)
