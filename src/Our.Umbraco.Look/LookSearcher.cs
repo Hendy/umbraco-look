@@ -1,11 +1,60 @@
-﻿using Examine;
+﻿using System.Collections.Specialized;
+using Examine;
 using Examine.LuceneEngine.Providers;
 using Examine.SearchCriteria;
+using Lucene.Net.Index;
+using Lucene.Net.Search;
+using Lucene.Net.Store;
 
 namespace Our.Umbraco.Look
 {
     public class LookSearcher : LuceneSearcher
     {
+        public override ISearchCriteria CreateSearchCriteria()
+        {
+            return base.CreateSearchCriteria();
+        }
+
+        public override ISearchCriteria CreateSearchCriteria(BooleanOperation defaultOperation)
+        {
+            return base.CreateSearchCriteria(defaultOperation);
+        }
+
+        public override ISearchCriteria CreateSearchCriteria(string type)
+        {
+            return base.CreateSearchCriteria(type);
+        }
+
+        public override ISearchCriteria CreateSearchCriteria(string type, BooleanOperation defaultOperation)
+        {
+            return base.CreateSearchCriteria(type, defaultOperation);
+        }
+
+        protected override Directory GetLuceneDirectory()
+        {
+            return base.GetLuceneDirectory();
+        }
+
+        public override Searcher GetSearcher()
+        {
+            return base.GetSearcher();
+        }
+
+        protected override string[] GetSearchFields()
+        {
+            return base.GetSearchFields();
+        }
+
+        public override void Initialize(string name, NameValueCollection config)
+        {
+            base.Initialize(name, config);
+        }
+
+        protected override IndexReader OpenNewReader()
+        {
+            return base.OpenNewReader();
+        }
+
         public override ISearchResults Search(ISearchCriteria searchParams)
         {
             return this.Search(searchParams, int.MaxValue);
