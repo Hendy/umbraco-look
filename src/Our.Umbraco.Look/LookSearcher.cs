@@ -5,6 +5,7 @@ using Examine.SearchCriteria;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
+using Our.Umbraco.Look;
 
 namespace Our.Umbraco.Look
 {
@@ -12,48 +13,48 @@ namespace Our.Umbraco.Look
     {
         public override ISearchCriteria CreateSearchCriteria()
         {
-            return base.CreateSearchCriteria();
+            return new LookSearchCriteria(base.CreateSearchCriteria());
         }
 
         public override ISearchCriteria CreateSearchCriteria(BooleanOperation defaultOperation)
         {
-            return base.CreateSearchCriteria(defaultOperation);
+            return new LookSearchCriteria(base.CreateSearchCriteria(defaultOperation));
         }
 
         public override ISearchCriteria CreateSearchCriteria(string type)
         {
-            return base.CreateSearchCriteria(type);
+            return new LookSearchCriteria(base.CreateSearchCriteria(type));
         }
 
         public override ISearchCriteria CreateSearchCriteria(string type, BooleanOperation defaultOperation)
         {
-            return base.CreateSearchCriteria(type, defaultOperation);
+            return new LookSearchCriteria(base.CreateSearchCriteria(type, defaultOperation));
         }
 
-        protected override Directory GetLuceneDirectory()
-        {
-            return base.GetLuceneDirectory();
-        }
+        //protected override Directory GetLuceneDirectory()
+        //{
+        //    return base.GetLuceneDirectory();
+        //}
 
-        public override Searcher GetSearcher()
-        {
-            return base.GetSearcher();
-        }
+        //public override Searcher GetSearcher()
+        //{
+        //    return base.GetSearcher();
+        //}
 
-        protected override string[] GetSearchFields()
-        {
-            return base.GetSearchFields();
-        }
+        //protected override string[] GetSearchFields()
+        //{
+        //    return base.GetSearchFields();
+        //}
 
-        public override void Initialize(string name, NameValueCollection config)
-        {
-            base.Initialize(name, config);
-        }
+        //public override void Initialize(string name, NameValueCollection config)
+        //{
+        //    base.Initialize(name, config);
+        //}
 
-        protected override IndexReader OpenNewReader()
-        {
-            return base.OpenNewReader();
-        }
+        //protected override IndexReader OpenNewReader()
+        //{
+        //    return base.OpenNewReader();
+        //}
 
         public override ISearchResults Search(ISearchCriteria searchParams)
         {
@@ -62,7 +63,12 @@ namespace Our.Umbraco.Look
         
         public override ISearchResults Search(ISearchCriteria searchParams, int maxResults)
         {
-            // TODO: put NodeQuery, NameQuery, TextQuery, DateQuery, TagQuery & LocationQuery properties onto custom ISearchCriteria
+            // safety check, incase search criteria wasn't created by this searcher !
+            if (searchParams is LookSearchCriteria)
+            {                
+                // TODO: put NodeQuery, NameQuery, TextQuery, DateQuery, TagQuery & LocationQuery properties onto custom LookSearchCriteria
+            }
+
             // TODO: pass max results into lookQuery
             return new LookQuery(this.Name) { ExamineQuery = searchParams }.Run();
         }

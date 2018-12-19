@@ -227,6 +227,7 @@
     <Compile Include="Models\LocationQuery.cs" />
     <Compile Include="Models\LookQueryCompiled.cs" />
     <Compile Include="Models\LookResult.cs" />
+    <Compile Include="Models\LookSearchCriteria.cs" />
     <Compile Include="Models\NameQuery.cs" />
     <Compile Include="Models\NodeQuery.cs" />
     <Compile Include="Models\LookMatch.cs" />
