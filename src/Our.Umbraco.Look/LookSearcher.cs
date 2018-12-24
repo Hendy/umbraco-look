@@ -63,14 +63,15 @@ namespace Our.Umbraco.Look
         
         public override ISearchResults Search(ISearchCriteria searchParams, int maxResults)
         {
+            var lookQuery = new LookQuery(this.Name) { ExamineQuery = searchParams };
+
             // safety check, incase search criteria wasn't created by this searcher !
             if (searchParams is LookSearchCriteria)
             {                
                 // TODO: put NodeQuery, NameQuery, TextQuery, DateQuery, TagQuery & LocationQuery properties onto custom LookSearchCriteria
             }
 
-            // TODO: pass max results into lookQuery
-            return new LookQuery(this.Name) { ExamineQuery = searchParams }.Run();
+            return lookQuery.Run();
         }
 
         public override ISearchResults Search(string searchText, bool useWildcards)

@@ -107,7 +107,7 @@ namespace Our.Umbraco.Look.Events
             {
                 var indexWriter = lookIndexer.GetIndexWriter();
 
-                var indexingContext = new IndexingContext(publishedContent, lookIndexer.Name);
+                var indexingContext = new IndexingContext(null, publishedContent, lookIndexer.Name);
                 
                 var document = new Document();
 
@@ -117,11 +117,11 @@ namespace Our.Umbraco.Look.Events
 
                 foreach (var detachedContent in publishedContent.GetFlatDetachedDescendants())
                 {
-                    indexingContext = new IndexingContext(detachedContent, lookIndexer.Name);
+                    indexingContext = new IndexingContext(publishedContent, detachedContent, lookIndexer.Name);
 
                     document = new Document();
 
-                    LookService.IndexDetached(publishedContent, indexingContext, document);
+                    LookService.Index(indexingContext, document);
 
                     indexWriter.AddDocument(document); // index each detached item
                 }

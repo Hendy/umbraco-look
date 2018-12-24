@@ -43,11 +43,23 @@ namespace Our.Umbraco.Look
         {
             var nodes = new List<IPublishedContent>();
 
-            nodes.AddRange(this.UmbracoHelper.TypedContentAtXPath("//"));
+            nodes.AddRange(this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]"));
 
             // TODO: add media & members to the nodes collection
 
-            
+
+            foreach (var node in nodes)
+            {
+                // index the node
+
+
+                // indexed any detached content from this node
+
+
+
+
+
+            }
 
 
             this.OnIndexOperationComplete(new EventArgs()); // causes the backoffice rebuild to end (UI thread watches a cache value)

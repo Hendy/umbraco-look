@@ -59,7 +59,7 @@ namespace Our.Umbraco.Look.Tests
             LookConfiguration.LocationIndexer = x => locationStack.Pop();
 
             // null for IPublishedContent as not required
-            var indexingContext = new IndexingContext(null, null);
+            var indexingContext = new IndexingContext(null, null, null);
 
             List<Document> documents = new List<Document>();
 

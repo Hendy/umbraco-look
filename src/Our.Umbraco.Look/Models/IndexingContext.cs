@@ -8,7 +8,12 @@ namespace Our.Umbraco.Look
     public class IndexingContext
     {
         /// <summary>
-        /// The IPublishedContent representation of the Content, Media or Member being indexed
+        /// When detached content is being indexed, this property will contain the host IPublishedContent containing the item being indexed
+        /// </summary>
+        public IPublishedContent HostItem { get; }
+
+        /// <summary>
+        /// The IPublishedContent representation of the Content, Media, Member or detacehd item being indexed
         /// </summary>
         public IPublishedContent Item { get; }
 
@@ -20,9 +25,10 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="node">The IPublishedContent representation of the thing being indexed</param>
+        /// <param name="hostNode">Only set when detached content ins being indexed</param>
+        /// <param name="node">The IPublishedContent representation of the thing being indexed (content, media, member or detached)</param>
         /// <param name="indexerName">The name of the inder being used</param>
-        internal IndexingContext(IPublishedContent node, string indexerName)
+        internal IndexingContext(IPublishedContent hostNode, IPublishedContent node, string indexerName)
         {
             this.Item = node;
             this.IndexerName = indexerName;
