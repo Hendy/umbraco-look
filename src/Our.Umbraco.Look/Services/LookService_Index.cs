@@ -62,6 +62,18 @@ namespace Our.Umbraco.Look
                         document.Add(cultureField);
                     }
                 }
+
+                if (indexingContext.HostItem != null)
+                {
+                    // indexing detached item, so store the host context id so we can return the detached item
+                    var hostIdField = new Field(
+                                            LookConstants.HostIdField,
+                                            indexingContext.HostItem.Id.ToString(),
+                                            Field.Store.YES,
+                                            Field.Index.NO);
+
+                    document.Add(hostIdField);
+                }
             }
 
             if (LookService.Instance.NameIndexer != null)

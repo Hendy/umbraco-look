@@ -18,6 +18,11 @@
         internal static string CultureField => "Look_Culture";
 
         /// <summary>
+        /// id to the content media or member item hosting this detached item
+        /// </summary>
+        internal static string HostIdField => "Look_HostId";
+
+        /// <summary>
         /// 
         /// </summary>
         internal static string HasNameField => "Look_HasName";

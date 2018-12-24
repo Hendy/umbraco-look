@@ -32,6 +32,7 @@ namespace Our.Umbraco.Look
 
             // these fields are always requested
             var lookFieldNames = new string[] {
+                LookConstants.HostIdField,
                 LuceneIndexer.IndexNodeIdFieldName,  // "__NodeId"
                 LookConstants.NodeTypeField,
                 LookConstants.NameField,
@@ -46,6 +47,11 @@ namespace Our.Umbraco.Look
                 // limit fields to be returned
                 mapFieldSelector = new MapFieldSelector(lookFieldNames);
             }
+
+            var getHostId = new Func<string, int?>(x => {
+                if (int.TryParse(x, out int id)) { return id; }
+                return null;
+            });
 
             // there should always be a valid node type value to parse
             var getNodeType = new Func<string, PublishedItemType>(x => { Enum.TryParse(x, out PublishedItemType type); return type; });
@@ -65,6 +71,7 @@ namespace Our.Umbraco.Look
                 var lookMatch = new LookMatch(
                     scoreDoc.doc,
                     scoreDoc.score,
+                    getHostId(doc.Get(LookConstants.HostIdField)),
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
                     doc.Get(LookConstants.NameField),
                     doc.Get(LookConstants.DateField).LuceneStringToDate(),
