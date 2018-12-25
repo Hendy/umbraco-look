@@ -8,7 +8,7 @@ namespace Our.Umbraco.Look
     public class IndexingContext
     {
         /// <summary>
-        /// When detached content is being indexed, this property will contain the host IPublishedContent containing the item being indexed
+        /// When detached content is being indexed, this property will be the IPublishedContent of the content, media or member containing the detached item being indexed
         /// </summary>
         public IPublishedContent HostItem { get; }
 

@@ -18,9 +18,8 @@ namespace Our.Umbraco.Look.Events
 {
     /// <summary>
     /// Hooks into all configured Exmaine Umbraco indexers, allowing Look to add additional fields
-    /// rename to HookIndexing ?
     /// </summary>
-    public class Indexing : ApplicationEventHandler
+    public class HookIndexing : ApplicationEventHandler
     {
         /// <summary>
         /// Umbraco started
