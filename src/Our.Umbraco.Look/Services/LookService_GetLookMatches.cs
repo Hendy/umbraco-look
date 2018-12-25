@@ -32,9 +32,10 @@ namespace Our.Umbraco.Look
 
             // these fields are always requested
             var lookFieldNames = new string[] {
-                LookConstants.HostIdField,
                 LuceneIndexer.IndexNodeIdFieldName,  // "__NodeId"
+                LookConstants.NodeKeyField,
                 LookConstants.NodeTypeField,
+                LookConstants.HostIdField,
                 LookConstants.NameField,
                 LookConstants.DateField,
                 LookConstants.TextField,
@@ -50,6 +51,12 @@ namespace Our.Umbraco.Look
 
             var getHostId = new Func<string, int?>(x => {
                 if (int.TryParse(x, out int id)) { return id; }
+                return null;
+            });
+
+            var getItemGuid = new Func<string, Guid?>(x =>
+            {
+                if (Guid.TryParse(x, out Guid guid)) { return guid; }
                 return null;
             });
 
@@ -71,8 +78,9 @@ namespace Our.Umbraco.Look
                 var lookMatch = new LookMatch(
                     scoreDoc.doc,
                     scoreDoc.score,
-                    getHostId(doc.Get(LookConstants.HostIdField)),
+                    getHostId(doc.Get(LookConstants.HostIdField)), // could be null
                     Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
+                    getItemGuid(doc.Get(LookConstants.NodeKeyField)), // this should only be null for unit tests (outside umbraco context)
                     doc.Get(LookConstants.NameField),
                     doc.Get(LookConstants.DateField).LuceneStringToDate(),
                     doc.Get(LookConstants.TextField),

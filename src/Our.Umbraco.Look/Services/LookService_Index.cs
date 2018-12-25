@@ -1,6 +1,7 @@
 ﻿using Examine.LuceneEngine.Providers;
 using Lucene.Net.Documents;
 using Lucene.Net.Util;
+using Our.Umbraco.Look.Extensions;
 using System;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
@@ -28,6 +29,13 @@ namespace Our.Umbraco.Look
                                             Field.Store.NO,
                                             Field.Index.NOT_ANALYZED);
 
+                // used to identify detached content
+                var nodeKeyField = new Field(
+                                            LookConstants.NodeKeyField,
+                                            indexingContext.Item.GetKey().ToString(),
+                                            Field.Store.YES,
+                                            Field.Index.NO);
+
                 var nodeTypeField = new Field(
                                             LookConstants.NodeTypeField,
                                             publishedItemType.ToString(),
@@ -43,8 +51,9 @@ namespace Our.Umbraco.Look
                                             Field.TermVector.NO);
 
                 document.Add(hasNodeField);
-                document.Add(nodeTypeAliasField);
+                document.Add(nodeKeyField);
                 document.Add(nodeTypeField);
+                document.Add(nodeTypeAliasField);
 
                 if (publishedItemType == PublishedItemType.Content)
                 {

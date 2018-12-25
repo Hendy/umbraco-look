@@ -8,6 +8,11 @@
         internal static string HasNodeField => "Look_HasNode";
 
         /// <summary>
+        /// Alternative to the Examine Id field (detached nodes have keys, but not ids)
+        /// </summary>
+        internal static string NodeKeyField => "Look_NodeKey";
+
+        /// <summary>
         /// Gets the field name to use for the node type (content || media || member)
         /// </summary>
         internal static string NodeTypeField => "Look_NodeType";

@@ -208,8 +208,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\LookIndexing.cs" />
-    <Compile Include="Events\Indexing.cs" />
+    <Compile Include="Events\HookIndexing.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\GetFlatDetachedDescendants.cs" />
+    <Compile Include="Extensions\IPublishedContentExtensions\GetKey.cs" />
     <Compile Include="Extensions\StringExtensions\LuceneStringToDate.cs" />
     <Compile Include="Extensions\DateTimeExtensions\DateToLuceneString.cs" />
     <Compile Include="Extensions\UmbracoHelperExtensions\SafeTypedMember.cs" />

@@ -10,10 +10,23 @@ namespace Our.Umbraco.Look
 {
     public class LookMatch : SearchResult
     {
+        /// <summary>
+        /// This is set if the Item returned is detached content (otherwise will be null)
+        /// </summary>
+        private Lazy<IPublishedContent> _hostItem;
+
+        /// <summary>
+        /// This is the content, media, member or detached item
+        /// </summary>
         private Lazy<IPublishedContent> _item;
 
         /// <summary>
-        /// Lazy evaluation of Item for IPublishedContent
+        /// Lazy evaluation of the host item (if the item is detached) otherwize this will be null
+        /// </summary>
+        public IPublishedContent HostItem => this._hostItem.Value;
+
+        /// <summary>
+        /// Lazy evaluation of Item for IPublishedContent of the content, media, member or detached item
         /// </summary>
         public IPublishedContent Item => this._item.Value;
 
@@ -57,7 +70,7 @@ namespace Our.Umbraco.Look
         /// </summary>
         /// <param name="docId"></param>
         /// <param name="score"></param>
-        /// <param name="hostId">host (if item is detached)</param>
+        /// <param name="hostKey">host (if item is detached)</param>
         /// <param name="itemId"></param>
         /// <param name="name"></param>
         /// <param name="date"></param>
@@ -72,7 +85,8 @@ namespace Our.Umbraco.Look
                     int docId,
                     float score,
                     int? hostId,
-                    int itemId,
+                    int itemId, // passed in so we don't have to get infalte IPublishedContent from itemGuid to get the int (required for the base SearchResult)
+                    Guid? itemGuid, // will be null in unit tests outside of Umbraco context
                     string name,
                     DateTime? date,
                     string text,
@@ -94,28 +108,41 @@ namespace Our.Umbraco.Look
             this.Location = location;
             this.Distance = distance;
 
-            this._item = new Lazy<IPublishedContent>(() => {
-
-                IPublishedContent item = null;
-
-                if (umbracoHelper != null) // will be null for unit tests (as not initialized via Umbraco startup)
+            this._hostItem = new Lazy<IPublishedContent>(() =>
+            {
+                if (umbracoHelper != null && hostId.HasValue)
                 {
-                    var id = hostId ?? itemId;
-
                     switch (publishedItemType)
                     {
-                        case PublishedItemType.Content: item = umbracoHelper.TypedContent(id); break;
-                        case PublishedItemType.Media: item = umbracoHelper.TypedMedia(itemId); break;
-                        case PublishedItemType.Member: item = umbracoHelper.SafeTypedMember(itemId); break;
-                    }
-
-                    if(hostId != null)
-                    {
-                        item = item.GetFlatDetachedDescendants().Single(x => x.Id == item.Id); // TODO: swap to using guid key (as all Ids  = 0)
+                        case PublishedItemType.Content: return umbracoHelper.TypedContent(hostId.Value); 
+                        case PublishedItemType.Media: return umbracoHelper.TypedMedia(hostId.Value);
+                        case PublishedItemType.Member: return umbracoHelper.SafeTypedMember(hostId.Value);
                     }
                 }
 
-                return item;
+                return null;
+            });
+
+            this._item = new Lazy<IPublishedContent>(() => {
+
+                if (umbracoHelper != null) // will be null for unit tests (as not initialized via Umbraco startup)
+                {
+                    if (this.HostItem == null) // not detached
+                    {
+                        switch (publishedItemType)
+                        {
+                            case PublishedItemType.Content: return umbracoHelper.TypedContent(itemId);
+                            case PublishedItemType.Media: return umbracoHelper.TypedMedia(itemId);
+                            case PublishedItemType.Member: return umbracoHelper.SafeTypedMember(itemId);
+                        }
+                    }
+                    else // get the host item, and then all of it's detached item to find by key
+                    {                        
+                        return this.HostItem.GetFlatDetachedDescendants().SingleOrDefault(x => x.GetKey() == itemGuid.Value);
+                    }
+                }
+
+                return null;
             });
         }
     }
