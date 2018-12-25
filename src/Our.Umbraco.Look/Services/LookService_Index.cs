@@ -32,9 +32,9 @@ namespace Our.Umbraco.Look
                 // used to identify detached content
                 var nodeKeyField = new Field(
                                             LookConstants.NodeKeyField,
-                                            indexingContext.Item.GetKey().ToString(),
+                                            indexingContext.Item.GetGuidKey().ToString(),
                                             Field.Store.YES,
-                                            Field.Index.NO);
+                                            Field.Index.NOT_ANALYZED);
 
                 var nodeTypeField = new Field(
                                             LookConstants.NodeTypeField,
