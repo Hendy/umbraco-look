@@ -30,6 +30,7 @@ namespace Our.Umbraco.Look
         /// <param name="indexerName">The name of the inder being used</param>
         internal IndexingContext(IPublishedContent hostNode, IPublishedContent node, string indexerName)
         {
+            this.HostItem = hostNode;
             this.Item = node;
             this.IndexerName = indexerName;
         }
