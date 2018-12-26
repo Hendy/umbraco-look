@@ -139,7 +139,7 @@ namespace Our.Umbraco.Look
                         foreach (var exculudeId in lookQuery.NodeQuery.NotIds)
                         {
                             query.Add(
-                                    new TermQuery(new Term(UmbracoContentIndexer.IndexNodeIdFieldName, exculudeId.ToString())),
+                                    new TermQuery(new Term(LookConstants.NodeIdField, exculudeId.ToString())),
                                     BooleanClause.Occur.MUST_NOT);
                         }
                     }

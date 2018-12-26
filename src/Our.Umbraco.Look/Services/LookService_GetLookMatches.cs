@@ -32,7 +32,7 @@ namespace Our.Umbraco.Look
 
             // these fields are always requested
             var lookFieldNames = new string[] {
-                LuceneIndexer.IndexNodeIdFieldName,  // "__NodeId"
+                LookConstants.NodeIdField,
                 LookConstants.NodeKeyField,
                 LookConstants.NodeTypeField,
                 LookConstants.HostIdField,
@@ -79,7 +79,7 @@ namespace Our.Umbraco.Look
                     scoreDoc.doc,
                     scoreDoc.score,
                     getHostId(doc.Get(LookConstants.HostIdField)), // could be null
-                    Convert.ToInt32(doc.Get(LuceneIndexer.IndexNodeIdFieldName)),
+                    Convert.ToInt32(doc.Get(LookConstants.NodeIdField)),
                     getItemGuid(doc.Get(LookConstants.NodeKeyField)), // this should only be null for unit tests (outside umbraco context)
                     doc.Get(LookConstants.NameField),
                     doc.Get(LookConstants.DateField).LuceneStringToDate(),

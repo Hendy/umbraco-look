@@ -8,7 +8,12 @@
         internal static string HasNodeField => "Look_HasNode";
 
         /// <summary>
-        /// Alternative to the Examine Id field (detached nodes have keys, but not ids)
+        /// Umbraco Id for the content, media or member being indexed (detached content will have an id = 0)
+        /// </summary>
+        internal static string NodeIdField => "Look_NodeId";
+
+        /// <summary>
+        /// Alternative to the Id field (detached nodes have keys, but not ids)
         /// </summary>
         internal static string NodeKeyField => "Look_NodeKey";
 

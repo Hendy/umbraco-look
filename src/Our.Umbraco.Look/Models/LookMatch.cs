@@ -31,6 +31,11 @@ namespace Our.Umbraco.Look
         public IPublishedContent Item => this._item.Value;
 
         /// <summary>
+        /// Guid key of the Content, media, member or detached item
+        /// </summary>
+        public Guid Key { get; }
+
+        /// <summary>
         /// The custom name field
         /// </summary>
         public string Name { get; }
@@ -100,6 +105,7 @@ namespace Our.Umbraco.Look
             //this.DocId = docId; // not in Examine 0.1.70, but in more recent versions
             this.Score = score;
             this.Id = itemId;
+            this.Key = itemGuid ?? Guid.Empty;
             this.Name = name;
             this.Date = date;
             this.Text = text;
@@ -123,8 +129,8 @@ namespace Our.Umbraco.Look
                 return null;
             });
 
-            this._item = new Lazy<IPublishedContent>(() => {
-
+            this._item = new Lazy<IPublishedContent>(() => 
+            {
                 if (umbracoHelper != null) // will be null for unit tests (as not initialized via Umbraco startup)
                 {
                     if (this.HostItem == null) // not detached

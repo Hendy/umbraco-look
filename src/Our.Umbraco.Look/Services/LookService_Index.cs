@@ -29,7 +29,12 @@ namespace Our.Umbraco.Look
                                             Field.Store.NO,
                                             Field.Index.NOT_ANALYZED);
 
-                // used to identify detached content
+                var nodeIdField = new Field(
+                                            LookConstants.NodeIdField,
+                                            indexingContext.Item.Id.ToString(),
+                                            Field.Store.YES,
+                                            Field.Index.NOT_ANALYZED);
+
                 var nodeKeyField = new Field(
                                             LookConstants.NodeKeyField,
                                             indexingContext.Item.GetGuidKey().ToString(),
@@ -51,6 +56,7 @@ namespace Our.Umbraco.Look
                                             Field.TermVector.NO);
 
                 document.Add(hasNodeField);
+                document.Add(nodeIdField);
                 document.Add(nodeKeyField);
                 document.Add(nodeTypeField);
                 document.Add(nodeTypeAliasField);

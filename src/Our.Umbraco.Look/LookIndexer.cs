@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Xml.Linq;
-using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 
