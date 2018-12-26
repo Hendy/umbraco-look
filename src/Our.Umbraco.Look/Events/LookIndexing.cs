@@ -61,38 +61,50 @@ namespace Our.Umbraco.Look.Events
 
         private void ContentService_Saved(IContentService sender, SaveEventArgs<IContent> e)
         {         
-            foreach (var contentItem in e.SavedEntities)
+            foreach (var entity in e.SavedEntities)
             {
-                this.Save(this._umbracoHelper.TypedContent(contentItem.Id));
+                this.Save(this._umbracoHelper.TypedContent(entity.Id));
             }
         }
 
         private void MediaService_Saved(IMediaService sender, SaveEventArgs<IMedia> e)
         {
-            foreach (var contentItem in e.SavedEntities)
+            foreach (var entity in e.SavedEntities)
             {
-                this.Save(this._umbracoHelper.TypedMedia(contentItem.Id));
+                this.Save(this._umbracoHelper.TypedMedia(entity.Id));
             }
         }
 
         private void MemberService_Saved(IMemberService sender, SaveEventArgs<IMember> e)
         {
-            foreach (var contentItem in e.SavedEntities)
+            foreach (var entity in e.SavedEntities)
             {
-                this.Save(this._umbracoHelper.TypedMember(contentItem.Id));
+                this.Save(this._umbracoHelper.TypedMember(entity.Id));
             }
         }
 
         private void ContentService_Deleted(IContentService sender, DeleteEventArgs<IContent> e)
         {
+            foreach (var entity in e.DeletedEntities)
+            {
+                this.Delete(entity.Id);
+            }
         }
 
         private void MediaService_Deleted(IMediaService sender, DeleteEventArgs<IMedia> e)
         {
+            foreach (var entity in e.DeletedEntities)
+            {
+                this.Delete(entity.Id);
+            }
         }
 
         private void MemberService_Deleted(IMemberService sender, DeleteEventArgs<IMember> e)
         {
+            foreach (var entity in e.DeletedEntities)
+            {
+                this.Delete(entity.Id);
+            }
         }
 
         /// <summary>
