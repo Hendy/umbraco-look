@@ -2,8 +2,10 @@
 using Examine.LuceneEngine;
 using Examine.LuceneEngine.Config;
 using Examine.LuceneEngine.Providers;
+using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
+using Our.Umbraco.Look.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -47,18 +49,34 @@ namespace Our.Umbraco.Look
 
             // TODO: add media & members to the nodes collection
 
+            var indexWriter = this.GetIndexWriter();
 
             foreach (var node in nodes)
             {
                 // index the node
+                var indexingContext = new IndexingContext(null, node, this.Name);
 
+                var document = new Document();
+
+                LookService.Index(indexingContext, document);
+
+                indexWriter.AddDocument(document);
 
                 // indexed any detached content from this node
+                foreach (var detachedContent in node.GetFlatDetachedDescendants())
+                {
+                    indexingContext = new IndexingContext(node, detachedContent, this.Name);
 
+                    document = new Document();
 
+                    LookService.Index(indexingContext, document);
 
+                    indexWriter.AddDocument(document); // index each detached item
+                }
 
+                indexWriter.Optimize();
 
+                indexWriter.Commit();
             }
 
 
@@ -212,5 +230,14 @@ namespace Our.Umbraco.Look
         {
             return base.ValidateDocument(node);
         }
+
+        ///// <summary>
+        ///// index all supplied nodes (and their detached content)
+        ///// </summary>
+        ///// <param name="nodes"></param>
+        //internal void Index(IPublishedContent[] nodes)
+        //{
+
+        //}
     }
 }

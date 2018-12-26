@@ -144,9 +144,19 @@ namespace Our.Umbraco.Look.Events
             }
         }
 
+        /// <summary>
+        /// Delete all lucene documents where node (item) id or deteached items using host id = the supplied id
+        /// </summary>
+        /// <param name="id"></param>
         private void Delete(int id)
         {
-            // TODO: dete from index where host id = id
+            // TODO: dete from index where Look_HostId = id OR item id = id
+            foreach (var lookIndexer in this._lookIndexers)
+            {
+
+
+                // TODO:
+            }
         }
     }
 }
