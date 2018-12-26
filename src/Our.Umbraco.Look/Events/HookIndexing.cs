@@ -92,13 +92,12 @@ namespace Our.Umbraco.Look.Events
         {
             var dummyHttpContext = new HttpContextWrapper(new HttpContext(new SimpleWorkerRequest("", "", new StringWriter())));
 
-            // commented out params as overload not available in Umbraco 7.2.3
             UmbracoContext.EnsureContext(
                                 dummyHttpContext,
                                 ApplicationContext.Current,
                                 new WebSecurity(dummyHttpContext, ApplicationContext.Current),
-                                //UmbracoConfig.For.UmbracoSettings(),
-                                //UrlProviderResolver.Current.Providers,                                
+                                UmbracoConfig.For.UmbracoSettings(),
+                                UrlProviderResolver.Current.Providers,                                
                                 true,
                                 false);
         }
