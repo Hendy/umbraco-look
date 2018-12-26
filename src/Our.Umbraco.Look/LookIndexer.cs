@@ -47,38 +47,17 @@ namespace Our.Umbraco.Look
 
             nodes.AddRange(this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]"));
 
-            // TODO: add media & members to the nodes collection
-
-            var indexWriter = this.GetIndexWriter();
-
-            foreach (var node in nodes)
+            foreach(var media in this.UmbracoHelper.TypedMediaAtRoot())
             {
-                // index the node
-                var indexingContext = new IndexingContext(null, node, this.Name);
-
-                var document = new Document();
-
-                LookService.Index(indexingContext, document);
-
-                indexWriter.AddDocument(document);
-
-                // indexed any detached content from this node
-                foreach (var detachedContent in node.GetFlatDetachedDescendants())
-                {
-                    indexingContext = new IndexingContext(node, detachedContent, this.Name);
-
-                    document = new Document();
-
-                    LookService.Index(indexingContext, document);
-
-                    indexWriter.AddDocument(document); // index each detached item
-                }
-
-                indexWriter.Optimize();
-
-                indexWriter.Commit();
+                nodes.AddRange(media.DescendantsOrSelf());
             }
 
+            //foreach (var member in ApplicationContext.Current.Services.MemberService.GetAll(0, int.MaxValue, out int totalRecords))
+            //{
+            //    nodes.Add(this.UmbracoHelper.TypedMember(member.Id));
+            //}
+
+            this.Index(nodes.ToArray()); // index all nodes
 
             this.OnIndexOperationComplete(new EventArgs()); // causes the backoffice rebuild to end (UI thread watches a cache value)
         }
@@ -86,8 +65,6 @@ namespace Our.Umbraco.Look
         protected override void PerformIndexAll(string type)
         {
         }
-
-
 
         protected override void AddDocument(Dictionary<string, string> fields, IndexWriter writer, int nodeId, string type)
         {
@@ -231,13 +208,39 @@ namespace Our.Umbraco.Look
             return base.ValidateDocument(node);
         }
 
-        ///// <summary>
-        ///// index all supplied nodes (and their detached content)
-        ///// </summary>
-        ///// <param name="nodes"></param>
-        //internal void Index(IPublishedContent[] nodes)
-        //{
+        /// <summary>
+        /// index all supplied nodes (and their detached content)
+        /// </summary>
+        /// <param name="nodes">collection of nodes (and any detached content they may have) to be indexed</param>
+        internal void Index(IPublishedContent[] nodes)
+        {
+            var indexWriter = this.GetIndexWriter();
 
-        //}
+            foreach (var node in nodes)
+            {
+                var indexingContext = new IndexingContext(null, node, this.Name);
+
+                var document = new Document();
+
+                LookService.Index(indexingContext, document);
+
+                indexWriter.AddDocument(document);
+
+                foreach (var detachedContent in node.GetFlatDetachedDescendants())
+                {
+                    indexingContext = new IndexingContext(node, detachedContent, this.Name);
+
+                    document = new Document();
+
+                    LookService.Index(indexingContext, document);
+
+                    indexWriter.AddDocument(document); // index each detached item
+                }
+
+                indexWriter.Commit();
+
+                indexWriter.Optimize();
+            }
+        }
     }
 }

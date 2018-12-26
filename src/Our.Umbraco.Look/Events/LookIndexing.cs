@@ -1,6 +1,4 @@
 ﻿using Examine;
-using Lucene.Net.Documents;
-using Our.Umbraco.Look.Extensions;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Events;
@@ -117,30 +115,7 @@ namespace Our.Umbraco.Look.Events
 
             foreach (var lookIndexer in this._lookIndexers)
             {
-                var indexWriter = lookIndexer.GetIndexWriter();
-
-                var indexingContext = new IndexingContext(null, publishedContent, lookIndexer.Name);
-                
-                var document = new Document();
-
-                LookService.Index(indexingContext, document);
-
-                indexWriter.AddDocument(document);  // index the content, media or memeber node itself
-
-                foreach (var detachedContent in publishedContent.GetFlatDetachedDescendants())
-                {
-                    indexingContext = new IndexingContext(publishedContent, detachedContent, lookIndexer.Name);
-
-                    document = new Document();
-
-                    LookService.Index(indexingContext, document);
-
-                    indexWriter.AddDocument(document); // index each detached item
-                }
-
-                indexWriter.Optimize();
-
-                indexWriter.Commit();
+                lookIndexer.Index(new IPublishedContent[] { publishedContent });
             }
         }
 
@@ -153,8 +128,6 @@ namespace Our.Umbraco.Look.Events
             // TODO: dete from index where Look_HostId = id OR item id = id
             foreach (var lookIndexer in this._lookIndexers)
             {
-
-
                 // TODO:
             }
         }
