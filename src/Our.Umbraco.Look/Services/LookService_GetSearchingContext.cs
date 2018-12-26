@@ -42,10 +42,13 @@ namespace Our.Umbraco.Look
 
                 if (indexSetDirectory != null)
                 {
+                    var indexSearcher = new IndexSearcher(indexSetDirectory, true); // TODO: handle reuse
+                    indexSearcher.SetDefaultFieldSortScoring(true, true);
+
                     return new SearchingContext()
                     {
                         Analyzer = searcher.IndexingAnalyzer,
-                        IndexSearcher = new IndexSearcher(indexSetDirectory, true), // TODO: handle reuse
+                        IndexSearcher = indexSearcher,
                         EnableLeadingWildcards = searcher.EnableLeadingWildcards
                     };
                 }
