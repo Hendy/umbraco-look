@@ -48,8 +48,8 @@ namespace Our.Umbraco.Look
                                             Field.Index.NOT_ANALYZED,
                                             Field.TermVector.NO);
 
-                var nodeTypeAliasField = new Field(
-                                            UmbracoContentIndexer.NodeTypeAliasFieldName,
+                var nodeAliasField = new Field(
+                                            LookConstants.NodeAliasField,
                                             indexingContext.Item.DocumentTypeAlias,
                                             Field.Store.NO,
                                             Field.Index.NOT_ANALYZED,
@@ -59,7 +59,7 @@ namespace Our.Umbraco.Look
                 document.Add(nodeIdField);
                 document.Add(nodeKeyField);
                 document.Add(nodeTypeField);
-                document.Add(nodeTypeAliasField);
+                document.Add(nodeAliasField);
 
                 if (publishedItemType == PublishedItemType.Content)
                 {
