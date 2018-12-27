@@ -1,4 +1,6 @@
 ﻿using Examine;
+using Lucene.Net.Index;
+using Lucene.Net.Search;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Events;
@@ -113,6 +115,8 @@ namespace Our.Umbraco.Look.Events
         {
             if (publishedContent == null) return; // content may have been saved, but not yet published
 
+            this.Delete(publishedContent.Id);
+
             foreach (var lookIndexer in this._lookIndexers)
             {
                 lookIndexer.Index(new IPublishedContent[] { publishedContent });
@@ -125,10 +129,18 @@ namespace Our.Umbraco.Look.Events
         /// <param name="id"></param>
         private void Delete(int id)
         {
-            // TODO: dete from index where Look_HostId = id OR item id = id
+            // build query
+            var query = new BooleanQuery();
+            var idQuery = new BooleanQuery();
+
+            idQuery.Add(new TermQuery(new Term(LookConstants.NodeIdField, id.ToString())), BooleanClause.Occur.SHOULD);
+            idQuery.Add(new TermQuery(new Term(LookConstants.HostIdField, id.ToString())), BooleanClause.Occur.SHOULD);
+
+            query.Add(idQuery, BooleanClause.Occur.MUST); 
+
             foreach (var lookIndexer in this._lookIndexers)
             {
-                // TODO:
+                lookIndexer.GetIndexWriter().DeleteDocuments(query);
             }
         }
     }
