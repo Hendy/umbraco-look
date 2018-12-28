@@ -1,10 +1,10 @@
 ﻿using Examine;
 using Lucene.Net.Index;
-using Lucene.Net.Search;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Events;
 using Umbraco.Core.Models;
+using Umbraco.Core.Publishing;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 
@@ -48,22 +48,21 @@ namespace Our.Umbraco.Look.Events
 
                 LookService.Initialize(this._umbracoHelper); 
 
-                ContentService.Saved += this.ContentService_Saved;
+                ContentService.Published += ContentService_Published;
                 MediaService.Saved += this.MediaService_Saved;
                 MemberService.Saved += this.MemberService_Saved;
 
-                ContentService.Deleted += this.ContentService_Deleted;
+                ContentService.UnPublished += ContentService_UnPublished;
                 MediaService.Deleted += this.MediaService_Deleted;
                 MemberService.Deleted += this.MemberService_Deleted;
             }
         }
 
-
-        private void ContentService_Saved(IContentService sender, SaveEventArgs<IContent> e)
-        {         
-            foreach (var entity in e.SavedEntities)
+        private void ContentService_Published(IPublishingStrategy sender, PublishEventArgs<IContent> e)
+        {
+            foreach (var entity in e.PublishedEntities)
             {
-                this.Save(this._umbracoHelper.TypedContent(entity.Id));
+                this.Update(this._umbracoHelper.TypedContent(entity.Id));
             }
         }
 
@@ -71,7 +70,7 @@ namespace Our.Umbraco.Look.Events
         {
             foreach (var entity in e.SavedEntities)
             {
-                this.Save(this._umbracoHelper.TypedMedia(entity.Id));
+                this.Update(this._umbracoHelper.TypedMedia(entity.Id));
             }
         }
 
@@ -79,15 +78,15 @@ namespace Our.Umbraco.Look.Events
         {
             foreach (var entity in e.SavedEntities)
             {
-                this.Save(this._umbracoHelper.TypedMember(entity.Id));
+                this.Update(this._umbracoHelper.TypedMember(entity.Id));
             }
         }
 
-        private void ContentService_Deleted(IContentService sender, DeleteEventArgs<IContent> e)
+        private void ContentService_UnPublished(IPublishingStrategy sender, PublishEventArgs<IContent> e)
         {
-            foreach (var entity in e.DeletedEntities)
+            foreach (var entity in e.PublishedEntities)
             {
-                this.Delete(entity.Id);
+                this.Remove(entity.Id);
             }
         }
 
@@ -95,7 +94,7 @@ namespace Our.Umbraco.Look.Events
         {
             foreach (var entity in e.DeletedEntities)
             {
-                this.Delete(entity.Id);
+                this.Remove(entity.Id);
             }
         }
 
@@ -103,7 +102,7 @@ namespace Our.Umbraco.Look.Events
         {
             foreach (var entity in e.DeletedEntities)
             {
-                this.Delete(entity.Id);
+                this.Remove(entity.Id);
             }
         }
 
@@ -111,11 +110,11 @@ namespace Our.Umbraco.Look.Events
         /// 
         /// </summary>
         /// <param name="publishedContent"></param>
-        private void Save(IPublishedContent publishedContent)
+        private void Update(IPublishedContent publishedContent)
         {
             if (publishedContent == null) return; // content may have been saved, but not yet published
 
-            this.Delete(publishedContent.Id);
+            this.Remove(publishedContent.Id);
 
             foreach (var lookIndexer in this._lookIndexers)
             {
@@ -127,20 +126,18 @@ namespace Our.Umbraco.Look.Events
         /// Delete all lucene documents where node (item) id or deteached items using host id = the supplied id
         /// </summary>
         /// <param name="id"></param>
-        private void Delete(int id)
+        private void Remove(int id)
         {
-            // build query
-            var query = new BooleanQuery();
-            var idQuery = new BooleanQuery();
-
-            idQuery.Add(new TermQuery(new Term(LookConstants.NodeIdField, id.ToString())), BooleanClause.Occur.SHOULD);
-            idQuery.Add(new TermQuery(new Term(LookConstants.HostIdField, id.ToString())), BooleanClause.Occur.SHOULD);
-
-            query.Add(idQuery, BooleanClause.Occur.MUST); 
-
             foreach (var lookIndexer in this._lookIndexers)
             {
-                lookIndexer.GetIndexWriter().DeleteDocuments(query);
+                var indexWriter = lookIndexer.GetIndexWriter();
+
+                indexWriter.DeleteDocuments(new Term[] {
+                    new Term(LookConstants.NodeIdField, id.ToString()),
+                    new Term(LookConstants.HostIdField, id.ToString())
+                });
+
+                indexWriter.Commit();
             }
         }
     }

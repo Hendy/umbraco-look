@@ -85,7 +85,7 @@ namespace Our.Umbraco.Look
                                             LookConstants.HostIdField,
                                             indexingContext.HostItem.Id.ToString(),
                                             Field.Store.YES,
-                                            Field.Index.NO);
+                                            Field.Index.NOT_ANALYZED);
 
                     document.Add(hostIdField);
                 }
