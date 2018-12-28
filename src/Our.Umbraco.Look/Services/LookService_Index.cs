@@ -6,7 +6,6 @@ using System;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
-using UmbracoExamine;
 
 namespace Our.Umbraco.Look
 {
