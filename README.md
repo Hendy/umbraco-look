@@ -4,7 +4,7 @@ Examine manages the indexes, whilst Look adds 'config-file-free' C# indexing and
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
 
-  * Umbraco 7.2.3 (min)
+  * Umbraco 7.3.0 (min)
   * Examine 0.1.70 (min)
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
@@ -43,15 +43,20 @@ The model supplied to the indexing functions:
 ```csharp
 public class IndexingContext
 {
-	/// <summary>
-	/// The IPublishedContent of the Content, Media or Member being indexed
-	/// </summary>
-	public IPublishedContent Item { get; }
+    /// <summary>
+    /// When a detached item is being indexed, this property will be the hosting content, media or member
+    /// </summary>
+    public IPublishedContent HostItem { get; }
 
-	/// <summary>
-	/// The name of the Examine indexer into which this item is being indexed
-	/// </summary>
-	public string IndexerName { get; }
+    /// <summary>
+    /// The Content, Media, Member or Detacehd item being indexed
+    /// </summary>
+    public IPublishedContent Item { get; }
+
+    /// <summary>
+    /// The name of the Examine indexer into which this item is being indexed
+    /// </summary>
+    public string IndexerName { get; }
 }
 ```
 
@@ -159,9 +164,10 @@ A node query is used to set search criteria based on the IPublishedContent type,
 ```csharp
 lookQuery.NodeQuery = new NodeQuery() {
 	Types = new [] { 
-		PublishedItemType.Content, 
-		PublishedItemType.Media, 
-		PublishedItemType.Member 
+		NodeType.Content, 
+		NodeType.Media, 
+		NodeType.Member,
+		NodeType.Detached
 	},
 	Cultures = new [] {
 		new CultureInfo("fr")	
@@ -303,10 +309,20 @@ Whilst the enumeration on the LookResult returns items as Exmaine SearchResult, 
 public class LookMatch : SearchResult
 {
 	/// <summary>
+	/// Lazy evaluation of the hosting IPublishedContent (if Item is detached, otherwise this will be null)
+	/// </summary>
+	public IPublishedContent HostItem { get; }
+
+	/// <summary>
 	/// Lazy evaluation of the associated IPublishedContent
 	/// </summary>
 	public IPublishedContent Item { get; }
 	
+	/// <summary>
+	/// Unique key to this IPublishedContent
+	/// </summary>
+	public Guid Key { get; }
+
 	/// <summary>
 	/// The custom name field
 	/// </summary>

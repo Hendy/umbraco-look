@@ -133,8 +133,8 @@ namespace Our.Umbraco.Look.Events
                 var indexWriter = lookIndexer.GetIndexWriter();
 
                 indexWriter.DeleteDocuments(new Term[] {
-                    new Term(LookConstants.NodeIdField, id.ToString()),
-                    new Term(LookConstants.HostIdField, id.ToString())
+                    new Term(LookConstants.NodeIdField, id.ToString()), // the actual item
+                    new Term(LookConstants.HostIdField, id.ToString()) // any detached items
                 });
 
                 indexWriter.Commit();
