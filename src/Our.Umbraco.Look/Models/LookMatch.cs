@@ -31,6 +31,11 @@ namespace Our.Umbraco.Look
         public IPublishedContent Item => this._item.Value;
 
         /// <summary>
+        /// Flag to indicate whether this result is a detached item
+        /// </summary>
+        public bool IsDetached => this._hostItem != null;
+
+        /// <summary>
         /// Guid key of the Content, media, member or detached item
         /// </summary>
         public Guid Key { get; }
@@ -75,8 +80,9 @@ namespace Our.Umbraco.Look
         /// </summary>
         /// <param name="docId"></param>
         /// <param name="score"></param>
-        /// <param name="hostKey">host (if item is detached)</param>
+        /// <param name="hostId">host (if item is detached)</param>
         /// <param name="itemId"></param>
+        /// <param name="itemGuid"></param>
         /// <param name="name"></param>
         /// <param name="date"></param>
         /// <param name="text"></param>
@@ -142,7 +148,7 @@ namespace Our.Umbraco.Look
                             case PublishedItemType.Member: return umbracoHelper.SafeTypedMember(itemId);
                         }
                     }
-                    else // get the host item, and then all of it's detached item to find by key
+                    else // get the host item, and then all of it's detached itemS to find by key
                     {                        
                         return this.HostItem.GetFlatDetachedDescendants().SingleOrDefault(x => x.GetKey() == itemGuid.Value);
                     }

@@ -18,6 +18,11 @@ namespace Our.Umbraco.Look
         public IPublishedContent Item { get; }
 
         /// <summary>
+        /// Flag to indicate whether this is a detached item
+        /// </summary>
+        public bool IsDetached => this.HostItem != null;
+
+        /// <summary>
         /// The name of the Examine indexer into which this item is being indexed
         /// </summary>
         public string IndexerName { get; }
