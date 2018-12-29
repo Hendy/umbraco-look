@@ -65,12 +65,14 @@ namespace Our.Umbraco.Look.Events
 
             publishedContent = umbracoHelper.TypedContent(e.NodeId);
 
-            if (publishedContent == null) // attempt to get as media
+            if (publishedContent == null)
             {
+                // attempt to get as media
                 publishedContent = umbracoHelper.TypedMedia(e.NodeId);
 
-                if (publishedContent == null) // attempt to get as member
+                if (publishedContent == null)
                 {
+                    // attempt to get as member
                     publishedContent = umbracoHelper.SafeTypedMember(e.NodeId);
                 }
             }

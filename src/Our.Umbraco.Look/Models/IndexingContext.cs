@@ -13,12 +13,12 @@ namespace Our.Umbraco.Look
         public IPublishedContent HostItem { get; }
 
         /// <summary>
-        /// The IPublishedContent representation of the Content, Media, Member or detacehd item being indexed
+        /// The IPublishedContent representation of the Content, Media, Member or Detached item being indexed
         /// </summary>
         public IPublishedContent Item { get; }
 
         /// <summary>
-        /// Flag to indicate whether this is a detached item
+        /// Flag to indicate whether the Item is a detached item
         /// </summary>
         public bool IsDetached => this.HostItem != null;
 
