@@ -98,7 +98,6 @@ namespace Our.Umbraco.Look
                                             .GetFields()
                                             .Cast<Field>()
                                             .Select(x => x.Name())
-                                            .Where(x => !lookFieldNames.Contains(x)) // exclude Look fields
                                             .ToArray();
 
                     foreach (var fieldName in fieldNames)
