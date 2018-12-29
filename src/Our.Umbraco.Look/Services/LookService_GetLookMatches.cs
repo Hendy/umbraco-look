@@ -1,5 +1,4 @@
-﻿using Examine.LuceneEngine.Providers;
-using Lucene.Net.Documents;
+﻿using Lucene.Net.Documents;
 using Lucene.Net.Search;
 using Our.Umbraco.Look.Extensions;
 using System;
