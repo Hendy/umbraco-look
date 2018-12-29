@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Linq;
 using Examine;
 using Examine.LuceneEngine.Providers;
 using Examine.SearchCriteria;
@@ -41,15 +42,21 @@ namespace Our.Umbraco.Look
         //    return base.GetSearcher();
         //}
 
-        //protected override string[] GetSearchFields()
-        //{
-        //    return base.GetSearchFields();
-        //}
 
-        //public override void Initialize(string name, NameValueCollection config)
-        //{
-        //    base.Initialize(name, config);
-        //}
+        protected override string[] GetSearchFields()
+        {
+            var debug = base.GetSearchFields();
+
+            return debug;
+        }
+
+        public override void Initialize(string name, NameValueCollection config)
+        {
+            base.Initialize(name, config);
+
+            // the search defaults to Look behaviour which allows for leading wildcards
+            this.EnableLeadingWildcards = true;
+        }
 
         //protected override IndexReader OpenNewReader()
         //{
@@ -61,17 +68,29 @@ namespace Our.Umbraco.Look
             return this.Search(searchParams, int.MaxValue);
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searchParams"></param>
+        /// <param name="maxResults"></param>
+        /// <returns></returns>
         public override ISearchResults Search(ISearchCriteria searchParams, int maxResults)
         {
-            var lookQuery = new LookQuery(this.Name) { ExamineQuery = searchParams };
+            var lookQuery = new LookQuery(this.Name)
+            {
+                ExamineQuery = searchParams
+            };
 
-            // safety check, incase search criteria wasn't created by this searcher !
+            // TODO: safety check, incase search criteria wasn't created by this searcher
+
             if (searchParams is LookSearchCriteria)
             {                
                 // TODO: put NodeQuery, NameQuery, TextQuery, DateQuery, TagQuery & LocationQuery properties onto custom LookSearchCriteria
             }
 
-            return lookQuery.Run();
+            var lookResult = lookQuery.Run();
+
+            return lookResult;
         }
 
         public override ISearchResults Search(string searchText, bool useWildcards)
@@ -83,12 +102,19 @@ namespace Our.Umbraco.Look
         /// 
         /// </summary>
         /// <param name="searchText"></param>
-        /// <param name="useWildcards">igored, as wildcards are always possible</param>
+        /// <param name="useWildcards">ignored, as wildcards are always possible</param>
         /// <param name="indexType"></param>
         /// <returns></returns>
         public override ISearchResults Search(string searchText, bool useWildcards, string indexType)
         {
-            return new LookQuery(this.Name) { TextQuery = new TextQuery(searchText) }.Run();
+            var lookQuery = new LookQuery(this.Name)
+            {
+                TextQuery = new TextQuery(searchText)
+            };
+
+            var lookResult = lookQuery.Run();
+
+            return lookResult;
         }
 
         ////clean integration with Examine (consumer just has to cast Searcher to this type), but may conflict with LookQuery constructor (specifying a different searcher)
