@@ -1,4 +1,5 @@
 ﻿using Examine;
+using Newtonsoft.Json;
 using Our.Umbraco.Look.Extensions;
 using System;
 using System.Linq;
@@ -23,11 +24,13 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Lazy evaluation of the host item (if the item is detached) otherwize this will be null
         /// </summary>
+        [JsonIgnore]
         public IPublishedContent HostItem => this._hostItem.Value;
 
         /// <summary>
         /// Lazy evaluation of Item for IPublishedContent of the content, media, member or detached item
         /// </summary>
+        [JsonIgnore]
         public IPublishedContent Item => this._item.Value;
 
         /// <summary>
