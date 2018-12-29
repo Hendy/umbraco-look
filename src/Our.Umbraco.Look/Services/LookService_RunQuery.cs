@@ -108,17 +108,20 @@ namespace Our.Umbraco.Look
                     {
                         case DetachedQuery.ExcludeDetached:
 
-                            break;
-
-                        case DetachedQuery.IncludeDetached:
+                            query.Add(
+                                    new TermQuery(new Term(LookConstants.IsDetachedField, "1")),
+                                    BooleanClause.Occur.MUST_NOT);
 
                             break;
 
                         case DetachedQuery.OnlyDetached:
 
+                            query.Add(
+                                new TermQuery(new Term(LookConstants.IsDetachedField, "1")),
+                                BooleanClause.Occur.MUST);
+
                             break;
                     }
-
 
                     if (lookQuery.NodeQuery.Cultures != null && lookQuery.NodeQuery.Cultures.Any())
                     {

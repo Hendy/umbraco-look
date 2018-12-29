@@ -33,6 +33,11 @@
         internal static string CultureField => "Look_Culture";
 
         /// <summary>
+        /// Field used as a flag to indicate if the document is detached
+        /// </summary>
+        internal static string IsDetachedField => "Look_IsDetached";
+
+        /// <summary>
         /// id to the content media or member item hosting this detached item
         /// </summary>
         internal static string HostIdField => "Look_HostId";

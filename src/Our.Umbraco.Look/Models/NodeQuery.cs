@@ -31,6 +31,8 @@ namespace Our.Umbraco.Look
         /// </summary>
         public int[] NotIds { get; set; } = null;
 
+        // TODO: NotKeys
+
         /// <summary>
         /// Create new empty NodeQuery search criteria
         /// </summary>
