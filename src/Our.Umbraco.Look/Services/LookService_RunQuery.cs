@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
-using UmbracoExamine;
 
 namespace Our.Umbraco.Look
 {
@@ -105,6 +104,22 @@ namespace Our.Umbraco.Look
                         query.Add(nodeTypeQuery, BooleanClause.Occur.MUST);
                     }
 
+                    switch (lookQuery.NodeQuery.DetachedQuery)
+                    {
+                        case DetachedQuery.ExcludeDetached:
+
+                            break;
+
+                        case DetachedQuery.IncludeDetached:
+
+                            break;
+
+                        case DetachedQuery.OnlyDetached:
+
+                            break;
+                    }
+
+
                     if (lookQuery.NodeQuery.Cultures != null && lookQuery.NodeQuery.Cultures.Any())
                     {
                         var nodeCultureQuery = new BooleanQuery();
@@ -133,6 +148,8 @@ namespace Our.Umbraco.Look
 
                         query.Add(nodeAliasQuery, BooleanClause.Occur.MUST);
                     }
+
+                    // TODO: NotKeys
 
                     if (lookQuery.NodeQuery.NotIds != null && lookQuery.NodeQuery.NotIds.Any())
                     {

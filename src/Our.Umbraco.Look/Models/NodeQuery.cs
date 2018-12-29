@@ -12,6 +12,11 @@ namespace Our.Umbraco.Look
         public PublishedItemType[] Types { get; set; } = null;
 
         /// <summary>
+        /// Flags to indicate whether detached content should be returned
+        /// </summary>
+        public DetachedQuery DetachedQuery { get; set; } = DetachedQuery.IncludeDetached;
+
+        /// <summary>
         /// The cultures of the content nodes to find
         /// </summary>
         public CultureInfo[] Cultures { get; set; } = null;

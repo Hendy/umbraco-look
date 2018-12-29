@@ -259,6 +259,7 @@
     <Compile Include="LookSearcher.cs" />
     <Compile Include="Models\DateBoundary.cs" />
     <Compile Include="Models\DateQuery.cs" />
+    <Compile Include="Models\DetachedQuery.cs" />
     <Compile Include="Models\Distance.cs" />
     <Compile Include="Models\DistanceUnit.cs" />
     <Compile Include="Models\Facet.cs" />
