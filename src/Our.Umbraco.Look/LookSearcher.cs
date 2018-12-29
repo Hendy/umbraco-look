@@ -1,12 +1,7 @@
-﻿using System.Collections.Specialized;
-using System.Linq;
-using Examine;
+﻿using Examine;
 using Examine.LuceneEngine.Providers;
 using Examine.SearchCriteria;
-using Lucene.Net.Index;
-using Lucene.Net.Search;
-using Lucene.Net.Store;
-using Our.Umbraco.Look;
+using System.Collections.Specialized;
 
 namespace Our.Umbraco.Look
 {
@@ -32,17 +27,6 @@ namespace Our.Umbraco.Look
             return new LookSearchCriteria(base.CreateSearchCriteria(type, defaultOperation));
         }
 
-        //protected override Directory GetLuceneDirectory()
-        //{
-        //    return base.GetLuceneDirectory();
-        //}
-
-        //public override Searcher GetSearcher()
-        //{
-        //    return base.GetSearcher();
-        //}
-
-
         protected override string[] GetSearchFields()
         {
             var debug = base.GetSearchFields();
@@ -54,14 +38,8 @@ namespace Our.Umbraco.Look
         {
             base.Initialize(name, config);
 
-            // the search defaults to Look behaviour which allows for leading wildcards
-            this.EnableLeadingWildcards = true;
+            this.EnableLeadingWildcards = false;
         }
-
-        //protected override IndexReader OpenNewReader()
-        //{
-        //    return base.OpenNewReader();
-        //}
 
         public override ISearchResults Search(ISearchCriteria searchParams)
         {
@@ -112,7 +90,7 @@ namespace Our.Umbraco.Look
                 TextQuery = new TextQuery(searchText)
             };
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Run();           
 
             return lookResult;
         }
