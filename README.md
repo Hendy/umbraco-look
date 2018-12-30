@@ -92,7 +92,7 @@ public class ConfigureIndexing : ApplicationEventHandler
 		LookConfiguration.TextIndexer = indexingContext => { 
 
 			// eg. if content, render page and scrape markup
-			if (indexingContext.Item.ItemType == PublishedItemType.Content) 
+			if (!indexingContext.IsDetached && indexingContext.Item.ItemType == PublishedItemType.Content) 
 			{				
 				// (could pass in httpContext to render page without http web request)
 				// return string

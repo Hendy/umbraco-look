@@ -192,7 +192,7 @@ namespace Our.Umbraco.Look
                         {
                             if (!lookQuery.NameQuery.Is.StartsWith(lookQuery.NameQuery.StartsWith))
                             {
-                                return new LookResult("Conlict in NameQuery between Is and StartsWith");
+                                return new LookResult("Conflict in NameQuery between Is and StartsWith");
                             }
                         }
                         else
@@ -207,7 +207,7 @@ namespace Our.Umbraco.Look
                         {
                             if (!lookQuery.NameQuery.Is.EndsWith(lookQuery.NameQuery.EndsWith))
                             {
-                                return new LookResult("Conlict in NameQuery between Is and EndsWith");
+                                return new LookResult("Conflict in NameQuery between Is and EndsWith");
                             }                            
                         }
                         else
@@ -229,7 +229,7 @@ namespace Our.Umbraco.Look
                         {
                             if (!lookQuery.NameQuery.Is.Contains(lookQuery.NameQuery.Contains))
                             {
-                                return new LookResult("Conlict in NameQuery between Is and Contains");
+                                return new LookResult("Conflict in NameQuery between Is and Contains");
                             }
                         }
                         else
