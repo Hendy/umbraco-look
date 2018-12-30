@@ -164,11 +164,11 @@ A node query is used to set search criteria based on the IPublishedContent type,
 ```csharp
 lookQuery.NodeQuery = new NodeQuery() {
 	Types = new [] { 
-		NodeType.Content, 
-		NodeType.Media, 
-		NodeType.Member,
-		NodeType.Detached
+		PublishedItemType.Content, 
+		PublishedItemType.Media, 
+		PublishedItemType.Member 
 	},
+	DetachedQuery = DetachedQuery.IncludeDetached, // enum options
 	Cultures = new [] {
 		new CultureInfo("fr")	
 	},
@@ -177,7 +177,8 @@ lookQuery.NodeQuery = new NodeQuery() {
 		"myMediaTypeAlias",
 		"myMemberTypeAlias"
 	},
-	NotIds = new [] { 123 } // (eg. exclude current page)
+	NotIds = new [] { 123 }, // (eg. exclude current page)
+	NotKeys = new [] { "6bb24ed2-9466-422f-a9d4-27a805db2d47" }
 };
 ```
 

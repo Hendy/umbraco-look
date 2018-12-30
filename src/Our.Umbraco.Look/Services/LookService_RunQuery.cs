@@ -152,14 +152,22 @@ namespace Our.Umbraco.Look
                         query.Add(nodeAliasQuery, BooleanClause.Occur.MUST);
                     }
 
-                    // TODO: NotKeys
-
                     if (lookQuery.NodeQuery.NotIds != null && lookQuery.NodeQuery.NotIds.Any())
                     {
                         foreach (var exculudeId in lookQuery.NodeQuery.NotIds)
                         {
                             query.Add(
                                     new TermQuery(new Term(LookConstants.NodeIdField, exculudeId.ToString())),
+                                    BooleanClause.Occur.MUST_NOT);
+                        }
+                    }
+
+                    if (lookQuery.NodeQuery.NotKeys != null && lookQuery.NodeQuery.NotKeys.Any())
+                    {
+                        foreach (var excludeKey in lookQuery.NodeQuery.NotKeys)
+                        {
+                            query.Add(
+                                    new TermQuery(new Term(LookConstants.NodeKeyField, excludeKey)),
                                     BooleanClause.Occur.MUST_NOT);
                         }
                     }

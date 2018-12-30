@@ -31,7 +31,10 @@ namespace Our.Umbraco.Look
         /// </summary>
         public int[] NotIds { get; set; } = null;
 
-        // TODO: NotKeys
+        /// <summary>
+        /// 
+        /// </summary>
+        public string[] NotKeys { get; set; } = null;
 
         /// <summary>
         /// Create new empty NodeQuery search criteria
@@ -42,6 +45,7 @@ namespace Our.Umbraco.Look
 
         /// <summary>
         /// Create new NodeQuery search criteria for nodes of a given type, eg content, media or members
+        /// (detached items are associated with their host type)
         /// </summary>
         /// <param name="type">The node type. eg. content, media or member</param>
         public NodeQuery(PublishedItemType type)

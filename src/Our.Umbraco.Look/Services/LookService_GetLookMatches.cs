@@ -120,6 +120,14 @@ namespace Our.Umbraco.Look
                         }
                     }
                 }
+                else
+                {
+                    // look fields only
+
+                    // TODO: map fields
+
+                    
+                }
 
                 yield return lookMatch;
             }
