@@ -5,7 +5,6 @@ using Lucene.Net.Spatial.Tier.Projectors;
 using System.Linq;
 using Umbraco.Core.Logging;
 using Umbraco.Web;
-using UmbracoExamine;
 
 namespace Our.Umbraco.Look
 {

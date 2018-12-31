@@ -28,16 +28,11 @@ namespace Our.Umbraco.Look.Events
         /// <param name="applicationContext"></param>
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            var indexProviders = ExamineManager
-                                    .Instance
-                                    .IndexProviderCollection
-                                    .Select(x => x as BaseUmbracoIndexer) // UmbracoContentIndexer, UmbracoMemberIndexer
-                                    .Where(x => x != null)
-                                    .ToArray();
+            var indexProviders = LookService.GetExamineIndexers(); // goes via service, so it can be user configured
 
             if (!indexProviders.Any())
             {
-                LogHelper.Warn(typeof(LookService), "Unable to find any Umbraco Examine indexers to hook into !");
+                LogHelper.Warn(typeof(LookService), "Unable to find any Umbraco Examine indexers to hook into");
             }
             else
             {

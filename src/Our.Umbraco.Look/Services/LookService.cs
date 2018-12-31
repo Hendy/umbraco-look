@@ -19,34 +19,39 @@ namespace Our.Umbraco.Look
         private object InitializationLock { get; set; } = new object();
 
         /// <summary>
+        /// Collection of Examine indexer names that Look should hook into
+        /// </summary>
+        private string[] ExamineIndexers { get; set; }
+
+        /// <summary>
         /// Lucene directory representations for each of the Examine index sets
         /// </summary>
-        private Dictionary<string, Directory> IndexSetDirectories { get; set; } = null;
+        private Dictionary<string, Directory> IndexSetDirectories { get; set; }
 
         /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, string> NameIndexer { get; set; } = null;
+        private Func<IndexingContext, string> NameIndexer { get; set; }
 
         /// <summary>
         /// Function to get the date for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, DateTime?> DateIndexer { get; set; } = null;
+        private Func<IndexingContext, DateTime?> DateIndexer { get; set; }
 
         /// <summary>
         /// Function to get text for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, string> TextIndexer { get; set; } = null;
+        private Func<IndexingContext, string> TextIndexer { get; set; }
 
         /// <summary>
         /// Function to get the tags for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, LookTag[]> TagIndexer { get; set; } = null;
+        private Func<IndexingContext, LookTag[]> TagIndexer { get; set; }
 
         /// <summary>
         /// Function to get a location for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, Location> LocationIndexer { get; set; } = null;
+        private Func<IndexingContext, Location> LocationIndexer { get; set; }
 
         /// <summary>
         /// Collection of cartesian tier plotters

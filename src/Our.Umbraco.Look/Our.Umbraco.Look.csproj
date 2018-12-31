@@ -282,6 +282,7 @@
     <Compile Include="Models\TextQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LookService.cs" />
+    <Compile Include="Services\LookService_GetExamineIndexers.cs" />
     <Compile Include="Services\LookService_GetLookMatches.cs" />
     <Compile Include="Services\LookService_GetSearchingContext.cs" />
     <Compile Include="Services\LookService_Index.cs" />
@@ -290,6 +291,7 @@
     <Compile Include="Services\LookService_SetDateIndexer.cs" />
     <Compile Include="Services\LookService_SetLocationIndexer.cs" />
     <Compile Include="Services\LookService_SetNameIndexer.cs" />
+    <Compile Include="Services\LookService_SetExamineIndexers.cs" />
     <Compile Include="Services\LookService_SetTagIndexer.cs" />
     <Compile Include="Services\LookService_SetRequestFields.cs" />
     <Compile Include="Services\LookService_SetTextIndexer.cs" />

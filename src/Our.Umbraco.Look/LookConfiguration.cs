@@ -5,6 +5,12 @@ namespace Our.Umbraco.Look
     public static class LookConfiguration
     {
         /// <summary>
+        /// Hook indexing
+        /// Set the index names of the exmaine indexes to hook into (if not set, it'll default to all)
+        /// </summary>
+        public static string[] ExamineIndexers { set { LookService.SetExamineIndexers(value); } }
+
+        /// <summary>
         /// Set a custom name indexer
         /// </summary>
         public static Func<IndexingContext, string> NameIndexer { set { LookService.SetNameIndexer(value); } }
