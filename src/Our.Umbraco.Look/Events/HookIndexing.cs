@@ -1,5 +1,4 @@
-﻿using Examine;
-using Examine.LuceneEngine;
+﻿using Examine.LuceneEngine;
 using Our.Umbraco.Look.Extensions;
 using System.IO;
 using System.Linq;
@@ -12,7 +11,6 @@ using Umbraco.Core.Models;
 using Umbraco.Web;
 using Umbraco.Web.Routing;
 using Umbraco.Web.Security;
-using UmbracoExamine;
 
 namespace Our.Umbraco.Look.Events
 {
