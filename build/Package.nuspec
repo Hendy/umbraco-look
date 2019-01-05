@@ -13,7 +13,7 @@
       Look sits on top of Umbraco Examine adding support for: tag faceting, geospatial querying and text match highlighting.
     </description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2018</copyright>
+    <copyright>Copyright 2019</copyright>
     <tags>Umbraco</tags>
     <dependencies>
       <dependency id="UmbracoCms.Core" version="7.3.0" />

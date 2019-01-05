@@ -56,7 +56,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Create new NodeQuery search critera (specifying a culture implies that the PublishedItemType will be Content)
         /// </summary>
-        /// <param name="culture"></param>
+        /// <param name="cultureInfo"></param>
         public NodeQuery(CultureInfo cultureInfo)
         {
             this.Cultures = new CultureInfo[] { cultureInfo };

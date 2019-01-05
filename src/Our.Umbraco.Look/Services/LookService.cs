@@ -60,7 +60,7 @@ namespace Our.Umbraco.Look
         private List<CartesianTierPlotter> CartesianTierPlotters { get; } = new List<CartesianTierPlotter>();
 
         /// <summary>
-        /// Max distance in miles for distance searches & location indexing
+        /// Max distance in miles for distance searches and location indexing
         /// </summary>
         private static double MaxDistance => 10000; // 12450 = half circumfrence of earth TODO: make configuration
 

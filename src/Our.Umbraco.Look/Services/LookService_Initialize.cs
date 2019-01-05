@@ -11,7 +11,7 @@ namespace Our.Umbraco.Look
     public partial class LookService
     {
         /// <summary>
-        /// Initialize the look service - it caches reference to all lucene folders & sets up CartesianTierPlotters
+        /// Initialize the look service - it caches reference to all lucene folders and sets up CartesianTierPlotters
         /// </summary>
         internal static void Initialize(UmbracoHelper umbracoHelper)
         {
