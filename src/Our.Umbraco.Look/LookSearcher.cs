@@ -59,11 +59,16 @@ namespace Our.Umbraco.Look
                 ExamineQuery = searchParams
             };
 
-            // TODO: safety check, incase search criteria wasn't created by this searcher
+            var lookSearchCriteria = searchParams as LookSearchCriteria;
 
-            if (searchParams is LookSearchCriteria)
-            {                
-                // TODO: put NodeQuery, NameQuery, TextQuery, DateQuery, TagQuery & LocationQuery properties onto custom LookSearchCriteria
+            if (lookSearchCriteria != null) // TODO: safety check it was created by this searcher ?
+            {
+                lookQuery.NodeQuery = lookSearchCriteria.NodeQuery;
+                lookQuery.NameQuery = lookSearchCriteria.NameQuery;
+                lookQuery.DateQuery = lookSearchCriteria.DateQuery;
+                lookQuery.TextQuery = lookSearchCriteria.TextQuery;
+                lookQuery.TagQuery = lookSearchCriteria.TagQuery;
+                lookQuery.LocationQuery = lookSearchCriteria.LocationQuery;
             }
 
             var lookResult = lookQuery.Run();
@@ -94,12 +99,5 @@ namespace Our.Umbraco.Look
 
             return lookResult;
         }
-
-        ////clean integration with Examine (consumer just has to cast Searcher to this type), but may conflict with LookQuery constructor (specifying a different searcher)
-        //public ISearchResults Search(LookQuery lookQuery)
-        //{
-        //    lookQuery.SearcherName = this.Name;
-        //    return lookQuery.Run();
-        //}
     }
 }

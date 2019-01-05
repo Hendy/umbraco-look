@@ -6,6 +6,10 @@ namespace Our.Umbraco.Look
 {
     public partial class LookService
     {
+        /// <summary>
+        /// Get all Examine indexers that Look should hook into
+        /// </summary>
+        /// <returns></returns>
         internal static BaseUmbracoIndexer[] GetExamineIndexers()
         {
             return ExamineManager

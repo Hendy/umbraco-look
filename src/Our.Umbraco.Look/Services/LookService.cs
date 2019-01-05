@@ -20,6 +20,7 @@ namespace Our.Umbraco.Look
 
         /// <summary>
         /// Collection of Examine indexer names that Look should hook into
+        /// When null, indicates that all avaiable should be used
         /// </summary>
         private string[] ExamineIndexers { get; set; }
 

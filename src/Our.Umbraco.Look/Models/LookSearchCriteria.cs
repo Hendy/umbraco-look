@@ -6,6 +6,42 @@ namespace Our.Umbraco.Look
 {
     public class LookSearchCriteria : ISearchCriteria
     {
+        // NOTE: using properties instead of methods to set criteria, so as to distinguish from the Exmaine fluent API
+        // to integrate with the Examine fluent api would mean overriding the Examine Compile method ?
+
+        /// <summary>
+        /// Set an optional (and) Look NodeQuery clause
+        /// </summary>
+        public NodeQuery NodeQuery { get; set; }
+
+        /// <summary>
+        /// Set an optinal (and) Look NameQuery clause
+        /// </summary>
+        public NameQuery NameQuery { get; set; }
+
+        /// <summary>
+        /// Set an optional (and) Look DateQuery clause
+        /// </summary>
+        public DateQuery DateQuery { get; set; }
+
+        /// <summary>
+        /// Set an optional (and) Look TextQuery clause
+        /// </summary>
+        public TextQuery TextQuery { get; set; }
+
+        /// <summary>
+        /// Set an optoinal (and) Look TagQuery clause
+        /// </summary>
+        public TagQuery TagQuery { get; set; }
+
+        /// <summary>
+        /// Set an optional (and) Look LocationQuery clause
+        /// </summary>
+        public LocationQuery LocationQuery { get; set; }
+
+        /// <summary>
+        /// the wrapped search criteria
+        /// </summary>
         private ISearchCriteria SearchCriteria { get; }
 
         /// <summary>
