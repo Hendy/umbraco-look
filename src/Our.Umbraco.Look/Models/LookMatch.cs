@@ -84,8 +84,8 @@ namespace Our.Umbraco.Look
         /// <param name="docId"></param>
         /// <param name="score"></param>
         /// <param name="hostId">host (if item is detached)</param>
-        /// <param name="itemId"></param>
-        /// <param name="itemGuid"></param>
+        /// <param name="itemId">passed in so we don't have to get infalte IPublishedContent from itemGuid to get the int (required for the base SearchResult)</param>
+        /// <param name="itemGuid">expected to be null in unit tests (as outside of Umbraco context)</param>
         /// <param name="name"></param>
         /// <param name="date"></param>
         /// <param name="text"></param>
@@ -99,8 +99,8 @@ namespace Our.Umbraco.Look
                     int docId,
                     float score,
                     int? hostId,
-                    int itemId, // passed in so we don't have to get infalte IPublishedContent from itemGuid to get the int (required for the base SearchResult)
-                    Guid? itemGuid, // will be null in unit tests outside of Umbraco context
+                    int itemId, 
+                    Guid? itemGuid,
                     string name,
                     DateTime? date,
                     string text,
@@ -151,7 +151,7 @@ namespace Our.Umbraco.Look
                             case PublishedItemType.Member: return umbracoHelper.SafeTypedMember(itemId);
                         }
                     }
-                    else // get the host item, and then all of it's detached itemS to find by key
+                    else // get the host item and then all of it's detached items to find by key
                     {                        
                         return this.HostItem.GetFlatDetachedDescendants().SingleOrDefault(x => x.GetKey() == itemGuid.Value);
                     }
