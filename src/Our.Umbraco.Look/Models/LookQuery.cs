@@ -49,7 +49,8 @@ namespace Our.Umbraco.Look
         public TextQuery TextQuery { get; set; }
 
         /// <summary>
-        /// (Optional) set tag query criteria for the custom tag field
+        /// (Optional) set tag query criteria for the custom tag field,
+        /// When null, this has no effect, when an empty TagQuery object indicates only those items which have tags should be returned, otherwise all options taken from TagQuery supplied
         /// </summary>
         public TagQuery TagQuery { get; set; }
 
