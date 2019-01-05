@@ -1,5 +1,7 @@
 ﻿using Examine.Providers;
 using Our.Umbraco.Look.BackOffice.Interfaces;
+using System.Linq;
+using Umbraco.Core;
 
 namespace Our.Umbraco.Look.BackOffice.Models
 {
@@ -29,9 +31,17 @@ namespace Our.Umbraco.Look.BackOffice.Models
             }
             else // must be an examine one
             {
-                // TODO: is Look 'hooked' into this examine searcher
-                
-                this.Icon = "icon-file-cabinet";
+                var name = baseSearchProvider.Name.TrimEnd("Searcher");
+
+                if (LookConfiguration.ExamineIndexers.Select(x => x.TrimEnd("Indexer")).Any(x => x == name))
+                {
+                    this.Active = true;
+                    this.Icon = "icon-files";
+                }
+                else
+                {
+                    this.Icon = "icon-file-cabinet";
+                }
             }
         }
 

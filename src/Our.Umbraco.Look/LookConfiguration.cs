@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Our.Umbraco.Look
 {
@@ -8,7 +9,17 @@ namespace Our.Umbraco.Look
         /// Hook indexing
         /// Set the index names of the exmaine indexes to hook into (if not set, it'll default to all)
         /// </summary>
-        public static string[] ExamineIndexers { set { LookService.SetExamineIndexers(value); } }
+        public static string[] ExamineIndexers
+        {
+            set
+            {
+                LookService.SetExamineIndexers(value);
+            }
+            get
+            {
+                return LookService.GetExamineIndexers().Select(x => x.Name).ToArray();
+            }
+        }
 
         /// <summary>
         /// Set a custom name indexer
