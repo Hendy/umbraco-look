@@ -37,6 +37,10 @@ namespace Our.Umbraco.Look.BackOffice.Models
             }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="id"></param>
         internal RootTreeNode(string id) : base(id) { }
     }
 }

@@ -222,7 +222,9 @@
     <Compile Include="Models\BaseTreeNode.cs" />
     <Compile Include="Models\RootTreeNode.cs" />
     <Compile Include="Models\SearcherTreeNode.cs" />
+    <Compile Include="Models\TagGroupTreeNode.cs" />
     <Compile Include="Models\TagsTreeNode.cs" />
+    <Compile Include="Models\TagTreeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LookTreeService.cs" />
   </ItemGroup>

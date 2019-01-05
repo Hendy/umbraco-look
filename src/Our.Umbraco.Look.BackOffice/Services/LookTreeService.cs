@@ -18,11 +18,15 @@ namespace Our.Umbraco.Look.BackOffice.Services
             }
 
             var chopped = id.Split('-');
+            var nodeType = chopped[0];
+            var nodeValue = chopped[1];
 
-            switch (chopped[0])
+            switch (nodeType)
             {
-                case "searcher": return new SearcherTreeNode(ExamineManager.Instance.SearchProviderCollection[chopped[1]]);
-                case "tags": return new TagsTreeNode(ExamineManager.Instance.SearchProviderCollection[chopped[1]]);
+                case "searcher": return new SearcherTreeNode(ExamineManager.Instance.SearchProviderCollection[nodeValue]);
+                case "tags": return new TagsTreeNode(nodeValue);
+                case "tagGroup": return new TagGroupTreeNode(nodeValue.Split('|')[0], nodeValue.Split('|')[1]);
+                //case "tag": return new TagTreeNode(nodeValue.Split('|')
             }
 
             return null;

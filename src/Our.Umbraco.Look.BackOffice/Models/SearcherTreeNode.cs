@@ -26,8 +26,8 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
             if (baseSearchProvider is LookSearcher)
             {
-                this.Icon = "icon-categories";
                 this.Active = true;
+                this.Icon = "icon-files";
             }
             else // must be an examine one
             {
@@ -36,7 +36,7 @@ namespace Our.Umbraco.Look.BackOffice.Models
                 if (LookConfiguration.ExamineIndexers.Select(x => x.TrimEnd("Indexer")).Any(x => x == name))
                 {
                     this.Active = true;
-                    this.Icon = "icon-files";
+                    this.Icon = "icon-categories";
                 }
                 else
                 {
@@ -51,7 +51,7 @@ namespace Our.Umbraco.Look.BackOffice.Models
             {
                 if (this.Active)
                 {
-                    return new ILookTreeNode[] { new TagsTreeNode(this.BaseSearchProvider) };
+                    return new ILookTreeNode[] { new TagsTreeNode(this.BaseSearchProvider.Name) };
                 }
 
                 return base.Children; // empty
