@@ -8,6 +8,6 @@
 
         string Icon { get; } // icon class name
 
-        ILookTreeNode[] Children { get; }
+        ILookTreeNode[] GetChildren();
     }
 }

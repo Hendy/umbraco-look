@@ -45,17 +45,14 @@ namespace Our.Umbraco.Look.BackOffice.Models
             }
         }
 
-        public override ILookTreeNode[] Children
+        public override ILookTreeNode[] GetChildren()
         {
-            get
+            if (this.Active)
             {
-                if (this.Active)
-                {
-                    return new ILookTreeNode[] { new TagsTreeNode(this.BaseSearchProvider.Name) };
-                }
-
-                return base.Children; // empty
+                return new ILookTreeNode[] { new TagsTreeNode(this.BaseSearchProvider.Name) };
             }
+
+            return base.GetChildren(); // empty
         }
     }
 }

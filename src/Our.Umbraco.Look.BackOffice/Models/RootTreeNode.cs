@@ -15,26 +15,23 @@ namespace Our.Umbraco.Look.BackOffice.Models
         /// <summary>
         /// For each examine searcher (Examine & Look) create a child node
         /// </summary>
-        public override ILookTreeNode[] Children
+        public override ILookTreeNode[] GetChildren()
         {
-            get
+            var children = new List<ILookTreeNode>();
+
+            var searchProviders = ExamineManager.Instance.SearchProviderCollection;
+
+            foreach (var searchProvider in searchProviders)
             {
-                var children = new List<ILookTreeNode>();
+                var baseSearchProvider = searchProvider as BaseSearchProvider;
 
-                var searchProviders = ExamineManager.Instance.SearchProviderCollection;
-
-                foreach (var searchProvider in searchProviders)
+                if (baseSearchProvider != null) // safety check
                 {
-                    var baseSearchProvider = searchProvider as BaseSearchProvider;
-
-                    if (baseSearchProvider != null) // safety check
-                    {
-                        children.Add(new SearcherTreeNode(baseSearchProvider));
-                    }
+                    children.Add(new SearcherTreeNode(baseSearchProvider));
                 }
-
-                return children.OrderBy(x => x.Name).ToArray();
             }
+
+            return children.OrderBy(x => x.Name).ToArray();
         }
 
         /// <summary>

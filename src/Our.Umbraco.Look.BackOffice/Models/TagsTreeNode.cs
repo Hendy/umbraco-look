@@ -16,18 +16,15 @@ namespace Our.Umbraco.Look.BackOffice.Models
             this.SearcherName = searcherName;
         }
 
-        public override ILookTreeNode[] Children
+        public override ILookTreeNode[] GetChildren()
         {
-            get
-            {
-                return new LookQuery(this.SearcherName) { TagQuery = new TagQuery() }
-                            .Run()
-                            .Matches
-                            .SelectMany(x => x.Tags.Select(y => y.Group))
-                            .Distinct()
-                            .Select(x => new TagGroupTreeNode(this.SearcherName, x))
-                            .ToArray();
-            }
+            return new LookQuery(this.SearcherName) { TagQuery = new TagQuery() }
+                        .Run()
+                        .Matches
+                        .SelectMany(x => x.Tags.Select(y => y.Group))
+                        .Distinct()
+                        .Select(x => new TagGroupTreeNode(this.SearcherName, x))
+                        .ToArray();
         }
     }
 }

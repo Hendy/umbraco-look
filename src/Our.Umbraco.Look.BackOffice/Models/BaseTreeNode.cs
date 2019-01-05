@@ -13,11 +13,14 @@ namespace Our.Umbraco.Look.BackOffice.Models
         /// <summary>
         /// Default to an empty collection (no children)
         /// </summary>
-        public virtual ILookTreeNode[] Children => new ILookTreeNode[] {};
+        public virtual ILookTreeNode[] GetChildren()
+        {
+            return new ILookTreeNode[] { };
+        }
 
         protected BaseTreeNode(string id)
         {
             this.Id = id;
-        }    
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Examine;
 using Our.Umbraco.Look.BackOffice.Interfaces;
 using Our.Umbraco.Look.BackOffice.Models;
+using System.Net.Http.Formatting;
 
 namespace Our.Umbraco.Look.BackOffice.Services
 {
@@ -10,12 +11,9 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// Factory method to make a type of LookTreeNode from the supplied (hyphen delimited) id
         /// </summary>
         /// <param name="id"></param>
-        internal static ILookTreeNode MakeLookTreeNode(string id)
+        internal static ILookTreeNode MakeLookTreeNode(string id, FormDataCollection queryStrings)
         {
-            if (id == "-1")
-            {
-                return new RootTreeNode(id);
-            }
+            if (id == "-1") return new RootTreeNode(id);
 
             var chopped = id.Split('-');
             var nodeType = chopped[0];

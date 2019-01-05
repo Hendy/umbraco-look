@@ -13,9 +13,9 @@ namespace Our.Umbraco.Look.BackOffice.Controllers
         {
             var tree = new TreeNodeCollection();
 
-            var treeNode = LookTreeService.MakeLookTreeNode(id);
+            var treeNode = LookTreeService.MakeLookTreeNode(id, queryStrings);
 
-            foreach(var childTreeNode in treeNode.Children)
+            foreach(var childTreeNode in treeNode.GetChildren())
             {
                 tree.Add(
                     this.CreateTreeNode(
@@ -24,7 +24,7 @@ namespace Our.Umbraco.Look.BackOffice.Controllers
                             queryStrings, 
                             childTreeNode.Name, 
                             childTreeNode.Icon, 
-                            childTreeNode.Children.Any()));
+                            childTreeNode.GetChildren().Any()));
             }
 
             return tree;
