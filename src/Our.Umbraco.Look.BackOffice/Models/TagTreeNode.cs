@@ -1,4 +1,6 @@
-﻿namespace Our.Umbraco.Look.BackOffice.Models
+﻿using System.Net.Http.Formatting;
+
+namespace Our.Umbraco.Look.BackOffice.Models
 {
     internal class TagTreeNode : BaseTreeNode
     {
@@ -10,7 +12,7 @@
 
         private LookTag LookTag { get; }
 
-        internal TagTreeNode(string searcherName, LookTag looktag) : base("tag-" + "searcherName|" + "")
+        internal TagTreeNode(string searcherName, LookTag looktag, FormDataCollection queryStrings) : base("tag-" + "searcherName|BROKEN" + "", queryStrings)
         {
             this.SearcherName = searcherName;
             this.LookTag = LookTag;

@@ -1,5 +1,6 @@
 ﻿using Our.Umbraco.Look.BackOffice.Interfaces;
 using System.Linq;
+using System.Net.Http.Formatting;
 
 namespace Our.Umbraco.Look.BackOffice.Models
 {
@@ -13,7 +14,7 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         private string TagGroup { get; }
 
-        internal TagGroupTreeNode(string searcherName, string tagGroup) : base("tagGroup-" + searcherName + "|" + tagGroup)
+        internal TagGroupTreeNode(string searcherName, string tagGroup, FormDataCollection queryStrings) : base("tagGroup-" + searcherName + "BROKEN" + tagGroup, queryStrings)
         {
             this.SearcherName = searcherName;
             this.TagGroup = tagGroup;
@@ -27,7 +28,7 @@ namespace Our.Umbraco.Look.BackOffice.Models
                         .SelectMany(x => x.Tags.Where(y => y.Group == this.TagGroup))
                         .Distinct()
                         .OrderBy(x => x.Name)
-                        .Select(x => new TagTreeNode(this.SearcherName, x))
+                        .Select(x => new TagTreeNode(this.SearcherName, x, base.QueryStrings))
                         .ToArray();
         }
     }

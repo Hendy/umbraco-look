@@ -13,7 +13,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <param name="id"></param>
         internal static ILookTreeNode MakeLookTreeNode(string id, FormDataCollection queryStrings)
         {
-            if (id == "-1") return new RootTreeNode(id);
+            if (id == "-1") return new RootTreeNode(id, queryStrings);
 
             var chopped = id.Split('-');
             var nodeType = chopped[0];
@@ -21,9 +21,9 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             switch (nodeType)
             {
-                case "searcher": return new SearcherTreeNode(ExamineManager.Instance.SearchProviderCollection[nodeValue]);
-                case "tags": return new TagsTreeNode(nodeValue);
-                case "tagGroup": return new TagGroupTreeNode(nodeValue.Split('|')[0], nodeValue.Split('|')[1]);
+                case "searcher": return new SearcherTreeNode(nodeValue, queryStrings);
+                case "tags": return new TagsTreeNode(nodeValue, queryStrings);
+                case "tagGroup": return new TagGroupTreeNode(nodeValue.Split('|')[0], nodeValue.Split('|')[1], queryStrings);
                 //case "tag": return new TagTreeNode(nodeValue.Split('|')
             }
 

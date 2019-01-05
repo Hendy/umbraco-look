@@ -3,6 +3,7 @@ using Examine.Providers;
 using Our.Umbraco.Look.BackOffice.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Formatting;
 
 namespace Our.Umbraco.Look.BackOffice.Models
 {
@@ -27,7 +28,7 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
                 if (baseSearchProvider != null) // safety check
                 {
-                    children.Add(new SearcherTreeNode(baseSearchProvider));
+                    children.Add(new SearcherTreeNode(baseSearchProvider.Name, base.QueryStrings));
                 }
             }
 
@@ -38,6 +39,6 @@ namespace Our.Umbraco.Look.BackOffice.Models
         /// Constructor
         /// </summary>
         /// <param name="id"></param>
-        internal RootTreeNode(string id) : base(id) { }
+        internal RootTreeNode(string id, FormDataCollection queryStrings) : base(id, queryStrings) { }
     }
 }

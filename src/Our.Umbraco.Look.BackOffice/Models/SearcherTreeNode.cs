@@ -1,37 +1,45 @@
-﻿using Examine.Providers;
+﻿using Examine;
+using Examine.Providers;
 using Our.Umbraco.Look.BackOffice.Interfaces;
 using System.Linq;
+using System.Net.Http.Formatting;
 using Umbraco.Core;
 
 namespace Our.Umbraco.Look.BackOffice.Models
 {
     internal class SearcherTreeNode : BaseTreeNode
     {
-        public override string Name { get; }
+        public override string Name => this.SearcherName;
 
         public override string Icon { get; } // could be "icon-file-cabinet, icon-files, icon-categories
 
         private BaseSearchProvider BaseSearchProvider { get; }
+
+        private string SearcherName { get; }
 
         /// <summary>
         /// Flag to indicate whether Look is 'hooked' in with this Examine provider or if this is a Look provider
         /// </summary>
         private bool Active { get; } = false;
 
-        internal SearcherTreeNode(BaseSearchProvider baseSearchProvider) : base("searcher-" + baseSearchProvider.Name)
+        /// <summary>
+        /// Constrcut
+        /// </summary>
+        /// <param name="baseSearchProvider"></param>
+        internal SearcherTreeNode(string searcherName, FormDataCollection queryStrings) : base("searcher-" + searcherName, queryStrings)
         {
-            this.BaseSearchProvider = baseSearchProvider;
+            this.SearcherName = searcherName;
 
-            this.Name = baseSearchProvider.Name;
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
 
-            if (baseSearchProvider is LookSearcher)
+            if (searcher is LookSearcher)
             {
                 this.Active = true;
                 this.Icon = "icon-files";
             }
             else // must be an examine one
             {
-                var name = baseSearchProvider.Name.TrimEnd("Searcher");
+                var name = this.SearcherName.TrimEnd("Searcher");
 
                 if (LookConfiguration.ExamineIndexers.Select(x => x.TrimEnd("Indexer")).Any(x => x == name))
                 {
@@ -49,7 +57,7 @@ namespace Our.Umbraco.Look.BackOffice.Models
         {
             if (this.Active)
             {
-                return new ILookTreeNode[] { new TagsTreeNode(this.BaseSearchProvider.Name) };
+                return new ILookTreeNode[] { new TagsTreeNode(this.SearcherName, base.QueryStrings) };
             }
 
             return base.GetChildren(); // empty
