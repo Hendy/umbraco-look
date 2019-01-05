@@ -1,4 +1,5 @@
-﻿using Examine.SearchCriteria;
+﻿using Examine.LuceneEngine.SearchCriteria;
+using Examine.SearchCriteria;
 using System;
 using System.Collections.Generic;
 
@@ -6,15 +7,35 @@ namespace Our.Umbraco.Look
 {
     public class LookSearchCriteria : ISearchCriteria
     {
-        #region Properties for the Look search criteria
+        #region Look search criteria extensions (using properties to distinguish from the Examine fluent API methods)
 
-        // NOTE: using properties instead of methods to set criteria, so as to distinguish from the Exmaine fluent API
-        // to integrate with the Examine fluent api would mean overriding the Examine Compile method ?
-
+        private ISearchCriteria _examineQuery = null;
+             
         /// <summary>
         /// 
         /// </summary>
-        public ISearchCriteria ExamineQuery { get; set; } // TODO: ensure the ISearchCriteria set is of type LuceneSearchCriteria (as returned by Examine.Compile)
+        public ISearchCriteria ExamineQuery
+        {
+            get
+            {
+                return this._examineQuery;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this._examineQuery = null;
+                }
+                else if (value is LuceneSearchCriteria)
+                {
+                    this._examineQuery = value;
+                }
+                else
+                {
+                    throw new Exception($"Expected the supplied ISearchCriteria to be of type LuceneSearchCriteria (as would be returned by the Exmaine .Compile() method, instead got '{value?.GetType().FullName}')");
+                }
+            }
+        } 
 
         /// <summary>
         /// Set an optional (and) Look NodeQuery clause
@@ -47,6 +68,8 @@ namespace Our.Umbraco.Look
         public LocationQuery LocationQuery { get; set; }
 
         #endregion
+
+        #region Wrapping the Examine search criteria
 
         /// <summary>
         /// the wrapped search criteria
@@ -225,5 +248,7 @@ namespace Our.Umbraco.Look
         {
             return this.SearchCriteria.RawQuery(query);
         }
+
+        #endregion
     }
 }
