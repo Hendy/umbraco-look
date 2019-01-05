@@ -6,8 +6,15 @@ namespace Our.Umbraco.Look
 {
     public class LookSearchCriteria : ISearchCriteria
     {
+        #region Properties for the Look search criteria
+
         // NOTE: using properties instead of methods to set criteria, so as to distinguish from the Exmaine fluent API
         // to integrate with the Examine fluent api would mean overriding the Examine Compile method ?
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ISearchCriteria ExamineQuery { get; set; } // TODO: ensure the ISearchCriteria set is of type LuceneSearchCriteria (as returned by Examine.Compile)
 
         /// <summary>
         /// Set an optional (and) Look NodeQuery clause
@@ -38,6 +45,8 @@ namespace Our.Umbraco.Look
         /// Set an optional (and) Look LocationQuery clause
         /// </summary>
         public LocationQuery LocationQuery { get; set; }
+
+        #endregion
 
         /// <summary>
         /// the wrapped search criteria

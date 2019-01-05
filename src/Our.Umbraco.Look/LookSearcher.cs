@@ -63,6 +63,7 @@ namespace Our.Umbraco.Look
 
             if (lookSearchCriteria != null) // TODO: safety check it was created by this searcher ?
             {
+                lookQuery.ExamineQuery = lookSearchCriteria.ExamineQuery;
                 lookQuery.NodeQuery = lookSearchCriteria.NodeQuery;
                 lookQuery.NameQuery = lookSearchCriteria.NameQuery;
                 lookQuery.DateQuery = lookSearchCriteria.DateQuery;
