@@ -19,6 +19,7 @@
       <dependency id="UmbracoCms.Core" version="7.3.0" />
       <dependency id="Lucene.Net.Contrib" version="2.9.4.1" />
       <dependency id="Examine" version="0.1.70" />
+      <dependency id="Our.Umbraco.EmbeddedResource" version="0.2.0" />
     </dependencies>
   </metadata>
   <files>
