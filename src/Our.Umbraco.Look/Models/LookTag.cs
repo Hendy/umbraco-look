@@ -115,6 +115,19 @@ namespace Our.Umbraco.Look
             return this.ToString() == obj.ToString();
         }
 
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = 0;
+
+                hashCode = (hashCode * 397) ^ this.Group.GetHashCode();
+                hashCode = (hashCode * 397) ^ this.Name.GetHashCode();
+
+                return hashCode;
+            }
+        }
+
         /// <summary>
         /// Serialize using the colon char delimiter to split the group from the tag
         /// </summary>

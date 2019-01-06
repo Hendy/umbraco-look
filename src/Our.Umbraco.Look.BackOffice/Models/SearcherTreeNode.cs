@@ -13,8 +13,6 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         public override string Icon { get; } // could be "icon-file-cabinet, icon-files, icon-categories
 
-        private BaseSearchProvider BaseSearchProvider { get; }
-
         private string SearcherName { get; }
 
         /// <summary>
@@ -23,14 +21,13 @@ namespace Our.Umbraco.Look.BackOffice.Models
         private bool Active { get; } = false;
 
         /// <summary>
-        /// Constrcut
+        /// Constructor
         /// </summary>
-        /// <param name="baseSearchProvider"></param>
-        internal SearcherTreeNode(string searcherName, FormDataCollection queryStrings) : base("searcher-" + searcherName, queryStrings)
+        internal SearcherTreeNode(FormDataCollection queryStrings) : base("searcher-" + queryStrings["searcherName"], queryStrings)
         {
-            this.SearcherName = searcherName;
+            this.SearcherName = queryStrings["searcherName"];
 
-            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            var searcher = ExamineManager.Instance.SearchProviderCollection[this.SearcherName];
 
             if (searcher is LookSearcher)
             {
@@ -57,7 +54,9 @@ namespace Our.Umbraco.Look.BackOffice.Models
         {
             if (this.Active)
             {
-                return new ILookTreeNode[] { new TagsTreeNode(this.SearcherName, base.QueryStrings) };
+                //base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
+
+                return new ILookTreeNode[] { new TagsTreeNode(base.QueryStrings) };
             }
 
             return base.GetChildren(); // empty

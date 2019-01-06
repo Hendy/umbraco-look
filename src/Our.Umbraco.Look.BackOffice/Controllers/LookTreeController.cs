@@ -21,7 +21,7 @@ namespace Our.Umbraco.Look.BackOffice.Controllers
                     this.CreateTreeNode(
                             childTreeNode.Id, 
                             id, 
-                            queryStrings, 
+                            childTreeNode.QueryStrings, 
                             childTreeNode.Name, 
                             childTreeNode.Icon, 
                             childTreeNode.GetChildren().Any()));

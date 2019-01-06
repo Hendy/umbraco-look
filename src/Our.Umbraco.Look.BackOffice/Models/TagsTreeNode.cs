@@ -1,4 +1,5 @@
 ﻿using Our.Umbraco.Look.BackOffice.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
 
@@ -12,20 +13,31 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         private string SearcherName { get; }
 
-        internal TagsTreeNode(string searcherName, FormDataCollection queryStrings) : base("tags-" + searcherName, queryStrings)
+        internal TagsTreeNode(FormDataCollection queryStrings) : base("tags-" + queryStrings["searcherName"], queryStrings)
         {
-            this.SearcherName = searcherName;
+            this.SearcherName = queryStrings["searcherName"];
         }
 
         public override ILookTreeNode[] GetChildren()
         {
-            return new LookQuery(this.SearcherName) { TagQuery = new TagQuery() }
-                        .Run()
-                        .Matches
-                        .SelectMany(x => x.Tags.Select(y => y.Group))
-                        .Distinct()
-                        .Select(x => new TagGroupTreeNode(this.SearcherName, x, base.QueryStrings))
-                        .ToArray();
+            var tagGroups = new LookQuery(this.SearcherName) { TagQuery = new TagQuery() }
+                                .Run()
+                                .Matches
+                                .SelectMany(x => x.Tags.Select(y => y.Group))
+                                .Distinct()
+                                .OrderBy(x => x);
+
+            var children = new List<TagGroupTreeNode>();
+
+            foreach (var tagGroup in tagGroups)
+            {
+                base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
+                base.QueryStrings.ReadAsNameValueCollection()["tagGroup"] = tagGroup;
+
+                children.Add(new TagGroupTreeNode(base.QueryStrings));
+            }
+
+            return children.ToArray();
         }
     }
 }

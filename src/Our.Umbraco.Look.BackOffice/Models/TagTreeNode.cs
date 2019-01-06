@@ -12,10 +12,10 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         private LookTag LookTag { get; }
 
-        internal TagTreeNode(string searcherName, LookTag looktag, FormDataCollection queryStrings) : base("tag-" + "searcherName|BROKEN" + "", queryStrings)
+        internal TagTreeNode(FormDataCollection queryStrings) : base("tag-" + queryStrings["searcherName"] + "|" + queryStrings["tag"], queryStrings)
         {
-            this.SearcherName = searcherName;
-            this.LookTag = LookTag;
+            this.SearcherName = queryStrings["searcherName"];
+            this.LookTag = new LookTag(queryStrings["tag"]);
         }
     }
 }

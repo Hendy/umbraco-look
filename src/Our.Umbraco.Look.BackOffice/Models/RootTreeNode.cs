@@ -14,6 +14,12 @@ namespace Our.Umbraco.Look.BackOffice.Models
         public override string Icon => string.Empty; //null; //"icon-zoom-in";
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="id"></param>
+        internal RootTreeNode(string id, FormDataCollection queryStrings) : base(id, queryStrings) { }
+
+        /// <summary>
         /// For each examine searcher (Examine & Look) create a child node
         /// </summary>
         public override ILookTreeNode[] GetChildren()
@@ -28,17 +34,13 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
                 if (baseSearchProvider != null) // safety check
                 {
-                    children.Add(new SearcherTreeNode(baseSearchProvider.Name, base.QueryStrings));
+                    base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = baseSearchProvider.Name;
+
+                    children.Add(new SearcherTreeNode(base.QueryStrings));
                 }
             }
 
             return children.OrderBy(x => x.Name).ToArray();
         }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="id"></param>
-        internal RootTreeNode(string id, FormDataCollection queryStrings) : base(id, queryStrings) { }
     }
 }
