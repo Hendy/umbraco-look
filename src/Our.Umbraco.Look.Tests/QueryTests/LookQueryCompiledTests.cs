@@ -132,7 +132,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             TestHelper.IndexThings(new Thing[] { new Thing() { Name = "thing" } });
 
-            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NameQuery = new NameQuery("thing") };
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NameQuery = new NameQuery() { Is = "thing" } };
 
             Assert.IsNull(lookQuery.Compiled);
 

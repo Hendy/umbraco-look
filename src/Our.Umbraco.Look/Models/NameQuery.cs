@@ -108,23 +108,6 @@ namespace Our.Umbraco.Look
         /// </summary>
         public bool CaseSensitive { get; set; } = true;
 
-        /// <summary>
-        /// Create a new NameQuery search criteria
-        /// </summary>
-        /// <param name="startsWith"></param>
-        /// <param name="contains"></param>
-        /// <param name="endsWith"></param>
-        /// <param name="caseSensitive">When true, the name search is case sensitive</param>
-        [System.Obsolete("this will be removed as not intuitive overload order")]
-        public NameQuery(string @is = null, string startsWith = null, string contains = null, string endsWith = null, bool caseSensitive = true)
-        {
-            this.Is = @is;
-            this.StartsWith = startsWith;
-            this.Contains = contains;
-            this.EndsWith = endsWith;
-            this.CaseSensitive = caseSensitive;
-        }
-
         public override bool Equals(object obj)
         {
             NameQuery nameQuery = obj as NameQuery;
