@@ -29,5 +29,41 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsFalse(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount == 0);
         }
+
+        [TestMethod]
+        public void Tag_All_Conflict()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery()
+            {
+                All = TagQuery.MakeTags("tag1"),
+                Not = TagQuery.MakeTags("tag1")
+            };
+
+            var lookResult = lookQuery.Run();
+
+            Assert.IsNotNull(lookResult);
+            Assert.IsFalse(lookResult.Success);
+            Assert.IsTrue(lookResult.TotalItemCount == 0);
+        }
+
+        [TestMethod]
+        public void Tag_Any_Conflict()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery()
+            {
+                Any = TagQuery.MakeTags("tag1"),
+                Not = TagQuery.MakeTags("tag1")
+            };
+
+            var lookResult = lookQuery.Run();
+
+            Assert.IsNotNull(lookResult);
+            Assert.IsFalse(lookResult.Success);
+            Assert.IsTrue(lookResult.TotalItemCount == 0);
+        }
     }
 }

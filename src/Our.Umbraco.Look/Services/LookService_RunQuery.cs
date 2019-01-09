@@ -381,7 +381,7 @@ namespace Our.Umbraco.Look
 
                     query.Add(new TermQuery(new Term(LookConstants.HasTagsField, "1")), BooleanClause.Occur.MUST);
 
-                    if (lookQuery.TagQuery.All != null)
+                    if (lookQuery.TagQuery.All != null && lookQuery.TagQuery.All.Any())
                     {
                         if (lookQuery.TagQuery.Not != null)
                         {
@@ -393,22 +393,19 @@ namespace Our.Umbraco.Look
                             }
                         }
 
-                        if (lookQuery.TagQuery.All.Any())
+                        foreach (var tag in lookQuery.TagQuery.All)
                         {
-                            foreach (var tag in lookQuery.TagQuery.All)
-                            {
-                                query.Add(
-                                        new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
-                                        BooleanClause.Occur.MUST);
-                            }
+                            query.Add(
+                                    new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
+                                    BooleanClause.Occur.MUST);
                         }
                     }
 
-                    if (lookQuery.TagQuery.Any != null)
+                    if (lookQuery.TagQuery.Any != null && lookQuery.TagQuery.Any.Any())
                     {
                         if (lookQuery.TagQuery.Not != null)
                         {
-                            var conflictTags = lookQuery.TagQuery.Any.Where(x => !lookQuery.TagQuery.Not.Contains(x));
+                            var conflictTags = lookQuery.TagQuery.Any.Where(x => lookQuery.TagQuery.Not.Contains(x));
 
                             if (conflictTags.Any())
                             {
@@ -416,19 +413,16 @@ namespace Our.Umbraco.Look
                             }
                         }
 
-                        if (lookQuery.TagQuery.Any.Any())
+                        var anyTagQuery = new BooleanQuery();
+
+                        foreach (var tag in lookQuery.TagQuery.Any)
                         {
-                            var anyTagQuery = new BooleanQuery();
-
-                            foreach (var tag in lookQuery.TagQuery.Any)
-                            {
-                                anyTagQuery.Add(
-                                                new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
-                                                BooleanClause.Occur.SHOULD);
-                            }
-
-                            query.Add(anyTagQuery, BooleanClause.Occur.MUST);
+                            anyTagQuery.Add(
+                                            new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
+                                            BooleanClause.Occur.SHOULD);
                         }
+
+                        query.Add(anyTagQuery, BooleanClause.Occur.MUST);
                     }
 
                     if (lookQuery.TagQuery.Not != null && lookQuery.TagQuery.Not.Any())
