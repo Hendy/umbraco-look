@@ -27,21 +27,6 @@ namespace Our.Umbraco.Look
         public TagFacetQuery FacetOn { get; set; }
 
         /// <summary>
-        /// Create a new TagQuery
-        /// </summary>
-        /// <param name="all">All of these tags</param>
-        /// <param name="any">Any of these tags</param>
-        /// <param name="not">None of these tags</param>
-        /// <param name="tagFacetQuery">Query model detailing how tags to return facet counts for</param>
-        public TagQuery(LookTag[] all = null, LookTag[] any = null, LookTag[] not = null, TagFacetQuery tagFacetQuery = null)
-        {
-            this.All = all;
-            this.Any = any;
-            this.Not = not;
-            this.FacetOn = tagFacetQuery;
-        }
-
-        /// <summary>
         /// Helper to simplify the construction of LookTag array, by being able to supply a raw collection of tag strings
         /// </summary>
         /// <param name="tags"></param>
