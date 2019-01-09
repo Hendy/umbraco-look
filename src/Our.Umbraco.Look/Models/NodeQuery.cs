@@ -27,6 +27,11 @@ namespace Our.Umbraco.Look
         public string[] Aliases { get; set; } = null;
 
         /// <summary>
+        /// If not null, then each result returned must have a key in this collection (useful for finding detached content)
+        /// </summary>
+        public string[] Keys { get; set; } = null;
+
+        /// <summary>
         /// Any umbraco ids that should be exlcuded from the results
         /// </summary>
         public int[] NotIds { get; set; } = null;
