@@ -145,7 +145,7 @@ namespace Our.Umbraco.Look
                         foreach (var typeAlias in lookQuery.NodeQuery.Aliases)
                         {
                             nodeAliasQuery.Add(
-                                                new TermQuery(new Term(LookConstants.NodeAliasField, typeAlias.ToLower())),
+                                                new TermQuery(new Term(LookConstants.NodeAliasField, typeAlias)),
                                                 BooleanClause.Occur.SHOULD);
                         }
 
