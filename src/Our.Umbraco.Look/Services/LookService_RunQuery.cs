@@ -152,6 +152,30 @@ namespace Our.Umbraco.Look
                         query.Add(nodeAliasQuery, BooleanClause.Occur.MUST);
                     }
 
+                    if (lookQuery.NodeQuery.Keys != null && lookQuery.NodeQuery.Keys.Any())
+                    {
+                        if (lookQuery.NodeQuery.NotKeys != null)
+                        {
+                            var conflictKeys = lookQuery.NodeQuery.Keys.Where(x => lookQuery.NodeQuery.NotKeys.Contains(x));
+
+                            if (conflictKeys.Any())
+                            {
+                                return new LookResult($"Conflict in NodeQuery, keys: '{ string.Join(",", conflictKeys) }' are in both Keys and NotKeys");
+                            }
+                        }
+
+                        var keyQuery = new BooleanQuery();
+
+                        foreach (var key in lookQuery.NodeQuery.Keys)
+                        {
+                            keyQuery.Add(
+                                        new TermQuery(new Term(LookConstants.NodeKeyField, key)),
+                                        BooleanClause.Occur.SHOULD);
+                        }
+
+                        query.Add(keyQuery, BooleanClause.Occur.MUST);
+                    }
+
                     if (lookQuery.NodeQuery.NotIds != null && lookQuery.NodeQuery.NotIds.Any())
                     {
                         foreach (var exculudeId in lookQuery.NodeQuery.NotIds)
@@ -361,7 +385,7 @@ namespace Our.Umbraco.Look
                     {
                         if (lookQuery.TagQuery.Not != null)
                         {
-                            var conflictTags = lookQuery.TagQuery.All.Where(x => !lookQuery.TagQuery.Not.Contains(x));
+                            var conflictTags = lookQuery.TagQuery.All.Where(x => lookQuery.TagQuery.Not.Contains(x));
 
                             if (conflictTags.Any())
                             {
