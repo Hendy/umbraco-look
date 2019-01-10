@@ -227,6 +227,7 @@
   <ItemGroup>
     <Compile Include="ModelTests\LookQueryTests.cs" />
     <Compile Include="ModelTests\NodeQueryConstructorTests.cs" />
+    <Compile Include="ModelTests\TagQueryComparrisonTests.cs" />
     <Compile Include="QueryTests\LookQueryConflictTests.cs" />
     <Compile Include="QueryTests\RequestFieldsTests.cs" />
     <Compile Include="Initialize.cs" />
