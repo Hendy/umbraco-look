@@ -62,16 +62,10 @@ namespace Our.Umbraco.Look
             var tagQuery = obj as TagQuery;
 
             return tagQuery != null
-                    && ((tagQuery.All == null && this.All == null) || (tagQuery.All != null && tagQuery.All.ElementsEqual(this.All)))
-                    && ((tagQuery.Any == null && this.Any == null) || (tagQuery.Any != null && tagQuery.Any.ElementsEqual(this.Any)))
-                    && ((tagQuery.Not == null && this.Not == null) || (tagQuery.Not != null && tagQuery.Not.ElementsEqual(this.Not)))
+                    && ((tagQuery.All == null && this.All == null) || (tagQuery.All != null && this.All != null && tagQuery.All.ElementsEqual(this.All)))
+                    && ((tagQuery.Any == null && this.Any == null) || (tagQuery.Any != null && this.Any != null && tagQuery.Any.ElementsEqual(this.Any)))
+                    && ((tagQuery.Not == null && this.Not == null) || (tagQuery.Not != null && this.Not != null && tagQuery.Not.ElementsEqual(this.Not)))
                     && ((tagQuery.FacetOn == null && this.FacetOn == null) || (tagQuery.FacetOn != null && tagQuery.FacetOn.Equals(this.FacetOn)));
-
-            //return tagQuery != null
-            //        && tagQuery.All.ElementsEqual(this.All)
-            //        && tagQuery.Any.ElementsEqual(this.Any)
-            //        && tagQuery.Not.ElementsEqual(this.Not)
-            //        && ((tagQuery.FacetOn == null && this.FacetOn == null) || (tagQuery.FacetOn != null && tagQuery.FacetOn.Equals(this.FacetOn)));
         }
 
         internal TagQuery Clone()
