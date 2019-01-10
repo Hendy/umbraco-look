@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Our.Umbraco.Look.Extensions;
+using System.Globalization;
 using System.Linq;
 using Umbraco.Core.Models;
 
@@ -103,14 +104,10 @@ namespace Our.Umbraco.Look
             NodeQuery nodeQuery = obj as NodeQuery;
 
             return nodeQuery != null
-                && ((nodeQuery.Types == null && this.Types == null)
-                    || (nodeQuery.Types != null && this.Types != null && nodeQuery.Types.SequenceEqual(this.Types)))
-                && ((nodeQuery.Cultures == null && this.Cultures == null)
-                    || (nodeQuery.Cultures != null && this.Cultures != null && nodeQuery.Cultures.SequenceEqual(this.Cultures)))
-                && ((nodeQuery.Aliases == null && this.Aliases == null)
-                    || (nodeQuery.Aliases != null && this.Aliases != null && nodeQuery.Aliases.SequenceEqual(this.Aliases)))
-                && ((nodeQuery.NotIds == null && this.NotIds == null)
-                    || (nodeQuery.NotIds != null && this.NotIds != null && nodeQuery.NotIds.SequenceEqual(this.NotIds)));
+                && ((nodeQuery.Types == null && this.Types == null) || (nodeQuery.Types != null && this.Types != null && nodeQuery.Types.ElementsEqual(this.Types)))
+                && ((nodeQuery.Cultures == null && this.Cultures == null) || (nodeQuery.Cultures != null && this.Cultures != null && nodeQuery.Cultures.ElementsEqual(this.Cultures)))
+                && ((nodeQuery.Aliases == null && this.Aliases == null) || (nodeQuery.Aliases != null && this.Aliases != null && nodeQuery.Aliases.ElementsEqual(this.Aliases)))
+                && ((nodeQuery.NotIds == null && this.NotIds == null) || (nodeQuery.NotIds != null && this.NotIds != null && nodeQuery.NotIds.ElementsEqual(this.NotIds)));
         }
 
         internal NodeQuery Clone()
