@@ -38,7 +38,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.TagQuery = new TagQuery()
             {
                 All = TagQuery.MakeTags("tag1"),
-                Not = TagQuery.MakeTags("tag1")
+                None = TagQuery.MakeTags("tag1")
             };
 
             var lookResult = lookQuery.Run();
@@ -56,7 +56,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.TagQuery = new TagQuery()
             {
                 Any = TagQuery.MakeTags("tag1"),
-                Not = TagQuery.MakeTags("tag1")
+                None = TagQuery.MakeTags("tag1")
             };
 
             var lookResult = lookQuery.Run();
