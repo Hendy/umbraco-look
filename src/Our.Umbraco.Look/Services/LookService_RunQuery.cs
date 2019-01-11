@@ -405,25 +405,14 @@ namespace Our.Umbraco.Look
                     // ANY
                     if (lookQuery.TagQuery.Any != null && lookQuery.TagQuery.Any.Any())
                     {
-                        // helper to flatted out collection of collections
-                        var getAllTags = new Func<LookTag[][], LookTag[]>(x =>
-                        {
-                            var tags = new List<LookTag>();
-
-                            foreach(var tagCollection in x)
-                            {
-                                foreach(var lookTag in tagCollection)
-                                {
-                                    tags.Add(lookTag);
-                                }
-                            }
-
-                            return tags.ToArray();
-                        });
-
                         if (lookQuery.TagQuery.None != null)
                         {
-                            var conflictTags = getAllTags(lookQuery.TagQuery.Any).Where(x => lookQuery.TagQuery.None.Contains(x));
+                            var conflictTags = lookQuery
+                                                    .TagQuery
+                                                    .Any
+                                                    .SelectMany(x => x.Select(y => y)) // flatten collections
+                                                    .Where(x => lookQuery.TagQuery.None.Contains(x))
+                                                    .Distinct();
 
                             if (conflictTags.Any())
                             {
