@@ -65,9 +65,9 @@ namespace Our.Umbraco.Look
             var tagQuery = obj as TagQuery;
 
             return tagQuery != null
-                    && ((tagQuery.All == null && this.All == null) || (tagQuery.All != null && this.All != null && tagQuery.All.BothNullOrElementsEqual(this.All)))
-                    && ((tagQuery.Any == null && this.Any == null) || (tagQuery.Any != null && this.Any != null && tagQuery.Any.BothNullOrElementsEqual(this.Any)))
-                    && ((tagQuery.None == null && this.None == null) || (tagQuery.None != null && this.None != null && tagQuery.None.BothNullOrElementsEqual(this.None)))
+                    && tagQuery.All.BothNullOrElementsEqual(this.All)
+                    && tagQuery.Any.BothNullOrElementsEqual(this.Any)
+                    && tagQuery.None.BothNullOrElementsEqual(this.None)
                     && ((tagQuery.FacetOn == null && this.FacetOn == null) || (tagQuery.FacetOn != null && tagQuery.FacetOn.Equals(this.FacetOn)));
         }
 

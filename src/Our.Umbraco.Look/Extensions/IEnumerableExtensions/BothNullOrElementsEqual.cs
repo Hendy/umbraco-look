@@ -15,6 +15,10 @@ namespace Our.Umbraco.Look.Extensions
         /// <returns></returns>
         internal static bool BothNullOrElementsEqual<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
         {
+            if (first == null && second == null) return true; // both are null, so neither has any elements
+
+            if (first == null || second == null) return false; // one collection exists, so elements must differ
+
             if (first.Count() != second.Count()) return false;
 
             Stack<TSource> stack = new Stack<TSource>(first);
