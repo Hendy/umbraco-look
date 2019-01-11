@@ -4,20 +4,23 @@ using System.Linq;
 
 namespace Our.Umbraco.Look
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class TagQuery
     {
         /// <summary>
-        /// Must have all these tags
+        /// Must have all the tags in the collection
         /// </summary>
         public LookTag[] All { get; set; }
 
         /// <summary>
-        /// Must have at least one of these tags
+        /// Must have at least one tag from each collection
         /// </summary>
         public LookTag[] Any { get; set; }
 
         /// <summary>
-        /// Must not have any of these tags
+        /// Must not have any tags in the collection
         /// </summary>
         public LookTag[] None { get; set; }
 
@@ -62,9 +65,9 @@ namespace Our.Umbraco.Look
             var tagQuery = obj as TagQuery;
 
             return tagQuery != null
-                    && ((tagQuery.All == null && this.All == null) || (tagQuery.All != null && this.All != null && tagQuery.All.ElementsEqual(this.All)))
-                    && ((tagQuery.Any == null && this.Any == null) || (tagQuery.Any != null && this.Any != null && tagQuery.Any.ElementsEqual(this.Any)))
-                    && ((tagQuery.None == null && this.None == null) || (tagQuery.None != null && this.None != null && tagQuery.None.ElementsEqual(this.None)))
+                    && ((tagQuery.All == null && this.All == null) || (tagQuery.All != null && this.All != null && tagQuery.All.BothNullOrElementsEqual(this.All)))
+                    && ((tagQuery.Any == null && this.Any == null) || (tagQuery.Any != null && this.Any != null && tagQuery.Any.BothNullOrElementsEqual(this.Any)))
+                    && ((tagQuery.None == null && this.None == null) || (tagQuery.None != null && this.None != null && tagQuery.None.BothNullOrElementsEqual(this.None)))
                     && ((tagQuery.FacetOn == null && this.FacetOn == null) || (tagQuery.FacetOn != null && tagQuery.FacetOn.Equals(this.FacetOn)));
         }
 

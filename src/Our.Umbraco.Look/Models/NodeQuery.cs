@@ -104,10 +104,10 @@ namespace Our.Umbraco.Look
             NodeQuery nodeQuery = obj as NodeQuery;
 
             return nodeQuery != null
-                && ((nodeQuery.Types == null && this.Types == null) || (nodeQuery.Types != null && this.Types != null && nodeQuery.Types.ElementsEqual(this.Types)))
-                && ((nodeQuery.Cultures == null && this.Cultures == null) || (nodeQuery.Cultures != null && this.Cultures != null && nodeQuery.Cultures.ElementsEqual(this.Cultures)))
-                && ((nodeQuery.Aliases == null && this.Aliases == null) || (nodeQuery.Aliases != null && this.Aliases != null && nodeQuery.Aliases.ElementsEqual(this.Aliases)))
-                && ((nodeQuery.NotIds == null && this.NotIds == null) || (nodeQuery.NotIds != null && this.NotIds != null && nodeQuery.NotIds.ElementsEqual(this.NotIds)));
+                && ((nodeQuery.Types == null && this.Types == null) || (nodeQuery.Types != null && this.Types != null && nodeQuery.Types.BothNullOrElementsEqual(this.Types)))
+                && ((nodeQuery.Cultures == null && this.Cultures == null) || (nodeQuery.Cultures != null && this.Cultures != null && nodeQuery.Cultures.BothNullOrElementsEqual(this.Cultures)))
+                && ((nodeQuery.Aliases == null && this.Aliases == null) || (nodeQuery.Aliases != null && this.Aliases != null && nodeQuery.Aliases.BothNullOrElementsEqual(this.Aliases)))
+                && ((nodeQuery.NotIds == null && this.NotIds == null) || (nodeQuery.NotIds != null && this.NotIds != null && nodeQuery.NotIds.BothNullOrElementsEqual(this.NotIds)));
         }
 
         internal NodeQuery Clone()

@@ -28,7 +28,7 @@ namespace Our.Umbraco.Look
             var tagFacetQuery = obj as TagFacetQuery;
 
             return tagFacetQuery != null
-                    && ((tagFacetQuery.TagGroups == null && this.TagGroups == null) || (tagFacetQuery.TagGroups != null && this.TagGroups != null && tagFacetQuery.TagGroups.ElementsEqual(this.TagGroups)));
+                    && ((tagFacetQuery.TagGroups == null && this.TagGroups == null) || (tagFacetQuery.TagGroups != null && this.TagGroups != null && tagFacetQuery.TagGroups.BothNullOrElementsEqual(this.TagGroups)));
         }
     }
 }
