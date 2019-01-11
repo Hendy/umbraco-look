@@ -55,7 +55,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TagQuery = new TagQuery()
             {
-                Any = TagQuery.MakeTags("tag1"),
+                Any = new LookTag[][] { TagQuery.MakeTags("tag1") },
                 None = TagQuery.MakeTags("tag1")
             };
 

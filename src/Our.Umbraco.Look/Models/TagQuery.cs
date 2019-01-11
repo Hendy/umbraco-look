@@ -1,4 +1,5 @@
 ﻿using Our.Umbraco.Look.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +18,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Must have at least one tag from each collection
         /// </summary>
-        public LookTag[] Any { get; set; }
+        public LookTag[][] Any { get; set; }
 
         /// <summary>
         /// Must not have any tags in the collection
@@ -64,9 +65,44 @@ namespace Our.Umbraco.Look
         {
             var tagQuery = obj as TagQuery;
 
+            var anyQueryEqual = new Func<LookTag[][], LookTag[][], bool>((first, second) =>
+            {
+                if (first == null && second == null) return true;
+
+                if (first == null || second == null) return false;
+
+                if (first.Count() != second.Count()) return false;
+
+                var firstStack = new Stack<LookTag[]>(first);
+
+                var areEqual = true;
+
+                do
+                {
+                    var firstCollection = firstStack.Pop();
+
+                    var matchingCollectionFound = false;
+
+                    var secondStack = new Stack<LookTag[]>(second);
+
+                    do
+                    {
+                        var secondCollection = secondStack.Pop();
+
+                        matchingCollectionFound = firstCollection.BothNullOrElementsEqual(secondCollection);
+                    }
+                    while (!matchingCollectionFound && secondStack.Any());
+
+                    areEqual = matchingCollectionFound;
+                }
+                while (areEqual && firstStack.Any());
+                
+                return areEqual;
+            });
+
             return tagQuery != null
                     && tagQuery.All.BothNullOrElementsEqual(this.All)
-                    && tagQuery.Any.BothNullOrElementsEqual(this.Any)
+                    && anyQueryEqual(tagQuery.Any, this.Any)
                     && tagQuery.None.BothNullOrElementsEqual(this.None)
                     && ((tagQuery.FacetOn == null && this.FacetOn == null) || (tagQuery.FacetOn != null && tagQuery.FacetOn.Equals(this.FacetOn)));
         }

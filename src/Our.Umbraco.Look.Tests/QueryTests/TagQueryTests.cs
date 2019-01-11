@@ -46,7 +46,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TagQuery = new TagQuery();
             lookQuery.TagQuery.All = TagQuery.MakeTags("shape:circle");
-            lookQuery.TagQuery.Any = TagQuery.MakeTags("size:small", "size:medium");
+            lookQuery.TagQuery.Any = new LookTag[][] { TagQuery.MakeTags("size:small", "size:medium") };
 
             var lookResult = LookService.RunQuery(lookQuery);
 

@@ -77,5 +77,41 @@ namespace Our.Umbraco.Look.Tests.ModelTests
 
             Assert.AreNotEqual(tagQuery1, tagQuery2);
         }
+
+        [TestMethod]
+        public void Same_Tag_Collection_Of_Collections()
+        {
+            var tagQuery1 = new TagQuery() { Any = new LookTag[][] { TagQuery.MakeTags("tag1", "tag2"), TagQuery.MakeTags("tag3", "tag4") }};
+            var tagQuery2 = new TagQuery() { Any = new LookTag[][] { TagQuery.MakeTags("tag1", "tag2"), TagQuery.MakeTags("tag3", "tag4") }};
+
+            Assert.AreEqual(tagQuery1, tagQuery2);
+        }
+
+        [TestMethod]
+        public void Same_Tag_Collection_Of_Collections_Out_Of_Order()
+        {
+            var tagQuery1 = new TagQuery() { Any = new LookTag[][] { TagQuery.MakeTags("tag1", "tag2"), TagQuery.MakeTags("tag3", "tag4") }};
+            var tagQuery2 = new TagQuery() { Any = new LookTag[][] { TagQuery.MakeTags("tag3", "tag4"), TagQuery.MakeTags("tag1", "tag2") }};
+
+            Assert.AreEqual(tagQuery1, tagQuery2);
+        }
+
+        [TestMethod]
+        public void Same_Tag_Collection_Of_Collections_Mixed_Up()
+        {
+            var tagQuery1 = new TagQuery() { Any = new LookTag[][] { TagQuery.MakeTags("tag2", "tag1"), TagQuery.MakeTags("tag3", "tag4") } };
+            var tagQuery2 = new TagQuery() { Any = new LookTag[][] { TagQuery.MakeTags("tag3", "tag4"), TagQuery.MakeTags("tag1", "tag2") } };
+
+            Assert.AreEqual(tagQuery1, tagQuery2);
+        }
+
+        [TestMethod]
+        public void Different_Tag_Collection_Of_Collections()
+        {
+            var tagQuery1 = new TagQuery() { Any = new LookTag[][] { TagQuery.MakeTags("tag1", "tag2"), TagQuery.MakeTags("tag3", "tag4") } };
+            var tagQuery2 = new TagQuery() { Any = new LookTag[][] { TagQuery.MakeTags("tag1", "tag2") } };
+
+            Assert.AreNotEqual(tagQuery1, tagQuery2);
+        }
     }
 }

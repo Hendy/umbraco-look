@@ -381,6 +381,7 @@ namespace Our.Umbraco.Look
 
                     query.Add(new TermQuery(new Term(LookConstants.HasTagsField, "1")), BooleanClause.Occur.MUST);
 
+                    // ALL
                     if (lookQuery.TagQuery.All != null && lookQuery.TagQuery.All.Any())
                     {
                         if (lookQuery.TagQuery.None != null)
@@ -401,11 +402,28 @@ namespace Our.Umbraco.Look
                         }
                     }
 
+                    // ANY
                     if (lookQuery.TagQuery.Any != null && lookQuery.TagQuery.Any.Any())
                     {
+                        // helper to flatted out collection of collections
+                        var getAllTags = new Func<LookTag[][], LookTag[]>(x =>
+                        {
+                            var tags = new List<LookTag>();
+
+                            foreach(var tagCollection in x)
+                            {
+                                foreach(var lookTag in tagCollection)
+                                {
+                                    tags.Add(lookTag);
+                                }
+                            }
+
+                            return tags.ToArray();
+                        });
+
                         if (lookQuery.TagQuery.None != null)
                         {
-                            var conflictTags = lookQuery.TagQuery.Any.Where(x => lookQuery.TagQuery.None.Contains(x));
+                            var conflictTags = getAllTags(lookQuery.TagQuery.Any).Where(x => lookQuery.TagQuery.None.Contains(x));
 
                             if (conflictTags.Any())
                             {
@@ -413,18 +431,23 @@ namespace Our.Umbraco.Look
                             }
                         }
 
-                        var anyTagQuery = new BooleanQuery();
-
-                        foreach (var tag in lookQuery.TagQuery.Any)
+                        foreach(var tagCollection in lookQuery.TagQuery.Any)
                         {
-                            anyTagQuery.Add(
-                                            new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
-                                            BooleanClause.Occur.SHOULD);
+                            var anyTagQuery = new BooleanQuery();
+
+                            foreach (var tag in tagCollection)
+                            {
+                                anyTagQuery.Add(
+                                                new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
+                                                BooleanClause.Occur.SHOULD);
+                            }
+
+                            query.Add(anyTagQuery, BooleanClause.Occur.MUST);
                         }
 
-                        query.Add(anyTagQuery, BooleanClause.Occur.MUST);
                     }
 
+                    // NONE
                     if (lookQuery.TagQuery.None != null && lookQuery.TagQuery.None.Any())
                     {
                         foreach (var tag in lookQuery.TagQuery.None)
