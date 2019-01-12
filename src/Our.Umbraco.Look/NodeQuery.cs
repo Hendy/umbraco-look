@@ -1,6 +1,5 @@
 ﻿using Our.Umbraco.Look.Extensions;
 using System.Globalization;
-using System.Linq;
 using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look
@@ -107,7 +106,9 @@ namespace Our.Umbraco.Look
                 && nodeQuery.Types.BothNullOrElementsEqual(this.Types)
                 && nodeQuery.Cultures.BothNullOrElementsEqual(this.Cultures)
                 && nodeQuery.Aliases.BothNullOrElementsEqual(this.Aliases)
-                && nodeQuery.NotIds.BothNullOrElementsEqual(this.NotIds);
+                && nodeQuery.Keys.BothNullOrEquals(this.Keys)
+                && nodeQuery.NotIds.BothNullOrElementsEqual(this.NotIds)
+                && nodeQuery.NotKeys.BothNullOrEquals(this.Keys);
         }
 
         internal NodeQuery Clone()

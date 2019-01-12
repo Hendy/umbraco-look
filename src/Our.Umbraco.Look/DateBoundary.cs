@@ -1,5 +1,8 @@
 ﻿namespace Our.Umbraco.Look
 {
+    /// <summary>
+    /// Used with the DateQuery
+    /// </summary>
     public enum DateBoundary
     {
         /// <summary>
