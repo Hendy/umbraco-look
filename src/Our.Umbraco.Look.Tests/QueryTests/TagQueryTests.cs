@@ -34,8 +34,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.TagQuery = new TagQuery();
-            lookQuery.TagQuery.All = new LookTag[] { new LookTag("shape", "circle") };
+            lookQuery.TagQuery = new TagQuery() { All = new [] { new LookTag("shape", "circle") } };
 
             var lookResult = LookService.RunQuery(lookQuery);
 
@@ -48,9 +47,11 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.TagQuery = new TagQuery();
-            lookQuery.TagQuery.All = TagQuery.MakeTags("shape:circle");
-            lookQuery.TagQuery.Any = new LookTag[][] { TagQuery.MakeTags("size:small", "size:medium") };
+            lookQuery.TagQuery = new TagQuery()
+            {
+                All = TagQuery.MakeTags("shape:circle"),
+                Any = new LookTag[][] { TagQuery.MakeTags("size:small", "size:medium") }
+            };
 
             var lookResult = LookService.RunQuery(lookQuery);
 
@@ -63,10 +64,12 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.TagQuery = new TagQuery();
-            lookQuery.TagQuery.Any = new LookTag[][] {
-                TagQuery.MakeTags("shape:circle", "shape:oblong"), // either of these
-                TagQuery.MakeTags("size:small", "size:medium") // and either of these
+            lookQuery.TagQuery = new TagQuery()
+            {
+                Any = new LookTag[][] {
+                        TagQuery.MakeTags("shape:circle", "shape:oblong"), // either of these
+                        TagQuery.MakeTags("size:small", "size:medium") // and either of these
+                }
             };
 
             var lookResult = LookService.RunQuery(lookQuery);
@@ -80,9 +83,11 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.TagQuery = new TagQuery();
-            lookQuery.TagQuery.All = TagQuery.MakeTags("shape");
-            lookQuery.TagQuery.None = TagQuery.MakeTags("shape:circle");
+            lookQuery.TagQuery = new TagQuery()
+            {
+                All = TagQuery.MakeTags("shape"),
+                None = TagQuery.MakeTags("shape:circle")
+            };
 
             var lookResult = LookService.RunQuery(lookQuery);
 
