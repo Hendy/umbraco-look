@@ -36,7 +36,7 @@ namespace Our.Umbraco.Look.Services
 
                 var nodeKeyField = new Field(
                                             LookConstants.NodeKeyField,
-                                            indexingContext.Item.GetGuidKey().ToString(),
+                                            indexingContext.Item.GetGuidKey().ToString(), // TODO: ToLower()
                                             Field.Store.YES,
                                             Field.Index.NOT_ANALYZED);
 
