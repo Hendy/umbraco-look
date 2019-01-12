@@ -405,14 +405,13 @@ namespace Our.Umbraco.Look
                     // ANY
                     if (lookQuery.TagQuery.Any != null && lookQuery.TagQuery.Any.Any())
                     {
-                        if (lookQuery.TagQuery.None != null)
+                        if (lookQuery.TagQuery.None != null && lookQuery.TagQuery.None.Any())
                         {
                             var conflictTags = lookQuery
                                                     .TagQuery
                                                     .Any
                                                     .SelectMany(x => x.Select(y => y)) // flatten collections
-                                                    .Where(x => lookQuery.TagQuery.None.Contains(x))
-                                                    .Distinct();
+                                                    .Where(x => lookQuery.TagQuery.None.Contains(x));
 
                             if (conflictTags.Any())
                             {
