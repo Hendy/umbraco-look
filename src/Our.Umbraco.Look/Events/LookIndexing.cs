@@ -10,7 +10,7 @@ using Umbraco.Core.Publishing;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 
-namespace Our.Umbraco.Look.Events
+namespace Our.Umbraco.Look
 {
     /// <summary>
     /// Enables the indexing of inner IPublishedContent collections on a node

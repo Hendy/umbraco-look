@@ -14,7 +14,7 @@ using Umbraco.Web;
 using Umbraco.Web.Routing;
 using Umbraco.Web.Security;
 
-namespace Our.Umbraco.Look.Events
+namespace Our.Umbraco.Look
 {
     /// <summary>
     /// Hooks into all configured Exmaine Umbraco indexers, allowing Look to add additional fields
