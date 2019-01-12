@@ -13,9 +13,14 @@ namespace Our.Umbraco.Look.Tests.QueryTests
                 new Thing() { Tags = TagQuery.MakeTags("shape:circle", "size:large")},
                 new Thing() { Tags = TagQuery.MakeTags("shape:circle", "size:medium")},
                 new Thing() { Tags = TagQuery.MakeTags("shape:circle", "size:small")},
+
                 new Thing() { Tags = TagQuery.MakeTags("shape:square", "size:large")},
                 new Thing() { Tags = TagQuery.MakeTags("shape:square", "size:medium")},
-                new Thing() { Tags = TagQuery.MakeTags("shape:square", "size:small")}
+                new Thing() { Tags = TagQuery.MakeTags("shape:square", "size:small")},
+
+                new Thing() { Tags = TagQuery.MakeTags("shape:oblong", "size:large")},
+                new Thing() { Tags = TagQuery.MakeTags("shape:oblong", "size:medium")},
+                new Thing() { Tags = TagQuery.MakeTags("shape:oblong", "size:small")}
             });
         }
 
@@ -52,6 +57,23 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsTrue(lookResult.Success);
             Assert.AreEqual(2, lookResult.TotalItemCount);
+        }
+
+        [TestMethod]
+        public void All_Small_Or_Medium_Circles_Or_Oblongs()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery();
+            lookQuery.TagQuery.Any = new LookTag[][] {
+                TagQuery.MakeTags("shape:circle", "shape:oblong"),
+                TagQuery.MakeTags("size:small", "size:medium")
+            };
+
+            var lookResult = LookService.RunQuery(lookQuery);
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.AreEqual(4, lookResult.TotalItemCount);
         }
     }
 }
