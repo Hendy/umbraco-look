@@ -15,7 +15,7 @@ using System.Web;
 
 namespace Our.Umbraco.Look
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Perform a Look search

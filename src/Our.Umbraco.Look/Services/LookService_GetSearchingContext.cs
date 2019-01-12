@@ -6,7 +6,7 @@ using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Get the configuration details of an Exmaine searcher, so Lucene can be queried in the same way,

@@ -2,7 +2,7 @@
 
 namespace Our.Umbraco.Look
 {
-    public partial class LookService
+    internal partial class LookService
     {
         internal static void SetExamineIndexers(string[] examineIndexers)
         {

@@ -6,7 +6,7 @@ using Umbraco.Web;
 
 namespace Our.Umbraco.Look
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Flag to indicate whether the look service has been initialized

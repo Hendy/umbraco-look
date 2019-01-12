@@ -4,7 +4,7 @@ using UmbracoExamine;
 
 namespace Our.Umbraco.Look
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Get all Examine indexers that Look should hook into

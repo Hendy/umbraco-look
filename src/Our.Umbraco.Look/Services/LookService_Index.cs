@@ -9,7 +9,7 @@ using Umbraco.Web;
 
 namespace Our.Umbraco.Look
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         ///  Do the indexing and set the field values onto the Lucene document

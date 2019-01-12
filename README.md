@@ -9,6 +9,10 @@ Examine manages the indexes, whilst Look adds 'config-file-free' C# indexing and
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
 
+Look can be used in a number of ways. Once installed Look offers .net seams for indexing IPublishedConent, be they content, media, members nodes or properties that return collections of IPublishedContent (eg. Nested Content).
+
+
+
 ## Indexing
 
 Look automatically hooks into all Umbraco Exmaine indexers offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data.
@@ -262,13 +266,7 @@ If not specified then the reults will be sorted on the Lucene score, otherwise s
 
 ### Search Results
 
-The search can be performed by calling the static RunQuery method on the LookService, passing in the LookQuery model:
-
-```csharp
-var lookResult = LookService.RunQuery(lookQuery);
-```
-
-or by using the Run method on the LookQuery model (which does the same as above):
+The search can be performed by calling the Run method on the LookQuery object:
 
 ```csharp
 var lookResult = lookQuery.Run();

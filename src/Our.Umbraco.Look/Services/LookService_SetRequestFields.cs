@@ -1,6 +1,6 @@
 ﻿namespace Our.Umbraco.Look
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Set the default behaviour for which Lucene fields should be returned.

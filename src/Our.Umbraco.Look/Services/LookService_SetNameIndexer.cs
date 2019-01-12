@@ -3,7 +3,7 @@ using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Set a custom function to execute at index-time, which will return a string value for the name field (or null to not index)

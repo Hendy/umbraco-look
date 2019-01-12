@@ -3,7 +3,7 @@ using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Register consumer code to perform when indexing location
