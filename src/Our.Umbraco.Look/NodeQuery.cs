@@ -106,9 +106,9 @@ namespace Our.Umbraco.Look
                 && nodeQuery.Types.BothNullOrElementsEqual(this.Types)
                 && nodeQuery.Cultures.BothNullOrElementsEqual(this.Cultures)
                 && nodeQuery.Aliases.BothNullOrElementsEqual(this.Aliases)
-                && nodeQuery.Keys.BothNullOrEquals(this.Keys)
+                && nodeQuery.Keys.BothNullOrElementsEqual(this.Keys)
                 && nodeQuery.NotIds.BothNullOrElementsEqual(this.NotIds)
-                && nodeQuery.NotKeys.BothNullOrEquals(this.Keys);
+                && nodeQuery.NotKeys.BothNullOrElementsEqual(this.Keys);
         }
 
         internal NodeQuery Clone()
