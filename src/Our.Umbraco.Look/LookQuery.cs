@@ -6,7 +6,7 @@ using System.Linq;
 namespace Our.Umbraco.Look
 {
     /// <summary>
-    /// Model used to specify the search query criteria for a LookService.Query
+    /// Create an instance of this class setting properties to specify the search criteria and then call the Run() method to return the results.
     /// </summary>
     public class LookQuery
     {
