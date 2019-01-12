@@ -6,7 +6,7 @@ using System.Linq;
 using Umbraco.Core.Logging;
 using Umbraco.Web;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
     internal partial class LookService
     {

@@ -40,7 +40,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.TagQuery.All = new LookTag[] { _red };
             lookQuery.TagQuery.FacetOn = new TagFacetQuery(_colour);
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);
@@ -65,7 +65,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.TagQuery.FacetOn = new TagFacetQuery(_colour);
 
             // first query
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);
@@ -86,7 +86,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.ApplyFacet(facet);
 
             // second query
-            lookResult = LookService.RunQuery(lookQuery);
+            lookResult = lookQuery.Run();
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);

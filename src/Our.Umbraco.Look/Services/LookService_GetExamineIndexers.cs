@@ -2,7 +2,7 @@
 using System.Linq;
 using UmbracoExamine;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
     internal partial class LookService
     {

@@ -13,7 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
     internal partial class LookService
     {

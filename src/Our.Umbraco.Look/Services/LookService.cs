@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using Umbraco.Web;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
     internal partial class LookService
     {

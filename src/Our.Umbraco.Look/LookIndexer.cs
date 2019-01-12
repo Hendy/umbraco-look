@@ -6,6 +6,7 @@ using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Our.Umbraco.Look.Extensions;
+using Our.Umbraco.Look.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;

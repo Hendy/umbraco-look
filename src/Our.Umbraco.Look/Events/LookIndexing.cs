@@ -1,5 +1,6 @@
 ﻿using Examine;
 using Lucene.Net.Index;
+using Our.Umbraco.Look.Services;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Events;

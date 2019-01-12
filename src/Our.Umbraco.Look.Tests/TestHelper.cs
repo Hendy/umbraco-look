@@ -4,6 +4,7 @@ using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Lucene.Net.Store;
 using Our.Umbraco.Look.Models;
+using Our.Umbraco.Look.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;

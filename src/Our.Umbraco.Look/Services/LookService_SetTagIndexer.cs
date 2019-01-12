@@ -1,7 +1,7 @@
 ﻿using System;
 using Umbraco.Core.Logging;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
     internal partial class LookService
     {

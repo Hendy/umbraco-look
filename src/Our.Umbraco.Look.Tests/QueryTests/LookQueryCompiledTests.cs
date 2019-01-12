@@ -22,7 +22,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             Assert.IsNull(lookQuery.Compiled);
         }
@@ -32,7 +32,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             Assert.IsNotNull(lookQuery.Compiled);
         }
@@ -43,7 +43,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             lookQuery.RawQuery = "+field:value";
 
@@ -55,7 +55,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             lookQuery.NodeQuery = new NodeQuery();
 
@@ -67,7 +67,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             lookQuery.NameQuery = new NameQuery();
             lookQuery.NameQuery.StartsWith = "new value";
@@ -80,7 +80,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             lookQuery.DateQuery = new DateQuery();
             lookQuery.DateQuery.Before = DateTime.MaxValue;
@@ -93,7 +93,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             lookQuery.TextQuery = new TextQuery();
             lookQuery.TextQuery.GetHighlight = true;
@@ -106,7 +106,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             lookQuery.TagQuery = new TagQuery();
             lookQuery.TagQuery.FacetOn = new TagFacetQuery();
@@ -119,7 +119,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Run();
 
             lookQuery.LocationQuery = new LocationQuery();
             lookQuery.LocationQuery.MaxDistance = new Distance(1, DistanceUnit.Miles);
@@ -136,13 +136,13 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsNull(lookQuery.Compiled);
 
-            var lookResults = LookService.RunQuery(lookQuery);
+            var lookResults = lookQuery.Run();
             var total = lookResults.TotalItemCount;
 
             Assert.IsNotNull(lookQuery.Compiled);
             Assert.IsTrue(total > 0);
 
-            Assert.AreEqual(total, LookService.RunQuery(lookQuery).TotalItemCount);            
+            Assert.AreEqual(total, lookQuery.Run().TotalItemCount);            
         }
     }
 }

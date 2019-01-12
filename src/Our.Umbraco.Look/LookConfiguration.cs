@@ -1,4 +1,5 @@
 ﻿using System;
+using Our.Umbraco.Look.Services;
 
 namespace Our.Umbraco.Look
 {
