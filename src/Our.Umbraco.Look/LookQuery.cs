@@ -1,4 +1,5 @@
 ﻿using Examine.SearchCriteria;
+using Our.Umbraco.Look.Models;
 using System.Linq;
 
 namespace Our.Umbraco.Look

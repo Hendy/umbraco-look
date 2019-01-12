@@ -1,7 +1,7 @@
 ﻿using Lucene.Net.Analysis;
 using Lucene.Net.Search;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Models
 {
     /// <summary>
     /// Model specifying details as to how the search should interact with the Lucene index
