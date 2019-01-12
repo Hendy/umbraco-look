@@ -251,6 +251,7 @@
     <Compile Include="Extensions\IEnumerableExtensions\BothNullOrElementsEqual.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\GetFlatDetachedDescendants.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\GetGuidKey.cs" />
+    <Compile Include="Extensions\ObjectExtensions\BothNullOrEquals.cs" />
     <Compile Include="Extensions\StringExtensions\LuceneStringToDate.cs" />
     <Compile Include="Extensions\DateTimeExtensions\DateToLuceneString.cs" />
     <Compile Include="Extensions\UmbracoHelperExtensions\SafeTypedMember.cs" />

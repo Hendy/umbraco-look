@@ -103,7 +103,7 @@ namespace Our.Umbraco.Look
             return tagQuery != null
                     && tagQuery.All.BothNullOrElementsEqual(this.All)                    
                     && tagQuery.None.BothNullOrElementsEqual(this.None)
-                    && ((tagQuery.FacetOn == null && this.FacetOn == null) || (tagQuery.FacetOn != null && tagQuery.FacetOn.Equals(this.FacetOn)))
+                    && tagQuery.FacetOn.BothNullOrEquals(this.FacetOn)
                     && anyQueryEqual(tagQuery.Any, this.Any); // potentially the slowest of all clauses, so last
         }
 

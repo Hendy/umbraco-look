@@ -1,4 +1,5 @@
 ﻿using Examine.SearchCriteria;
+using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Models;
 using Our.Umbraco.Look.Services;
 using System.Linq;
@@ -177,12 +178,12 @@ namespace Our.Umbraco.Look
                 lookQuery != null
                 && lookQuery.RequestFields == this.RequestFields
                 && lookQuery.RawQuery == this.RawQuery
-                && ((lookQuery.NodeQuery == null && this.NodeQuery == null) || this.NodeQuery != null && this.NodeQuery.Equals(lookQuery.NodeQuery))
-                && ((lookQuery.NameQuery == null && this.NameQuery == null) || this.NameQuery != null && this.NameQuery.Equals(lookQuery.NameQuery))
-                && ((lookQuery.DateQuery == null && this.DateQuery == null) || this.DateQuery != null && this.DateQuery.Equals(lookQuery.DateQuery))
-                && ((lookQuery.TextQuery == null && this.TextQuery == null) || this.TextQuery != null && this.TextQuery.Equals(lookQuery.TextQuery))
-                && ((lookQuery.TagQuery == null && this.TagQuery == null) || this.TagQuery != null && this.TagQuery.Equals(lookQuery.TagQuery))
-                && ((lookQuery.LocationQuery == null && this.LocationQuery == null) || this.LocationQuery != null && this.LocationQuery.Equals(lookQuery.LocationQuery))
+                && lookQuery.NodeQuery.BothNullOrEquals(this.NodeQuery)
+                && lookQuery.NameQuery.BothNullOrEquals(this.NameQuery)
+                && lookQuery.DateQuery.BothNullOrEquals(this.DateQuery)
+                && lookQuery.TextQuery.BothNullOrEquals(this.TextQuery)
+                && lookQuery.TagQuery.BothNullOrEquals(this.TagQuery)
+                && lookQuery.LocationQuery.BothNullOrEquals(this.LocationQuery)
                 && lookQuery.SortOn == this.SortOn
                 && lookQuery.SearcherName == this.SearcherName;
         }
