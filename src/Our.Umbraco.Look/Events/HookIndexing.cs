@@ -1,6 +1,7 @@
 ﻿using Examine.LuceneEngine;
 using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Services;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -18,6 +19,7 @@ namespace Our.Umbraco.Look.Events
     /// <summary>
     /// Hooks into all configured Exmaine Umbraco indexers, allowing Look to add additional fields
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)] // hide from api intellisense
     public class HookIndexing : ApplicationEventHandler
     {
         /// <summary>
