@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Our.Umbraco.Look.Tests.QueryTests
 {
@@ -19,8 +20,8 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.NodeQuery = new NodeQuery()
             {
-                Keys = new string[] { "04719e28-a337-4710-be12-9764afba8096" },
-                NotKeys = new string[] { "04719e28-a337-4710-be12-9764afba8096" }
+                Keys = new [] { Guid.Parse("04719e28-a337-4710-be12-9764afba8096") },
+                NotKeys = new [] { Guid.Parse("04719e28-a337-4710-be12-9764afba8096") },
             };
 
             var lookResult = lookQuery.Run();

@@ -170,7 +170,7 @@ namespace Our.Umbraco.Look.Services
                         foreach (var key in lookQuery.NodeQuery.Keys)
                         {
                             keyQuery.Add(
-                                        new TermQuery(new Term(LookConstants.NodeKeyField, key)),
+                                        new TermQuery(new Term(LookConstants.NodeKeyField, key.GuidToLuceneString())),
                                         BooleanClause.Occur.SHOULD);
                         }
 
@@ -192,7 +192,7 @@ namespace Our.Umbraco.Look.Services
                         foreach (var excludeKey in lookQuery.NodeQuery.NotKeys)
                         {
                             query.Add(
-                                    new TermQuery(new Term(LookConstants.NodeKeyField, excludeKey)),
+                                    new TermQuery(new Term(LookConstants.NodeKeyField, excludeKey.GuidToLuceneString())),
                                     BooleanClause.Occur.MUST_NOT);
                         }
                     }

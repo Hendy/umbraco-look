@@ -1,4 +1,5 @@
 ﻿using Our.Umbraco.Look.Extensions;
+using System;
 using System.Globalization;
 using Umbraco.Core.Models;
 
@@ -29,7 +30,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// If not null, then each result returned must have a key in this collection (useful for finding detached content)
         /// </summary>
-        public string[] Keys { get; set; } = null;
+        public Guid[] Keys { get; set; } = null;
 
         /// <summary>
         /// Any umbraco ids that should be exlcuded from the results
@@ -39,7 +40,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// 
         /// </summary>
-        public string[] NotKeys { get; set; } = null;
+        public Guid[] NotKeys { get; set; } = null;
 
         /// <summary>
         /// Create new empty NodeQuery search criteria
