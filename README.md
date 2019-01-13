@@ -181,8 +181,14 @@ lookQuery.NodeQuery = new NodeQuery() {
 		"myMediaTypeAlias",
 		"myMemberTypeAlias"
 	},
+	Ids = new [] { 1,2,3 },
+	Keys = new [] { 
+		Guid.Parse("dc890492-4571-4701-8085-b874837d597a"), 
+		Guid.Parse("9f60f10f-74ea-4323-98bb-13b6f6423ad6"),
+		Guid.Parse("88a9e4e3-d4cb-4641-aff3-8579f1d60399")
+	}
 	NotIds = new [] { 123 }, // (eg. exclude current page)
-	NotKeys = new [] { "6bb24ed2-9466-422f-a9d4-27a805db2d47" }
+	NotKeys = new [] { Guid.Parse("6bb24ed2-9466-422f-a9d4-27a805db2d47") }
 };
 ```
 
@@ -241,7 +247,7 @@ The FacetOn proeperty is used to specify how tag faceting is caluculated (see Fa
 ```csharp
 lookQuery.TagQuery = new TagQuery() {
 	All = TagQuery.MakeTags("size:large"), // all of these tags
-	Any = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags
+	Any = new LookTag[][] { TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") } // at least one of these tags
 	Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority,
 	FacetOn = new TagFacetQuery("colour", "size", "shape")
 };
