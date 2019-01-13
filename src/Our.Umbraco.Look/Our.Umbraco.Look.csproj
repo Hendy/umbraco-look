@@ -290,7 +290,7 @@
     <Compile Include="Services\LookService_GetLookMatches.cs" />
     <Compile Include="Services\LookService_GetSearchingContext.cs" />
     <Compile Include="Services\LookService_Index.cs" />
-    <Compile Include="Services\LookService_RunQuery.cs" />
+    <Compile Include="Services\LookService_Search.cs" />
     <Compile Include="Services\LookService_Initialize.cs" />
     <Compile Include="Services\LookService_SetDateIndexer.cs" />
     <Compile Include="Services\LookService_SetLocationIndexer.cs" />

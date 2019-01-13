@@ -266,7 +266,7 @@ If not specified then the reults will be sorted on the Lucene score, otherwise s
 
 ### Search Results
 
-The search can be performed by calling the Run method on the LookQuery object:
+The search can be performed by calling the Search method on the LookQuery object:
 
 ```csharp
 var lookResult = lookQuery.Search();

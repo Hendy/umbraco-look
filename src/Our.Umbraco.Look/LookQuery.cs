@@ -162,7 +162,7 @@ namespace Our.Umbraco.Look
         /// <returns></returns>
         public LookResult Search()
         {
-            return LookService.RunQuery(this);
+            return LookService.Search(this);
         }
 
         /// <summary>
