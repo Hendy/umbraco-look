@@ -28,6 +28,11 @@ namespace Our.Umbraco.Look
         public string[] Aliases { get; set; } = null;
 
         /// <summary>
+        /// Only content, media or members with these ids will be retuned (detached items don't have ids)
+        /// </summary>
+        public int[] Ids { get; set; }
+
+        /// <summary>
         /// If not null, then each result returned must have a key in this collection (useful for finding detached content)
         /// </summary>
         public Guid[] Keys { get; set; } = null;

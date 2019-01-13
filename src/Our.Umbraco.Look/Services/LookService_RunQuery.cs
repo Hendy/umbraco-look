@@ -153,6 +153,30 @@ namespace Our.Umbraco.Look.Services
                         query.Add(nodeAliasQuery, BooleanClause.Occur.MUST);
                     }
 
+                    if (lookQuery.NodeQuery.Ids != null && lookQuery.NodeQuery.Ids.Any())
+                    {
+                        if (lookQuery.NodeQuery.NotIds != null)
+                        {
+                            var conflictIds = lookQuery.NodeQuery.Ids.Where(x => lookQuery.NodeQuery.NotIds.Contains(x));
+
+                            if (conflictIds.Any())
+                            {
+                                return new LookResult($"Conflict in NodeQuery, Ids: '{ string.Join(",", conflictIds) }' are in both Ids and NotIds");
+                            }
+                        }
+
+                        var idQuery = new BooleanQuery();
+
+                        foreach (var id in lookQuery.NodeQuery.Ids)
+                        {
+                            idQuery.Add(
+                                        new TermQuery(new Term(LookConstants.NodeIdField, id.ToString())),
+                                        BooleanClause.Occur.SHOULD);
+                        }
+
+                        query.Add(idQuery, BooleanClause.Occur.MUST);
+                    }
+
                     if (lookQuery.NodeQuery.Keys != null && lookQuery.NodeQuery.Keys.Any())
                     {
                         if (lookQuery.NodeQuery.NotKeys != null)
