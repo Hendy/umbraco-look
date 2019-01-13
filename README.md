@@ -63,72 +63,8 @@ public class IndexingContext
     public string IndexerName { get; }
 }
 ```
+[Example](../../wiki/Example-Indexing)
 
-The index setters would typically be set in an Umbraco startup event (but they can be changed at any-time). Eg.
-
-```csharp
-public class ConfigureIndexing : ApplicationEventHandler
-{	
-	/// <summary>
-	/// Umbraco has started event
-	/// </summary>
-	protected override void ApplicationStarted(
-				UmbracoApplicationBase umbracoApplication, 
-				ApplicationContext applicationContext)
-	{				
-		LookConfiguration.NameIndexer = indexingContext => { 
-			
-			// eg. always return the Name of the IPublishedContent
-			return indexingContext.Item.Name; 
-		};
-
-		LookConfiguration.DateIndexer = indexingContext => { 
-			
-			// eg. news articles use a different date
-			if (indexingContext.Item.DocumentTypeAlias == "newsArticle") 
-			{
-				return indexingItem.GetPropertyValue<DateTime>("releaseDate");
-			}
-
-			return indexingContext.Item.UpdateDate; 
-		};
-
-		LookConfiguration.TextIndexer = indexingContext => { 
-
-			// eg. if content, render page and scrape markup
-			if (!indexingContext.IsDetached && indexingContext.Item.ItemType == PublishedItemType.Content) 
-			{				
-				// (could pass in httpContext to render page without http web request)
-				// return string
-			}
-
-			return null; // don't index
-		};
-		
-		LookConfiguration.TagIndexer = indexingContext => {
-			// return LookTag[] or null (see tags section below)
-
-			// eg a nuPicker
-			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
-
-			return picker
-				.PickedKeys
-				.Select(x => new LookTag("colour", x))
-				.ToArray();
-		};
-		
-		LookConfiguration.LocationIndexer = indexingContext => {
-			// return Location or null
-
-			// eg. using Terratype			 
-			var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
-			var terratypeLatLng = terratype.Position.ToWgs84();
-
-			return new Location(terratypeLatLng.Latitude, terratypeLatLng.Longitude);
-		};
-	}
-}
-```
 
 ## Searching
 
