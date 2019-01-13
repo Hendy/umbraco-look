@@ -106,7 +106,7 @@ namespace Our.Umbraco.Look
                 lookQuery.LocationQuery = lookSearchCriteria.LocationQuery;
             }
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             return lookResult;
         }
@@ -136,7 +136,7 @@ namespace Our.Umbraco.Look
                 TextQuery = new TextQuery(searchText)
             };
 
-            var lookResult = lookQuery.Run();           
+            var lookResult = lookQuery.Search();           
 
             return lookResult;
         }

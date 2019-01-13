@@ -24,7 +24,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
                 NotKeys = new [] { Guid.Parse("04719e28-a337-4710-be12-9764afba8096") },
             };
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsNotNull(lookResult);
             Assert.IsFalse(lookResult.Success);
@@ -42,7 +42,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
                 None = TagQuery.MakeTags("tag1")
             };
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsNotNull(lookResult);
             Assert.IsFalse(lookResult.Success);
@@ -60,7 +60,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
                 None = TagQuery.MakeTags("tag1")
             };
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsNotNull(lookResult);
             Assert.IsFalse(lookResult.Success);

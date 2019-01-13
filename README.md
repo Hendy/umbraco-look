@@ -269,7 +269,7 @@ If not specified then the reults will be sorted on the Lucene score, otherwise s
 The search can be performed by calling the Run method on the LookQuery object:
 
 ```csharp
-var lookResult = lookQuery.Run();
+var lookResult = lookQuery.Search();
 ```
 
 When the query is performed, the source LookQuery model is compiled, such that it can be useful to hold onto a reference for any subsequent paging queries. The 

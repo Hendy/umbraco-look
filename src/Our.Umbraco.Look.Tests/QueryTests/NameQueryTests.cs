@@ -19,7 +19,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Has_Name()
         {
-            Assert.IsTrue(new LookQuery(TestHelper.GetSearchingContext()) { NameQuery = new NameQuery() }.Run().TotalItemCount > 0);
+            Assert.IsTrue(new LookQuery(TestHelper.GetSearchingContext()) { NameQuery = new NameQuery() }.Search().TotalItemCount > 0);
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.NameQuery = new NameQuery();
             lookQuery.NameQuery.Is = "123";
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount == 1);
@@ -46,7 +46,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.StartsWith = "12";
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.TotalItemCount > 0);
         }
@@ -60,7 +60,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.EndsWith= "23";
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.TotalItemCount > 0);
         }
@@ -75,7 +75,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.NameQuery.StartsWith = "12";
             lookQuery.NameQuery.EndsWith = "23";
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.TotalItemCount > 0);
         }
@@ -89,7 +89,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.StartsWith = "xyz";
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsFalse(lookResult.Success);
         }
@@ -103,7 +103,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.NameQuery.Is = "123";
             lookQuery.NameQuery.EndsWith = "xyz";
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsFalse(lookResult.Success);
         }

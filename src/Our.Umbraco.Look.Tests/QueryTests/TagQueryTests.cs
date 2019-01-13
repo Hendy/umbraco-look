@@ -26,7 +26,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Has_Tags()
         {
-            Assert.IsTrue(new LookQuery(TestHelper.GetSearchingContext()) { TagQuery = new TagQuery() }.Run().TotalItemCount > 0);
+            Assert.IsTrue(new LookQuery(TestHelper.GetSearchingContext()) { TagQuery = new TagQuery() }.Search().TotalItemCount > 0);
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TagQuery = new TagQuery() { All = new [] { new LookTag("shape", "circle") } };
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
             Assert.AreEqual(3, lookResult.TotalItemCount);
@@ -53,7 +53,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
                 Any = new LookTag[][] { TagQuery.MakeTags("size:small", "size:medium") }
             };
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
             Assert.AreEqual(2, lookResult.TotalItemCount);
@@ -72,7 +72,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
                 }
             };
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
             Assert.AreEqual(4, lookResult.TotalItemCount);
@@ -89,7 +89,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
                 None = TagQuery.MakeTags("shape:circle")
             };
 
-            var lookResult = lookQuery.Run();
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
             Assert.AreEqual(6, lookResult.TotalItemCount);
