@@ -38,7 +38,7 @@ namespace Our.Umbraco.Look
         public int[] NotIds { get; set; } = null;
 
         /// <summary>
-        /// 
+        /// Any keys that should be excluded from the results
         /// </summary>
         public Guid[] NotKeys { get; set; } = null;
 
