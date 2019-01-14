@@ -57,7 +57,33 @@ namespace Our.Umbraco.Look.Tests.ModelTests
             var tagQuery2 = new TagQuery() { All = TagQuery.MakeTags("tag1", "tag2") };
 
             Assert.AreNotEqual(tagQuery1, tagQuery2);
+        }
 
+        [TestMethod]
+        public void Same_Tags_Both_Empty()
+        {
+            var tagQuery1 = new TagQuery() { All = new LookTag[] { } };
+            var tagQuery2 = new TagQuery() { All = new LookTag[] { } };
+
+            Assert.AreEqual(tagQuery1, tagQuery2);
+        }
+
+        [TestMethod]
+        public void Different_Tags_First_Empty()
+        {
+            var tagQuery1 = new TagQuery() { All = new LookTag[] { } };
+            var tagQuery2 = new TagQuery() { All = TagQuery.MakeTags("tag1") };
+
+            Assert.AreNotEqual(tagQuery1, tagQuery2);
+        }
+
+        [TestMethod]
+        public void Different_Tags_Second_Empty()
+        {
+            var tagQuery1 = new TagQuery() { All = TagQuery.MakeTags("tag1") };
+            var tagQuery2 = new TagQuery() { All = new LookTag[] { } };
+
+            Assert.AreNotEqual(tagQuery1, tagQuery2);
         }
 
         [TestMethod]
@@ -113,5 +139,34 @@ namespace Our.Umbraco.Look.Tests.ModelTests
 
             Assert.AreNotEqual(tagQuery1, tagQuery2);
         }
+
+        [TestMethod]
+        public void Same_Tag_Collection_Of_Collections_Both_Empty()
+        {
+            var tagQuery1 = new TagQuery() { Any = new LookTag[][] { } };
+            var tagQuery2 = new TagQuery() { Any = new LookTag[][] { } };
+
+            Assert.AreEqual(tagQuery1, tagQuery2);
+        }
+
+        [TestMethod]
+        public void Different_Tag_Collection_Of_Collections_First_Empty()
+        {
+            var tagQuery1 = new TagQuery() { Any = new LookTag[][] { } };
+            var tagQuery2 = new TagQuery() { Any = new LookTag[][] { TagQuery.MakeTags("tag1", "tag2") } };
+
+            Assert.AreNotEqual(tagQuery1, tagQuery2);
+        }
+
+
+        [TestMethod]
+        public void Different_Tag_Collection_Of_Collections_Second_Empty()
+        {
+            var tagQuery1 = new TagQuery() { Any = new LookTag[][] { TagQuery.MakeTags("tag1", "tag2") } };
+            var tagQuery2 = new TagQuery() { Any = new LookTag[][] { } };
+
+            Assert.AreNotEqual(tagQuery1, tagQuery2);
+        }
+
     }
 }

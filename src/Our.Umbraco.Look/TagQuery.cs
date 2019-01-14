@@ -1,5 +1,4 @@
 ﻿using Our.Umbraco.Look.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,46 +64,11 @@ namespace Our.Umbraco.Look
         {
             var tagQuery = obj as TagQuery;
 
-            var anyQueryEqual = new Func<LookTag[][], LookTag[][], bool>((first, second) =>
-            {
-                if (first == null && second == null) return true;
-
-                if (first == null || second == null) return false;
-
-                if (first.Count() != second.Count()) return false;
-
-                var firstStack = new Stack<LookTag[]>(first);
-
-                var areEqual = true;
-
-                do
-                {
-                    var firstCollection = firstStack.Pop();
-
-                    var matchingCollectionFound = false;
-
-                    var secondStack = new Stack<LookTag[]>(second);
-
-                    do
-                    {
-                        var secondCollection = secondStack.Pop();
-
-                        matchingCollectionFound = firstCollection.BothNullOrElementsEqual(secondCollection);
-                    }
-                    while (!matchingCollectionFound && secondStack.Any());
-
-                    areEqual = matchingCollectionFound;
-                }
-                while (areEqual && firstStack.Any());
-                
-                return areEqual;
-            });
-
             return tagQuery != null
-                    && tagQuery.All.BothNullOrElementsEqual(this.All)                    
+                    && tagQuery.All.BothNullOrElementsEqual(this.All)
                     && tagQuery.None.BothNullOrElementsEqual(this.None)
                     && tagQuery.FacetOn.BothNullOrEquals(this.FacetOn)
-                    && anyQueryEqual(tagQuery.Any, this.Any); // potentially the slowest of all clauses, so last
+                    && tagQuery.Any.BothNullOrElementCollectionsEqual(this.Any);  // potentially the slowest of all clauses, so last
         }
 
         internal TagQuery Clone()

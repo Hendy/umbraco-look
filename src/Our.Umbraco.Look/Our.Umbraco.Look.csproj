@@ -249,6 +249,7 @@
     <Compile Include="Events\LookIndexing.cs" />
     <Compile Include="Events\HookIndexing.cs" />
     <Compile Include="Extensions\GuidExtensions\GuidToLuceneString.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions\BothNullOrElementCollectionsEqual.cs" />
     <Compile Include="Extensions\IEnumerableExtensions\BothNullOrElementsEqual.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\GetFlatDetachedDescendants.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\GetGuidKey.cs" />
