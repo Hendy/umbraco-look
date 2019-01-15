@@ -15,7 +15,7 @@ namespace Our.Umbraco.Look
         public LookTag[] All { get; set; }
 
         /// <summary>
-        /// Must have at least one tag from each collection.
+        /// Must have at least one tag from each collection
         /// </summary>
         public LookTag[][] Any { get; set; }
 

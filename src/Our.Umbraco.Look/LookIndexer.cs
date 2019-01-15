@@ -226,9 +226,9 @@ namespace Our.Umbraco.Look
 
                 indexWriter.AddDocument(document);
 
-                foreach (var detachedContent in node.GetFlatDetachedDescendants())
+                foreach (var detachedNode in node.GetFlatDetachedDescendants())
                 {
-                    indexingContext = new IndexingContext(node, detachedContent, this.Name);
+                    indexingContext = new IndexingContext(node, detachedNode, this.Name);
 
                     document = new Document();
 
