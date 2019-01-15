@@ -21,25 +21,28 @@ namespace Our.Umbraco.Look.Extensions
 
             if (first.Count() != second.Count()) return false;
 
-            Stack<TSource> stack = new Stack<TSource>(first);
-            List<TSource> list = new List<TSource>(second);
-
             var areEqual = true;
 
-            do
+            if (first.Any())
             {
-                var element = stack.Pop();
+                Stack<TSource> stack = new Stack<TSource>(first);
+                List<TSource> list = new List<TSource>(second);
 
-                if (!list.Contains(element))
+                do
                 {
-                    areEqual = false;
+                    var element = stack.Pop();
+
+                    if (!list.Contains(element))
+                    {
+                        areEqual = false;
+                    }
+                    else
+                    {
+                        list.Remove(element);
+                    }
                 }
-                else
-                {
-                    list.Remove(element);
-                }
+                while (areEqual && stack.Any());
             }
-            while (areEqual && stack.Any());
 
             return areEqual;
         }
