@@ -1,6 +1,5 @@
-# Umbraco Look (Alpha)
-Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for: text match highlighting, geospatial querying and tag faceting.
-Examine manages the indexes, whilst Look adds 'config-file-free' C# indexing and a lightweight querying API.
+# Umbraco Look (Beta)
+Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for: text match highlighting, geospatial querying, tag faceting and the indexing of detached IPublishedContent.
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
 
@@ -8,17 +7,13 @@ Examine manages the indexes, whilst Look adds 'config-file-free' C# indexing and
   * Examine 0.1.70 (min)
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
+ ## Indexing
 
-Look can be used in a number of ways. Once installed Look offers .net seams for indexing IPublishedConent, be they content, media, members nodes or properties that return collections of IPublishedContent (eg. Nested Content).
+Look can be used in a number of ways. Once installed it offers .Net seams for indexing additional data (`name`, `date`, `text`, `tags` and `location`) into any existing Exmaine Content or Member indexers (without having to change any configuration files) - this has been termed 'Hook Indexing'.
+Look also includes an Exmaine indexer that when configured (see [Examine configuration](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)) can index Umbraco content, media, or member nodes, and also properties that return collections of IPublishedContent (eg. Nested Content).
 
-
-
-## Indexing
-
-Look automatically hooks into all Umbraco Exmaine indexers offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data.
 To configure the indexing behaviour, functions can be set via static methods on the LookConfiguration class (all are optional).
 If a function is set and returns a value then custom Lucene field(s) prefixed with "Look_" will be used.
-(On a default Umbraco install, the indexers are: "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer", see [/config/ExamineSettings.config](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)).
 
 The static properties definitions on LookConfiguration where indexing functions can be set:
 
@@ -48,19 +43,19 @@ The model supplied to the indexing functions:
 public class IndexingContext
 {
     /// <summary>
-    /// When a detached item is being indexed, this property will be the hosting content, media or member
+    /// The name of the Examine indexer into which this item is being indexed
     /// </summary>
-    public IPublishedContent HostItem { get; }
+    public string IndexerName { get; }
 
     /// <summary>
-    /// The Content, Media, Member or Detacehd item being indexed
+    /// The Content, Media, Member or Detacehd item being indexed (always has a value)
     /// </summary>
     public IPublishedContent Item { get; }
 
     /// <summary>
-    /// The name of the Examine indexer into which this item is being indexed
+    /// When a detached item is being indexed, this property will be the hosting content, media or member (otherwise it will be null)
     /// </summary>
-    public string IndexerName { get; }
+    public IPublishedContent HostItem { get; }
 }
 ```
 [Example](../../wiki/Example-Indexing)
