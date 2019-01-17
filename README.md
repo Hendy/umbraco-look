@@ -9,16 +9,16 @@ Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/refe
 
  ## Indexing
 
-Look can be used index additional `name`, `date`, `text`, `tags` and `location` data into Lucene indexes in two ways. 
+Look can be used index additional `name`, `date`, `text`, `tags` and `location` data into Lucene indexes, in two ways:
 
-Firstly, once installed, it offers .Net seams for adding such data into any configured Umbraco Exmaine indexers (referred to as 'hook' indexing). 
-This can be useful in that no configuration files need to be changed as Look can hook into the default _External_, _Internal_, and _InternalMember_ indexers (or any others that have been configured).
+Firstly, once installed, it offers .Net seams for adding such data into any configured Umbraco Examine indexers (referred to as 'hook' indexing). 
+This can be useful as no configuration files need to be changed as it can hook into the default _External_, _Internal_, and _InternalMember_ indexers (or any others that have been setup).
 
-Secondly Look includes an Exmaine indexer that when configured (see [Examine configuration](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)) can 
-also index properties that return collections of IPublishedContent (eg. Nested Content) in additional to Umbraco content, media and member nodes (referred to as 'look' indexing).
+Secondly Look includes an Examine indexer that when configured (see [Examine configuration](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)) can 
+also index properties that return collections of IPublishedContent (eg. Nested Content) in additional to the Umbraco content, media and member nodes (referred to as 'look' indexing).
 
-To configure the indexing behaviour for either of the two ways mentioned above, functions can be set via static methods on the LookConfiguration class (all are optional).
-If a function is set and returns a value then custom Lucene field(s) prefixed with "Look_" will be used.
+To configure the indexing behaviour for either of the two ways, functions can be set via static methods on the LookConfiguration class (all are optional).
+If a function is set and returns a value then custom Lucene field(s) prefixed with "Look_" will be used to store that value.
 
 ```csharp
 public static class LookConfiguration
@@ -67,7 +67,7 @@ public class IndexingContext
 
 ## Searching
 
-Searching is performed using a configured (Umbraco or Look) Examine Searcher and can be done using the Exmaine API, or directly with the Look API.
+Searching is performed using a configured (Umbraco or Look) Examine Searcher and can be done using the Exmaine API, or with the Look API.
 
 To be able to use the additional query types that Look introduces (text highlighting, tag faceting etc...) with the Exmaine API, a Look searcher needs to be used
 (rather than an Umbraco searcher). This is because a Look searcher will return an object as ISearchCritera that can be cast to LookSearchCriteria where the Look query types can be set. Eg.
