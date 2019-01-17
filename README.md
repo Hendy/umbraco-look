@@ -181,7 +181,7 @@ The FacetOn proeperty is used to specify how tag faceting is caluculated (see Fa
 lookQuery.TagQuery = new TagQuery() {
 	All = TagQuery.MakeTags("size:large"),
 	Any = new LookTag[][] { TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") }
-	Not = TagQuery.MakeTags("colour:black"),
+	None = TagQuery.MakeTags("colour:black"),
 	FacetOn = new TagFacetQuery("colour", "size", "shape")
 };
 ```
