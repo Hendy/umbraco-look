@@ -73,7 +73,7 @@ To be able to use the additional query types that Look introduces (text highligh
 (rather than an Umbraco searcher). This is because a Look searcher will return an object as ISearchCritera that can be cast to LookSearchCriteria where the Look query types can be set. Eg.
 
 ```csharp
-var searcher = ExamineManager.Instance.SearchProviderCollection["MyLookSearcher"]
+var searcher = ExamineManager.Instance.SearchProviderCollection["MyLookSearcher"];
 var searchCriteria = searcher.CreateSearchCriteria();
 var lookSearchCriteria = (LookSearchCriteria)searchCriteria;
 
