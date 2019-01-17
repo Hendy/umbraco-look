@@ -9,8 +9,8 @@ Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/refe
 
  ## Indexing
 
-Look can be used in a number of ways. Once installed it offers .Net seams for indexing additional data (`name`, `date`, `text`, `tags` and `location`) into any existing Exmaine Content or Member indexers (without having to change any configuration files) - this has been termed 'Hook Indexing'.
-Look also includes an Exmaine indexer that when configured (see [Examine configuration](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)) can index Umbraco content, media, or member nodes, and also properties that return collections of IPublishedContent (eg. Nested Content).
+Look can be used in a number of ways. Once installed it offers .Net seams for indexing additional data (`name`, `date`, `text`, `tags` and `location`) into any existing Exmaine Content or Member indexers (without having to change any configuration files).
+Look also includes an Exmaine indexer that when configured (see [Examine configuration](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)) can in addition to indexing Umbraco content, media and member nodes, also index properties that return collections of IPublishedContent (eg. Nested Content).
 
 To configure the indexing behaviour, functions can be set via static methods on the LookConfiguration class (all are optional).
 If a function is set and returns a value then custom Lucene field(s) prefixed with "Look_" will be used.
@@ -48,22 +48,25 @@ public class IndexingContext
     public string IndexerName { get; }
 
     /// <summary>
-    /// The Content, Media, Member or Detacehd item being indexed (always has a value)
+    /// The Content, Media, Member or Detached item being indexed (always has a value)
     /// </summary>
     public IPublishedContent Item { get; }
 
     /// <summary>
-    /// When a detached item is being indexed, this property will be the hosting content, media or member (otherwise it will be null)
+    /// When a detached item is being indexed, this property will be the hosting content, media or member 
+	/// (this value will null when the item being indexed is not Detached)
     /// </summary>
     public IPublishedContent HostItem { get; }
 }
 ```
-[Example](../../wiki/Example-Indexing)
+[Example Indexing Code](../../wiki/Example-Indexing)
 
 
 ## Searching
 
-A LookQuery consists of any combinations of these query types: `ExamineQuery`, `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
+Searching can be done using the regular Examine fluent API, or by using using the Look API which will return the regular ISearchResults but with additional properties.
+
+Using the Look API, a LookQuery consists of any combinations of these query types: `ExamineQuery`, `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
 together with an Examine Searcher. The LookQuery constructor is used to specify which Examine searcher to use:
 
 ```csharp
@@ -94,7 +97,7 @@ lookQuery.RawQuery = "+myField: myValue";
 ```
 
 #### NodeQuery
-A node query is used to set search criteria based on the IPublishedContent type, alias and any Ids that should be excluded (all properties are optional).
+A node query is used to specify search criteria based on common properties of IPublishedContent (all properties are optional).
 
 ```csharp
 lookQuery.NodeQuery = new NodeQuery() {
@@ -125,9 +128,7 @@ lookQuery.NodeQuery = new NodeQuery() {
 
 #### NameQuery
 A name query is used together with a custom name indexer and enables string comparrison queries (wildcards are not allowed and all properties are optional).
-If a name query is contradictory (for example, Is = "Must be this" and StartsWith = "Something else"), then
-an empty result will be returned with the Success flag being false. The NameQuery also has constructor overloads 
-for all properties where each is optional (defaulting to a case sensitive search).
+If a name query is set (ie, not null), then results must have a name value.
 
 ```csharp
 lookQuery.NameQuery = new NameQuery() {
@@ -141,7 +142,8 @@ lookQuery.NameQuery = new NameQuery() {
 
 #### DateQuery
 
-A date query is used together with a custom date indexer and enables date range queries (both date properties are optional).
+A date query is used together with a custom date indexer and enables date range queries (all properties are optional).
+If a date query is set (ie, not null), then results must have a date value.
 
 ```csharp
 lookQuery.DateQuery = new DateQuery() {
@@ -155,7 +157,7 @@ lookQuery.DateQuery = new DateQuery() {
 
 A text query is used together with a custom text indexer and allows for wildcard searching using the analyzer specified by Exmaine.
 Highlighting gives the ability to return an html snippet of text indiciating the part of the full text that the match was made on. All properties
-are optional, and there is a constructor where all properties are optional (by default GetHighlight and GetText are false).
+are optional).
 
 ```csharp
 lookQuery.TextQuery = new TextQuery() {
@@ -166,28 +168,28 @@ lookQuery.TextQuery = new TextQuery() {
 
 #### TagQuery
 
-A tag query is used together with a custom tag indexer.
+A tag query is used together with a custom tag indexer (all properties are optional).
+If a tag query is set (ie, not null), then each result must have at least one tag.
 
-The All, Any and Not properties expect LookTag[] values (see LookTags section below). 
-
-If there are any query contradictions (such as a tag exsing in both All and Not), then
-an empty result is returned with the success flag as false.
+All = each result must contain all of these tags.
+Any = each result must contain at least one tag from each of the collections supplied.
+None = each result must not contain any of these tags.
 
 The FacetOn proeperty is used to specify how tag faceting is caluculated (see Facets section below).
 
 ```csharp
 lookQuery.TagQuery = new TagQuery() {
-	All = TagQuery.MakeTags("size:large"), // all of these tags
-	Any = new LookTag[][] { TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") } // at least one of these tags
-	Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority,
+	All = TagQuery.MakeTags("size:large"),
+	Any = new LookTag[][] { TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") }
+	Not = TagQuery.MakeTags("colour:black"),
 	FacetOn = new TagFacetQuery("colour", "size", "shape")
 };
 ```
 
 #### LocationQuery
 
-A location query is used together with a custom location indexer. If a Location alone is set, then all nodes which 
-have a location indexed will have a distance value returned. However if a MaxDistance is also set, then only nodes
+A location query is used together with a custom location indexer. If a Location alone is set, then all results which 
+have a location indexed will have a distance value returned. However if a MaxDistance is also set, then only results
 within that range are returned.
 
 ```csharp
@@ -361,15 +363,3 @@ var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue", "size:
 ### Facets
 
 Look interprets facets to mean: "if the current query asked something slightly different (the facet being the difference), then how many results would be returned instead ?".
-
-
-Namespaces used in examples:
-```csharp
-using System;
-using System.Linq;
-using Umbraco.Core;
-using Umbraco.Core.Models;
-using Examine;
-using Examine.SearchCriteria;
-using Our.Umbraco.Look;
-```
