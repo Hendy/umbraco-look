@@ -1,4 +1,4 @@
-# Umbraco Look (Beta)
+# Look (Beta) for Umbraco Examine
 Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for: text match highlighting, geospatial querying, tag faceting and the indexing of detached IPublishedContent.
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
@@ -9,7 +9,7 @@ Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/refe
 
  ## Indexing
 
-Look can be used index additional `name`, `date`, `text`, `tags` and `location` data into Lucene indexes, in two ways:
+Look can be used index additional `name`, `date`, `text`, `tag` and `location` data into Lucene indexes, in two ways:
 
 Firstly, once installed, it offers .Net seams for adding such data into any configured Umbraco Examine indexers (referred to as 'hook' indexing). 
 This can be useful as no configuration files need to be changed as it can hook into the default _External_, _Internal_, and _InternalMember_ indexers (or any others that have been setup).
