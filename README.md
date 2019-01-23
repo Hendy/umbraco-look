@@ -45,21 +45,21 @@ The model supplied to the indexing functions:
 ```csharp
 public class IndexingContext
 {
-    /// <summary>
-    /// The name of the Examine indexer into which this item is being indexed
-    /// </summary>
-    public string IndexerName { get; }
+	/// <summary>
+	/// The name of the Examine indexer into which this item is being indexed
+	/// </summary>
+	public string IndexerName { get; }
 
-    /// <summary>
-    /// The Content, Media, Member or Detached item being indexed (always has a value)
-    /// </summary>
-    public IPublishedContent Item { get; }
+	/// <summary>
+	/// The Content, Media, Member or Detached item being indexed (always has a value)
+	/// </summary>
+	public IPublishedContent Item { get; }
 
-    /// <summary>
+	/// <summary>
 	/// When a detached item is being indexed, this property will be the hosting content, media or member 
 	/// (this value will null when the item being indexed is not Detached)
-    /// </summary>
-    public IPublishedContent HostItem { get; }
+	/// </summary>
+	public IPublishedContent HostItem { get; }
 }
 ```
 [Example Indexing Code](../../wiki/Example-Indexing)
@@ -70,18 +70,28 @@ public class IndexingContext
 Searching is performed using a configured (Umbraco or Look) Examine Searcher and can be done using the Exmaine API, or with the Look API.
 
 To be able to use the additional query types that Look introduces (text highlighting, tag faceting etc...) with the Exmaine API, a Look searcher needs to be used
-(rather than an Umbraco searcher). This is because a Look searcher will return an object as ISearchCritera that can be cast to LookSearchCriteria where the Look query types can be set. Eg.
+(rather than an Umbraco searcher). This is because a Look searcher will return an object as ISearchCritera that can be cast to LookSearchCriteria where the Look query types can be set.
+
+### Examine API
 
 ```csharp
 var searcher = ExamineManager.Instance.SearchProviderCollection["MyLookSearcher"];
 var searchCriteria = searcher.CreateSearchCriteria();
 var lookSearchCriteria = (LookSearchCriteria)searchCriteria;
 
+lookSearchCriteria.NodeQuery = ...
+lookSearchCriteria.NameQuery = ...
+lookSearchCriteria.DateQuery = ...
+lookSearchCriteria.TextQuery = ...
 lookSearchCriteria.TagQuery = ...
 lookSearchCriteria.LocationQuery = ...
+lookSearchCriteria.ExamineQuery = ...
+lookSearchCriteria.RawQuery = ...
 
 var results = searcher.Search(searchCriteria);
 ```
+
+### Look API
 
 The Look API can be used with all searchers. Eg.
 
@@ -96,8 +106,14 @@ var lookQuery = new LookQuery("MyLookSearcher"); // use a named Examine searcher
 ```
 
 ```csharp
+lookQuery.NodeQuery = ...
+lookQuery.NameQuery = ...
+lookQuery.DateQuery = ...
+lookQuery.TextQuery = ...
 lookQuery.TagQuery = ...
 lookQuery.LocationQuery = ...
+lookQuery.ExamineQuery = ...
+lookQuery.RawQuery = ...
 
 var results = lookQuery.Search();
 ```
@@ -106,22 +122,6 @@ var results = lookQuery.Search();
 
 All query types are optional, but when set, they become a required clause. All queries will return a LookResult, which has a boolean Success flag property. The flag
 is set to true when a query with at least one clause is executed sucessfully.
-
-#### ExamineQuery
-
-Examine ISearchCriteria can be passed into a LookQuery.
-
-```charp
-lookQuery.ExamineQuery = myExamineQuery.Compile();
-```
-
-#### RawQuery
-
-String property for any [Lucene raw query](http://www.lucenetutorial.com/lucene-query-syntax.html).
-
-```csharp
-lookQuery.RawQuery = "+myField: myValue";
-```
 
 #### NodeQuery
 A node query is used to specify search criteria based on common properties of IPublishedContent (all properties are optional).
@@ -230,6 +230,22 @@ lookQuery.LocationQuery = new LocationQuery() {
 	Location = new Location(55.406330, 10.388500),
 	MaxDistance = new Distance(500, DistanceUnit.Miles)
 };
+```
+
+#### ExamineQuery
+
+Examine ISearchCriteria can be passed into a LookQuery.
+
+```charp
+lookQuery.ExamineQuery = myExamineQuery.Compile();
+```
+
+#### RawQuery
+
+String property for any [Lucene raw query](http://www.lucenetutorial.com/lucene-query-syntax.html).
+
+```csharp
+lookQuery.RawQuery = "+myField: myValue";
 ```
 
 #### SortOn
