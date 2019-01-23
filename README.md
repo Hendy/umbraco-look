@@ -1,5 +1,15 @@
 # Look (Beta) for Umbraco Examine
-Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for: text match highlighting, geospatial querying, tag faceting and the indexing of detached IPublishedContent.
+Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for:
+
+* Indexing all IPublishedContent items (each as a Lucene Document) be they: Umbraco Content, Media, Members or properties on them that return IPublishedContent, eg. Nested Content. 
+
+* Text match highlighting - return fragments of contextual text relevant to the supplied search term.
+
+* Geospatial querying - calculate the distance from a geographical location for each item, this can also be used for filtering / sorting.
+
+* Tag faceting - return a colleciton of facets, where each details the number of results that would be returned, should that facet be applied to the current query (useful for guided navigation).
+
+## Installation
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
 
@@ -9,15 +19,15 @@ Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/refe
 
  ## Indexing
 
-Look can be used index additional `name`, `date`, `text`, `tag` and `location` data into Lucene indexes, in two ways:
+Look can be used index additional `name`, `date`, `text`, `tag` and `location` for an IPublishedContent item into Lucene indexes, in two ways:
 
-Firstly, once installed, it offers .Net seams for adding such data into any configured Umbraco Examine indexers (referred to as 'hook' indexing). 
+Firstly, once installed, it offers .Net seams for adding such data into any configured Umbraco Examine indexers.
 This can be useful as no configuration files need to be changed as it can hook into the default _External_, _Internal_, and _InternalMember_ indexers (or any others that have been setup).
 
 Secondly Look includes an Examine indexer that when configured (see [Examine configuration](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)) can 
-also index properties that return collections of IPublishedContent (eg. Nested Content) in additional to the Umbraco content, media and member nodes (referred to as 'look' indexing).
+also index properties that return collections of IPublishedContent (eg. Nested Content) in additional to the Umbraco Content, Media and Member nodes.
 
-To configure the indexing behaviour for either of the two ways, functions can be set via static methods on the LookConfiguration class (all are optional).
+To configure the indexing behaviour for either of the ways mentioned, functions can be set via static methods on the LookConfiguration class (all are optional).
 If a function is set and returns a value then custom Lucene field(s) prefixed with "Look_" will be used to store that value.
 
 ```csharp
@@ -69,7 +79,7 @@ public class IndexingContext
 
 Searching is performed using a configured (Umbraco or Look) Examine Searcher and can be done using the Exmaine API, or with the Look API.
 
-To be able to use the additional query types that Look introduces (text highlighting, tag faceting etc...) with the Exmaine API, a Look searcher needs to be used
+To be able to use the additional query types that Look introduces with the Exmaine API, a Look searcher needs to be used
 (rather than an Umbraco searcher). This is because a Look searcher will return an object as ISearchCritera that can be cast to LookSearchCriteria where the Look query types can be set.
 
 ### Examine API
@@ -120,8 +130,8 @@ var results = lookQuery.Search();
 
 ### Look Query types
 
-All query types are optional, but when set, they become a required clause. All queries will return a LookResult, which has a boolean Success flag property. The flag
-is set to true when a query with at least one clause is executed sucessfully.
+All query types are optional, but when set, they become a required clause. 
+
 
 #### NodeQuery
 A node query is used to specify search criteria based on common properties of IPublishedContent (all properties are optional).
@@ -199,9 +209,6 @@ A tag query is used together with a custom tag indexer (all properties are optio
 If a tag query is set (ie, not null), then each result must have at least one tag.
 
 
-
-
-
 All = each result must contain all of these tags.
 
 Any = each result must contain at least one tag from each of the collections supplied.
@@ -260,9 +267,9 @@ The search can be performed by calling the Search method on the LookQuery object
 var lookResult = lookQuery.Search();
 ```
 
-When the query is performed, the source LookQuery model is compiled, such that it can be useful to hold onto a reference for any subsequent paging queries. The 
-LookResult model returned implements Examine.ISearchResults so that it can be integrated into existing site architecture, whilst the Matches property will
-return the results enumerable as strongly typed LookMatch objects.
+When the search is performed, the source LookQuery model is compiled (such that it can be useful to hold onto a reference for any subsequent paging queries). 
+
+The LookResult model returned implements Examine.ISearchResults, but extends it with a Matches property that will return the results enumerated as strongly typed LookMatch objects (useful for lazy access to the assocated IPublishedContent item and other data) and a Facets property for any facet results.
 
 
 ```csharp
