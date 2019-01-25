@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Our.Umbraco.Look.BackOffice</id>
+    <version>0.1.0</version>
+    <authors>Hendy Racher</authors>
+    <owners>Hendy Racher</owners>
+    <licenseUrl>https://github.com/Hendy/umbraco-look/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Hendy/umbraco-look</projectUrl>
+    <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      Umbraco tree for Look admin.
+    </description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>Umbraco</tags>
+    <dependencies>
+      <dependency id="Our.Umbraco.Look" version="0.19.0" />
+      <dependency id="Our.Umbraco.EmbeddedResource" version="0.2.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\src\Our.Umbraco.Look.BackOffice\bin\Release\Our.Umbraco.Look.BackOffice.dll" target="lib\net45"></file>
+  </files>
+</package>
