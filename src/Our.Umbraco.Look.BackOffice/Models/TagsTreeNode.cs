@@ -21,7 +21,7 @@ namespace Our.Umbraco.Look.BackOffice.Models
         public override ILookTreeNode[] GetChildren()
         {
             var tagGroups = new LookQuery(this.SearcherName) { TagQuery = new TagQuery() }
-                                .Run()
+                                .Search()
                                 .Matches
                                 .SelectMany(x => x.Tags.Select(y => y.Group))
                                 .Distinct()
