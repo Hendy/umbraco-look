@@ -1,45 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using Our.Umbraco.Look.Extensions;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Our.Umbraco.Look
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class TagQuery
     {
         /// <summary>
-        /// Must have all these tags
+        /// Must have all the tags in the collection
         /// </summary>
         public LookTag[] All { get; set; }
 
         /// <summary>
-        /// Must have at least one of these tags
+        /// Must have at least one tag from each collection
         /// </summary>
-        public LookTag[] Any { get; set; }
+        public LookTag[][] Any { get; set; }
 
         /// <summary>
-        /// Must not have any of these tags
+        /// Must not have any tags in the collection
         /// </summary>
-        public LookTag[] Not { get; set; }
+        public LookTag[] None { get; set; }
 
         /// <summary>
         /// when null, facets are not calculated, but when string[], each string value represents the tag group field to facet on, the empty string or whitespace = empty group
         /// The count value for a returned tag indicates how may results would be expected should that tag be added into the AllTags collection of this query
         /// </summary>
         public TagFacetQuery FacetOn { get; set; }
-
-        /// <summary>
-        /// Create a new TagQuery
-        /// </summary>
-        /// <param name="all">All of these tags</param>
-        /// <param name="any">Any of these tags</param>
-        /// <param name="not">None of these tags</param>
-        /// <param name="tagFacetQuery">Query model detailing how tags to return facet counts for</param>
-        public TagQuery(LookTag[] all = null, LookTag[] any = null, LookTag[] not = null, TagFacetQuery tagFacetQuery = null)
-        {
-            this.All = all;
-            this.Any = any;
-            this.Not = not;
-            this.FacetOn = tagFacetQuery;
-        }
 
         /// <summary>
         /// Helper to simplify the construction of LookTag array, by being able to supply a raw collection of tag strings
@@ -76,10 +65,10 @@ namespace Our.Umbraco.Look
             var tagQuery = obj as TagQuery;
 
             return tagQuery != null
-                && ((tagQuery.All == null && this.All == null) || (tagQuery.All != null && this.All != null && tagQuery.All.SequenceEqual(this.All)))
-                && ((tagQuery.Any == null && this.Any == null) || (tagQuery.Any != null && this.Any != null && tagQuery.Any.SequenceEqual(this.Any)))
-                && ((tagQuery.Not == null && this.Not == null) || (tagQuery.Not != null && this.Not != null && tagQuery.Not.SequenceEqual(this.Not)))
-                && ((tagQuery.FacetOn == null && this.FacetOn == null) || (tagQuery.FacetOn != null && tagQuery.FacetOn.Equals(this.FacetOn)));
+                    && tagQuery.All.BothNullOrElementsEqual(this.All)
+                    && tagQuery.None.BothNullOrElementsEqual(this.None)
+                    && tagQuery.FacetOn.BothNullOrEquals(this.FacetOn)
+                    && tagQuery.Any.BothNullOrElementCollectionsEqual(this.Any);  // potentially the slowest of all clauses, so last
         }
 
         internal TagQuery Clone()

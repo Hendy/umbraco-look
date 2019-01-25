@@ -1,5 +1,7 @@
 ﻿using Examine;
 using Lucene.Net.Index;
+using Our.Umbraco.Look.Services;
+using System.ComponentModel;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Events;
@@ -8,13 +10,14 @@ using Umbraco.Core.Publishing;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 
-namespace Our.Umbraco.Look.Events
+namespace Our.Umbraco.Look
 {
     /// <summary>
     /// Enables the indexing of inner IPublishedContent collections on a node
     /// By default, Examine will create 1 Lucene document for a Node,
     /// using this Indexer will create 1 Lucene document for each descendant IPublishedContent collection of a node (eg, all NestedContent, or StackedContent items)
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)] // hide from api intellisense
     public class LookIndexing : ApplicationEventHandler
     {
         /// <summary>

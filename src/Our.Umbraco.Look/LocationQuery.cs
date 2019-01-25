@@ -1,4 +1,6 @@
-﻿namespace Our.Umbraco.Look
+﻿using Our.Umbraco.Look.Extensions;
+
+namespace Our.Umbraco.Look
 {
     public class LocationQuery
     {
@@ -28,8 +30,8 @@
             var locationQuery = obj as LocationQuery;
 
             return locationQuery != null
-                && ((locationQuery.Location == null && this.Location == null) || (locationQuery.Location != null && this.Location.Equals(locationQuery.Location)))
-                && ((locationQuery.MaxDistance == null && this.MaxDistance == null) || locationQuery.MaxDistance != null && this.MaxDistance.Equals(locationQuery.MaxDistance));
+                && locationQuery.Location.BothNullOrEquals(this.Location)
+                && locationQuery.MaxDistance.BothNullOrEquals(this.MaxDistance);
         }
 
         internal LocationQuery Clone()

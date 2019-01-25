@@ -7,9 +7,9 @@ using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         ///  Do the indexing and set the field values onto the Lucene document
@@ -36,7 +36,7 @@ namespace Our.Umbraco.Look
 
                 var nodeKeyField = new Field(
                                             LookConstants.NodeKeyField,
-                                            indexingContext.Item.GetGuidKey().ToString(),
+                                            indexingContext.Item.GetGuidKey().GuidToLuceneString(),
                                             Field.Store.YES,
                                             Field.Index.NOT_ANALYZED);
 

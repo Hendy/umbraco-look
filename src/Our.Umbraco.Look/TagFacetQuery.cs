@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using Our.Umbraco.Look.Extensions;
 
 namespace Our.Umbraco.Look
 {
@@ -27,8 +27,7 @@ namespace Our.Umbraco.Look
         {
             var tagFacetQuery = obj as TagFacetQuery;
 
-            return tagFacetQuery != null
-                    && ((tagFacetQuery.TagGroups == null && this.TagGroups == null) ||(tagFacetQuery.TagGroups != null && tagFacetQuery.TagGroups.SequenceEqual(this.TagGroups)));
+            return tagFacetQuery != null && tagFacetQuery.TagGroups.BothNullOrElementsEqual(this.TagGroups);
         }
     }
 }

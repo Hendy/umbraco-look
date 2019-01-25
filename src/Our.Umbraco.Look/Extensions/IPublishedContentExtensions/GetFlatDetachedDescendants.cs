@@ -15,19 +15,19 @@ namespace Our.Umbraco.Look.Extensions
         {
             var detachedPublishedContent = new List<IPublishedContent>();
 
-            var properties = publishedContent
-                                .Properties
-                                .Where(y => y.Value is IEnumerable<IPublishedContent>)
-                                .Select(y => y.Value as IEnumerable<IPublishedContent>);
+            var publishedContentCollections = publishedContent
+                                                .Properties
+                                                .Where(y => y.Value is IEnumerable<IPublishedContent>)
+                                                .Select(y => y.Value as IEnumerable<IPublishedContent>);
 
-            foreach (var property in properties)
+            foreach (var publishedContentCollection in publishedContentCollections)
             {
-                detachedPublishedContent.AddRange(property);
+                detachedPublishedContent.AddRange(publishedContentCollection);
                 
-                foreach (var propertyItem in property)
+                foreach (var childPublishedContent in publishedContentCollection)
                 {
                     // recurse
-                    detachedPublishedContent.AddRange(IPublishedContentExtensions.GetFlatDetachedDescendants(propertyItem));
+                    detachedPublishedContent.AddRange(IPublishedContentExtensions.GetFlatDetachedDescendants(childPublishedContent));
                 }
             }
 

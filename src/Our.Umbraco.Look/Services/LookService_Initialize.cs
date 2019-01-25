@@ -6,9 +6,9 @@ using System.Linq;
 using Umbraco.Core.Logging;
 using Umbraco.Web;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Initialize the look service - it caches reference to all lucene folders and sets up CartesianTierPlotters

@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using Umbraco.Web;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Flag to indicate whether the look service has been initialized

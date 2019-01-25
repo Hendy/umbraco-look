@@ -1,11 +1,12 @@
 ﻿using Examine;
 using Examine.LuceneEngine.Providers;
 using Lucene.Net.Search;
+using Our.Umbraco.Look.Models;
 using Umbraco.Core.Logging;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Get the configuration details of an Exmaine searcher, so Lucene can be queried in the same way,

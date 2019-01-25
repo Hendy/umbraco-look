@@ -2,9 +2,9 @@
 using System.Linq;
 using UmbracoExamine;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Get all Examine indexers that Look should hook into (this collection doesn't include the Look indexer/searcher, only the Examine ones)

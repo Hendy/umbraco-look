@@ -6,6 +6,7 @@ using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Our.Umbraco.Look.Extensions;
+using Our.Umbraco.Look.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -225,9 +226,9 @@ namespace Our.Umbraco.Look
 
                 indexWriter.AddDocument(document);
 
-                foreach (var detachedContent in node.GetFlatDetachedDescendants())
+                foreach (var detachedNode in node.GetFlatDetachedDescendants())
                 {
-                    indexingContext = new IndexingContext(node, detachedContent, this.Name);
+                    indexingContext = new IndexingContext(node, detachedNode, this.Name);
 
                     document = new Document();
 

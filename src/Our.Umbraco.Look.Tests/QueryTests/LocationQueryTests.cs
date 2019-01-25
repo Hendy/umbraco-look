@@ -26,7 +26,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Has_Location()
         {
-            Assert.AreEqual(4, new LookQuery(TestHelper.GetSearchingContext()) { LocationQuery = new LocationQuery() }.Run().TotalItemCount);
+            Assert.AreEqual(4, new LookQuery(TestHelper.GetSearchingContext()) { LocationQuery = new LocationQuery() }.Search().TotalItemCount);
         }
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.SortOn = SortOn.Distance;
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount == 4);
@@ -61,7 +61,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.LocationQuery.Location = _london;
             lookQuery.LocationQuery.MaxDistance = new Distance(300, DistanceUnit.Miles);
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount == 2);

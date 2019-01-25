@@ -1,5 +1,6 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using Our.Umbraco.Look.Extensions;
+using System;
+using System.Globalization;
 using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look
@@ -27,14 +28,24 @@ namespace Our.Umbraco.Look
         public string[] Aliases { get; set; } = null;
 
         /// <summary>
+        /// Only content, media or members with these ids will be retuned (detached items don't have ids)
+        /// </summary>
+        public int[] Ids { get; set; }
+
+        /// <summary>
+        /// If not null, then each result returned must have a key in this collection (useful for finding detached content)
+        /// </summary>
+        public Guid[] Keys { get; set; } = null;
+
+        /// <summary>
         /// Any umbraco ids that should be exlcuded from the results
         /// </summary>
         public int[] NotIds { get; set; } = null;
 
         /// <summary>
-        /// 
+        /// Any keys that should be excluded from the results
         /// </summary>
-        public string[] NotKeys { get; set; } = null;
+        public Guid[] NotKeys { get; set; } = null;
 
         /// <summary>
         /// Create new empty NodeQuery search criteria
@@ -98,14 +109,12 @@ namespace Our.Umbraco.Look
             NodeQuery nodeQuery = obj as NodeQuery;
 
             return nodeQuery != null
-                && ((nodeQuery.Types == null && this.Types == null)
-                    || (nodeQuery.Types != null && this.Types != null && nodeQuery.Types.SequenceEqual(this.Types)))
-                && ((nodeQuery.Cultures == null && this.Cultures == null)
-                    || (nodeQuery.Cultures != null && this.Cultures != null && nodeQuery.Cultures.SequenceEqual(this.Cultures)))
-                && ((nodeQuery.Aliases == null && this.Aliases == null)
-                    || (nodeQuery.Aliases != null && this.Aliases != null && nodeQuery.Aliases.SequenceEqual(this.Aliases)))
-                && ((nodeQuery.NotIds == null && this.NotIds == null)
-                    || (nodeQuery.NotIds != null && this.NotIds != null && nodeQuery.NotIds.SequenceEqual(this.NotIds)));
+                && nodeQuery.Types.BothNullOrElementsEqual(this.Types)
+                && nodeQuery.Cultures.BothNullOrElementsEqual(this.Cultures)
+                && nodeQuery.Aliases.BothNullOrElementsEqual(this.Aliases)
+                && nodeQuery.Keys.BothNullOrElementsEqual(this.Keys)
+                && nodeQuery.NotIds.BothNullOrElementsEqual(this.NotIds)
+                && nodeQuery.NotKeys.BothNullOrElementsEqual(this.Keys);
         }
 
         internal NodeQuery Clone()

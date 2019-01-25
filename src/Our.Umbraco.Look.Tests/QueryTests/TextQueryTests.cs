@@ -20,7 +20,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Has_Text()
         {
-            Assert.AreEqual(4, new LookQuery(TestHelper.GetSearchingContext()) { TextQuery = new TextQuery() }.Run().TotalItemCount);
+            Assert.AreEqual(4, new LookQuery(TestHelper.GetSearchingContext()) { TextQuery = new TextQuery() }.Search().TotalItemCount);
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TextQuery = new TextQuery("dolor");
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount > 0);
@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TextQuery = new TextQuery("dolor", true);
 
-            var lookResult = LookService.RunQuery(lookQuery);
+            var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
             Assert.IsTrue(lookResult.TotalItemCount > 0);

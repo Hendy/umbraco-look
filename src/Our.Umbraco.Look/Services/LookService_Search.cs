@@ -6,22 +6,23 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Spatial.Tier;
 using Our.Umbraco.Look.Extensions;
+using Our.Umbraco.Look.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Perform a Look search
         /// </summary>
         /// <param name="lookQuery">A LookQuery model for the search criteria</param>
         /// <returns>A LookResult model for the search response</returns>
-        public static LookResult RunQuery(LookQuery lookQuery)
+        public static LookResult Search(LookQuery lookQuery)
         {
             // flag to indicate whether there are any query clauses in the supplied LookQuery
             bool hasQuery = lookQuery?.Compiled != null ? true : false;
@@ -145,11 +146,59 @@ namespace Our.Umbraco.Look
                         foreach (var typeAlias in lookQuery.NodeQuery.Aliases)
                         {
                             nodeAliasQuery.Add(
-                                                new TermQuery(new Term(LookConstants.NodeAliasField, typeAlias.ToLower())),
+                                                new TermQuery(new Term(LookConstants.NodeAliasField, typeAlias)),
                                                 BooleanClause.Occur.SHOULD);
                         }
 
                         query.Add(nodeAliasQuery, BooleanClause.Occur.MUST);
+                    }
+
+                    if (lookQuery.NodeQuery.Ids != null && lookQuery.NodeQuery.Ids.Any())
+                    {
+                        if (lookQuery.NodeQuery.NotIds != null)
+                        {
+                            var conflictIds = lookQuery.NodeQuery.Ids.Where(x => lookQuery.NodeQuery.NotIds.Contains(x));
+
+                            if (conflictIds.Any())
+                            {
+                                return new LookResult($"Conflict in NodeQuery, Ids: '{ string.Join(",", conflictIds) }' are in both Ids and NotIds");
+                            }
+                        }
+
+                        var idQuery = new BooleanQuery();
+
+                        foreach (var id in lookQuery.NodeQuery.Ids)
+                        {
+                            idQuery.Add(
+                                        new TermQuery(new Term(LookConstants.NodeIdField, id.ToString())),
+                                        BooleanClause.Occur.SHOULD);
+                        }
+
+                        query.Add(idQuery, BooleanClause.Occur.MUST);
+                    }
+
+                    if (lookQuery.NodeQuery.Keys != null && lookQuery.NodeQuery.Keys.Any())
+                    {
+                        if (lookQuery.NodeQuery.NotKeys != null)
+                        {
+                            var conflictKeys = lookQuery.NodeQuery.Keys.Where(x => lookQuery.NodeQuery.NotKeys.Contains(x));
+
+                            if (conflictKeys.Any())
+                            {
+                                return new LookResult($"Conflict in NodeQuery, keys: '{ string.Join(",", conflictKeys) }' are in both Keys and NotKeys");
+                            }
+                        }
+
+                        var keyQuery = new BooleanQuery();
+
+                        foreach (var key in lookQuery.NodeQuery.Keys)
+                        {
+                            keyQuery.Add(
+                                        new TermQuery(new Term(LookConstants.NodeKeyField, key.GuidToLuceneString())),
+                                        BooleanClause.Occur.SHOULD);
+                        }
+
+                        query.Add(keyQuery, BooleanClause.Occur.MUST);
                     }
 
                     if (lookQuery.NodeQuery.NotIds != null && lookQuery.NodeQuery.NotIds.Any())
@@ -167,7 +216,7 @@ namespace Our.Umbraco.Look
                         foreach (var excludeKey in lookQuery.NodeQuery.NotKeys)
                         {
                             query.Add(
-                                    new TermQuery(new Term(LookConstants.NodeKeyField, excludeKey)),
+                                    new TermQuery(new Term(LookConstants.NodeKeyField, excludeKey.GuidToLuceneString())),
                                     BooleanClause.Occur.MUST_NOT);
                         }
                     }
@@ -357,11 +406,12 @@ namespace Our.Umbraco.Look
 
                     query.Add(new TermQuery(new Term(LookConstants.HasTagsField, "1")), BooleanClause.Occur.MUST);
 
-                    if (lookQuery.TagQuery.All != null)
+                    // ALL
+                    if (lookQuery.TagQuery.All != null && lookQuery.TagQuery.All.Any())
                     {
-                        if (lookQuery.TagQuery.Not != null)
+                        if (lookQuery.TagQuery.None != null)
                         {
-                            var conflictTags = lookQuery.TagQuery.All.Where(x => !lookQuery.TagQuery.Not.Contains(x));
+                            var conflictTags = lookQuery.TagQuery.All.Where(x => lookQuery.TagQuery.None.Contains(x));
 
                             if (conflictTags.Any())
                             {
@@ -369,22 +419,24 @@ namespace Our.Umbraco.Look
                             }
                         }
 
-                        if (lookQuery.TagQuery.All.Any())
+                        foreach (var tag in lookQuery.TagQuery.All)
                         {
-                            foreach (var tag in lookQuery.TagQuery.All)
-                            {
-                                query.Add(
-                                        new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
-                                        BooleanClause.Occur.MUST);
-                            }
+                            query.Add(
+                                    new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
+                                    BooleanClause.Occur.MUST);
                         }
                     }
 
-                    if (lookQuery.TagQuery.Any != null)
+                    // ANY
+                    if (lookQuery.TagQuery.Any != null && lookQuery.TagQuery.Any.Any())
                     {
-                        if (lookQuery.TagQuery.Not != null)
+                        if (lookQuery.TagQuery.None != null && lookQuery.TagQuery.None.Any())
                         {
-                            var conflictTags = lookQuery.TagQuery.Any.Where(x => !lookQuery.TagQuery.Not.Contains(x));
+                            var conflictTags = lookQuery
+                                                    .TagQuery
+                                                    .Any
+                                                    .SelectMany(x => x.Select(y => y)) // flatten collections
+                                                    .Where(x => lookQuery.TagQuery.None.Contains(x));
 
                             if (conflictTags.Any())
                             {
@@ -392,11 +444,11 @@ namespace Our.Umbraco.Look
                             }
                         }
 
-                        if (lookQuery.TagQuery.Any.Any())
+                        foreach(var tagCollection in lookQuery.TagQuery.Any)
                         {
                             var anyTagQuery = new BooleanQuery();
 
-                            foreach (var tag in lookQuery.TagQuery.Any)
+                            foreach (var tag in tagCollection)
                             {
                                 anyTagQuery.Add(
                                                 new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
@@ -405,11 +457,13 @@ namespace Our.Umbraco.Look
 
                             query.Add(anyTagQuery, BooleanClause.Occur.MUST);
                         }
+
                     }
 
-                    if (lookQuery.TagQuery.Not != null && lookQuery.TagQuery.Not.Any())
+                    // NONE
+                    if (lookQuery.TagQuery.None != null && lookQuery.TagQuery.None.Any())
                     {
-                        foreach (var tag in lookQuery.TagQuery.Not)
+                        foreach (var tag in lookQuery.TagQuery.None)
                         {
                             query.Add(
                                 new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),

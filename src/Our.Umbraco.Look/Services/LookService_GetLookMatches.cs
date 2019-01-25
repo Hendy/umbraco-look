@@ -7,9 +7,9 @@ using System.Linq;
 using System.Web;
 using Umbraco.Core.Models;
 
-namespace Our.Umbraco.Look
+namespace Our.Umbraco.Look.Services
 {
-    public partial class LookService
+    internal partial class LookService
     {
         /// <summary>
         /// Supplied with the result of a Lucene query, this method will yield a constructed LookMatch for each in order

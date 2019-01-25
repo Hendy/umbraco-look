@@ -1,6 +1,15 @@
-# Umbraco Look (Alpha)
-Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for: text match highlighting, geospatial querying and tag faceting.
-Examine manages the indexes, whilst Look adds 'config-file-free' C# indexing and a lightweight querying API.
+# Look (Beta) for Umbraco Examine
+Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for:
+
+* Indexing all IPublishedContent items (each as a Lucene Document) be they: Umbraco Content, Media, Members or properties on them that return IPublishedContent, eg. Nested Content. 
+
+* Text match highlighting - return fragments of contextual text relevant to the supplied search term.
+
+* Geospatial querying - calculate the distance from a geographical location for each item, this can also be used for filtering / sorting.
+
+* Tag faceting - return a colleciton of facets, where each details the number of results that would be returned, should that facet be applied to the current query (useful for guided navigation).
+
+## Installation
 
 [The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
 
@@ -8,15 +17,18 @@ Examine manages the indexes, whilst Look adds 'config-file-free' C# indexing and
   * Examine 0.1.70 (min)
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
+ ## Indexing
 
-## Indexing
+Look can be used index additional `name`, `date`, `text`, `tag` and `location` for an IPublishedContent item into Lucene indexes, in two ways:
 
-Look automatically hooks into all Umbraco Exmaine indexers offering the ability to create additional Lucene fields for `name`, `date`, `text`, `tags` and `location` data.
-To configure the indexing behaviour, functions can be set via static methods on the LookConfiguration class (all are optional).
-If a function is set and returns a value then custom Lucene field(s) prefixed with "Look_" will be used.
-(On a default Umbraco install, the indexers are: "ExternalIndexer", "InternalIndexer" and "InternalMemberIndexer", see [/config/ExamineSettings.config](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)).
+Firstly, once installed, it offers .Net seams for adding such data into any configured Umbraco Examine indexers.
+This can be useful as no configuration files need to be changed as it can hook into the default _External_, _Internal_, and _InternalMember_ indexers (or any others that have been setup).
 
-The static properties definitions on LookConfiguration where indexing functions can be set:
+Secondly Look includes an Examine indexer that when configured (see [Examine configuration](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)) can 
+also index properties that return collections of IPublishedContent (eg. Nested Content) in additional to the Umbraco Content, Media and Member nodes.
+
+To configure the indexing behaviour for either of the ways mentioned, functions can be set via static methods on the LookConfiguration class (all are optional).
+If a function is set and returns a value then custom Lucene field(s) prefixed with "Look_" will be used to store that value.
 
 ```csharp
 public static class LookConfiguration
@@ -43,123 +55,86 @@ The model supplied to the indexing functions:
 ```csharp
 public class IndexingContext
 {
-    /// <summary>
-    /// When a detached item is being indexed, this property will be the hosting content, media or member
-    /// </summary>
-    public IPublishedContent HostItem { get; }
-
-    /// <summary>
-    /// The Content, Media, Member or Detacehd item being indexed
-    /// </summary>
-    public IPublishedContent Item { get; }
-
-    /// <summary>
-    /// The name of the Examine indexer into which this item is being indexed
-    /// </summary>
-    public string IndexerName { get; }
-}
-```
-
-The index setters would typically be set in an Umbraco startup event (but they can be changed at any-time). Eg.
-
-```csharp
-public class ConfigureIndexing : ApplicationEventHandler
-{	
 	/// <summary>
-	/// Umbraco has started event
+	/// The name of the Examine indexer into which this item is being indexed
 	/// </summary>
-	protected override void ApplicationStarted(
-				UmbracoApplicationBase umbracoApplication, 
-				ApplicationContext applicationContext)
-	{				
-		LookConfiguration.NameIndexer = indexingContext => { 
-			
-			// eg. always return the Name of the IPublishedContent
-			return indexingContext.Item.Name; 
-		};
+	public string IndexerName { get; }
 
-		LookConfiguration.DateIndexer = indexingContext => { 
-			
-			// eg. news articles use a different date
-			if (indexingContext.Item.DocumentTypeAlias == "newsArticle") 
-			{
-				return indexingItem.GetPropertyValue<DateTime>("releaseDate");
-			}
+	/// <summary>
+	/// The Content, Media, Member or Detached item being indexed (always has a value)
+	/// </summary>
+	public IPublishedContent Item { get; }
 
-			return indexingContext.Item.UpdateDate; 
-		};
-
-		LookConfiguration.TextIndexer = indexingContext => { 
-
-			// eg. if content, render page and scrape markup
-			if (!indexingContext.IsDetached && indexingContext.Item.ItemType == PublishedItemType.Content) 
-			{				
-				// (could pass in httpContext to render page without http web request)
-				// return string
-			}
-
-			return null; // don't index
-		};
-		
-		LookConfiguration.TagIndexer = indexingContext => {
-			// return LookTag[] or null (see tags section below)
-
-			// eg a nuPicker
-			var picker = indexingContext.Item.GetPropertyValue<Picker>("colours");
-
-			return picker
-				.PickedKeys
-				.Select(x => new LookTag("colour", x))
-				.ToArray();
-		};
-		
-		LookConfiguration.LocationIndexer = indexingContext => {
-			// return Location or null
-
-			// eg. using Terratype			 
-			var terratype = indexingContext.Item.GetPropertyValue<Terratype.Models.Model>("location");
-			var terratypeLatLng = terratype.Position.ToWgs84();
-
-			return new Location(terratypeLatLng.Latitude, terratypeLatLng.Longitude);
-		};
-	}
+	/// <summary>
+	/// When a detached item is being indexed, this property will be the hosting content, media or member 
+	/// (this value will null when the item being indexed is not Detached)
+	/// </summary>
+	public IPublishedContent HostItem { get; }
 }
 ```
+[Example Indexing Code](../../wiki/Example-Indexing)
+
 
 ## Searching
 
-A LookQuery consists of any combinations of these query types: `ExamineQuery`, `RawQuery`, `NodeQuery`, `NameQuery`, `DateQuery`, `TextQuery`, `TagQuery`, & `LocationQuery`
-together with an Examine Searcher. The LookQuery constructor is used to specify which Examine searcher to use:
+Searching is performed using a configured (Umbraco or Look) Examine Searcher and can be done using the Exmaine API, or with the Look API.
+
+To be able to use the additional query types that Look introduces with the Exmaine API, a Look searcher needs to be used
+(rather than an Umbraco searcher). This is because a Look searcher will return an object as ISearchCritera that can be cast to LookSearchCriteria where the Look query types can be set.
+
+### Examine API
 
 ```csharp
-var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalSearcher")
+var searcher = ExamineManager.Instance.SearchProviderCollection["MyLookSearcher"];
+var searchCriteria = searcher.CreateSearchCriteria();
+var lookSearchCriteria = (LookSearchCriteria)searchCriteria;
+
+lookSearchCriteria.NodeQuery = ...
+lookSearchCriteria.NameQuery = ...
+lookSearchCriteria.DateQuery = ...
+lookSearchCriteria.TextQuery = ...
+lookSearchCriteria.TagQuery = ...
+lookSearchCriteria.LocationQuery = ...
+lookSearchCriteria.ExamineQuery = ...
+lookSearchCriteria.RawQuery = ...
+
+var results = searcher.Search(searchCriteria);
+```
+
+### Look API
+
+The Look API can be used with all searchers. Eg.
+
+```csharp
+var lookQuery = new LookQuery(); // use the default Examine searcher (usually "ExternalSearcher")
+```
+
+or
+
+```csharp
+var lookQuery = new LookQuery("MyLookSearcher"); // use a named Examine searcher
 ```
 
 ```csharp
-var lookQuery = new LookQuery("InternalSearcher"); // use a named searcher
+lookQuery.NodeQuery = ...
+lookQuery.NameQuery = ...
+lookQuery.DateQuery = ...
+lookQuery.TextQuery = ...
+lookQuery.TagQuery = ...
+lookQuery.LocationQuery = ...
+lookQuery.ExamineQuery = ...
+lookQuery.RawQuery = ...
+
+var results = lookQuery.Search();
 ```
 
-All query types are optional, but when set, they become a required clause. All queries will return a LookResult, which has a boolean Success flag property. The flag
-is set to true when a query with at least one clause is executed sucessfully.
+### Look Query types
 
-#### ExamineQuery
+All query types are optional, but when set, they become a required clause. 
 
-Examine ISearchCriteria can be passed into a LookQuery.
-
-```charp
-lookQuery.ExamineQuery = myExamineQuery.Compile();
-```
-
-#### RawQuery
-
-String property for any [Lucene raw query](http://www.lucenetutorial.com/lucene-query-syntax.html) (this can be a way to pass in an Examine built query).
-
-```csharp
-lookQuery.RawQuery = "+myField: myValue";
-```
 
 #### NodeQuery
-A node query is used to set search criteria based on the IPublishedContent type, alias and any Ids that should be excluded (all properties are optional).
+A node query is used to specify search criteria based on common properties of IPublishedContent (all properties are optional).
 
 ```csharp
 lookQuery.NodeQuery = new NodeQuery() {
@@ -177,16 +152,20 @@ lookQuery.NodeQuery = new NodeQuery() {
 		"myMediaTypeAlias",
 		"myMemberTypeAlias"
 	},
+	Ids = new [] { 1,2,3 },
+	Keys = new [] { 
+		Guid.Parse("dc890492-4571-4701-8085-b874837d597a"), 
+		Guid.Parse("9f60f10f-74ea-4323-98bb-13b6f6423ad6"),
+		Guid.Parse("88a9e4e3-d4cb-4641-aff3-8579f1d60399")
+	}
 	NotIds = new [] { 123 }, // (eg. exclude current page)
-	NotKeys = new [] { "6bb24ed2-9466-422f-a9d4-27a805db2d47" }
+	NotKeys = new [] { Guid.Parse("6bb24ed2-9466-422f-a9d4-27a805db2d47") }
 };
 ```
 
 #### NameQuery
 A name query is used together with a custom name indexer and enables string comparrison queries (wildcards are not allowed and all properties are optional).
-If a name query is contradictory (for example, Is = "Must be this" and StartsWith = "Something else"), then
-an empty result will be returned with the Success flag being false. The NameQuery also has constructor overloads 
-for all properties where each is optional (defaulting to a case sensitive search).
+If a name query is set (ie, not null), then results must have a name value.
 
 ```csharp
 lookQuery.NameQuery = new NameQuery() {
@@ -200,7 +179,8 @@ lookQuery.NameQuery = new NameQuery() {
 
 #### DateQuery
 
-A date query is used together with a custom date indexer and enables date range queries (both date properties are optional).
+A date query is used together with a custom date indexer and enables date range queries (all properties are optional).
+If a date query is set (ie, not null), then results must have a date value.
 
 ```csharp
 lookQuery.DateQuery = new DateQuery() {
@@ -214,7 +194,7 @@ lookQuery.DateQuery = new DateQuery() {
 
 A text query is used together with a custom text indexer and allows for wildcard searching using the analyzer specified by Exmaine.
 Highlighting gives the ability to return an html snippet of text indiciating the part of the full text that the match was made on. All properties
-are optional, and there is a constructor where all properties are optional (by default GetHighlight and GetText are false).
+are optional).
 
 ```csharp
 lookQuery.TextQuery = new TextQuery() {
@@ -225,28 +205,31 @@ lookQuery.TextQuery = new TextQuery() {
 
 #### TagQuery
 
-A tag query is used together with a custom tag indexer.
+A tag query is used together with a custom tag indexer (all properties are optional).
+If a tag query is set (ie, not null), then each result must have at least one tag.
 
-The All, Any and Not properties expect LookTag[] values (see LookTags section below). 
 
-If there are any query contradictions (such as a tag exsing in both All and Not), then
-an empty result is returned with the success flag as false.
+All = each result must contain all of these tags.
+
+Any = each result must contain at least one tag from each of the collections supplied.
+
+None = each result must not contain any of these tags.
 
 The FacetOn proeperty is used to specify how tag faceting is caluculated (see Facets section below).
 
 ```csharp
 lookQuery.TagQuery = new TagQuery() {
-	All = TagQuery.MakeTags("size:large"), // all of these tags
-	Any = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue") // at least one of these tags
-	Not = TagQuery.MakeTags("colour:black"), // none of these tags, 'not' always takes priority,
+	All = new[] { new LookTag("size:large") };
+	Any = new LookTag[][] { new[] { new LookTag("colour:red"), new LookTag("colour:green") } };
+	None = TagQuery.MakeTags("colour:black"), // helper to make collection
 	FacetOn = new TagFacetQuery("colour", "size", "shape")
 };
 ```
 
 #### LocationQuery
 
-A location query is used together with a custom location indexer. If a Location alone is set, then all nodes which 
-have a location indexed will have a distance value returned. However if a MaxDistance is also set, then only nodes
+A location query is used together with a custom location indexer. If a Location alone is set, then all results which 
+have a location indexed will have a distance value returned. However if a MaxDistance is also set, then only results
 within that range are returned.
 
 ```csharp
@@ -256,27 +239,37 @@ lookQuery.LocationQuery = new LocationQuery() {
 };
 ```
 
+#### ExamineQuery
+
+Examine ISearchCriteria can be passed into a LookQuery.
+
+```charp
+lookQuery.ExamineQuery = myExamineQuery.Compile();
+```
+
+#### RawQuery
+
+String property for any [Lucene raw query](http://www.lucenetutorial.com/lucene-query-syntax.html).
+
+```csharp
+lookQuery.RawQuery = "+myField: myValue";
+```
+
 #### SortOn
 
 If not specified then the reults will be sorted on the Lucene score, otherwise sorting can be set by the SortOn enum to use the custom name, date or distance fields.
 
 ### Search Results
 
-The search can be performed by calling the static RunQuery method on the LookService, passing in the LookQuery model:
+The search can be performed by calling the Search method on the LookQuery object:
 
 ```csharp
-var lookResult = LookService.RunQuery(lookQuery);
+var lookResult = lookQuery.Search();
 ```
 
-or by using the Run method on the LookQuery model (which does the same as above):
+When the search is performed, the source LookQuery model is compiled (such that it can be useful to hold onto a reference for any subsequent paging queries). 
 
-```csharp
-var lookResult = lookQuery.Run();
-```
-
-When the query is performed, the source LookQuery model is compiled, such that it can be useful to hold onto a reference for any subsequent paging queries. The 
-LookResult model returned implements Examine.ISearchResults so that it can be integrated into existing site architecture, whilst the Matches property will
-return the results enumerable as strongly typed LookMatch objects.
+The LookResult model returned implements Examine.ISearchResults, but extends it with a Matches property that will return the results enumerated as strongly typed LookMatch objects (useful for lazy access to the assocated IPublishedContent item and other data) and a Facets property for any facet results.
 
 
 ```csharp
@@ -426,15 +419,3 @@ var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue", "size:
 ### Facets
 
 Look interprets facets to mean: "if the current query asked something slightly different (the facet being the difference), then how many results would be returned instead ?".
-
-
-Namespaces used in examples:
-```csharp
-using System;
-using System.Linq;
-using Umbraco.Core;
-using Umbraco.Core.Models;
-using Examine;
-using Examine.SearchCriteria;
-using Our.Umbraco.Look;
-```
