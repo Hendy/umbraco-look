@@ -13,6 +13,8 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         public abstract string Icon { get; }
 
+        public virtual string RoutePath { get; } = "developer";
+
         /// <summary>
         /// Constructor
         /// </summary>

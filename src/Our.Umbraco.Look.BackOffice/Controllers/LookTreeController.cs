@@ -26,7 +26,8 @@ namespace Our.Umbraco.Look.BackOffice.Controllers
                             childTreeNode.QueryStrings, 
                             childTreeNode.Name, 
                             childTreeNode.Icon, 
-                            childTreeNode.GetChildren().Any()));
+                            childTreeNode.GetChildren().Any(),
+                            childTreeNode.RoutePath));
             }
 
             return tree;

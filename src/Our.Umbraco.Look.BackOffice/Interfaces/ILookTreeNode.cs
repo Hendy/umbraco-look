@@ -12,6 +12,11 @@ namespace Our.Umbraco.Look.BackOffice.Interfaces
 
         string Icon { get; } // icon class name
 
+        /// <summary>
+        /// The url part to the resource
+        /// </summary>
+        string RoutePath { get; }
+
         ILookTreeNode[] GetChildren();
     }
 }
