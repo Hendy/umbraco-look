@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Our.Umbraco.EmbeddedResource;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -36,12 +35,12 @@ using Our.Umbraco.EmbeddedResource;
 [assembly: AssemblyVersion("0.1.0.0")]
 [assembly: AssemblyFileVersion("0.1.0.0")]
 
-[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Controllers.SearcherController.js", "/App_Plugins/Look/SearcherController.js")]
-[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Controllers.TagController.js", "/App_Plugins/Look/TagController.js")]
-[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Controllers.TagGroupController.js", "/App_Plugins/Look/TagGroupController.js")]
-[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Controllers.TagsController.js", "/App_Plugins/Look/TagsController.js")]
+//[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Controllers.SearcherController.js", "/App_Plugins/Look/SearcherController.js")]
+//[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Controllers.TagController.js", "/App_Plugins/Look/TagController.js")]
+//[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Controllers.TagGroupController.js", "/App_Plugins/Look/TagGroupController.js")]
+//[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Controllers.TagsController.js", "/App_Plugins/Look/TagsController.js")]
 
-[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.Searcher.html", "/umbraco/views/lookTree/Searcher.html")]
-[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.Tag.html", "/umbraco/views/lookTree/Tag.html")]
-[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.TagGroup.html", "/umbraco/views/lookTree/TagGroup.html")]
-[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.Tags.html", "/umbraco/views/lookTree/Tags.html")]
+//[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.Searcher.html", "/umbraco/views/lookTree/Searcher.html")]
+//[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.Tag.html", "/umbraco/views/lookTree/Tag.html")]
+//[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.TagGroup.html", "/umbraco/views/lookTree/TagGroup.html")]
+//[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.Tags.html", "/umbraco/views/lookTree/Tags.html")]

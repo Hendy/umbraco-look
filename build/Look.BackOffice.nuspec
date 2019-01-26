@@ -17,7 +17,6 @@
     <tags>Umbraco</tags>
     <dependencies>
       <dependency id="Our.Umbraco.Look" version="0.19.0" />
-      <dependency id="Our.Umbraco.EmbeddedResource" version="0.2.0" />
     </dependencies>
   </metadata>
   <files>
