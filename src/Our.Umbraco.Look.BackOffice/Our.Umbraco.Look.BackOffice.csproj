@@ -244,6 +244,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Views\Searcher.html" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Views\Tag.html" />
+    <EmbeddedResource Include="Resources\Views\TagGroup.html" />
+    <EmbeddedResource Include="Resources\Views\Tags.html" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

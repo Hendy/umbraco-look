@@ -13,7 +13,7 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         public override string Icon { get; } // could be "icon-file-cabinet, icon-files, icon-categories
 
-        public override string RoutePath => "developer/lookTree/Searcher.html";
+        public override string RoutePath => "developer/lookTree/Searcher/-1";
 
         private string SearcherName { get; }
 

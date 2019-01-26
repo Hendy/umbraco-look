@@ -8,6 +8,8 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         public override string Name => this.LookTag.Name;
 
+        public override string RoutePath => "developer/lookTree/Tag/-1";
+
         private string SearcherName { get; }
 
         private LookTag LookTag { get; }

@@ -36,4 +36,7 @@ using Our.Umbraco.EmbeddedResource;
 [assembly: AssemblyVersion("0.1.0.0")]
 [assembly: AssemblyFileVersion("0.1.0.0")]
 
-[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.Searcher.html", "/App_Plugings/Look/Searcher.html")]
+[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.Searcher.html", "/umbraco/views/lookTree/Searcher.html")]
+[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.Tag.html", "/umbraco/views/lookTree/Tags.html")]
+[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.TagGroup.html", "/umbraco/views/lookTree/TagGroup.html")]
+[assembly: EmbeddedResourceProtected("Our.Umbraco.Look.BackOffice.Resources.Views.Tag.html", "/umbraco/views/lookTree/Tag.html")]

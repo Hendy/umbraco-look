@@ -11,6 +11,8 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         public override string Name => "Tags";
 
+        public override string RoutePath => "developer/lookTree/Tags/-1";
+
         private string SearcherName { get; }
 
         internal TagsTreeNode(FormDataCollection queryStrings) : base("tags-" + queryStrings["searcherName"], queryStrings)

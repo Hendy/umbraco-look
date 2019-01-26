@@ -11,6 +11,8 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         public override string Name => string.IsNullOrWhiteSpace(this.TagGroup) ? "<Default>" : this.TagGroup;
 
+        public override string RoutePath => "developer/lookTree/TagGroup/-1";
+
         private string SearcherName { get; }
 
         private string TagGroup { get; }
