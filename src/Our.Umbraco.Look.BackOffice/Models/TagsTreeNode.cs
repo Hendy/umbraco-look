@@ -11,7 +11,7 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         public override string Name => "Tags";
 
-        public override string RoutePath => "developer/lookTree/Tags/-1";
+        public override string RoutePath => "developer/lookTree/Tags/" + this.SearcherName;
 
         private string SearcherName { get; }
 

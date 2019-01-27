@@ -11,7 +11,7 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         public override string Name => string.IsNullOrWhiteSpace(this.TagGroup) ? "<Default>" : this.TagGroup;
 
-        public override string RoutePath => "developer/lookTree/TagGroup/-1";
+        public override string RoutePath => "developer/lookTree/TagGroup/" + this.SearcherName + "|" + this.TagGroup;
 
         private string SearcherName { get; }
 
@@ -37,7 +37,8 @@ namespace Our.Umbraco.Look.BackOffice.Models
             foreach (var tag in tags)
             {
                 base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
-                base.QueryStrings.ReadAsNameValueCollection()["tag"] = tag.ToString();
+                base.QueryStrings.ReadAsNameValueCollection()["tagGroup"] = this.TagGroup;
+                base.QueryStrings.ReadAsNameValueCollection()["tagName"] = tag.Name;
 
                 children.Add(new TagTreeNode(base.QueryStrings));
             }

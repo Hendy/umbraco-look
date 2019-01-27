@@ -8,16 +8,20 @@ namespace Our.Umbraco.Look.BackOffice.Models
 
         public override string Name => this.LookTag.Name;
 
-        public override string RoutePath => "developer/lookTree/Tag/-1";
+        public override string RoutePath => "developer/lookTree/Tag/" + this.SearcherName + "|" + this.LookTag.Group + "|" + this.LookTag.Name;
 
         private string SearcherName { get; }
 
         private LookTag LookTag { get; }
 
-        internal TagTreeNode(FormDataCollection queryStrings) : base("tag-" + queryStrings["searcherName"] + "|" + queryStrings["tag"], queryStrings)
+        internal TagTreeNode(FormDataCollection queryStrings) : base("tag-" + queryStrings["searcherName"] + "|" + queryStrings["tagGroup"] + "|" + queryStrings["tagName"], queryStrings)
         {
             this.SearcherName = queryStrings["searcherName"];
-            this.LookTag = new LookTag(queryStrings["tag"]);
+
+            var tagGroup = queryStrings["tagGroup"];
+            var tagName = queryStrings["tagName"];
+
+            this.LookTag = new LookTag(tagGroup, tagName);
         }
     }
 }

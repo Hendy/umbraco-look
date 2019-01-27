@@ -1,5 +1,6 @@
 ﻿using Our.Umbraco.Look.BackOffice.Interfaces;
 using Our.Umbraco.Look.BackOffice.Models;
+using System.Linq;
 using System.Net.Http.Formatting;
 
 namespace Our.Umbraco.Look.BackOffice.Services
@@ -15,7 +16,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
             if (id == "-1") return new RootTreeNode(id, queryStrings);
 
             var nodeType = id.Split('-')[0];
-            var nodeParams = id.Split('-')[1]; // FIX: everything after the first hyphen -
+            var nodeParams = id.Split('-')[1]; // TODO: FIX: everything after the first hyphen
 
             switch (nodeType)
             {
@@ -39,13 +40,16 @@ namespace Our.Umbraco.Look.BackOffice.Services
                     return new TagGroupTreeNode(queryStrings);
 
                 case "tag":
-                    //var tagParams = id.Split('-')
+                    var tagParams = nodeParams.Split('|').Take(3).ToArray(); // limit chop, as tag name may contain delimiter
+
+                    queryStrings.ReadAsNameValueCollection()["searcherName"] = tagParams[0];
+                    queryStrings.ReadAsNameValueCollection()["tagGroup"] = tagParams[1];
+                    queryStrings.ReadAsNameValueCollection()["tagName"] = tagParams[2];
 
                     return new TagTreeNode(queryStrings);
             }
 
             return null;
         }
-
     }
 }

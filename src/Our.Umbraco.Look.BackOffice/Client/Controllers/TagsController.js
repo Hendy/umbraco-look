@@ -9,6 +9,8 @@
 
     function TagsController($scope, $routeParams, apiService) {
 
+        $scope.searcherName = $routeParams.id;
+
     }
 
 })();

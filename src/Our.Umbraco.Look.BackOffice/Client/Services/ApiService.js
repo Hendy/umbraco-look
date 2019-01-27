@@ -15,8 +15,6 @@
      
         function getSearcherDetails(searcherName) {
 
-            console.log('getSeracherDetails called');
-
             return $http({
                 method: 'GET',
                 url: 'BackOffice/Look/Api/GetSearcherDetails',
