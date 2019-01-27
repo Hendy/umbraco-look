@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using Examine;
+using Our.Umbraco.Look.BackOffice.Models.Api;
+using System.Web.Http;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 
@@ -8,12 +10,20 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
     public class ApiController : UmbracoAuthorizedApiController
     {
         [HttpGet]
-        public object GetSearcherDetails([FromUri]string searcherName)
+        public IHttpActionResult GetSearcherDetails([FromUri]string searcherName)
         {
+            var response = new SearcherDetailsResponse();
+
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+
+            if (searcher == null)
+            {
+                return this.BadRequest("Unknown Searcher");
+            }
 
 
 
-            return null;
+            return this.Ok(response);
         }
     
     }

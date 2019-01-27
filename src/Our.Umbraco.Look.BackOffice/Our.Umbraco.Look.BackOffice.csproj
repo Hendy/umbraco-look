@@ -220,6 +220,7 @@
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\TreeController.cs" />
     <Compile Include="Interfaces\ILookTreeNode.cs" />
+    <Compile Include="Models\Api\SearcherDetailsResponse.cs" />
     <Compile Include="Models\Tree\BaseTreeNode.cs" />
     <Compile Include="Models\Tree\RootTreeNode.cs" />
     <Compile Include="Models\Tree\SearcherTreeNode.cs" />
@@ -257,9 +258,7 @@
   <ItemGroup>
     <Content Include="Client\Controllers\SearcherController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Api\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
