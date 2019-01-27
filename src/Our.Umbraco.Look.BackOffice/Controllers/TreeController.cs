@@ -6,12 +6,13 @@ using umbraco.BusinessLogic.Actions;
 using Umbraco.Web.Models.Trees;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.Trees;
+using UmbracoTreeController = Umbraco.Web.Trees.TreeController;
 
 namespace Our.Umbraco.Look.BackOffice.Controllers
 {
     [Tree("developer", "lookTree", "Look", "icon-zoom-in")]
     [PluginController("Look")]
-    public class LookTreeController : TreeController
+    public class TreeController : UmbracoTreeController
     {
         protected override TreeNodeCollection GetTreeNodes(string id, FormDataCollection queryStrings)
         {

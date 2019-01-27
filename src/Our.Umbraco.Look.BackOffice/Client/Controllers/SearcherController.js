@@ -5,40 +5,19 @@
         .module('umbraco')
         .controller('Look.BackOffice.SearcherController', SearcherController);
 
-    SearcherController.$inject = ['$scope'];
+    SearcherController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService'];
 
-    function SearcherController($scope) {
+    function SearcherController($scope, $routeParams, apiService) {
 
-        $scope.init = init;
-        $scope.test = 'nothing';
+        $scope.searcherName = $routeParams.id;
+        
+        apiService.getSearcherDetails($scope.searcherName)
+            .then(function (response) {
 
 
-        // init function used to get the tree node id from the view ! (as can't find a suitable resource to inject so as to get at this value)
-        function init(currentNode) {
-            console.log(currentNode);
-            //appenderName = currentNode.id.split('|')[1]; // strip the 'appender|' prefix
-            load();
-        }
+        });
 
-        function load() {
 
-            $scope.test = "loaded";
-
-            //azureLoggerResource.getDetails(appenderName)
-            //    .then(function (response) {
-
-            //        $scope.appenderName = response.data.name;
-            //        $scope.connectionString = response.data.connectionString;
-            //        $scope.tableName = response.data.tableName;
-            //        $scope.readOnly = response.data.readOnly;
-            //        $scope.bufferSize = response.data.bufferSize;
-
-            //    });
-        }
-
-        //function cancel() {
-        //    navigationService.hideNavigation();
-        //}
     }
 
 })();

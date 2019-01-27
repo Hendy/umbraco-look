@@ -217,7 +217,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\LookTreeController.cs" />
+    <Compile Include="Controllers\ApiController.cs" />
+    <Compile Include="Controllers\TreeController.cs" />
     <Compile Include="Interfaces\ILookTreeNode.cs" />
     <Compile Include="Models\BaseTreeNode.cs" />
     <Compile Include="Models\RootTreeNode.cs" />
