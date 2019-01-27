@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
 
-namespace Our.Umbraco.Look.BackOffice.Models
+namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
     internal class RootTreeNode : BaseTreeNode
     {

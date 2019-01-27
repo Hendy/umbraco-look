@@ -10,6 +10,9 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         [HttpGet]
         public object GetSearcherDetails([FromUri]string searcherName)
         {
+
+
+
             return null;
         }
     

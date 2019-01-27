@@ -1,7 +1,7 @@
 ﻿using Our.Umbraco.Look.BackOffice.Interfaces;
 using System.Net.Http.Formatting;
 
-namespace Our.Umbraco.Look.BackOffice.Models
+namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
     internal abstract class BaseTreeNode : ILookTreeNode
     {

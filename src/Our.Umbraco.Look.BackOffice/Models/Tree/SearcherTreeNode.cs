@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using Umbraco.Core;
 
-namespace Our.Umbraco.Look.BackOffice.Models
+namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
     internal class SearcherTreeNode : BaseTreeNode
     {

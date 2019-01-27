@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Formatting;
 
-namespace Our.Umbraco.Look.BackOffice.Models
+namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
     internal class TagTreeNode : BaseTreeNode
     {
