@@ -21,5 +21,18 @@
   </metadata>
   <files>
     <file src="..\src\Our.Umbraco.Look.BackOffice\bin\Release\Our.Umbraco.Look.BackOffice.dll" target="lib\net45"></file>
+
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\package.manifest" target="Content\App_Plugins\Look\package.manifest" />
+
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\SearcherController.js" target="Content\App_Plugins\Look\Controllers\SearcherController.js" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\TagController.js" target="Content\App_Plugins\Look\Controllers\TagController.js" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\TagGroupController.js" target="Content\App_Plugins\Look\Controllers\TagGroupController.js" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\TagsController.js" target="Content\App_Plugins\Look\Controllers\TagsController.js" />
+
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Searcher.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Searcher.html" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Tag.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Tag.Html" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\TagGroup.html" target="Content\App_Plugins\Look\BackOffice\LookTree\TagGroup.html" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Tags.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Tags.html" />
+
   </files>
 </package>
