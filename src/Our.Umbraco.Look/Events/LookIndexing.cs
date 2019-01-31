@@ -21,7 +21,7 @@ namespace Our.Umbraco.Look
     public class LookIndexing : ApplicationEventHandler
     {
         /// <summary>
-        /// Ask Examine if it has any LookDetachedIndexers (as they may be registered at runtime in future)
+        /// Collection of LookIndexers registered with Examine
         /// </summary>
         private LookIndexer[] _lookIndexers;
 
@@ -31,7 +31,7 @@ namespace Our.Umbraco.Look
         private UmbracoHelper _umbracoHelper;
 
         /// <summary>
-        /// Event used to maintain any detached indexes, as and when Umbraco data changes
+        /// Wire-up events to maintain Look indexes 'as and when' Umbraco data changes
         /// </summary>
         /// <param name="umbracoApplication"></param>
         /// <param name="applicationContext"></param>
@@ -110,7 +110,7 @@ namespace Our.Umbraco.Look
         }
 
         /// <summary>
-        /// 
+        /// Update the Lucene document in all indexes
         /// </summary>
         /// <param name="publishedContent"></param>
         private void Update(IPublishedContent publishedContent)
@@ -126,9 +126,10 @@ namespace Our.Umbraco.Look
         }
 
         /// <summary>
-        /// Delete all lucene documents where node (item) id or deteached items using host id = the supplied id
+        /// Delete from all indexes all Lucene documents where the id identifies 
+        /// the Umbraco Content, Media or Member item and any of its Detached items
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">The Umbraco Content, Media or Member Id (Detached items do not have Ids)</param>
         private void Remove(int id)
         {
             foreach (var lookIndexer in this._lookIndexers)

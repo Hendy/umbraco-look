@@ -7,8 +7,9 @@ namespace Our.Umbraco.Look
     public static class LookConfiguration
     {
         /// <summary>
-        /// Hook indexing
-        /// Set the index names of the exmaine indexes to hook into (if not set, it'll default to all)
+        /// 'Hook indexing'
+        /// Get or set the index names of all the Exmaine indexes to hook into.
+        /// If not set (or null) all Examine indexes are returned.
         /// </summary>
         public static string[] ExamineIndexers
         {
@@ -51,7 +52,9 @@ namespace Our.Umbraco.Look
         public static Func<IndexingContext, Location> LocationIndexer { set { LookService.SetLocationIndexer(value); } }
 
         /// <summary>
-        /// Specify which fields to return in the result set
+        /// Specify which fields to return in the result set.
+        /// Defaults to AllFields which will return all Lucene fields for each document, making it fully populate the Fields dictionary property on the SearchResult.
+        /// Setting it to LookFieldsOnly reduces the number of Lucene fields returned to the min required to inflate a LookMatch object.
         /// </summary>
         public static RequestFields RequestFields { set { LookService.SetRequestFields(value); } }
     }
