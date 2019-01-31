@@ -21,8 +21,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
                 return this.BadRequest("Unknown Searcher");
             }
 
-
-
             return this.Ok(response);
         }
     
