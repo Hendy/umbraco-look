@@ -77,7 +77,10 @@ namespace Our.Umbraco.Look
             {
                 this.EnsureUmbracoContext();
 
-                var indexingContext = new IndexingContext(null, publishedContent, indexerName);
+                var indexingContext = new IndexingContext(
+                                            hostNode: null, 
+                                            node: publishedContent, 
+                                            indexerName: indexerName);
 
                 LookService.Index(indexingContext, e.Document);
             }

@@ -213,7 +213,10 @@ namespace Our.Umbraco.Look
 
             foreach (var node in nodes)
             {
-                var indexingContext = new IndexingContext(null, node, this.Name);
+                var indexingContext = new IndexingContext(
+                                                hostNode: null, 
+                                                node: node, 
+                                                indexerName: this.Name);
 
                 var document = new Document();
 
@@ -223,7 +226,10 @@ namespace Our.Umbraco.Look
 
                 foreach (var detachedNode in node.GetFlatDetachedDescendants())
                 {
-                    indexingContext = new IndexingContext(node, detachedNode, this.Name);
+                    indexingContext = new IndexingContext(
+                                            hostNode: node, 
+                                            node: detachedNode, 
+                                            indexerName: this.Name);
 
                     document = new Document();
 
