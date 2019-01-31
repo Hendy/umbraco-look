@@ -1,4 +1,5 @@
 ﻿using Examine;
+using Our.Umbraco.Look;
 using Our.Umbraco.Look.BackOffice.Models.Api;
 using System.Web.Http;
 using Umbraco.Web.Mvc;
@@ -20,6 +21,13 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             {
                 return this.BadRequest("Unknown Searcher");
             }
+
+            response.SearcherName = searcher.Name;
+            response.SearcherDescription = searcher.Description;
+            response.SearcherType = searcher is LookSearcher ? "Look" : "Examine";
+
+            // number of documents in index
+            // indexers operational
 
             return this.Ok(response);
         }

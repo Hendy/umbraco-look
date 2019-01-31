@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
                     this.Active = true;
                     this.Icon = "icon-categories";
                 }
-                else
+                else // not hooked in 
                 {
                     this.Icon = "icon-file-cabinet";
                 }
