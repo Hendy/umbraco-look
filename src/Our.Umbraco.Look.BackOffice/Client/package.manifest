@@ -7,5 +7,6 @@
     "~/App_Plugins/Look/Services/ApiService.js"
   ],
   "css": [
+    "~/App_Plugins/Look/Look.css"
   ]
 }

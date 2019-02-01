@@ -242,6 +242,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\Look.css" />
     <Content Include="Client\Services\ApiService.js" />
     <Content Include="Client\Views\Searcher.html" />
   </ItemGroup>
