@@ -12,12 +12,15 @@
         $scope.searcherName = $routeParams.id;
         $scope.searcherDescription = null;
         $scope.searcherType = null;
+        $scope.icon = null;
         
         apiService.getSearcherDetails($scope.searcherName)
             .then(function (response) {
 
                 $scope.searcherDescription = response.data.SearcherDescription;
                 $scope.searcherType = response.data.SearcherType;
+                $scope.icon = response.data.Icon;
+
 
                 $scope.response = response;
 

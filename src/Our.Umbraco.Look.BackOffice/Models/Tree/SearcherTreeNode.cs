@@ -1,6 +1,6 @@
 ﻿using Examine;
-using Examine.Providers;
 using Our.Umbraco.Look.BackOffice.Interfaces;
+using Our.Umbraco.Look.BackOffice.Services;
 using System.Linq;
 using System.Net.Http.Formatting;
 using Umbraco.Core;
@@ -34,7 +34,6 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
             if (searcher is LookSearcher)
             {
                 this.Active = true;
-                this.Icon = "icon-files";
             }
             else // must be an examine one
             {
@@ -43,13 +42,10 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
                 if (LookConfiguration.ExamineIndexers.Select(x => x.TrimEnd("Indexer")).Any(x => x == name))
                 {
                     this.Active = true;
-                    this.Icon = "icon-categories";
-                }
-                else // not hooked in 
-                {
-                    this.Icon = "icon-file-cabinet";
                 }
             }
+
+            this.Icon = LookTreeService.GetSearcherIcon(searcher);
         }
 
         public override ILookTreeNode[] GetChildren()

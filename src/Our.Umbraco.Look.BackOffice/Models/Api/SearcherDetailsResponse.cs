@@ -19,5 +19,10 @@
         /// Examine "Examine (active or inactive)", "Look"
         /// </summary>
         public string SearcherType { get; set; }
+
+        /// <summary>
+        /// Css icon name
+        /// </summary>
+        public string Icon { get; set; }
     }
 }
