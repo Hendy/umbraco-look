@@ -2,24 +2,47 @@
 
     <div class="umb-panel-header">
 
-        <h2>Look</h2>
-
+        <div class="look-header">
+            <span class="icon icon-files look-header-icon">&nbsp;</span>
+            <span class="look-header-title">{{ searcherName }}</span>
+        </div>
+        
     </div>
-
     <div class="umb-panel-body">
+        <div class="umb-pane">
 
-        <span class="icon icon-files look-icon-body">&nbsp;</span>
+            <div class="look-body">
+                <dl>
+                    <dt>Name</dt>
+                    <dd>{{ searcherName }}</dd>
 
-        <h3>Searcher</h3>
-        <p>Name: {{ searcherName }}</p>
-        <p>Description: {{ searcherDescription }}</p>
-        <p>Type: {{ searcherType }}</p>
+                    <dt>Description</dt>
+                    <dd>{{ searcherDescription }}</dd>
 
-        <hr/>
+                    <dt>Type</dt>
+                    <dd>{{ searcherType }}</dd>
 
-        <!--<p>{{ response|json }}</p>-->
-       
 
+                    <!--<dt>Name Indexing</dt>
+                    <dd>YES/NO</dd>
+
+                    <dt>Date Indexing</dt>
+                    <dd></dd>
+
+                    <dt>Text Indexing</dt>
+                    <dd></dd>
+
+                    <dt>Tag Indexing</dt>
+                    <dd></dd>
+
+                    <dt>Location Indexing</dt>
+                    <dd></dd>-->
+
+                </dl>
+
+                <!--<p>{{ response|json }}</p>-->
+            </div>       
+
+        </div><!-- /umb-pane -->
     </div>
-
 </div>

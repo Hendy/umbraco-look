@@ -1,3 +1,40 @@
-﻿.look-icon-body {
-    font-size: 100px;
+﻿
+.look-header {
+    margin: 35px 15px;
 }
+
+    .look-header span {
+        float: left;
+    }
+
+.look-header-icon {
+    font-size: 70px;
+}
+
+.look-header-title {
+    font-size: x-large;
+}
+
+.look-body {
+}
+
+    .look-body dl {
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    .look-body dt {
+        flex-basis: 20%;
+        padding: 2px 5px;
+        text-align: right;
+        background: #333;
+        color: #fff;
+    }
+
+    .look-body dd {
+        flex-basis: 70%;
+        flex-grow: 1;
+        margin: 0;
+        padding: 2px 3px;
+        border-bottom: 1px dashed lightgrey;
+    }
