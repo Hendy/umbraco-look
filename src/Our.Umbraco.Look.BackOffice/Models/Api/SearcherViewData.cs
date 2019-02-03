@@ -1,9 +1,9 @@
 ﻿namespace Our.Umbraco.Look.BackOffice.Models.Api
 {
     /// <summary>
-    /// Response POCO for the ApiController.GetSearcherDetails() method
+    /// Model for view when a searcher is selected in the tree
     /// </summary>
-    public class SearcherDetailsResponse
+    public class SearcherViewData
     {
         /// <summary>
         /// Searcher Name

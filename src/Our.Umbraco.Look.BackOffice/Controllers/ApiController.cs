@@ -12,9 +12,9 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
     public class ApiController : UmbracoAuthorizedApiController
     {
         [HttpGet]
-        public IHttpActionResult GetSearcherDetails([FromUri]string searcherName)
+        public IHttpActionResult GetViewDataForSearcher([FromUri]string searcherName)
         {
-            var response = new SearcherDetailsResponse();
+            var viewData = new SearcherViewData();
 
             var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
 
@@ -23,16 +23,54 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
                 return this.BadRequest("Unknown Searcher");
             }
 
-            response.SearcherName = searcher.Name;
-            response.SearcherDescription = searcher.Description;
-            response.SearcherType = searcher is LookSearcher ? "Look" : "Examine";
-            response.Icon = LookTreeService.GetSearcherIcon(searcher);
+            viewData.SearcherName = searcher.Name;
+            viewData.SearcherDescription = searcher.Description;
+            viewData.SearcherType = searcher is LookSearcher ? "Look" : "Examine";
+            viewData.Icon = LookTreeService.GetSearcherIcon(searcher);
 
             // number of documents in index
             // indexers operational
 
-            return this.Ok(response);
+            return this.Ok(viewData);
         }
-    
+
+        /// <summary>
+        /// Get the view model for the top level 'Tags' tree node (for a searcher)
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult GetViewDataForTags([FromUri]string searcherName)
+        {
+            var viewData = new TagsViewData();
+
+            return this.BadRequest("TODO:");
+        }
+
+        /// <summary>
+        /// Get the view model for a specific 'TagGroup' tree node (for a searcher)
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult GetViewDataForTagGroup([FromUri]string searcherName, [FromUri]string tagGroup)
+        {
+            var viewData = new TagGroupViewData();
+
+            return this.BadRequest("TODO:");
+        }
+
+        /// <summary>
+        /// Get the view model for a specific 'Tag' tree node (for a searcher)
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult GetViewDataForTag([FromUri]string searcherName, [FromUri]string tagGroup, [FromUri]string tagName)
+        {
+            var viewData = new TagViewData();
+
+            return this.BadRequest("TODO:");
+        }
     }
 }

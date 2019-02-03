@@ -11,6 +11,12 @@
 
         $scope.searcherName = $routeParams.id;
 
+        apiService.getViewDataForTags($scope.searcherName)
+            .then(function (response) {
+
+                $scope.response = response;
+
+            });
     }
 
 })();

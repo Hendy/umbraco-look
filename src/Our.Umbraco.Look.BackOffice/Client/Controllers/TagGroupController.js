@@ -14,6 +14,13 @@
         $scope.searcherName = parsedId[0];
         $scope.tagGroup = parsedId[1];
 
+        apiService.getViewDataForTagGroup($scope.searcherName, $scope.tagGroup)
+            .then(function (response) {
+
+                $scope.response = response;
+
+            });
+
     }
 
 })();

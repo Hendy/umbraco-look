@@ -220,7 +220,10 @@
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\TreeController.cs" />
     <Compile Include="Interfaces\ILookTreeNode.cs" />
-    <Compile Include="Models\Api\SearcherDetailsResponse.cs" />
+    <Compile Include="Models\Api\SearcherViewData.cs" />
+    <Compile Include="Models\Api\TagGroupViewData.cs" />
+    <Compile Include="Models\Api\TagsViewData.cs" />
+    <Compile Include="Models\Api\TagViewData.cs" />
     <Compile Include="Models\Tree\BaseTreeNode.cs" />
     <Compile Include="Models\Tree\RootTreeNode.cs" />
     <Compile Include="Models\Tree\SearcherTreeNode.cs" />

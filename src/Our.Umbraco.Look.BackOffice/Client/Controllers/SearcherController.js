@@ -14,7 +14,7 @@
         $scope.searcherType = null;
         $scope.icon = null;
         
-        apiService.getSearcherDetails($scope.searcherName)
+        apiService.getViewDataForSearcher($scope.searcherName)
             .then(function (response) {
 
                 $scope.searcherDescription = response.data.SearcherDescription;
