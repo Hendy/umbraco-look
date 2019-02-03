@@ -5,6 +5,8 @@ using Our.Umbraco.Look.BackOffice.Services;
 using System.Web.Http;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Our.Umbraco.AzureLogger.Core.Controllers
 {
@@ -17,11 +19,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             var viewData = new SearcherViewData();
 
             var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
-
-            if (searcher == null)
-            {
-                return this.BadRequest("Unknown Searcher");
-            }
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
 
             viewData.SearcherName = searcher.Name;
             viewData.SearcherDescription = searcher.Description;
@@ -44,7 +42,11 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new TagsViewData();
 
-            return this.BadRequest("TODO:");
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+
+            return this.Ok(viewData);
         }
 
         /// <summary>
@@ -57,7 +59,21 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new TagGroupViewData();
 
-            return this.BadRequest("TODO:");
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+            viewData.TagCounts = new LookQuery(searcherName) { TagQuery = new TagQuery() { FacetOn = new TagFacetQuery(tagGroup) } }
+                                .Search()
+                                .Facets
+                                .Select(x => new TagGroupViewData.TagCount()
+                                {
+                                    Name = x.Tags.Single().Name, // query such that only single collection results expected
+                                    Count = x.Count
+                                })
+                                .OrderBy(x => x.Name)
+                                .ToArray();
+
+            return this.Ok(viewData);
         }
 
         /// <summary>
@@ -70,7 +86,11 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new TagViewData();
 
-            return this.BadRequest("TODO:");
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+
+            return this.Ok(viewData);
         }
     }
 }

@@ -14,7 +14,7 @@
         apiService.getViewDataForTags($scope.searcherName)
             .then(function (response) {
 
-                $scope.response = response;
+                $scope.response = response.data;
 
             });
     }

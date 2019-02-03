@@ -22,7 +22,7 @@
                 $scope.icon = response.data.Icon;
 
 
-                $scope.response = response;
+                $scope.response = response.data;
 
         });
 

@@ -14,10 +14,14 @@
         $scope.searcherName = parsedId[0];
         $scope.tagGroup = parsedId[1];
 
+        $scope.tags = null; // an object array of: tag name + useage count 
+
         apiService.getViewDataForTagGroup($scope.searcherName, $scope.tagGroup)
             .then(function (response) {
 
-                $scope.response = response;
+                $scope.response = response.data; // DEBUG
+
+                $scope.tags = response.data.TagCounts;
 
             });
 
