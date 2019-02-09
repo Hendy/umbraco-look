@@ -45,6 +45,8 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
             if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
 
+            // The tags node renders all tag groups
+            viewData.TagGroups = QueryService.GetTagGroups(searcherName);
 
             return this.Ok(viewData);
         }
