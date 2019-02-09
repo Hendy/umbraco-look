@@ -5,9 +5,9 @@
         .module('umbraco')
         .factory('Look.BackOffice.ApiService', ApiService);
 
-    ApiService.$inject = ['$rootScope', '$http', '$q'];
+    ApiService.$inject = ['$http'];
 
-    function ApiService($rootScope, $http, $q) {
+    function ApiService($http) {
 
         return {
             getViewDataForSearcher: getViewDataForSearcher,

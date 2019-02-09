@@ -24,7 +24,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             viewData.SearcherName = searcher.Name;
             viewData.SearcherDescription = searcher.Description;
             viewData.SearcherType = searcher is LookSearcher ? "Look" : "Examine";
-            viewData.Icon = LookTreeService.GetSearcherIcon(searcher);
+            viewData.Icon = TreeService.GetSearcherIcon(searcher);
 
             // number of documents in index
             // indexers operational

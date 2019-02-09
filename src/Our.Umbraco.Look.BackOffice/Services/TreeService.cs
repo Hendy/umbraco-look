@@ -7,7 +7,7 @@ using Umbraco.Core;
 
 namespace Our.Umbraco.Look.BackOffice.Services
 {
-    internal static class LookTreeService
+    internal static class TreeService
     {
         /// <summary>
         /// Factory method to make a type of LookTreeNode from the supplied (hyphen delimited) id

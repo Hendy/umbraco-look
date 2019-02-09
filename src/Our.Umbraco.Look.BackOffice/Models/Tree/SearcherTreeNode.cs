@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
                 }
             }
 
-            this.Icon = LookTreeService.GetSearcherIcon(searcher);
+            this.Icon = TreeService.GetSearcherIcon(searcher);
         }
 
         public override ILookTreeNode[] GetChildren()
