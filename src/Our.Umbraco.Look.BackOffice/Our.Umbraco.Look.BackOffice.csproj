@@ -220,6 +220,8 @@
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\TreeController.cs" />
     <Compile Include="Interfaces\ILookTreeNode.cs" />
+    <Compile Include="Models\Api\QueryResult.cs" />
+    <Compile Include="Models\Api\Match.cs" />
     <Compile Include="Models\Api\SearcherViewData.cs" />
     <Compile Include="Models\Api\TagGroupViewData.cs" />
     <Compile Include="Models\Api\TagsViewData.cs" />

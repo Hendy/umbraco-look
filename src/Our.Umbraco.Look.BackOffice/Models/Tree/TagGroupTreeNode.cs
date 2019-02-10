@@ -1,4 +1,5 @@
 ﻿using Our.Umbraco.Look.BackOffice.Interfaces;
+using Our.Umbraco.Look.BackOffice.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
@@ -25,12 +26,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
         public override ILookTreeNode[] GetChildren()
         {
-            var tags = new LookQuery(this.SearcherName) { TagQuery = new TagQuery() }
-                        .Search()
-                        .Matches
-                        .SelectMany(x => x.Tags.Where(y => y.Group == this.TagGroup))
-                        .Distinct()
-                        .OrderBy(x => x.Name);
+            var tags = QueryService.GetTags(this.SearcherName, this.TagGroup);
 
             var children = new List<TagTreeNode>();
 

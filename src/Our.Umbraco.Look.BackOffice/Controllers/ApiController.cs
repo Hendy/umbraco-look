@@ -100,7 +100,38 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
 
         #region QueryService
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <param name="tagGroup"></param>
+        /// <param name="tagName"></param>
+        /// <param name="sort"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult Query(
+                    [FromUri]string searcherName, 
+                    [FromUri]string tagGroup, 
+                    [FromUri]string tagName,
+                    [FromUri]string sort,
+                    [FromUri]string skip,
+                    [FromUri]string take)
+        {
+            var queryResult = new QueryResult();
 
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+
+
+
+
+
+
+            return this.Ok(queryResult);
+        }
 
 
         #endregion

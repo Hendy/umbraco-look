@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace Our.Umbraco.Look.BackOffice.Services
 {
@@ -12,27 +8,40 @@ namespace Our.Umbraco.Look.BackOffice.Services
     internal static class QueryService
     {
         /// <summary>
-        /// return all tag groups (todo return facet counts)
+        /// get all groups in seacher
         /// </summary>
         /// <param name="searcherName"></param>
         /// <returns></returns>
         internal static string[] GetTagGroups(string searcherName)
         {
+            // TODO: return useage count for each (facets)
 
-            var tagGroups = new LookQuery(searcherName) { TagQuery = new TagQuery() }
-                    .Search()
-                    .Matches
-                    .SelectMany(x => x.Tags.Select(y => y.Group))
-                    .Distinct()
-                    .OrderBy(x => x)
-                    .ToArray();
-
-            return tagGroups;
+            return new LookQuery(searcherName) { TagQuery = new TagQuery() }
+                        .Search()
+                        .Matches
+                        .SelectMany(x => x.Tags.Select(y => y.Group))
+                        .Distinct()
+                        .OrderBy(x => x)
+                        .ToArray();
         }
 
-        internal static object GetTags(string searcherName, string tagGroup)
+        /// <summary>
+        /// get all tags in group
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <param name="tagGroup"></param>
+        /// <returns></returns>
+        internal static LookTag[] GetTags(string searcherName, string tagGroup)
         {
-            return null;
+            // TODO: return useage count for each (facets)
+
+            return new LookQuery(searcherName) { TagQuery = new TagQuery() }
+                        .Search()
+                        .Matches
+                        .SelectMany(x => x.Tags.Where(y => y.Group == tagGroup))
+                        .Distinct()
+                        .OrderBy(x => x.Name)
+                        .ToArray();
         }
     }
 }
