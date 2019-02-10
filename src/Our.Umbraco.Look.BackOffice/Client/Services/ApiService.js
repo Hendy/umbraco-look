@@ -68,8 +68,8 @@
             if (angular.isUndefined(tagGroup)) { tagGroup = ''; }
             if (angular.isUndefined(tagName)) { tagName = ''; }
             if (angular.isUndefined(sort)) { sort = ''; }
-            if (angular.isUndefined(skip)) { skip = ''; }
-            if (angular.isUndefined(take)) { take = ''; }
+            if (angular.isUndefined(skip)) { skip = 0; }
+            if (angular.isUndefined(take)) { take = 10; }
 
             var matches = $http({
                 method: 'GET',

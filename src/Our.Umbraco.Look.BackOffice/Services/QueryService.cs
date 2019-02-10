@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Our.Umbraco.Look.BackOffice.Models.Api;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,13 +44,22 @@ namespace Our.Umbraco.Look.BackOffice.Services
                                 .ToDictionary(x => x.Item1, x => x.Item2);
         }
 
+        /// <summary>
+        /// get a chunk of matches
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <param name="tagGroup"></param>
+        /// <param name="tagName"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        internal static MatchesResult GetMatches(string searcherName, string tagGroup, string tagName, string sort, int skip, int take)
+        {
+            var matchesResult = new MatchesResult();
 
-        //internal static QueryResult GetMatches(string searcherName, string tagGroup, string tagName, string sort)
-        //{
 
 
-        //    return null;
-        //}
 
+            return matchesResult;
+        }
     }
 }
