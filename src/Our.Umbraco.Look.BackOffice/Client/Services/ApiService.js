@@ -73,7 +73,7 @@
 
             var matches = $http({
                 method: 'GET',
-                url: 'BackOffice/Look/Api/Query',
+                url: 'BackOffice/Look/Api/GetMatches',
                 params: {
                     'searcherName': searcherName,
                     'tagGroup': tagGroup,

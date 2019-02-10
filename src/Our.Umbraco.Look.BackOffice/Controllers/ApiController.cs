@@ -12,8 +12,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
     [PluginController("Look")]
     public class ApiController : UmbracoAuthorizedApiController
     {
-        #region ViewDataService
-
         [HttpGet]
         public IHttpActionResult GetViewDataForSearcher([FromUri]string searcherName)
         {
@@ -96,10 +94,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(viewData);
         }
 
-        #endregion
-
-        #region QueryService
-
         /// <summary>
         /// 
         /// </summary>
@@ -111,7 +105,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         /// <param name="take"></param>
         /// <returns></returns>
         [HttpGet]
-        public IHttpActionResult Query(
+        public IHttpActionResult GetMatches(
                     [FromUri]string searcherName, 
                     [FromUri]string tagGroup, 
                     [FromUri]string tagName,
@@ -119,21 +113,19 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
                     [FromUri]string skip,
                     [FromUri]string take)
         {
-            var queryResult = new QueryResult();
+            var matchesResult = new MatchesResult();
 
             var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
             if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
 
 
+            matchesResult.Matches = new MatchesResult.Match[] { new MatchesResult.Match() {  } };
 
 
 
 
-
-            return this.Ok(queryResult);
+            return this.Ok(matchesResult);
         }
 
-
-        #endregion
     }
 }

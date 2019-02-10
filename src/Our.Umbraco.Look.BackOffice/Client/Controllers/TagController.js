@@ -14,7 +14,8 @@
         $scope.searcherName = parsedId[0];
         $scope.tagGroup = parsedId[1];
         $scope.tagName = parsedId[2];
-        $scope.matches = null;
+
+        //$scope.matchesResponse = null;
 
         apiService
             .getViewDataForTag($scope.searcherName, $scope.tagGroup, $scope.tagName)
@@ -29,7 +30,7 @@
             .getMatches($scope.searcherName, $scope.tagGroup)
             .then(function (response) {
 
-                $scope.matches = response.data;
+                $scope.matchesResponse = response.data;
 
             });
 

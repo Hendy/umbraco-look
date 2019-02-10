@@ -13,7 +13,8 @@
 
         $scope.searcherName = parsedId[0];
         $scope.tagGroup = parsedId[1];
-        $scope.matches = null;
+
+        //$scope.matchesResponse = null;
 
         //$scope.tags = null; // an object array of: tag name + useage count 
 
@@ -31,7 +32,7 @@
             .getMatches($scope.searcherName, $scope.tagGroup)
             .then(function (response) {
 
-                $scope.matches = response.data;
+                $scope.matchesResponse = response.data;
 
             });
 

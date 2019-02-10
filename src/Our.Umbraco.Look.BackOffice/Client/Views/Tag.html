@@ -17,7 +17,13 @@
                 <p>{{ response|json }}</p>
                 
                 <hr/>
-                <p>{{ matches|json}}</p>
+                <p>{{ matchesResponse|json}}</p>
+
+                <div class="umb-scrollable">
+                    <div lazy-load="getMoreMatches()">
+                        loading matches...
+                    </div>
+                </div>
 
             </div>
 
