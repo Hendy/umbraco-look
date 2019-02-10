@@ -5,9 +5,9 @@
         .module('umbraco')
         .controller('Look.BackOffice.TagGroupController', TagGroupController);
 
-    TagGroupController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ViewDataService', 'Look.BackOffice.QueryService'];
+    TagGroupController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService'];
 
-    function TagGroupController($scope, $routeParams, viewDataService, queryService) {
+    function TagGroupController($scope, $routeParams, apiService) {
 
         var parsedId = $routeParams.id.split('|');
 
@@ -17,24 +17,21 @@
 
         //$scope.tags = null; // an object array of: tag name + useage count 
 
-        viewDataService
+        apiService
             .getViewDataForTagGroup($scope.searcherName, $scope.tagGroup)
             .then(function (response) {
 
                 $scope.response = response.data; // DEBUG
 
                 //$scope.tags = response.data.TagCounts;
-
-
-
             });
 
 
-        queryService
+        apiService
             .getMatches($scope.searcherName, $scope.tagGroup)
             .then(function (response) {
 
-                $scope.matches = response.data.matches;
+                $scope.matches = response.data;
 
             });
 

@@ -4,8 +4,7 @@
     "~/App_Plugins/Look/Controllers/TagController.js",
     "~/App_Plugins/Look/Controllers/TagGroupController.js",
     "~/App_Plugins/Look/Controllers/TagsController.js",
-    "~/App_Plugins/Look/Services/QueryService.js",
-    "~/App_Plugins/Look/Services/ViewDataService.js"
+    "~/App_Plugins/Look/Services/ApiService.js"
   ],
   "css": [
     "~/App_Plugins/Look/Look.css"

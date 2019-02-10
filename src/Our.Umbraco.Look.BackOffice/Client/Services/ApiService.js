@@ -3,17 +3,18 @@
 
     angular
         .module('umbraco')
-        .factory('Look.BackOffice.ViewDataService', ViewDataService);
+        .factory('Look.BackOffice.ApiService', ApiService);
 
-    ViewDataService.$inject = ['$http'];
+    ApiService.$inject = ['$http', '$q'];
 
-    function ViewDataService($http) {
+    function ApiService($http, $q) {
 
         return {
             getViewDataForSearcher: getViewDataForSearcher,
             getViewDataForTags: getViewDataForTags,
             getViewDataForTagGroup: getViewDataForTagGroup,
-            getViewDataForTag: getViewDataForTag
+            getViewDataForTag: getViewDataForTag,
+            getMatches: getMatches
         };
      
         function getViewDataForSearcher(searcherName) {
@@ -57,6 +58,38 @@
                     'tagName': tagName
                 }
             });
+        }
+
+        function getMatches(searcherName, tagGroup, tagName, sort, skip, take) {
+
+            //var deferred = $q.defer();
+
+            if (angular.isUndefined(searcherName)) { searcherName = ''; }
+            if (angular.isUndefined(tagGroup)) { tagGroup = ''; }
+            if (angular.isUndefined(tagName)) { tagName = ''; }
+            if (angular.isUndefined(sort)) { sort = ''; }
+            if (angular.isUndefined(skip)) { skip = ''; }
+            if (angular.isUndefined(take)) { take = ''; }
+
+            var matches = $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/Query',
+                params: {
+                    'searcherName': searcherName,
+                    'tagGroup': tagGroup,
+                    'tagName': tagName,
+                    'sort': sort,
+                    'skip': skip,
+                    'take': take
+                }
+            });
+
+
+            return matches;
+
+            //deferred.resolve(matches);
+
+            //return deferred.promise;
         }
     }
 

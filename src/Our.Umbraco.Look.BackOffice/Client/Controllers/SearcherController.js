@@ -5,16 +5,16 @@
         .module('umbraco')
         .controller('Look.BackOffice.SearcherController', SearcherController);
 
-    SearcherController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ViewDataService'];
+    SearcherController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService'];
 
-    function SearcherController($scope, $routeParams, viewDataService) {
+    function SearcherController($scope, $routeParams, apiService) {
 
         $scope.searcherName = $routeParams.id;
         $scope.searcherDescription = null;
         $scope.searcherType = null;
         $scope.icon = null;
         
-        viewDataService.getViewDataForSearcher($scope.searcherName)
+        apiService.getViewDataForSearcher($scope.searcherName)
             .then(function (response) {
 
                 $scope.searcherDescription = response.data.SearcherDescription;

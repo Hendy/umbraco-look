@@ -249,8 +249,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Client\Look.css" />
-    <Content Include="Client\Services\ViewDataService.js" />
-    <Content Include="Client\Services\QueryService.js" />
+    <Content Include="Client\Services\ApiService.js" />
     <Content Include="Client\Views\Searcher.html" />
   </ItemGroup>
   <ItemGroup>
