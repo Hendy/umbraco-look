@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Our.Umbraco.Look.BackOffice.Services
 {
@@ -8,13 +10,13 @@ namespace Our.Umbraco.Look.BackOffice.Services
     internal static class QueryService
     {
         /// <summary>
-        /// get all groups in seacher
+        /// get all tag groups in seacher
         /// </summary>
         /// <param name="searcherName"></param>
         /// <returns></returns>
         internal static string[] GetTagGroups(string searcherName) //TODO: change to Dictionary<string, int> (to assoicate a count)
         {
-            // TODO: return useage count for each (facets)
+            // TODO: return useage count for each (need new field)
 
             return new LookQuery(searcherName) { TagQuery = new TagQuery() }
                         .Search()
@@ -26,22 +28,19 @@ namespace Our.Umbraco.Look.BackOffice.Services
         }
 
         /// <summary>
-        /// get all tags in group
+        /// get all tags in group and gives each a count
         /// </summary>
         /// <param name="searcherName"></param>
         /// <param name="tagGroup"></param>
         /// <returns></returns>
-        internal static LookTag[] GetTags(string searcherName, string tagGroup) //TODO: change to Dictionary<LookTag, int> (to assoicate a count)
+        internal static Dictionary<LookTag, int> GetTags(string searcherName, string tagGroup) //TODO: change to Dictionary<LookTag, int> (to assoicate a count)
         {
-            // TODO: return useage count for each (facets)
-
-            return new LookQuery(searcherName) { TagQuery = new TagQuery() }
-                        .Search()
-                        .Matches
-                        .SelectMany(x => x.Tags.Where(y => y.Group == tagGroup))
-                        .Distinct()
-                        .OrderBy(x => x.Name)
-                        .ToArray();
+            return new LookQuery(searcherName) { TagQuery = new TagQuery() { FacetOn = new TagFacetQuery(tagGroup) } }
+                                .Search()
+                                .Facets
+                                .Select(x => new Tuple<LookTag, int>(x.Tags.Single(), x.Count))
+                                .OrderBy(x => x.Item1.Name)
+                                .ToDictionary(x => x.Item1, x => x.Item2);
         }
 
 

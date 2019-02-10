@@ -48,7 +48,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
                     queryStrings.ReadAsNameValueCollection()["tagGroup"] = tagParams[1];
                     queryStrings.ReadAsNameValueCollection()["tagName"] = tagParams[2];
 
-                    return new TagTreeNode(queryStrings);
+                    return new TagTreeNode(queryStrings); // create tag node without count
             }
 
             return null;

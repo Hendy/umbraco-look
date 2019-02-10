@@ -33,9 +33,9 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
             {
                 base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
                 base.QueryStrings.ReadAsNameValueCollection()["tagGroup"] = this.TagGroup;
-                base.QueryStrings.ReadAsNameValueCollection()["tagName"] = tag.Name;
+                base.QueryStrings.ReadAsNameValueCollection()["tagName"] = tag.Key.Name;
 
-                children.Add(new TagTreeNode(base.QueryStrings));
+                children.Add(new TagTreeNode(base.QueryStrings, tag.Value)); // create tag node with count
             }
 
             return children.ToArray();

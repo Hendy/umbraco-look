@@ -1,4 +1,6 @@
-﻿namespace Our.Umbraco.Look.BackOffice.Models.Api
+﻿using System.Collections.Generic;
+
+namespace Our.Umbraco.Look.BackOffice.Models.Api
 {
     /// <summary>
     /// Model for view when a TagGroup is selected in the tree
@@ -6,15 +8,8 @@
     public class TagGroupViewData
     {
         /// <summary>
-        /// For all tags in a given tag group, return each with a useage count
+        /// Tags in this group - together with their useage count
         /// </summary>
-        public TagCount[] TagCounts { get; set; }
-
-        public class TagCount
-        {
-            public string Name { get; set; }
-
-            public int Count { get; set; }
-        }
+        public Dictionary<LookTag, int> Tags { get; set; }
     }
 }

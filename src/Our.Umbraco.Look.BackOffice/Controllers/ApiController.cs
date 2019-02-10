@@ -63,16 +63,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
             if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
 
-            viewData.TagCounts = new LookQuery(searcherName) { TagQuery = new TagQuery() { FacetOn = new TagFacetQuery(tagGroup) } }
-                                .Search()
-                                .Facets
-                                .Select(x => new TagGroupViewData.TagCount()
-                                {
-                                    Name = x.Tags.Single().Name, // query such that only single collection results expected
-                                    Count = x.Count
-                                })
-                                .OrderBy(x => x.Name)
-                                .ToArray();
+            viewData.Tags = QueryService.GetTags(searcherName, tagGroup);
 
             return this.Ok(viewData);
         }

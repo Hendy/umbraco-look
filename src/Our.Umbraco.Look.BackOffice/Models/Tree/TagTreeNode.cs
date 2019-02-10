@@ -6,7 +6,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
     {
         public override string Icon => "icon-tag";
 
-        public override string Name => this.LookTag.Name;
+        public override string Name => this.LookTag.Name + $" ({ this.Count })";
 
         public override string RoutePath => "developer/lookTree/Tag/" + this.SearcherName + "|" + this.LookTag.Group + "|" + this.LookTag.Name;
 
@@ -14,7 +14,12 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
         private LookTag LookTag { get; }
 
-        internal TagTreeNode(FormDataCollection queryStrings) : base("tag-" + queryStrings["searcherName"] + "|" + queryStrings["tagGroup"] + "|" + queryStrings["tagName"], queryStrings)
+        /// <summary>
+        /// Number of documents using this tag
+        /// </summary>
+        private int Count { get; }
+
+        internal TagTreeNode(FormDataCollection queryStrings, int count = -1) : base("tag-" + queryStrings["searcherName"] + "|" + queryStrings["tagGroup"] + "|" + queryStrings["tagName"], queryStrings)
         {
             this.SearcherName = queryStrings["searcherName"];
 
@@ -22,6 +27,8 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
             var tagName = queryStrings["tagName"];
 
             this.LookTag = new LookTag(tagGroup, tagName);
+
+            this.Count = count;
         }
     }
 }
