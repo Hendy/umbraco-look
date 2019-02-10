@@ -3,11 +3,11 @@
 
     angular
         .module('umbraco')
-        .factory('Look.BackOffice.ApiService', ApiService);
+        .factory('Look.BackOffice.ViewDataService', ViewDataService);
 
-    ApiService.$inject = ['$http'];
+    ViewDataService.$inject = ['$http'];
 
-    function ApiService($http) {
+    function ViewDataService($http) {
 
         return {
             getViewDataForSearcher: getViewDataForSearcher,
@@ -58,9 +58,6 @@
                 }
             });
         }
-
-
-
     }
 
 })();

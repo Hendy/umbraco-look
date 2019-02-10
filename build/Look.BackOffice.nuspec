@@ -30,8 +30,9 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\TagGroupController.js" target="Content\App_Plugins\Look\Controllers\TagGroupController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\TagsController.js" target="Content\App_Plugins\Look\Controllers\TagsController.js" />
 
-    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\ApiService.js" target="Content\App_Plugins\Look\Services\ApiService.js" />
-    
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\QueryService.js" target="Content\App_Plugins\Look\Services\QueryService.js" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\ViewDataService.js" target="Content\App_Plugins\Look\Services\ViewDataService.js" />
+
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Searcher.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Searcher.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Tag.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Tag.Html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\TagGroup.html" target="Content\App_Plugins\Look\BackOffice\LookTree\TagGroup.html" />

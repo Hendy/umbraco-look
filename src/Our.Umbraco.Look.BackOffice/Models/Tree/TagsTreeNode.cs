@@ -1,7 +1,6 @@
 ﻿using Our.Umbraco.Look.BackOffice.Interfaces;
 using Our.Umbraco.Look.BackOffice.Services;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Formatting;
 
 namespace Our.Umbraco.Look.BackOffice.Models.Tree
@@ -23,7 +22,6 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
         public override ILookTreeNode[] GetChildren()
         {
-            // get distinct collection of tag groups in this searcher
             var tagGroups = QueryService.GetTagGroups(this.SearcherName);
 
             var children = new List<TagGroupTreeNode>();

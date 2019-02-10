@@ -5,13 +5,13 @@
         .module('umbraco')
         .controller('Look.BackOffice.TagsController', TagsController);
 
-    TagsController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService'];
+    TagsController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ViewDataService'];
 
-    function TagsController($scope, $routeParams, apiService) {
+    function TagsController($scope, $routeParams, viewDataService) {
 
         $scope.searcherName = $routeParams.id;
 
-        apiService.getViewDataForTags($scope.searcherName)
+        viewDataService.getViewDataForTags($scope.searcherName)
             .then(function (response) {
 
                 $scope.response = response.data;

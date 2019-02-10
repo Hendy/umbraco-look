@@ -2,17 +2,18 @@
 using Our.Umbraco.Look;
 using Our.Umbraco.Look.BackOffice.Models.Api;
 using Our.Umbraco.Look.BackOffice.Services;
+using System.Linq;
 using System.Web.Http;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Our.Umbraco.AzureLogger.Core.Controllers
 {
     [PluginController("Look")]
     public class ApiController : UmbracoAuthorizedApiController
     {
+        #region ViewDataService
+
         [HttpGet]
         public IHttpActionResult GetViewDataForSearcher([FromUri]string searcherName)
         {
@@ -94,5 +95,14 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
 
             return this.Ok(viewData);
         }
+
+        #endregion
+
+        #region QueryService
+
+
+
+
+        #endregion
     }
 }
