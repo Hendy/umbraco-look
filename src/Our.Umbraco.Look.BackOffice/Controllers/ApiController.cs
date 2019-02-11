@@ -88,7 +88,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         }
 
         /// <summary>
-        /// TODO: rename to GetTagMatches ?
+        /// Get matches based on tags
         /// </summary>
         /// <param name="searcherName"></param>
         /// <param name="tagGroup"></param>
@@ -98,7 +98,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         /// <param name="take"></param>
         /// <returns></returns>
         [HttpGet]
-        public IHttpActionResult GetMatches(
+        public IHttpActionResult GetTagMatches(
                     [FromUri]string searcherName, 
                     [FromUri]string tagGroup, 
                     [FromUri]string tagName,

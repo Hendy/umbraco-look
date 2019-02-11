@@ -1,0 +1,22 @@
+﻿
+<div ng-controller="Look.BackOffice.MatchesController">
+
+    <div class="umb-scrollable">
+        <p>Matches for tag type queries</p>
+
+        <div lazy-load="getMoreMatches()">
+        
+            <div>Layout of a match...</div>
+            {{ matches }}
+
+        
+        </div>
+
+
+        <div class="info-banner" ng-show="currentlyLoading">Loading... <a href="" ng-click="cancelGetMoreLogItems()">Cancel</a></div>
+        <div class="info-banner" ng-show="finishedLoading && matches.length == 0">No Matches.</div>
+        <div class="info-banner" ng-show="finishedLoading && matches.length > 0">Finished Loading.</div>
+
+    </div>
+
+</div>

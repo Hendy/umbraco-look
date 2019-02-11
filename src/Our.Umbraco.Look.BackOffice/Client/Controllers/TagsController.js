@@ -11,6 +11,7 @@
 
         $scope.searcherName = $routeParams.id;
 
+
         apiService.getViewDataForTags($scope.searcherName)
             .then(function (response) {
 
@@ -18,14 +19,6 @@
 
             });
 
-
-        apiService
-            .getMatches($scope.searcherName) // TODO: rename to GetTagMatches ?
-            .then(function (response) {
-
-                $scope.matchesResponse = response.data;
-
-            });
     }
 
 })();

@@ -14,7 +14,7 @@
             getViewDataForTags: getViewDataForTags,
             getViewDataForTagGroup: getViewDataForTagGroup,
             getViewDataForTag: getViewDataForTag,
-            getMatches: getMatches
+            getTagMatches: getTagMatches
         };
      
         function getViewDataForSearcher(searcherName) {
@@ -60,7 +60,7 @@
             });
         }
 
-        function getMatches(searcherName, tagGroup, tagName, sort, skip, take) {
+        function getTagMatches(searcherName, tagGroup, tagName, sort, skip, take) {
 
             //var deferred = $q.defer();
 
@@ -73,7 +73,7 @@
 
             var matches = $http({
                 method: 'GET',
-                url: 'BackOffice/Look/Api/GetMatches',
+                url: 'BackOffice/Look/Api/GetTagMatches',
                 params: {
                     'searcherName': searcherName,
                     'tagGroup': tagGroup,

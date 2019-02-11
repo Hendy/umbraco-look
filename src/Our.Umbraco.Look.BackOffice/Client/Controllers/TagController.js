@@ -15,22 +15,11 @@
         $scope.tagGroup = parsedId[1];
         $scope.tagName = parsedId[2];
 
-        $scope.matchesResponse = 'not set';
-
         apiService
             .getViewDataForTag($scope.searcherName, $scope.tagGroup, $scope.tagName)
             .then(function (response) {
 
                 $scope.response = response.data;
-
-            });
-
-
-        apiService
-            .getMatches($scope.searcherName, $scope.tagGroup, $scope.tagName)
-            .then(function (response) {
-
-                $scope.matchesResponse = response.data;
 
             });
 

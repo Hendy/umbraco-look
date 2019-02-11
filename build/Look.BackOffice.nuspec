@@ -25,6 +25,7 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\package.manifest" target="Content\App_Plugins\Look\package.manifest" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Look.css" target="Content\App_Plugins\Look\Look.css" />
 
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\MatchesController.js" target="Content\App_Plugins\Look\Controllers\MatchesController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\SearcherController.js" target="Content\App_Plugins\Look\Controllers\SearcherController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\TagController.js" target="Content\App_Plugins\Look\Controllers\TagController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\TagGroupController.js" target="Content\App_Plugins\Look\Controllers\TagGroupController.js" />
@@ -33,6 +34,7 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\QueryService.js" target="Content\App_Plugins\Look\Services\QueryService.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\ViewDataService.js" target="Content\App_Plugins\Look\Services\ViewDataService.js" />
 
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Matches.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Matches.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Searcher.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Searcher.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Tag.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Tag.Html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\TagGroup.html" target="Content\App_Plugins\Look\BackOffice\LookTree\TagGroup.html" />

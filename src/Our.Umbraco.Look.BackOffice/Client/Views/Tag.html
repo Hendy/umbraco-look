@@ -14,16 +14,10 @@
             <div class="look-body">
 
                 <hr/>
-                <p>{{ response|json }}</p>
-                
+                <p>{{ response|json }}</p>                
                 <hr/>
-                <p>{{ matchesResponse|json}}</p>
 
-                <div class="umb-scrollable">
-                    <div lazy-load="getMoreMatches()">
-                        loading matches...
-                    </div>
-                </div>
+                <ng-include src="'/App_Plugins/Look/BackOffice/LookTree/Matches.html'"></ng-include>
 
             </div>
 
