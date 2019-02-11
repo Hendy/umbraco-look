@@ -28,6 +28,8 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             // number of documents in index
             // indexers operational
 
+
+
             return this.Ok(viewData);
         }
 
@@ -86,7 +88,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         }
 
         /// <summary>
-        /// 
+        /// TODO: rename to GetTagMatches ?
         /// </summary>
         /// <param name="searcherName"></param>
         /// <param name="tagGroup"></param>
@@ -110,6 +112,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
 
             var lookQuery = new LookQuery(searcherName);
+            var tagQuery = new TagQuery(); // setting a tag query, means only items that have tags will be returned
 
             if (string.IsNullOrWhiteSpace(tagName)) // only have the group to query
             {
@@ -119,17 +122,16 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
                                                 .Select(x => x.Key)
                                                 .ToArray();
 
-                lookQuery.TagQuery = new TagQuery()
-                {
-                    Any = new LookTag[][] { tagsInGroup }
-                };
+                tagQuery.Any = new LookTag[][] { tagsInGroup };
 
             }
             else // we have a specifc tag
-            {                
-                lookQuery.TagQuery = new TagQuery() { All = new[] { new LookTag(tagGroup, tagName) } };                            
+            {
+                tagQuery.All = new[] { new LookTag(tagGroup, tagName) }; 
             }
 
+
+            lookQuery.TagQuery = tagQuery;
             lookQuery.SortOn = SortOn.Name;
 
             var lookResult = lookQuery.Search();

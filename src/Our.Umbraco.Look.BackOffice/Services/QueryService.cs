@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         }
 
         /// <summary>
-        /// get a chunk of matches
+        /// get a chunk of matches TODO: rename to GetTagMatches ?
         /// </summary>
         /// <param name="searcherName"></param>
         /// <param name="tagGroup"></param>

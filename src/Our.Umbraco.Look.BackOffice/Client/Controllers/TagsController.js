@@ -17,6 +17,15 @@
                 $scope.response = response.data;
 
             });
+
+
+        apiService
+            .getMatches($scope.searcherName) // TODO: rename to GetTagMatches ?
+            .then(function (response) {
+
+                $scope.matchesResponse = response.data;
+
+            });
     }
 
 })();
