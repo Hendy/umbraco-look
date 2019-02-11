@@ -14,11 +14,13 @@
         var tagGroup = $scope.$parent.tagGroup;
         var tagName = $scope.$parent.tagName;
 
+        // TODO: switch to handle other query types
+
         apiService
             .getTagMatches(searcherName, tagGroup, tagName)
             .then(function (response) {
 
-                $scope.matches = response.data;
+                $scope.matches = response.data.Matches;
 
             });
 

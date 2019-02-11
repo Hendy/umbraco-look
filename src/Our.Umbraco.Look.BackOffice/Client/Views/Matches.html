@@ -2,12 +2,18 @@
 <div ng-controller="Look.BackOffice.MatchesController">
 
     <div class="umb-scrollable">
-        <p>Matches for tag type queries</p>
-
         <div lazy-load="getMoreMatches()">
         
-            <div>Layout of a match...</div>
             {{ matches }}
+            <hr/>
+
+            <div ng-repeat="match in matches">
+
+                <span class="match-name">{{match.key}}</span> | 
+                <span class="match-key">{{match.name}}</span> |
+                <span class="match-id">{{match.id}}</span> |
+
+            </div>
 
         
         </div>

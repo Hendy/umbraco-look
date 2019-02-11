@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Our.Umbraco.Look.BackOffice.Models.Api
 {
@@ -26,9 +27,15 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
         /// </summary>
         public class Match
         {
+            [JsonProperty("id")]
+            public int Id { get; set; }
+
+            [JsonProperty("key")]
             public Guid Key { get; set; }
 
+            [JsonProperty("name")]
             public string Name { get; set; }
+
 
 
             // id, key
@@ -38,5 +45,16 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             // link
             // name
         }
+
+        //public enum ItemType
+        //{
+        //    Content,
+
+        //    Media,
+
+        //    Member,
+
+        //    Detached
+        //}
     }
 }

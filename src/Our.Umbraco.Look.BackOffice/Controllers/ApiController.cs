@@ -106,51 +106,10 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
                     [FromUri]int skip,
                     [FromUri]int take)
         {
-            var matchesResult = new MatchesResult();
-
             var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
             if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
 
-            var lookQuery = new LookQuery(searcherName);
-            var tagQuery = new TagQuery(); // setting a tag query, means only items that have tags will be returned
-
-            if (string.IsNullOrWhiteSpace(tagName)) // only have the group to query
-            {
-                // TODO: add a new field into the lucene index (would avoid additional query to first look up the tags in this group)
-
-                var tagsInGroup = QueryService.GetTags(searcherName, tagGroup)
-                                                .Select(x => x.Key)
-                                                .ToArray();
-
-                tagQuery.Any = new LookTag[][] { tagsInGroup };
-
-            }
-            else // we have a specifc tag
-            {
-                tagQuery.All = new[] { new LookTag(tagGroup, tagName) }; 
-            }
-
-
-            lookQuery.TagQuery = tagQuery;
-            lookQuery.SortOn = SortOn.Name;
-
-            var lookResult = lookQuery.Search();
-
-            matchesResult.TotalItemCount = lookResult.TotalItemCount;
-            matchesResult.Matches = lookResult
-                                        .Matches
-                                        .Skip(skip)
-                                        .Take(take)
-                                        .Select(x => new MatchesResult.Match()
-                                        {
-                                            Key = x.Key,
-                                            Name = x.Name
-
-                                        })
-                                        .ToArray();
-
-            return this.Ok(matchesResult);
+            return this.Ok(QueryService.GetTagMatches(searcherName, tagGroup, tagName, sort, skip, take));
         }
-
     }
 }
