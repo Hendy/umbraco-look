@@ -33,6 +33,8 @@
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\ApiService.js" target="Content\App_Plugins\Look\Services\ApiService.js" />
 
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Directives\LazyLoadDirective.js" target="Content\App_Plugins\Look\Directives\LazyLoadDirective.js" />
+
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Matches.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Matches.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Searcher.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Searcher.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Tag.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Tag.Html" />
