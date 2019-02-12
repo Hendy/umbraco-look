@@ -62,10 +62,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
             if (string.IsNullOrWhiteSpace(tagName)) // only have the group to query
             {
                 // TODO: add a new field into the lucene index (would avoid additional query to first look up the tags in this group)
-
-                var tagsInGroup = QueryService.GetTags(searcherName, tagGroup)
-                                                .Select(x => x.Key)
-                                                .ToArray();
+                var tagsInGroup = QueryService.GetTags(searcherName, tagGroup).Select(x => x.Key).ToArray();
 
                 tagQuery.Any = new LookTag[][] { tagsInGroup };
 
