@@ -19,7 +19,7 @@
             .getViewDataForTagGroup($scope.searcherName, $scope.tagGroup)
             .then(function (response) {
 
-                $scope.response = response.data; // DEBUG
+                $scope.viewData = response.data;
 
                 //$scope.tags = response.data.TagCounts;
             });
