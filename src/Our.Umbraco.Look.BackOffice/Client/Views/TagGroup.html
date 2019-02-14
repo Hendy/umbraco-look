@@ -2,6 +2,8 @@
 
     <div class="umb-panel-header">
 
+        <ng-include src="'/App_Plugins/Look/BackOffice/LookTree/Partials/Sort.html'"></ng-include>
+
         <div class="look-header">
             <span class="icon icon-tags look-header-icon">&nbsp;</span>
             <span class="look-header-title">{{ tagGroup ? tagGroup : '&lt;Default&gt;' }}</span>
@@ -15,7 +17,6 @@
 
                 <!--<pre>viewData = {{viewData|json}}</pre>-->
 
-                <ng-include src="'/App_Plugins/Look/BackOffice/LookTree/Partials/Sort.html'"></ng-include>
                 <ng-include src="'/App_Plugins/Look/BackOffice/LookTree/Partials/Matches.html'"></ng-include>
 
             </div>

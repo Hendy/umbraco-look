@@ -1,11 +1,22 @@
 ﻿
+.look-sort {
+    float: right;
+    margin:15px;
+}
+
+.look-sort label {
+    display: block;
+    font-size: small;
+}
+
+
 .look-header {
     margin: 35px 15px;
 }
 
-    .look-header span {
-        float: left;
-    }
+.look-header span {
+    float: left;
+}
 
 .look-header-icon {
     font-size: 70px;
@@ -38,6 +49,8 @@
         padding: 2px 3px;
         border-bottom: 1px dashed lightgrey;
     }
+
+
 
 
 // .icon-selection-traycontent

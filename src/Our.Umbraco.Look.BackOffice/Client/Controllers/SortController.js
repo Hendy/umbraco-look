@@ -9,10 +9,18 @@
 
     function SortController($scope, sortService) {
 
-        $scope.sortOptions = ['Score']; // everything can be sorted by score
+        $scope.sortOptions = [];
 
-        $scope.sortOptions.push('Name');
-        $scope.sortOptions.push('Date');
+        $scope.sortOn = 'Score';
+
+        // default sort order - TODO: only enable if there are items in the index
+        $scope.sortOptions.push({ value: 'Score', label: 'Score', disabled: false });
+
+        // only enable these, if these fields have indexeres set on them
+        $scope.sortOptions.push({ value: 'Name', label: 'Name', disabled: false }); // DEBUG
+
+        $scope.sortOptions.push({ value: 'DateAscending', label: 'Date Ascending', disabled: true });
+        $scope.sortOptions.push({ value: 'DateDecending', label: 'Date Decending', disabled: true });
 
         $scope.change = function () {
             sortService.change($scope.sortOn);

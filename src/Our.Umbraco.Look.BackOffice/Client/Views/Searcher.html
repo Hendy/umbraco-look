@@ -2,6 +2,8 @@
 
     <div class="umb-panel-header">
 
+        <ng-include src="'/App_Plugins/Look/BackOffice/LookTree/Partials/Sort.html'"></ng-include>
+
         <div class="look-header">
             <span class="icon {{ icon }} look-header-icon">&nbsp;</span>
             <span class="look-header-title">{{ searcherName }}</span>
@@ -13,6 +15,7 @@
 
             <!--<pre>viewData = {{viewData|json}}</pre>-->
 
+            
             <div class="look-body">
                 <dl>
                     <dt>Name</dt>
@@ -25,7 +28,9 @@
                     <dd>{{ searcherType }}</dd>
 
 
-                    <!--<dt>Name Indexing</dt>
+                    <!--
+                        
+                    <dt>Name Indexing</dt>
                     <dd>YES/NO</dd>
 
                     <dt>Date Indexing</dt>
@@ -38,12 +43,13 @@
                     <dd></dd>
 
                     <dt>Location Indexing</dt>
-                    <dd></dd>-->
-
+                    <dd></dd>
+                    
+                    -->
                 </dl>
+                
 
-
-                <ng-include src="'/App_Plugins/Look/BackOffice/LookTree/Partials/Sort.html'"></ng-include>
+               
                 <ng-include src="'/App_Plugins/Look/BackOffice/LookTree/Partials/Matches.html'"></ng-include>
 
             </div>       

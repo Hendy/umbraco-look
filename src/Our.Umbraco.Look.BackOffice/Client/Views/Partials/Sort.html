@@ -1,8 +1,13 @@
 ﻿
-<div ng-controller="Look.BackOffice.SortController">
-
-    Sort: <select ng-model="sortOn" 
-                  ng-options="x for x in sortOptions"
-                  ng-change="change()"></select>
+<div ng-controller="Look.BackOffice.SortController" class="look-sort">
     
+    <label for="lookSortOn">Sort On</label>
+
+    <!-- have to use ng-repeat as support for disabled & ng-options not in v1.1.5 -->
+    <select id="lookSortOn"
+            ng-model="sortOn"
+            ng-change="change()">
+        <option ng-repeat="x in sortOptions" ng-value="{{x.value}}" ng-disabled="{{x.disabled}}">{{x.label}}</option>
+    </select>
+
 </div>
