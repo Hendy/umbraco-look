@@ -5,9 +5,9 @@
         .module('umbraco')
         .factory('Look.BackOffice.ApiService', ApiService);
 
-    ApiService.$inject = ['$http', '$q'];
+    ApiService.$inject = ['$http'];
 
-    function ApiService($http, $q) {
+    function ApiService($http) {
 
         return {
             getViewDataForSearcher: getViewDataForSearcher,
@@ -62,8 +62,6 @@
 
         function getTagMatches(searcherName, tagGroup, tagName, sort, skip, take) {
 
-            //var deferred = $q.defer();
-
             if (angular.isUndefined(searcherName)) { searcherName = ''; }
             if (angular.isUndefined(tagGroup)) { tagGroup = ''; }
             if (angular.isUndefined(tagName)) { tagName = ''; }
@@ -84,12 +82,7 @@
                 }
             });
 
-
             return matches;
-
-            //deferred.resolve(matches);
-
-            //return deferred.promise;
         }
     }
 

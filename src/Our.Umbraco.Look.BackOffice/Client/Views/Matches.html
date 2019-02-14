@@ -3,10 +3,8 @@
 
     <div class="umb-scrollable">
         <div lazy-load="getMoreMatches()">
-        
-            <hr/>
-            matches = {{ matches }}
-            <hr/>
+            
+            <p>matches = {{ matches|json }}</p>
 
             <div ng-repeat="match in matches">
 
@@ -15,10 +13,8 @@
                 <span class="match-id">{{match.id}}</span> |
 
             </div>
-
         
         </div>
-
 
         <div class="info-banner" ng-show="currentlyLoading">Loading... <a href="" ng-click="cancelGetMoreLogItems()">Cancel</a></div>
         <div class="info-banner" ng-show="finishedLoading && matches.length == 0">No Matches.</div>

@@ -1,27 +1,21 @@
 ﻿(function () {
     'use strict';
 
+    // matches controller handles the paging and rendering of collection of matches (from parent scope)
     angular
         .module('umbraco')
         .controller('Look.BackOffice.MatchesController', MatchesController);
 
-    MatchesController.$inject = ['$scope', 'Look.BackOffice.ApiService'];
+    MatchesController.$inject = ['$scope'];
 
     // this controller will handle paging for more results
-    function MatchesController($scope, apiService) {
+    function MatchesController($scope) {
 
-        var searcherName = $scope.$parent.searcherName;
-        var tagGroup = $scope.$parent.tagGroup;
-        var tagName = $scope.$parent.tagName;
+        var getMatches = $scope.$parent.getMatches; // $scope.$parent.getMatches(skip, take) expected to exist
 
-        // TODO: switch to handle other query types
-
-        apiService
-            .getTagMatches(searcherName, tagGroup, tagName)
-            .then(function (response) {
-
-                $scope.matches = response.data.Matches;
-
+        getMatches(0, 0) // skip 0, take all
+            .then(function (matches) {
+                $scope.matches = matches;
             });
 
     }
