@@ -86,6 +86,19 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(viewData);
         }
 
+        [HttpGet]
+        public IHttpActionResult GetMatches(
+            [FromUri]string searcherName,
+            [FromUri]string sort, // currently ignored
+            [FromUri]int skip,
+            [FromUri]int take)
+        {
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+            return this.Ok(QueryService.GetMatches(searcherName, sort, skip, take));
+        }
+
         /// <summary>
         /// Get matches based on tags
         /// </summary>

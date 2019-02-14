@@ -14,7 +14,9 @@
             getViewDataForTags: getViewDataForTags,
             getViewDataForTagGroup: getViewDataForTagGroup,
             getViewDataForTag: getViewDataForTag,
-            getTagMatches: getTagMatches
+
+            getMatches: getMatches,
+            getTagMatches: getTagMatches            
         };
      
         function getViewDataForSearcher(searcherName) {
@@ -59,6 +61,28 @@
                 }
             });
         }
+
+        function getMatches(searcherName, sort, skip, take) {
+
+            if (angular.isUndefined(searcherName)) { searcherName = ''; }
+            if (angular.isUndefined(sort)) { sort = ''; }
+            if (angular.isUndefined(skip)) { skip = 0; }
+            if (angular.isUndefined(take)) { take = 10; }
+
+            var matches = $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetMatches',
+                params: {
+                    'searcherName': searcherName,
+                    'sort': sort,
+                    'skip': skip,
+                    'take': take
+                }
+            });
+
+            return matches;
+        }
+
 
         function getTagMatches(searcherName, tagGroup, tagName, sort, skip, take) {
 

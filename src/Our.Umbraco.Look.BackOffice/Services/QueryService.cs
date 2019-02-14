@@ -47,6 +47,40 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <summary>
         /// get a chunk of matches
         /// </summary>
+        /// <param name="tagName"></param>
+        /// <param name="sort"></param>
+        /// <returns></returns>
+        internal static MatchesResult GetMatches(string searcherName, string sort, int skip, int take)
+        {
+            var matchesResult = new MatchesResult();
+
+            var lookQuery = new LookQuery(searcherName);
+
+            lookQuery.NodeQuery = new NodeQuery();
+
+            lookQuery.SortOn = SortOn.Name;
+
+            var lookResult = lookQuery.Search();
+
+            matchesResult.TotalItemCount = lookResult.TotalItemCount;
+            matchesResult.Matches = lookResult
+                                        .Matches
+                                        .Skip(skip)
+                                        .Take(take)
+                                        .Select(x => new MatchesResult.Match()
+                                        {
+                                            Key = x.Key,
+                                            Name = x.Name
+                                        })
+                                        .ToArray();
+
+            return matchesResult;
+        }
+
+
+        /// <summary>
+        /// get a chunk of matches
+        /// </summary>
         /// <param name="searcherName"></param>
         /// <param name="tagGroup"></param>
         /// <param name="tagName"></param>
