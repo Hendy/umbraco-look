@@ -89,7 +89,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         [HttpGet]
         public IHttpActionResult GetMatches(
             [FromUri]string searcherName,
-            [FromUri]string sort, // currently ignored
+            [FromUri]string sort,
             [FromUri]int skip,
             [FromUri]int take)
         {
@@ -114,7 +114,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
                     [FromUri]string searcherName, 
                     [FromUri]string tagGroup, 
                     [FromUri]string tagName,
-                    [FromUri]string sort, // currently ignored
+                    [FromUri]string sort,
                     [FromUri]int skip,
                     [FromUri]int take)
         {

@@ -30,6 +30,9 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
         /// </summary>
         public class Match
         {
+            [JsonProperty("score")]
+            public float Score { get; set; }
+
             [JsonProperty("id")]
             public int Id { get; set; }
 
@@ -73,6 +76,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             {
                 var match = new Match();
 
+                match.Score = lookMatch.Score;
                 match.Id = lookMatch.Id;
                 match.Key = lookMatch.Key;
                 match.Name = lookMatch.Name;

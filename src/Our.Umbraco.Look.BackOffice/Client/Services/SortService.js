@@ -20,17 +20,12 @@
         };
 
         // register a callback to be triggered on change
-        function onChange(callback) {
-            callbacks.push(callback);
-        }
+        function onChange(callback) { callbacks.push(callback); }
 
-        // when a change is executed
+        // when a change occurs
         function change(sort) {
-            sortOn = sort;
-
-            angular.forEach(callbacks, function (callback) {
-                callback();
-            });
+            this.sortOn = sort; // (required this.)
+            angular.forEach(callbacks, function (callback) { callback(); });
         }
     }
 

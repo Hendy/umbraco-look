@@ -58,7 +58,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             lookQuery.NodeQuery = new NodeQuery();
 
-            lookQuery.SortOn = SortOn.Name;
+            QueryService.SetSort(lookQuery, sort);
 
             var lookResult = lookQuery.Search();
 
@@ -102,9 +102,9 @@ namespace Our.Umbraco.Look.BackOffice.Services
                 tagQuery.All = new[] { new LookTag(tagGroup, tagName) };
             }
 
-
             lookQuery.TagQuery = tagQuery;
-            lookQuery.SortOn = SortOn.Name;
+
+            QueryService.SetSort(lookQuery, sort);
 
             var lookResult = lookQuery.Search();
 
@@ -117,6 +117,17 @@ namespace Our.Umbraco.Look.BackOffice.Services
                                         .ToArray();
 
             return matchesResult;
+        }
+
+        private static void SetSort(LookQuery lookQuery, string sort)
+        {
+            switch (sort)
+            {
+                case "Score": lookQuery.SortOn = SortOn.Score; break;
+                case "Name": lookQuery.SortOn = SortOn.Name; break;
+                case "DateAscending": lookQuery.SortOn = SortOn.DateAscending; break;
+                case "DateDescending": lookQuery.SortOn = SortOn.DateDescending; break;
+            }
         }
     }
 }

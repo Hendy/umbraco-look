@@ -18,7 +18,7 @@
         var getMatches = $scope.$parent.getMatches; // $scope.$parent.getMatches(sort, skip, take) expected to exist
 
         var skip = 0; // skip counter
-        const take = 1; // take 
+        const take = 1; // take (set to 1 specifically for bad performance during development)
 
         // prepare method for lazyLoad to call
         $scope.getMoreMatches = function () {
@@ -51,6 +51,9 @@
             return q.promise;
         };
 
+        $scope.cancelGetMoreMatches = function () {
+            // TODO: 
+        };
 
         //$scope.lazyLoad(); // trigger the lazy load to start - wasn't ready here
 
