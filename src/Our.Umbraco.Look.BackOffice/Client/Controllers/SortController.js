@@ -11,7 +11,7 @@
 
         $scope.sortOptions = [];
 
-        $scope.sortOn = 'Score';
+        $scope.sortOn = sortService.sortOn;
 
         // default sort order - TODO: only enable if there are items in the index
         $scope.sortOptions.push({ value: 'Score', label: 'Score', disabled: false });

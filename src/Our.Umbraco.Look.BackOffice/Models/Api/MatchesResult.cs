@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 
+using PublishedItemType = Umbraco.Core.Models.PublishedItemType;
+
 namespace Our.Umbraco.Look.BackOffice.Models.Api
 {
     public class MatchesResult
@@ -36,25 +38,38 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             [JsonProperty("name")]
             public string Name { get; set; }
 
+            [JsonProperty("icon")]
+            public string Icon { get; set; }
+
+            [JsonProperty("isDetached")]
+            public bool IsDetached { get; set; }
+
+            // Link
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="lookMatch"></param>
+            public static explicit operator Match(LookMatch lookMatch)
+            {
+                var match = new Match();
+
+                match.Id = lookMatch.Id;
+                match.Key = lookMatch.Key;
+                match.Name = lookMatch.Name;
+
+                switch (lookMatch.PublishedItemType)
+                {
+                    case PublishedItemType.Content: match.Icon = "icon-selection-traycontent"; break;
+                    case PublishedItemType.Media: match.Icon = "icon-selection-traymedia"; break;
+                    case PublishedItemType.Member: match.Icon = "icon-selection-traymember"; break;
+                }
+
+                match.IsDetached = lookMatch.IsDetached;
 
 
-            // id, key
-            // content,media,member
-            // tags
-
-            // link
-            // name
+                return match;
+            }
         }
-
-        //public enum ItemType
-        //{
-        //    Content,
-
-        //    Media,
-
-        //    Member,
-
-        //    Detached
-        //}
     }
 }

@@ -67,11 +67,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
                                         .Matches
                                         .Skip(skip)
                                         .Take(take)
-                                        .Select(x => new MatchesResult.Match()
-                                        {
-                                            Key = x.Key,
-                                            Name = x.Name
-                                        })
+                                        .Select(x => (MatchesResult.Match)x)
                                         .ToArray();
 
             return matchesResult;
@@ -117,12 +113,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
                                         .Matches
                                         .Skip(skip)
                                         .Take(take)
-                                        .Select(x => new MatchesResult.Match()
-                                        {
-                                            Key = x.Key,
-                                            Name = x.Name
-
-                                        })
+                                        .Select(x => (MatchesResult.Match)x)
                                         .ToArray();
 
             return matchesResult;
