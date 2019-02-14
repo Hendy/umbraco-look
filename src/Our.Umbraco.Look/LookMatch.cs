@@ -36,7 +36,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Flag to indicate whether this result is a detached item
         /// </summary>
-        public bool IsDetached => this._hostItem != null;
+        public bool IsDetached { get; }
 
         /// <summary>
         /// Guid key of the Content, media, member or detached item
@@ -79,6 +79,11 @@ namespace Our.Umbraco.Look
         public double? Distance { get; }
 
         /// <summary>
+        /// The contextual type: content, media or member (a detached item belongs to one of these)
+        /// </summary>
+        public PublishedItemType PublishedItemType { get; }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="docId"></param>
@@ -115,6 +120,7 @@ namespace Our.Umbraco.Look
             this.Score = score;
             this.Id = itemId;
             this.Key = itemGuid ?? Guid.Empty;
+            this.IsDetached = hostId.HasValue;
             this.Name = name;
             this.Date = date;
             this.Text = text;
@@ -122,10 +128,11 @@ namespace Our.Umbraco.Look
             this.Tags = tags;
             this.Location = location;
             this.Distance = distance;
+            this.PublishedItemType = PublishedItemType;
 
             this._hostItem = new Lazy<IPublishedContent>(() =>
             {
-                if (umbracoHelper != null && hostId.HasValue)
+                if (umbracoHelper != null && this.IsDetached)
                 {
                     switch (publishedItemType)
                     {
