@@ -15,7 +15,7 @@
         $scope.sortOptions.push('Date');
 
         $scope.change = function () {
-            sortService.sortOn = $scope.sortOn; // set value for service consumers
+            sortService.change($scope.sortOn);
         };
 
     }

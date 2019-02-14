@@ -13,13 +13,13 @@
 
         var getMatches = $scope.$parent.getMatches; // $scope.$parent.getMatches(sort, skip, take) expected to exist
 
-        getMatches(sortService.sortOn, 0, 2) // skip 0, take all
+        getMatches(sortService.sortOn, 0, 2) // sort, skip 0, take all
             .then(function (matches) {
                 $scope.matches = matches;
             });
 
-        // if sortOnService changes, we need to know to reset matches
-        $scope.$watch('sortService.sortOn', function(newValue, oldValue, scope) {
+        sortService.onChange(function () {
+            $scope.matches = null;
         });
 
     }
