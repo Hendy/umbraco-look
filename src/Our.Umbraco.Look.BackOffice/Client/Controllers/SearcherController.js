@@ -27,12 +27,12 @@
         });
 
         // matches
-        $scope.getMatches = function (skip, take) {
+        $scope.getMatches = function (sort, skip, take) {
 
             var q = $q.defer();
 
             apiService
-                .getMatches($scope.searcherName)
+                .getMatches($scope.searcherName, skip, take)
                 .then(function (response) {
                     q.resolve(response.data.Matches);
                 });

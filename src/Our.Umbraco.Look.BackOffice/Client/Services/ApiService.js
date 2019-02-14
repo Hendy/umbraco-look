@@ -1,6 +1,7 @@
 ﻿(function () {
     'use strict';
 
+    // service where each method corresponds to a C# API controller method
     angular
         .module('umbraco')
         .factory('Look.BackOffice.ApiService', ApiService);

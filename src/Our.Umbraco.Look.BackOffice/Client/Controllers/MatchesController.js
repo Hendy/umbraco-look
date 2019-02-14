@@ -6,17 +6,21 @@
         .module('umbraco')
         .controller('Look.BackOffice.MatchesController', MatchesController);
 
-    MatchesController.$inject = ['$scope'];
+    MatchesController.$inject = ['$scope', 'Look.BackOffice.SortService'];
 
     // this controller will handle paging for more results
-    function MatchesController($scope) {
+    function MatchesController($scope, sortService) {
 
-        var getMatches = $scope.$parent.getMatches; // $scope.$parent.getMatches(skip, take) expected to exist
+        var getMatches = $scope.$parent.getMatches; // $scope.$parent.getMatches(sort, skip, take) expected to exist
 
-        getMatches(0, 0) // skip 0, take all
+        getMatches(sortService.sortOn, 0, 2) // skip 0, take all
             .then(function (matches) {
                 $scope.matches = matches;
             });
+
+        // if sortOnService changes, we need to know to reset matches
+        $scope.$watch('sortService.sortOn', function(newValue, oldValue, scope) {
+        });
 
     }
 

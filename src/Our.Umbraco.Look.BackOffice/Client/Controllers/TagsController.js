@@ -19,7 +19,7 @@
             });
 
         // matches
-        $scope.getMatches = function (skip, take) {
+        $scope.getMatches = function (sort, skip, take) {
 
             var q = $q.defer();
 

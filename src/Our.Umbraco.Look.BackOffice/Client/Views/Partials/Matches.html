@@ -4,7 +4,7 @@
     <div class="umb-scrollable">
         <div lazy-load="getMoreMatches()">
             
-            <p>matches = {{ matches | json }}</p>
+            <pre>matches = {{ matches[0] | json }}</pre><!-- render the 1st so we know the properties -->
 
             <div ng-repeat="match in matches">
 

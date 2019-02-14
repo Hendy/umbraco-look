@@ -35,7 +35,9 @@
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Directives\LazyLoadDirective.js" target="Content\App_Plugins\Look\Directives\LazyLoadDirective.js" />
 
-    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Matches.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Matches.html" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Partials\Matches.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Partials\Matches.html" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Partials\Matches.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Partials\SortOn.html" />
+
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Searcher.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Searcher.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Tag.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Tag.Html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\TagGroup.html" target="Content\App_Plugins\Look\BackOffice\LookTree\TagGroup.html" />
