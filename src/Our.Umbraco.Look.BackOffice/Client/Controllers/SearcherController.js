@@ -32,9 +32,9 @@
             var q = $q.defer();
 
             apiService
-                .getMatches($scope.searcherName, skip, take)
+                .getMatches($scope.searcherName, sort, skip, take)
                 .then(function (response) {
-                    q.resolve(response.data.Matches);
+                    q.resolve(response.data.matches);
                 });
 
             return q.promise;

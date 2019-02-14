@@ -10,29 +10,28 @@
 
     function SortService() {
 
-        var sortOn = 'Score';
         var callbacks = [];
+        var sortOn = 'Score'; // the current sort on property
 
         return {
-            // when a change is executed
-            change: function (sort) { 
-
-                this.sortOn = sort;
-
-                angular.forEach(callbacks, function (callback) {
-                    callback();
-                });
-            },
-
-            // the current sort on property
-            sortOn: sortOn,
-
-            // register a callback to be triggered on change
-            onChange: function (callback) {
-                callbacks.push(callback);
-            }
+            onChange: onChange,
+            change: change,
+            sortOn: sortOn
         };
 
+        // register a callback to be triggered on change
+        function onChange(callback) {
+            callbacks.push(callback);
+        }
+
+        // when a change is executed
+        function change(sort) {
+            sortOn = sort;
+
+            angular.forEach(callbacks, function (callback) {
+                callback();
+            });
+        }
     }
 
 })();

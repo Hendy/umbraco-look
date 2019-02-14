@@ -68,7 +68,7 @@
             if (angular.isUndefined(searcherName)) { searcherName = ''; }
             if (angular.isUndefined(sort)) { sort = ''; }
             if (angular.isUndefined(skip)) { skip = 0; }
-            if (angular.isUndefined(take)) { take = 10; }
+            if (angular.isUndefined(take)) { take = 0; }
 
             var matches = $http({
                 method: 'GET',
@@ -92,7 +92,7 @@
             if (angular.isUndefined(tagName)) { tagName = ''; }
             if (angular.isUndefined(sort)) { sort = ''; }
             if (angular.isUndefined(skip)) { skip = 0; }
-            if (angular.isUndefined(take)) { take = 10; }
+            if (angular.isUndefined(take)) { take = 0; }
 
             var matches = $http({
                 method: 'GET',

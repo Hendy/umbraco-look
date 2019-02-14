@@ -24,9 +24,9 @@
             var q = $q.defer();
 
             apiService
-                .getTagMatches($scope.searcherName)
+                .getTagMatches($scope.searcherName, undefined, undefined, sort, skip, take)
                 .then(function (response) {
-                    q.resolve(response.data.Matches);
+                    q.resolve(response.data.matches);
                 });
 
             return q.promise;

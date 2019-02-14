@@ -7,6 +7,7 @@
     "~/App_Plugins/Look/Controllers/TagController.js",
     "~/App_Plugins/Look/Controllers/TagGroupController.js",
     "~/App_Plugins/Look/Controllers/TagsController.js",
+
     "~/App_Plugins/Look/Directives/LazyLoadDirective.js",
 
     "~/App_Plugins/Look/Services/ApiService.js",

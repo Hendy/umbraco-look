@@ -10,6 +10,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
         /// <summary>
         /// array of matched Lucene documents (flattened from a LookResult)
         /// </summary>
+        [JsonProperty("matches")]
         public Match[] Matches { get; set; }
 
         /// <summary>
@@ -44,6 +45,24 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             [JsonProperty("isDetached")]
             public bool IsDetached { get; set; }
 
+            // proeprties to indicate if this match has values set for each type of indexer
+
+            //[JsonProperty("hasName")]
+            //public bool HasName { get; set; }
+
+            //[JsonProperty("hasText")]
+            //public bool HasText { get; set; }
+
+            //[JsonProperty("hasDate")]
+            //public bool HasDate { get; set; }
+
+            //[JsonProperty("hasTags")]
+            //public bool HasTags { get; set; }
+
+            //[JsonProperty("hasLocation")]
+            //public bool HasLocation { get; set; }
+
+
             // Link
 
             /// <summary>
@@ -66,7 +85,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 }
 
                 match.IsDetached = lookMatch.IsDetached;
-
+                
 
                 return match;
             }
