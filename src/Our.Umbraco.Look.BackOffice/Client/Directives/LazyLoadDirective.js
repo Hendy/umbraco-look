@@ -25,7 +25,6 @@
                 var scrollableElement = $(element).closest('.umb-panel-body'); // jQuery to find element that's scrollable
 
                 scrollableElement.bind('scroll', function () {
-
                     // calculate direction of scroll
                     var currentScrollTop = $(this).scrollTop();
                     if (currentScrollTop > previousScrollTop) { // user scrolling down
@@ -43,12 +42,11 @@
                     }
                 });
 
-
                 // add trigger method to scope, so controller can call this (eg. after reductive filtering, or a clear)
                 scope.lazyLoad = function () {
-                    $timeout(function () { // timeout to ensure scope is ready (and element height calculated correctly)
+                    //$timeout(function () { // timeout to ensure scope is ready (and element height calculated correctly)
                         fireLazyLoad();
-                    });
+                    //});
                 };
 
                 fireLazyLoad(); // startup
@@ -60,19 +58,31 @@
                     return element.offset().top + element.height() < $(window).height() + 100; // 100 = number of pixels below view
                 }
 
+                var fireLazyLoadPromise = null;
+
                 // private helper - common checks before will cause a lazyLoad to start
                 function fireLazyLoad() {
-                    if (enabled && !expanding && elementCanExpand()) { // safety check;
-                        doLazyLoad();
+
+                    $timeout.cancel(fireLazyLoadPromise);
+
+                    if (enabled && !expanding && elementCanExpand()) { // check locks
+
+                        // set trigger
+                        fireLazyLoadPromise = $timeout(function () {
+                            if (enabled && !expanding && elementCanExpand()) { // double check locks
+                                expanding = true;
+                                doLazyLoad();
+                            }
+                        }, 500);
                     }
                 }
 
                 // private helper - reccursive method (it holds the expanding flag)
                 // handles the 'method to call', and attempts to fill the screen
                 function doLazyLoad() {
-                    if (enabled) { // fail safe
 
-                        expanding = true; // ensures lock flag
+                    //if (enabled) { // fail safe
+                        //expanding = true; // ensures lock flag
 
                         $timeout(function () { // timeout to ensure scope is ready
 
@@ -80,16 +90,15 @@
 
                                 .then(function (tryAgain) { // return value of the promise, bool flag to indicate if the 'method to call' is worth repeating
 
-                                    if (tryAgain && elementCanExpand())
-                                    {
+                                    if (enabled && tryAgain && elementCanExpand()) {
                                         doLazyLoad(); // reccurse
-                                    } 
+                                    }
 
                                     expanding = false; // release lock flag
                                 });
                         });
 
-                    }
+                    //}
                 }
             }
         };

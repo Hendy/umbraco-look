@@ -65,8 +65,13 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             //[JsonProperty("hasLocation")]
             //public bool HasLocation { get; set; }
 
-
-            // Link
+            /// <summary>
+            /// #/content/content/edit/1074
+            /// #/media/media/edit/1096
+            /// #/member/member/edit/62b351b9-1dfe-41ab-9336-31fe72374d41
+            /// </summary>
+            [JsonProperty("link")]
+            public string Link { get; set; }
 
             /// <summary>
             /// 
@@ -83,9 +88,20 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
 
                 switch (lookMatch.PublishedItemType)
                 {
-                    case PublishedItemType.Content: match.Icon = "icon-selection-traycontent"; break;
-                    case PublishedItemType.Media: match.Icon = "icon-selection-traymedia"; break;
-                    case PublishedItemType.Member: match.Icon = "icon-selection-traymember"; break;
+                    case PublishedItemType.Content:
+                        match.Icon = "icon-selection-traycontent";
+                        match.Link = "#/content/content/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Id : lookMatch.Item.Id);
+                        break;
+
+                    case PublishedItemType.Media:
+                        match.Icon = "icon-selection-traymedia";
+                        match.Link = "#/media/media/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Id : lookMatch.Item.Id);
+                        break;
+
+                    case PublishedItemType.Member:
+                        match.Icon = "icon-selection-traymember";
+                        //match.Link = "#/member/member/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Get : lookMatch.Key.ToString())
+                        break;
                 }
 
                 match.IsDetached = lookMatch.IsDetached;

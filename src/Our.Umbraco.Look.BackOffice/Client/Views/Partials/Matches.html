@@ -1,26 +1,26 @@
-﻿
-<div ng-controller="Look.BackOffice.MatchesController">
+﻿<div ng-controller="Look.BackOffice.MatchesController">
 
-    <!--<div class="umb-scrollable">-->
-        <div lazy-load="getMoreMatches()">
+    <div lazy-load="getMoreMatches()">
             
-            <!--<pre>matches = {{ matches | json }}</pre>-->
+        <pre>matches[0] = {{ matches[0] | json }}</pre>
 
-            <div ng-repeat="match in matches">
+        <div ng-repeat="match in matches" class="look-match">
+            <a href="{{match.link}}">
 
-                <!--<span class="match-name">{{match.key}}</span> |--> 
+                <span class="match-score">{{match.score}}</span>
+
+                <!--<span class="match-key">{{match.key}}</span> |--> 
+            
                 <span class="match-key">{{match.name}}</span> |
-                <span class="match-id">{{match.id}}</span> |
-                <span>{{match.score}}</span>
+                <!--<span class="match-id">{{match.id}}</span> |-->
 
-            </div>
-        
+            </a>
         </div>
+        
+    </div>
 
-        <div class="info-banner" ng-show="currentlyLoading">Loading... <a href="" ng-click="cancelGetMoreMatches()">Cancel</a>.</div>
-        <div class="info-banner" ng-show="finishedLoading && matches.length == 0">No Matches.</div>
-        <div class="info-banner" ng-show="finishedLoading && matches.length > 0">Finished Loading.</div>
-
-    <!--</div>-->
+    <div class="info-banner" ng-show="currentlyLoading">Loading... <a href="" ng-click="cancelGetMoreMatches()">Cancel</a>.</div>
+    <div class="info-banner" ng-show="finishedLoading && matches.length == 0">No Matches.</div>
+    <div class="info-banner" ng-show="finishedLoading && matches.length > 0">Finished Loading.</div>
 
 </div>

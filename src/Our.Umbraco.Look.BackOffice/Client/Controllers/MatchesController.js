@@ -26,12 +26,11 @@
             var q = $q.defer();
 
             if (!$scope.currentlyLoading) {
-
                 $scope.currentlyLoading = true;
 
                 getMatches(sortService.sortOn, skip, take)
                     .then(function (matches) { // success
-                        
+
                         var tryAgain = false;
 
                         if (matches.length > 0) {
@@ -39,13 +38,17 @@
                             tryAgain = true;
                             skip += take;
                         }
+                        else {
+                            $scope.finishedLoading = true;
+                        }
 
                         $scope.currentlyLoading = false;
+
                         q.resolve(tryAgain);
 
                     });
             } else {
-                q.resolve(true); // we're currently loading data, but return true to indicate consumer should try again
+                q.resolve(false); // we're currently loading data
             }
 
             return q.promise;
@@ -61,6 +64,7 @@
         sortService.onChange(function () {
             $scope.matches = [];
             skip = 0;
+            $scope.finishedLoading = false;
             $scope.lazyLoad(); // trigger the lazy load
         });
 
