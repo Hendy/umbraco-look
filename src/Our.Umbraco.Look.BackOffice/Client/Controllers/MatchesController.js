@@ -20,8 +20,7 @@
         var skip = 0; // skip counter
         const take = 1; // take 
 
-
-
+        // prepare method for lazyLoad to call
         $scope.getMoreMatches = function () {
 
             var q = $q.defer();
@@ -53,11 +52,13 @@
         };
 
 
+        //$scope.lazyLoad(); // trigger the lazy load to start - wasn't ready here
+
+        // clear data, then re-trigger lazy-load
         sortService.onChange(function () {
             $scope.matches = [];
             skip = 0;
-
-            //$scope.lazyLoad(); // trigger the lazy load
+            $scope.lazyLoad(); // trigger the lazy load
         });
 
     }

@@ -19,50 +19,39 @@
             restrict: 'A',
             link: function (scope, element, attrs) {
 
-                var enabled = true;
+                var enabled = true; // dead switch
                 var expanding = false; // locker
                 var previousScrollTop = 0;
-                var scrollableElement = $(element).closest('.umb-panel-body'); // iQuery to find element that's scrollable
+                var scrollableElement = $(element).closest('.umb-panel-body'); // jQuery to find element that's scrollable
 
                 scrollableElement.bind('scroll', function () {
 
                     // calculate direction of scroll
                     var currentScrollTop = $(this).scrollTop();
                     if (currentScrollTop > previousScrollTop) { // user scrolling down
-                        if (!expanding && elementCanExpand()) {
-                            lazyLoad();
-                        }
+                        fireLazyLoad();
                     }
 
                     previousScrollTop = currentScrollTop;
                 });
 
-                // disable directive if page changed
+                // cleanup - disable directive if page changed
                 scope.$watch(function () { return $location.url(); }, function (newValue, oldValue) {
-
                     if (newValue !== oldValue) {
-                        console.log('disabling lazyLoad()');
                         enabled = false;
                         scrollableElement.unbind('scroll');
                     }
                 });
 
 
-                // HACK: add method to the scope so can be called from controller (we know this is the only instance of the directive being used)
-                // the controller will call this after reductive filtering, or a complete clear
+                // add trigger method to scope, so controller can call this (eg. after reductive filtering, or a clear)
                 scope.lazyLoad = function () {
-
                     $timeout(function () { // timeout to ensure scope is ready (and element height calculated correctly)
-
-                        // TODO: cancel any lazy-load currenty in process
-                        if (!expanding && elementCanExpand()) { // safety check;
-                            lazyLoad();
-                        }
-
+                        fireLazyLoad();
                     });
                 };
 
-                lazyLoad(); // startup
+                fireLazyLoad(); // startup
 
                 // --------------------------------------------------------------------------------
 
@@ -71,23 +60,32 @@
                     return element.offset().top + element.height() < $(window).height() + 100; // 100 = number of pixels below view
                 }
 
+                // private helper - common checks before will cause a lazyLoad to start
+                function fireLazyLoad() {
+                    if (enabled && !expanding && elementCanExpand()) { // safety check;
+                        doLazyLoad();
+                    }
+                }
+
+                // private helper - reccursive method (it holds the expanding flag)
                 // handles the 'method to call', and attempts to fill the screen
-                function lazyLoad() {
+                function doLazyLoad() {
+                    if (enabled) { // fail safe
 
-                    if (enabled) {
-
-                        expanding = true;
+                        expanding = true; // ensures lock flag
 
                         $timeout(function () { // timeout to ensure scope is ready
 
                             scope.$apply(attrs.lazyLoad) // execute angular expression string (the 'method to call')
-                                .then(function (tryAgain) { // return value of the promise
 
-                                    if (tryAgain && elementCanExpand()) { // check to see if screen filled
-                                        lazyLoad(); // try again
-                                    }
+                                .then(function (tryAgain) { // return value of the promise, bool flag to indicate if the 'method to call' is worth repeating
 
-                                    expanding = false;
+                                    if (tryAgain && elementCanExpand())
+                                    {
+                                        doLazyLoad(); // reccurse
+                                    } 
+
+                                    expanding = false; // release lock flag
                                 });
                         });
 
