@@ -55,7 +55,15 @@
 
                 // returns true if the element doesn't stretch below the bottom of the view
                 function elementCanExpand() {
-                    return element.offset().top + element.height() < $(window).height() + 100; // 100 = number of pixels below view
+
+                    // TODO: is this element visible / the active view ?
+
+                    //$timeout(function () {
+
+                        return element.offset().top + element.height() < $(window).height() + 100; // 100 = number of pixels below view
+
+                    //});
+
                 }
 
                 var fireLazyLoadPromise = null;
@@ -65,22 +73,19 @@
 
                     $timeout.cancel(fireLazyLoadPromise);
 
-                    if (enabled && !expanding && elementCanExpand()) { // check locks
-
-                        // set trigger
-                        fireLazyLoadPromise = $timeout(function () {
-                            if (enabled && !expanding && elementCanExpand()) { // double check locks
-                                doLazyLoad();
-                            }
-                        }, 500);
-                    }
+                    // set trigger
+                    fireLazyLoadPromise = $timeout(function () {
+                        if (enabled && !expanding && elementCanExpand()) { // double check locks
+                            doLazyLoad();
+                        }
+                    }, 500);
                 }
 
                 // private helper - reccursive method (it holds the expanding flag)
                 // handles the 'method to call', and attempts to fill the screen
                 function doLazyLoad() {
 
-                    //if (enabled) { // fail safe
+                    if (enabled) { // fail safe
                         expanding = true; // ensures lock flag
 
                         $timeout(function () { // timeout to ensure scope is ready
@@ -89,15 +94,14 @@
 
                                 .then(function (tryAgain) { // return value of the promise, bool flag to indicate if the 'method to call' is worth repeating
 
-                                    if (enabled && tryAgain && elementCanExpand()) {
+                                    if (tryAgain && elementCanExpand()) {
                                         doLazyLoad(); // reccurse
                                     }
 
                                     expanding = false; // release lock flag
                                 });
                         });
-
-                    //}
+                    }
                 }
             }
         };

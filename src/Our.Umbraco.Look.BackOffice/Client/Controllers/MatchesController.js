@@ -25,7 +25,7 @@
 
             var q = $q.defer();
 
-            if (!$scope.finishedLoading && !$scope.currentlyLoading) {
+            if (!$scope.currentlyLoading) {
                 $scope.currentlyLoading = true;
 
                 getMatches(sortService.sortOn, skip, take)
@@ -45,11 +45,10 @@
                         $scope.currentlyLoading = false;
 
                         q.resolve(tryAgain);
-
                     });
 
             } else {
-                q.resolve(false); // we're currently loading data
+                q.resolve(true); // we're currently loading data, but do try again (only finish when no more data is returned)
             }
 
             return q.promise;
