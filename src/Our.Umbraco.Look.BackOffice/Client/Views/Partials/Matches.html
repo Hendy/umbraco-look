@@ -2,12 +2,14 @@
 
     <div lazy-load="getMoreMatches()">
             
-        <pre>matches[0] = {{ matches[0] | json }}</pre>
+        <!--<pre>matches[0] = {{ matches[0] | json }}</pre>-->
 
         <div ng-repeat="match in matches" class="look-match">
             <a href="{{match.link}}">
 
                 <span class="match-score">{{match.score}}</span>
+
+                 <span class="icon {{ match.icon }} match-icon">&nbsp;</span>
 
                 <!--<span class="match-key">{{match.key}}</span> |--> 
             
@@ -21,6 +23,6 @@
 
     <div class="info-banner" ng-show="currentlyLoading">Loading... <a href="" ng-click="cancelGetMoreMatches()">Cancel</a>.</div>
     <div class="info-banner" ng-show="finishedLoading && matches.length == 0">No Matches.</div>
-    <div class="info-banner" ng-show="finishedLoading && matches.length > 0">Finished Loading.</div>
+    <div class="info-banner" ng-show="finishedLoading && matches.length > 0">Finished Loading. <a href="" ng-click="refresh()">Refresh</a></div>
 
 </div>

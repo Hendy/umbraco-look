@@ -70,7 +70,6 @@
                         // set trigger
                         fireLazyLoadPromise = $timeout(function () {
                             if (enabled && !expanding && elementCanExpand()) { // double check locks
-                                expanding = true;
                                 doLazyLoad();
                             }
                         }, 500);
@@ -82,7 +81,7 @@
                 function doLazyLoad() {
 
                     //if (enabled) { // fail safe
-                        //expanding = true; // ensures lock flag
+                        expanding = true; // ensures lock flag
 
                         $timeout(function () { // timeout to ensure scope is ready
 

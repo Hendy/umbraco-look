@@ -18,14 +18,14 @@
         var getMatches = $scope.$parent.getMatches; // $scope.$parent.getMatches(sort, skip, take) expected to exist
 
         var skip = 0; // skip counter
-        const take = 1; // take (set to 1 specifically for bad performance during development)
+        const take = 50; // (set to 1 specifically for bad performance during development)
 
         // prepare method for lazyLoad to call
         $scope.getMoreMatches = function () {
 
             var q = $q.defer();
 
-            if (!$scope.currentlyLoading) {
+            if (!$scope.finishedLoading && !$scope.currentlyLoading) {
                 $scope.currentlyLoading = true;
 
                 getMatches(sortService.sortOn, skip, take)
@@ -47,6 +47,7 @@
                         q.resolve(tryAgain);
 
                     });
+
             } else {
                 q.resolve(false); // we're currently loading data
             }
@@ -58,16 +59,23 @@
             // TODO: 
         };
 
+        $scope.refresh = function () {
+            reset();
+        };
+
         //$scope.lazyLoad(); // trigger the lazy load to start - wasn't ready here
 
         // clear data, then re-trigger lazy-load
         sortService.onChange(function () {
-            $scope.matches = [];
-            skip = 0;
-            $scope.finishedLoading = false;
-            $scope.lazyLoad(); // trigger the lazy load
+            reset();
         });
 
+        function reset() {
+            skip = 0;
+            $scope.matches = [];
+            $scope.finishedLoading = false;
+            $scope.lazyLoad(); // trigger the lazy load
+        }
     }
 
 })();

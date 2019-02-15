@@ -52,3 +52,17 @@
 
 
 
+.look-match {
+    margin:5px 0;
+    border:solid 1px red;
+    
+}
+
+.look-match .match-score {
+    float:right;
+    font-size:xx-small;
+}
+
+.look-match .match-icon {
+    font-size: 35px;
+}
