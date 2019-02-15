@@ -123,5 +123,17 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
 
             return this.Ok(QueryService.GetTagMatches(searcherName, tagGroup, tagName, sort, skip, take));
         }
+
+
+        [HttpGet]
+        public IHttpActionResult GetConfigurationData([FromUri]string searcherName)
+        {
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+            var configurationData = new ConfigurationData();
+
+            return this.Ok(configurationData);
+        }
     }
 }

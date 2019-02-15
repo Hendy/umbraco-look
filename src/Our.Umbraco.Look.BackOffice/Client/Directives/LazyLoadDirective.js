@@ -43,11 +43,7 @@
                 });
 
                 // add trigger method to scope, so controller can call this (eg. after reductive filtering, or a clear)
-                scope.lazyLoad = function () {
-                    //$timeout(function () { // timeout to ensure scope is ready (and element height calculated correctly)
-                        fireLazyLoad();
-                    //});
-                };
+                scope.lazyLoad = function () { fireLazyLoad(); };
 
                 fireLazyLoad(); // startup
 
@@ -55,15 +51,7 @@
 
                 // returns true if the element doesn't stretch below the bottom of the view
                 function elementCanExpand() {
-
-                    // TODO: is this element visible / the active view ?
-
-                    //$timeout(function () {
-
-                        return element.offset().top + element.height() < $(window).height() + 100; // 100 = number of pixels below view
-
-                    //});
-
+                    return element.offset().top + element.height() < $(window).height() + 100; // 100 = number of pixels below view
                 }
 
                 var fireLazyLoadPromise = null;

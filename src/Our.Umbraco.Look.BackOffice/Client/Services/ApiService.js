@@ -17,7 +17,9 @@
             getViewDataForTag: getViewDataForTag,
 
             getMatches: getMatches,
-            getTagMatches: getTagMatches            
+            getTagMatches: getTagMatches,
+
+            getConfigurationData: getConfigurationData // get details about indexers in use (sort will use to enable options)
         };
      
         function getViewDataForSearcher(searcherName) {
@@ -84,7 +86,6 @@
             return matches;
         }
 
-
         function getTagMatches(searcherName, tagGroup, tagName, sort, skip, take) {
 
             if (angular.isUndefined(searcherName)) { searcherName = ''; }
@@ -108,6 +109,16 @@
             });
 
             return matches;
+        }
+
+        function getConfigurationData(searcherName) {
+            return $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetConfigurationData',
+                params: {
+                    'searcherName': searcherName
+                }
+            });
         }
     }
 
