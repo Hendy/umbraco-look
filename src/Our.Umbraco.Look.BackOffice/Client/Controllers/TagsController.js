@@ -5,12 +5,23 @@
         .module('umbraco')
         .controller('Look.BackOffice.TagsController', TagsController);
 
-    TagsController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService', '$q'];
+    TagsController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService', '$q', 'navigationService'];
 
-    function TagsController($scope, $routeParams, apiService, $q) {
+    function TagsController($scope, $routeParams, apiService, $q, navigationService) {
 
         // input params
         $scope.searcherName = $routeParams.id;
+
+        // sync tree
+        navigationService.syncTree({
+            tree: 'lookTree',
+            path: [
+                '-1',
+                'searcher-' + $scope.searcherName,
+                'tags-' + $scope.searcherName
+            ],
+            forceReload: false
+        });
 
         // view data
         apiService.getViewDataForTags($scope.searcherName)

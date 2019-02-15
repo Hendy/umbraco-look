@@ -5,15 +5,25 @@
         .module('umbraco')
         .controller('Look.BackOffice.SearcherController', SearcherController);
 
-    SearcherController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService', '$q'];
+    SearcherController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService', '$q', 'navigationService'];
 
-    function SearcherController($scope, $routeParams, apiService, $q) {
+    function SearcherController($scope, $routeParams, apiService, $q, navigationService) {
 
         // input params
         $scope.searcherName = $routeParams.id;
         $scope.searcherDescription = null;
         $scope.searcherType = null;
         $scope.icon = null;
+
+        // sync tree
+        navigationService.syncTree({
+            tree: 'lookTree',
+            path: [
+                '-1',
+                'searcher-' + $scope.searcherName
+            ],
+            forceReload: false
+        });
 
         // view data
         apiService.getViewDataForSearcher($scope.searcherName)
@@ -39,6 +49,8 @@
 
             return q.promise;
         };
+
+
 
     }
 
