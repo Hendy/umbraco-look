@@ -1,9 +1,8 @@
 {
   "javascript": [
     "~/App_Plugins/Look/Controllers/MatchesController.js",
-    "~/App_Plugins/Look/Controllers/SortController.js",
-
     "~/App_Plugins/Look/Controllers/SearcherController.js",
+    "~/App_Plugins/Look/Controllers/SortController.js",
     "~/App_Plugins/Look/Controllers/TagController.js",
     "~/App_Plugins/Look/Controllers/TagGroupController.js",
     "~/App_Plugins/Look/Controllers/TagsController.js",
