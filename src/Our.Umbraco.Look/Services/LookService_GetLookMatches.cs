@@ -14,6 +14,7 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Supplied with the result of a Lucene query, this method will yield a constructed LookMatch for each in order
         /// </summary>
+        /// <param name="searcherName"></param>
         /// <param name="indexSearcher">The searcher supplied to get the Lucene doc for each id in the Lucene results (topDocs)</param>
         /// <param name="topDocs">The results of the Lucene query (a collection of ids in an order)</param>
         /// <param name="requestFields">Enum value specifying which Lucene fields shoudl be returned</param>
@@ -21,6 +22,7 @@ namespace Our.Umbraco.Look.Services
         /// <param name="getDistance">Function used to calculate distance (if a location was supplied in the original query)</param>
         /// <returns></returns>
         private static IEnumerable<LookMatch> GetLookMatches(
+                                                    string searcherName,
                                                     IndexSearcher indexSearcher,
                                                     TopDocs topDocs,
                                                     RequestFields requestFields,
@@ -76,8 +78,9 @@ namespace Our.Umbraco.Look.Services
                 var docId = scoreDoc.doc;
 
                 var doc = indexSearcher.Doc(docId, mapFieldSelector);
-
+                
                 var lookMatch = new LookMatch(
+                    searcherName,
                     scoreDoc.doc,
                     scoreDoc.score,
                     getHostId(doc.Get(LookConstants.HostIdField)), // could be null

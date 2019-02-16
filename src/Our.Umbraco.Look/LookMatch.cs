@@ -22,6 +22,12 @@ namespace Our.Umbraco.Look
         private Lazy<IPublishedContent> _item;
 
         /// <summary>
+        /// The Examine searcher used
+        /// </summary>
+        [JsonIgnore]
+        public string SearcherName { get; }
+
+        /// <summary>
         /// Lazy evaluation of the host item (if the item is detached) otherwize this will be null
         /// </summary>
         [JsonIgnore]
@@ -86,6 +92,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="searcherName"></param>
         /// <param name="docId"></param>
         /// <param name="score"></param>
         /// <param name="hostId">host (if item is detached)</param>
@@ -101,6 +108,7 @@ namespace Our.Umbraco.Look
         /// <param name="publishedItemType"></param>
         /// <param name="umbracoHelper"></param>
         internal LookMatch(
+                    string searcherName,
                     int docId,
                     float score,
                     int? hostId,
@@ -116,6 +124,7 @@ namespace Our.Umbraco.Look
                     PublishedItemType publishedItemType,
                     UmbracoHelper umbracoHelper)
         {
+            this.SearcherName = searcherName;
             //this.DocId = docId; // not in Examine 0.1.70, but in more recent versions
             this.Score = score;
             this.Id = itemId;

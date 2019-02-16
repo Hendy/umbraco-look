@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-
+using System.Linq;
 using PublishedItemType = Umbraco.Core.Models.PublishedItemType;
 
 namespace Our.Umbraco.Look.BackOffice.Models.Api
@@ -23,7 +23,6 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
         /// </summary>
         public int TotalItemCount { get; set; } = -1;
 
-
         /// <summary>
         /// Respesents a matched document in the indexed (subset of a LookMatch)
         /// this is for api serialzation
@@ -39,28 +38,32 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             [JsonProperty("key")]
             public Guid Key { get; set; }
 
-            [JsonProperty("name")]
-            public string Name { get; set; }
-
             [JsonProperty("icon")]
             public string Icon { get; set; }
 
             [JsonProperty("isDetached")]
             public bool IsDetached { get; set; }
 
-            // proeprties to indicate if this match has values set for each type of indexer
-
             //[JsonProperty("hasName")]
             //public bool HasName { get; set; }
 
-            //[JsonProperty("hasText")]
-            //public bool HasText { get; set; }
+            [JsonProperty("name")]
+            public string Name { get; set; }
 
             //[JsonProperty("hasDate")]
             //public bool HasDate { get; set; }
 
+            [JsonProperty("date")]
+            public DateTime? Date { get; set; }
+
             //[JsonProperty("hasTags")]
             //public bool HasTags { get; set; }
+
+            [JsonProperty("tags")]
+            public Tag[] Tags { get; set; }
+
+            //[JsonProperty("hasText")]
+            //public bool HasText { get; set; }
 
             //[JsonProperty("hasLocation")]
             //public bool HasLocation { get; set; }
@@ -74,7 +77,25 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             public string Link { get; set; }
 
             /// <summary>
-            /// 
+            /// Tag for api serialization
+            /// </summary>
+            public class Tag
+            {
+                [JsonProperty("group")]
+                public string Group { get; set; }
+
+                [JsonProperty("name")]
+                public string Name { get; set; }
+
+                /// <summary>
+                /// internal back office link to tag node in look tree
+                /// </summary>
+                [JsonProperty("link")]
+                public string Link { get; set; }
+            }
+
+            /// <summary>
+            /// Map a LookMatch object (as returned by Look) to a Match object (used for back office view model rendering)
             /// </summary>
             /// <param name="lookMatch"></param>
             public static explicit operator Match(LookMatch lookMatch)
@@ -89,23 +110,33 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 switch (lookMatch.PublishedItemType)
                 {
                     case PublishedItemType.Content:
-                        match.Icon = "icon-selection-traycontent";
+                        match.Icon = "icon-umb-content"; // "icon-selection-traycontent";
                         match.Link = "#/content/content/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Id : lookMatch.Item.Id);
                         break;
 
                     case PublishedItemType.Media:
-                        match.Icon = "icon-selection-traymedia";
+                        match.Icon = "icon-umb-media"; // "icon-selection-traymedia";
                         match.Link = "#/media/media/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Id : lookMatch.Item.Id);
                         break;
 
                     case PublishedItemType.Member:
-                        match.Icon = "icon-selection-traymember";
+                        match.Icon = "icon-umb-members"; // "icon-selection-traymember";
                         //match.Link = "#/member/member/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Get : lookMatch.Key.ToString())
                         break;
                 }
 
                 match.IsDetached = lookMatch.IsDetached;
-                
+                match.Date = lookMatch.Date;
+
+                match.Tags = lookMatch
+                                .Tags
+                                .Select(x => new Tag()
+                                {
+                                    Group = x.Group,
+                                    Name = x.Name,
+                                    Link = "#/developer/lookTree/Tag/" + lookMatch.SearcherName + "|" + x.Group + "|" + x.Name
+                                })
+                                .ToArray();
 
                 return match;
             }

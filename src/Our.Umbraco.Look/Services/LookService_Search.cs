@@ -603,6 +603,7 @@ namespace Our.Umbraco.Look.Services
 
                 return new LookResult(
                                 LookService.GetLookMatches(
+                                                        lookQuery.SearcherName,
                                                         lookQuery.SearchingContext.IndexSearcher,
                                                         topDocs,
                                                         lookQuery.RequestFields ?? LookService.Instance.RequestFields,
