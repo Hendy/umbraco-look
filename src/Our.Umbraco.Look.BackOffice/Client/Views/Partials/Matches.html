@@ -45,8 +45,9 @@
         </div>
     </div>
 
-    <div class="info-banner" ng-show="currentlyLoading">Loading... <a href="" ng-click="cancelGetMoreMatches()">Cancel</a>.</div>
-    <div class="info-banner" ng-show="finishedLoading && matches.length == 0">No Matches.</div>
-    <div class="info-banner" ng-show="finishedLoading && matches.length > 0">Finished Loading. <a href="" ng-click="refresh()">Refresh</a></div>
+    <div class="look-banner" ng-show="currentlyLoading">Loading... <a href="" ng-click="cancelGetMoreMatches()">Cancel</a>.</div>
+    <div class="look-banner" ng-show="finishedLoading && matches.length === 0">No Matches.</div>
+    <div class="look-banner" ng-show="finishedLoading && matches.length === 1">Found 1 Match. <a href="" ng-click="reload()">Reload</a></div>
+    <div class="look-banner" ng-show="finishedLoading && matches.length > 1">Found {{matches.length}} Matches. <a href="" ng-click="reload()">Reload</a></div>
 
 </div>

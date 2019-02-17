@@ -76,7 +76,7 @@
         };
 
 
-        $scope.refresh = function () {
+        $scope.reload = function () {
             reset();
         };
 
