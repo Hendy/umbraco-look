@@ -14,11 +14,6 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
         public Match[] Matches { get; set; }
 
         /// <summary>
-        /// Flag to use by lazy loader to know when to stop
-        /// </summary>
-        public bool MoreItems { get; set; } = false;
-
-        /// <summary>
         /// Total number of results matching the query supplied(ignores any skip/take values)
         /// </summary>
         public int TotalItemCount { get; set; } = -1;
@@ -45,7 +40,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             public bool IsDetached { get; set; }
 
             //[JsonProperty("hasName")]
-            //public bool HasName { get; set; }
+            //public bool HasName => !string.IsNullOrWhiteSpace(this.Name);
 
             [JsonProperty("name")]
             public string Name { get; set; }
@@ -59,8 +54,8 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             //[JsonProperty("hasTags")]
             //public bool HasTags { get; set; }
 
-            [JsonProperty("tags")]
-            public Tag[] Tags { get; set; }
+            [JsonProperty("tagGroups")]
+            public TagGroup[] TagGroups { get; set; }
 
             //[JsonProperty("hasText")]
             //public bool HasText { get; set; }
@@ -77,11 +72,29 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             public string Link { get; set; }
 
             /// <summary>
+            /// Tag Group for api serialization
+            /// </summary>
+            public class TagGroup
+            {
+                [JsonProperty("name")]
+                public string Name { get; set; }
+
+                [JsonProperty("link")]
+                public string Link { get; set; }
+
+                [JsonProperty("tags")]
+                public Tag[] Tags { get; set; }
+            }
+
+            /// <summary>
             /// Tag for api serialization
             /// </summary>
             public class Tag
             {
-                [JsonProperty("group")]
+                /// <summary>
+                /// property used as a helper for sorting, no need to serialize as this tag will be inside a TagGroup obj
+                /// </summary>
+                [JsonIgnore]
                 public string Group { get; set; }
 
                 [JsonProperty("name")]
@@ -128,7 +141,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 match.IsDetached = lookMatch.IsDetached;
                 match.Date = lookMatch.Date;
 
-                match.Tags = lookMatch
+                var tags = lookMatch
                                 .Tags
                                 .Select(x => new Tag()
                                 {
@@ -137,6 +150,18 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                                     Link = "#/developer/lookTree/Tag/" + lookMatch.SearcherName + "|" + x.Group + "|" + x.Name
                                 })
                                 .ToArray();
+
+                match.TagGroups = tags
+                                    .Select(x => x.Group)
+                                    .Distinct()
+                                    .OrderBy(x => x)
+                                    .Select(x => new TagGroup()
+                                    {
+                                        Name = string.IsNullOrEmpty(x) ? "-default-" : x,
+                                        Link = "#/developer/lookTree/TagGroup/" + lookMatch.SearcherName + "|" + x,
+                                        Tags = tags.Where(y => y.Group == x).OrderBy(y => y.Name).ToArray()
+                                    })
+                                    .ToArray();
 
                 return match;
             }

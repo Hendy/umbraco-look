@@ -46,6 +46,9 @@
             apiService
                 .getTagMatches($scope.searcherName, $scope.tagGroup, $scope.tagName, sort, skip, take)
                 .then(function (response) {
+
+                    // TODO: foreach match, sort its tags collection, so that this tag is first in the list (followed by all other tags in this group)
+
                     q.resolve(response.data.matches);
                 });
 

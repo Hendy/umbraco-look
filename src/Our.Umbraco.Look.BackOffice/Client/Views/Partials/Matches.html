@@ -1,24 +1,44 @@
 ﻿<div ng-controller="Look.BackOffice.MatchesController">
 
     <div lazy-load="getMoreMatches()">
-            
         <!--<pre>matches[0] = {{ matches[0] | json }}</pre>-->
+        <div ng-repeat="match in matches">
 
-        <div ng-repeat="match in matches" class="look-match">
-            <a href="{{match.link}}">
+            <div class="look-match-breaker" ng-if="nameBreaker(match, matches[$index -1])">
+                <p>{{match.name.charAt(0)}}</p>
+            </div>
 
-                <span class="match-score">{{match.score}}</span>
+            <div class="look-match">
+                <a href="{{match.link}}">
+                    <span class="{{match.icon}} look-match-icon">&nbsp;</span>
+                </a>
 
-                 <span class="icon {{ match.icon }} match-icon">&nbsp;</span>
+                <span class="match-is-detached">{{match.isDetached}}</span>
 
-                <!--<span class="match-key">{{match.key}}</span> |--> 
-            
-                <span class="match-key">{{match.name}}</span> |
                 <!--<span class="match-id">{{match.id}}</span> |-->
+                <!--<span class="match-key">{{match.key}}</span> |--> 
+                <span class="look-match-name">{{match.name}}</span>
+                <span class="look-match-date">{{match.date}}</span>
 
-            </a>
+                <!-- https://stackoverflow.com/questions/10457833/how-would-i-render-a-dynamic-definition-list-using-angularjs -->
+                <div class="look-match-tags">
+
+                    <div class="look-match-tag-group" ng-repeat="tagGroup in match.tagGroups">
+                        <a href="{{tagGroup.link}}">
+                            {{tagGroup.name}}
+                        </a>
+                        
+                        <span class="look-match-tag" ng-repeat="tag in tagGroup.tags">                            
+                            <a href="{{tag.link}}">{{tag.name}}</a>{{ $last ? '.' : ', '}}
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <span class="look-match-score">{{match.score}}</span>
+            </div>
         </div>
-        
     </div>
 
     <div class="info-banner" ng-show="currentlyLoading">Loading... <a href="" ng-click="cancelGetMoreMatches()">Cancel</a>.</div>

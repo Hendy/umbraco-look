@@ -1,7 +1,7 @@
 ﻿(function () {
     'use strict';
 
-    // matches controller handles the paging and rendering of collection of matches (from parent scope)
+    // matches controller handles the paging and rendering of collection of matches (match data taken from parent scope)
     angular
         .module('umbraco')
         .controller('Look.BackOffice.MatchesController', MatchesController);
@@ -57,6 +57,24 @@
         $scope.cancelGetMoreMatches = function () {
             // TODO: 
         };
+
+        // (later version of Angular adds one time binding)
+        // returns true, if sorting by name, and the current match and last match differ in their initial name letter
+        $scope.nameBreaker = function (currentMatch, lastMatch) {
+
+            var enableNameBreaker = false;
+
+            if (sortService.sortOn === 'Name') {
+                if (angular.isUndefined(lastMatch)) { // this is the first match, so show name breaker
+                    enableNameBreaker = true;
+                } else {
+                    enableNameBreaker = currentMatch.name.charAt(0).toLowerCase() !== lastMatch.name.charAt(0).toLowerCase();
+                }
+            }
+
+            return enableNameBreaker;
+        };
+
 
         $scope.refresh = function () {
             reset();

@@ -51,18 +51,35 @@
     }
 
 
+.look-match-breaker {
+    font-size:larger;
+}
 
 .look-match {
     margin:5px 0;
     border:solid 1px red;
+    clear:both;
     
 }
 
-.look-match .match-score {
+.look-match-score {
     float:right;
     font-size:xx-small;
 }
 
-.look-match .match-icon {
+.look-match-icon {
     font-size: 35px;
+}
+
+.look-match-tags {
+
+    border:solid 1px yellow;
+}
+
+.look-match-tag-group {
+    border:solid 1px black;
+
+}
+.look-match-tag {
+    border:solid 1px blue;
 }
