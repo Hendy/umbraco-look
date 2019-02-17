@@ -5,9 +5,9 @@
         .module('umbraco')
         .controller('Look.BackOffice.SearcherController', SearcherController);
 
-    SearcherController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService', '$q', 'navigationService'];
+    SearcherController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService', '$q', 'navigationService', '$timeout'];
 
-    function SearcherController($scope, $routeParams, apiService, $q, navigationService) {
+    function SearcherController($scope, $routeParams, apiService, $q, navigationService, $timeout) {
 
         // input params
         $scope.searcherName = $routeParams.id;
@@ -16,14 +16,16 @@
         $scope.icon = null;
 
         // sync tree
-        navigationService.syncTree({
-            tree: 'lookTree',
-            path: [
-                '-1',
-                'searcher-' + $scope.searcherName
-            ],
-            forceReload: true
-        });
+        $timeout(function () { // HACK: timeout required as navigationService not ready on inital load
+            navigationService.syncTree({
+                tree: 'lookTree',
+                path: [
+                    '-1',
+                    'searcher-' + $scope.searcherName
+                ],
+                forceReload: true
+            });
+        }, 200);
 
         // view data
         apiService.getViewDataForSearcher($scope.searcherName)

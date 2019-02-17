@@ -5,9 +5,9 @@
         .module('umbraco')
         .controller('Look.BackOffice.TagGroupController', TagGroupController);
 
-    TagGroupController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService', '$q', 'navigationService'];
+    TagGroupController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService', '$q', 'navigationService', '$timeout'];
 
-    function TagGroupController($scope, $routeParams, apiService, $q, navigationService) {
+    function TagGroupController($scope, $routeParams, apiService, $q, navigationService, $timeout) {
 
         // input params
         var parsedId = $routeParams.id.split('|');
@@ -16,16 +16,18 @@
         $scope.tagGroup = parsedId[1];
 
         // sync tree
-        navigationService.syncTree({
-            tree: 'lookTree',
-            path: [
-                '-1',
-                'searcher-' + $scope.searcherName,
-                'tags-' + $scope.searcherName,
-                'tagGroup-' + $scope.searcherName + '|' + $scope.tagGroup
-            ],
-            forceReload: true
-        });
+        $timeout(function () { // HACK: timeout required as navigationService not ready on inital load
+            navigationService.syncTree({
+                tree: 'lookTree',
+                path: [
+                    '-1',
+                    'searcher-' + $scope.searcherName,
+                    'tags-' + $scope.searcherName,
+                    'tagGroup-' + $scope.searcherName + '|' + $scope.tagGroup
+                ],
+                forceReload: true
+            });
+        }, 200);
 
         // view data
         apiService
