@@ -22,7 +22,7 @@
                 '-1',
                 'searcher-' + $scope.searcherName
             ],
-            forceReload: false
+            forceReload: true
         });
 
         // view data

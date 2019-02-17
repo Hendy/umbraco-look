@@ -20,7 +20,7 @@
                 'searcher-' + $scope.searcherName,
                 'tags-' + $scope.searcherName
             ],
-            forceReload: false
+            forceReload: true
         });
 
         // view data

@@ -24,7 +24,7 @@
                 'tags-' + $scope.searcherName,
                 'tagGroup-' + $scope.searcherName + '|' + $scope.tagGroup
             ],
-            forceReload: false
+            forceReload: true
         });
 
         // view data
