@@ -24,12 +24,16 @@
                 <div class="look-match-tags">
 
                     <div class="look-match-tag-group" ng-repeat="tagGroup in match.tagGroups">
-                        <a href="{{tagGroup.link}}">
-                            {{tagGroup.name}}
-                        </a>
-                        
-                        <span class="look-match-tag" ng-repeat="tag in tagGroup.tags">                            
-                            <a href="{{tag.link}}">{{tag.name}}</a>{{ $last ? '.' : ', '}}
+
+                        <span class="icon icon-tags">&nbsp;</span>
+                        <a ng-if="tagGroup.link !== null" href="{{tagGroup.link}}">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</a>
+                        <span ng-if="tagGroup.link === null">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</span>
+                                                
+                        <span class="look-match-tag" ng-repeat="tag in tagGroup.tags">
+                            <span class="icon icon-tag">&nbsp;</span>
+                            <a ng-if="tag.link !== null" href="{{tag.link}}">{{tag.name}}</a>
+                            <span ng-if="tag.link === null">{{tag.name}}</span>
+                            <!--{{ $last ? '.' : ', '}}-->
                         </span>
                     </div>
 

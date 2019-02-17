@@ -66,7 +66,7 @@
                         if (enabled && !expanding && elementCanExpand()) { // double check locks
                             doLazyLoad();
                         }
-                    }, 500);
+                    });
                 }
 
                 // private helper - reccursive method (it holds the expanding flag)

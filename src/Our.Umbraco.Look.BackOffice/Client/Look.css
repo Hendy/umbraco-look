@@ -50,6 +50,10 @@
         border-bottom: 1px dashed lightgrey;
     }
 
+    .look-body a {
+        text-decoration: underline;
+        color:blue;
+    }
 
 .look-match-breaker {
     font-size:larger;
@@ -57,29 +61,32 @@
 
 .look-match {
     margin:5px 0;
-    border:solid 1px red;
+    border:dashed 1px red;
     clear:both;
     
 }
 
+
 .look-match-score {
     float:right;
     font-size:xx-small;
+
+    border:solid 1px black;
 }
 
 .look-match-icon {
     font-size: 35px;
+    border: solid 1px black;
 }
 
 .look-match-tags {
-
-    border:solid 1px yellow;
+    border: solid 1px yellow;
+    border: solid 1px black;
 }
 
 .look-match-tag-group {
-    border:solid 1px black;
-
+    border: solid 1px black;
 }
+
 .look-match-tag {
-    border:solid 1px blue;
 }

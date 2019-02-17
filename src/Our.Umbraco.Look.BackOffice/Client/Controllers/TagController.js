@@ -47,6 +47,25 @@
                 .getTagMatches($scope.searcherName, $scope.tagGroup, $scope.tagName, sort, skip, take)
                 .then(function (response) {
 
+                    // remove link to this tag from all matches (no need to render link to self)
+                    response.data.matches = response.data.matches.map(function (item) {
+
+                        item.tagGroups = item.tagGroups.map(function (tagGroup) {
+                            tagGroup.tags = tagGroup.tags.map(function (tag) {
+
+                                if (tagGroup.name === $scope.tagGroup && tag.name === $scope.tagName) {
+                                    tag.link = null; // clear link to self
+                                }
+
+                                return tag;
+                            });                                
+
+                            return tagGroup;
+                        });
+
+                        return item;
+                    });
+
                     // TODO: foreach match, sort its tags collection, so that this tag is first in the list (followed by all other tags in this group)
 
                     q.resolve(response.data.matches);

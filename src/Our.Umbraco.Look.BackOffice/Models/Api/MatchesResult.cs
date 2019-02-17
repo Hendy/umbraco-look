@@ -157,7 +157,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                                     .OrderBy(x => x)
                                     .Select(x => new TagGroup()
                                     {
-                                        Name = string.IsNullOrEmpty(x) ? "-default-" : x,
+                                        Name = x,
                                         Link = "#/developer/lookTree/TagGroup/" + lookMatch.SearcherName + "|" + x,
                                         Tags = tags.Where(y => y.Group == x).OrderBy(y => y.Name).ToArray()
                                     })
