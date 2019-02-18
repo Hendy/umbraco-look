@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Linq;
+using Umbraco.Web;
 using PublishedItemType = Umbraco.Core.Models.PublishedItemType;
 
 namespace Our.Umbraco.Look.BackOffice.Models.Api
@@ -64,12 +65,25 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             //public bool HasLocation { get; set; }
 
             /// <summary>
+            /// names of all ancestors of this content / media
+            /// (string rendered before the link text)
+            /// </summary>
+            [JsonProperty("path")]
+            public string Path { get; set; }
+
+            /// <summary>
             /// #/content/content/edit/1074
             /// #/media/media/edit/1096
             /// #/member/member/edit/62b351b9-1dfe-41ab-9336-31fe72374d41
             /// </summary>
             [JsonProperty("link")]
             public string Link { get; set; }
+
+            /// <summary>
+            /// This is the umbraco human friendly path to the content / media or member
+            /// </summary>
+            [JsonProperty("linkText")]
+            public string LinkText { get; set; }
 
             /// <summary>
             /// Tag Group for api serialization
@@ -120,20 +134,35 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 match.Key = lookMatch.Key;
                 match.Name = lookMatch.Name;
 
+                var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+
                 switch (lookMatch.PublishedItemType)
                 {
                     case PublishedItemType.Content:
+                        var item = lookMatch.IsDetached ? lookMatch.HostItem : lookMatch.Item;
+
                         match.Icon = "icon-umb-content"; // "icon-selection-traycontent";
-                        match.Link = "#/content/content/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Id : lookMatch.Item.Id);
+
+                        match.Path = string.Join("\\", item
+                                                        .Path
+                                                        .Split(',')
+                                                        .Select(x => int.Parse(x))
+                                                        .Where(x => x > 0 && x != item.Id)
+                                                        .Select(x => umbracoHelper.TypedContent(x)?.Name)) + "\\";
+
+                        match.Link = "#/content/content/edit/" + item.Id;
+                        match.LinkText = item.Name;
                         break;
 
                     case PublishedItemType.Media:
                         match.Icon = "icon-umb-media"; // "icon-selection-traymedia";
                         match.Link = "#/media/media/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Id : lookMatch.Item.Id);
+                        match.LinkText = "TODO: media/parent/this";
                         break;
 
                     case PublishedItemType.Member:
                         match.Icon = "icon-umb-members"; // "icon-selection-traymember";
+                        match.LinkText = "TODO: members/this";
                         //match.Link = "#/member/member/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Get : lookMatch.Key.ToString())
                         break;
                 }

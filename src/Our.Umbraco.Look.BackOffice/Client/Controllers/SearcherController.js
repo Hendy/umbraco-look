@@ -25,7 +25,7 @@
                 ],
                 forceReload: true
             });
-        }, 200);
+        }, 500);
 
         // view data
         apiService.getViewDataForSearcher($scope.searcherName)

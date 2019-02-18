@@ -23,7 +23,7 @@
                 ],
                 forceReload: true
             });
-        }, 200);
+        }, 500);
 
         // view data
         apiService.getViewDataForTags($scope.searcherName)

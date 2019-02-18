@@ -27,7 +27,7 @@
                 ],
                 forceReload: true
             });
-        }, 200);
+        }, 500);
 
         // view data
         apiService
