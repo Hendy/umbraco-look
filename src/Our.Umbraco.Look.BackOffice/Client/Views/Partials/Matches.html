@@ -1,7 +1,6 @@
 ﻿<div ng-controller="Look.BackOffice.MatchesController">
 
     <div lazy-load="getMoreMatches()">
-        <!--<pre>matches[0] = {{ matches[0] | json }}</pre>-->
         <div ng-repeat="match in matches">
 
             <div class="look-match-breaker" ng-if="nameBreaker(match, matches[$index -1])">
@@ -28,9 +27,10 @@
 
                 
                 <div class="look-match-tags">
-                    <!-- angularjs. 1.1.5 doesn't lend itself to ng-repeat with dl markup https://stackoverflow.com/questions/10457833/how-would-i-render-a-dynamic-definition-list-using-angularjs -->
-                    <div class="look-match-tag-group" ng-repeat="tagGroup in match.tagGroups">
 
+                    <span class="look-match-no-tags" ng-if="match.tagGroups.length === 0">No Tags</span>
+
+                    <div class="look-match-tag-group" ng-repeat="tagGroup in match.tagGroups">
                         <span class="icon icon-tags">&nbsp;</span>
                         <a ng-if="tagGroup.link !== null" href="{{tagGroup.link}}">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</a>
                         <span ng-if="tagGroup.link === null">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</span>
@@ -42,6 +42,7 @@
                             <!--{{ $last ? '.' : ', '}}-->
                         </span>
                     </div>
+
                 </div>
 
                 <div style="clear:both;"></div>

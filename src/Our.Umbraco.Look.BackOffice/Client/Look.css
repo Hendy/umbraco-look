@@ -100,19 +100,24 @@
 .look-match-details {
     border: solid 1px grey;
     float: left;
+    width:40%;
 }
 
     .look-match-details div {
-        font-size:large;
     }
 
     .look-match-details div span {
         font-size:small;
     }
 
+
 .look-match-tags {
     float:left;
     border: solid 1px black;
+}
+
+.look-match-no-tags {
+
 }
 
 .look-match-tag-group {
