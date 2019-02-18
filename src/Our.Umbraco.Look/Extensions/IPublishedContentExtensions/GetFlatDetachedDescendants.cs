@@ -22,7 +22,8 @@ namespace Our.Umbraco.Look.Extensions
 
             foreach (var publishedContentCollection in publishedContentCollections)
             {
-                detachedPublishedContent.AddRange(publishedContentCollection);
+                // ensure only detached items are added
+                detachedPublishedContent.AddRange(publishedContentCollection.Where(x => x.Id == 0));
                 
                 foreach (var childPublishedContent in publishedContentCollection)
                 {
