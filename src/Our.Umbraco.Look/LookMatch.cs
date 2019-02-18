@@ -137,7 +137,7 @@ namespace Our.Umbraco.Look
             this.Tags = tags;
             this.Location = location;
             this.Distance = distance;
-            this.PublishedItemType = PublishedItemType;
+            this.PublishedItemType = publishedItemType;
 
             this._hostItem = new Lazy<IPublishedContent>(() =>
             {
