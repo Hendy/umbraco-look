@@ -7,7 +7,7 @@
                 <p>{{match.name.charAt(0)}}</p>
             </div>
 
-            <div class="look-match">
+            <div class="look-match" ng-class-even="'even'" ng-class-odd="'odd'">
                 
                 <span class="look-match-score">{{match.score}}</span>
                 
@@ -43,11 +43,11 @@
 
 
                 <div class="look-match-text">
-
+                    Has Text: {{ match.hasText ? 'Yes' : 'No'}}
                 </div>
 
-                <div class="look-match-location>">
-
+                <div class="look-match-location">
+                    Has Location: {{ match.hasLocation ? 'Yes' : 'No'}}
                 </div>
 
                 <div style="clear:both;"></div>

@@ -64,9 +64,20 @@
 
 
 .look-match {
-    margin:5px 0;
-    clear:both;   
+    margin: 0 0 10px 0;
+    clear: both;
+    background-color: #f3f3f5;
 }
+
+.look-match.even {
+    
+}
+
+.look-match.odd {
+
+}
+
+
 
 .look-match-score {
     float: right;
@@ -127,6 +138,18 @@
 .look-match-tag {
 }
 
+
+.look-match-text {
+    float: left;
+    border: solid 1px grey;
+    font-size: small;
+}
+
+.look-match-location {
+    float: left;
+    border: solid 1px grey;
+    font-size: small;
+}
 
 
 
