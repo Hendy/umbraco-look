@@ -89,7 +89,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
             var lookQuery = new LookQuery(searcherName);
             var tagQuery = new TagQuery(); // setting a tag query, means only items that have tags will be returned
 
-            if (string.IsNullOrWhiteSpace(tagName)) // only have the group to query
+            if (!string.IsNullOrWhiteSpace(tagGroup) && string.IsNullOrWhiteSpace(tagName)) // only have the group to query
             {
                 // TODO: add a new field into the lucene index (would avoid additional query to first look up the tags in this group)
                 var tagsInGroup = QueryService.GetTags(searcherName, tagGroup).Select(x => x.Key).ToArray();
@@ -97,7 +97,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
                 tagQuery.Any = new LookTag[][] { tagsInGroup };
 
             }
-            else // we have a specifc tag
+            else if (!string.IsNullOrWhiteSpace(tagName)) // we have a specifc tag
             {
                 tagQuery.All = new[] { new LookTag(tagGroup, tagName) };
             }
