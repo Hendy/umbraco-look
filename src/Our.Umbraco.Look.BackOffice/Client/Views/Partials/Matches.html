@@ -21,15 +21,12 @@
 
                 <div class="look-match-details">
                     <div><span>Name: </span> {{match.name}}</div>
-                    <div><span>Date: </span> {{match.date}}</div>
+                    <div><span>Date: </span> {{match.date | date:'d MMMM yyyy, HH:mm:ss'}}</div>
                     <div><span>Path: </span> {{match.path}}<a href="{{match.link}}">{{match.linkText}}</a>{{ match.isDetached ? '\\' + match.name : ''}}</div>
                 </div>
-
                 
                 <div class="look-match-tags">
-
                     <span class="look-match-no-tags" ng-if="match.tagGroups.length === 0">No Tags</span>
-
                     <div class="look-match-tag-group" ng-repeat="tagGroup in match.tagGroups">
                         <span class="icon icon-tags">&nbsp;</span>
                         <a ng-if="tagGroup.link !== null" href="{{tagGroup.link}}">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</a>
@@ -42,6 +39,14 @@
                             <!--{{ $last ? '.' : ', '}}-->
                         </span>
                     </div>
+                </div>
+
+
+                <div class="look-match-text">
+
+                </div>
+
+                <div class="look-match-location>">
 
                 </div>
 

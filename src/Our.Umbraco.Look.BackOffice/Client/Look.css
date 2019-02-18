@@ -57,8 +57,8 @@
 
 
 .look-match-breaker {
-    font-size:larger;
-    border:solid 1px black;
+    font-size:x-large;
+    text-transform:uppercase;
 }
 
 
@@ -113,7 +113,8 @@
 
 .look-match-tags {
     float:left;
-    border: solid 1px black;
+    border: solid 1px grey;
+    font-size:small;
 }
 
 .look-match-no-tags {
@@ -121,12 +122,13 @@
 }
 
 .look-match-tag-group {
-    border: solid 1px black;
 }
 
 .look-match-tag {
-
 }
+
+
+
 
 .look-banner {
     border:solid 2px green;

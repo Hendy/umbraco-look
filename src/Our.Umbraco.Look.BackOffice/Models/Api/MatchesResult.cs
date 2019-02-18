@@ -58,11 +58,11 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             [JsonProperty("tagGroups")]
             public TagGroup[] TagGroups { get; set; }
 
-            //[JsonProperty("hasText")]
-            //public bool HasText { get; set; }
+            [JsonProperty("hasText")]
+            public bool HasText { get; set; }
 
-            //[JsonProperty("hasLocation")]
-            //public bool HasLocation { get; set; }
+            [JsonProperty("hasLocation")]
+            public bool HasLocation { get; set; }
 
             /// <summary>
             /// names of all ancestors of this content / media
@@ -134,36 +134,37 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 match.Key = lookMatch.Key;
                 match.Name = lookMatch.Name;
 
+                var item = lookMatch.IsDetached ? lookMatch.HostItem : lookMatch.Item; // set it to be the non-detached
+                var pathIds = item
+                                .Path
+                                .Split(',')
+                                .Select(x => int.Parse(x))
+                                .Where(x => x > 0 && x != item.Id)
+                                .ToArray();
+
                 var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
 
                 switch (lookMatch.PublishedItemType)
                 {
-                    case PublishedItemType.Content:
-                        var item = lookMatch.IsDetached ? lookMatch.HostItem : lookMatch.Item;
-
-                        match.Icon = "icon-umb-content"; // "icon-selection-traycontent";
-
-                        match.Path = string.Join("\\", item
-                                                        .Path
-                                                        .Split(',')
-                                                        .Select(x => int.Parse(x))
-                                                        .Where(x => x > 0 && x != item.Id)
-                                                        .Select(x => umbracoHelper.TypedContent(x)?.Name)) + "\\";
-
+                    case PublishedItemType.Content:                        
+                        match.Icon = "icon-umb-content";
+                        match.Path = pathIds.Any() ? string.Join("\\", pathIds.Select(x => umbracoHelper.TypedContent(x).Name)) + "\\" : string.Empty;
                         match.Link = "#/content/content/edit/" + item.Id;
                         match.LinkText = item.Name;
                         break;
 
                     case PublishedItemType.Media:
-                        match.Icon = "icon-umb-media"; // "icon-selection-traymedia";
+                        match.Icon = "icon-umb-media";
+                        match.Path = pathIds.Any() ? string.Join("\\", pathIds.Select(x => umbracoHelper.TypedMedia(x).Name)) + "\\" : string.Empty;
                         match.Link = "#/media/media/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Id : lookMatch.Item.Id);
-                        match.LinkText = "TODO: media/parent/this";
+                        match.LinkText = item.Name;
                         break;
 
                     case PublishedItemType.Member:
                         match.Icon = "icon-umb-members"; // "icon-selection-traymember";
-                        match.LinkText = "TODO: members/this";
+                        match.Path = "";
                         //match.Link = "#/member/member/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Get : lookMatch.Key.ToString())
+                        match.LinkText = item.Name;
                         break;
                 }
 
@@ -191,6 +192,9 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                                         Tags = tags.Where(y => y.Group == x).OrderBy(y => y.Name).ToArray()
                                     })
                                     .ToArray();
+
+                match.HasText = !string.IsNullOrWhiteSpace(lookMatch.Text);
+                match.HasLocation = lookMatch.Location != null;
 
                 return match;
             }

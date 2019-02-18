@@ -18,7 +18,6 @@
 
         // sync tree
         $timeout(function () { // HACK: timeout required as navigationService not ready on inital load
-            console.log('showtree3');
             navigationService.syncTree({
                 tree: 'lookTree',
                 path: [
