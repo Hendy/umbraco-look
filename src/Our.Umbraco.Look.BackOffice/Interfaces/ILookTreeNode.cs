@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Formatting;
+using Umbraco.Web.Models.Trees;
 
 namespace Our.Umbraco.Look.BackOffice.Interfaces
 {
@@ -17,6 +18,16 @@ namespace Our.Umbraco.Look.BackOffice.Interfaces
         /// </summary>
         string RoutePath { get; }
 
+        /// <summary>
+        /// Child tree nodes
+        /// </summary>
+        /// <returns></returns>
         ILookTreeNode[] GetChildren();
+
+        /// <summary>
+        /// Umbraco tree menu items
+        /// </summary>
+        /// <returns></returns>
+        MenuItemCollection GetMenu();
     }
 }

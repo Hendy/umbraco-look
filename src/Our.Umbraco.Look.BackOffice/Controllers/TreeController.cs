@@ -1,8 +1,7 @@
-﻿using Our.Umbraco.Look.BackOffice.Services;
+﻿using Our.Umbraco.Look.BackOffice.Interfaces;
+using Our.Umbraco.Look.BackOffice.Services;
 using System.Linq;
 using System.Net.Http.Formatting;
-using umbraco;
-using umbraco.BusinessLogic.Actions;
 using Umbraco.Web.Models.Trees;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.Trees;
@@ -38,14 +37,9 @@ namespace Our.Umbraco.Look.BackOffice.Controllers
 
         protected override MenuItemCollection GetMenuForNode(string id, FormDataCollection queryStrings)
         {
-            MenuItemCollection nodeMenu = new MenuItemCollection();
+            var treeNode = TreeService.MakeLookTreeNode(id, queryStrings);
 
-            if (!id.StartsWith("tag-"))
-            {
-                nodeMenu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
-            }
-
-            return nodeMenu;
+            return treeNode.GetMenu();
         }
     }
 }

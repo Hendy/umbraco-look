@@ -1,5 +1,6 @@
 ﻿using Our.Umbraco.Look.BackOffice.Interfaces;
 using System.Net.Http.Formatting;
+using Umbraco.Web.Models.Trees;
 
 namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
@@ -32,6 +33,15 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
         public virtual ILookTreeNode[] GetChildren()
         {
             return new ILookTreeNode[] { };
+        }
+
+        /// <summary>
+        /// default to empty collection
+        /// </summary>
+        /// <returns></returns>
+        public virtual MenuItemCollection GetMenu()
+        {
+            return new MenuItemCollection();
         }
     }
 }

@@ -3,7 +3,10 @@ using Our.Umbraco.Look.BackOffice.Interfaces;
 using Our.Umbraco.Look.BackOffice.Services;
 using System.Linq;
 using System.Net.Http.Formatting;
+using umbraco;
+using umbraco.BusinessLogic.Actions;
 using Umbraco.Core;
+using Umbraco.Web.Models.Trees;
 
 namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
@@ -59,5 +62,15 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
             return base.GetChildren(); // empty
         }
+
+        public override MenuItemCollection GetMenu()
+        {
+            var menu = new MenuItemCollection();
+
+            menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
+
+            return menu;
+        }
+
     }
 }
