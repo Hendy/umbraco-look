@@ -3,6 +3,7 @@ using Lucene.Net.Search;
 using Our.Umbraco.Look.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using Umbraco.Core.Models;
@@ -61,6 +62,16 @@ namespace Our.Umbraco.Look.Services
                 return null;
             });
 
+            var getCultureInfo = new Func<string, CultureInfo>(x =>
+            {
+                if (int.TryParse(x, out int lcid))
+                {
+                    return new CultureInfo(lcid);
+                }
+
+                return null;
+            });
+
             // there should always be a valid node type value to parse
             var getNodeType = new Func<string, PublishedItemType>(x => 
             {
@@ -86,6 +97,7 @@ namespace Our.Umbraco.Look.Services
                     getHostId(doc.Get(LookConstants.HostIdField)), // could be null
                     Convert.ToInt32(doc.Get(LookConstants.NodeIdField)),
                     getItemGuid(doc.Get(LookConstants.NodeKeyField)), // this should only be null for unit tests (outside umbraco context)
+                    getCultureInfo(doc.Get(LookConstants.CultureField)),
                     doc.Get(LookConstants.NameField),
                     doc.Get(LookConstants.DateField).LuceneStringToDate(),
                     doc.Get(LookConstants.TextField),

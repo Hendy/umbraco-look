@@ -69,7 +69,7 @@ namespace Our.Umbraco.Look.Services
                         var cultureField = new Field(
                                                 LookConstants.CultureField,
                                                 culture.LCID.ToString(),
-                                                Field.Store.NO,
+                                                Field.Store.YES,
                                                 Field.Index.NOT_ANALYZED,
                                                 Field.TermVector.NO);
 
