@@ -29,7 +29,7 @@ namespace Our.Umbraco.Look.Services
 
             if (lookQuery == null)
             {
-                return new LookResult("LookQuery object was null");
+                return LookResult.Error("LookQuery object was null");
             }
 
             if (lookQuery.SearchingContext == null) // supplied by unit test to skip examine dependency
@@ -39,7 +39,7 @@ namespace Our.Umbraco.Look.Services
 
                 if (lookQuery.SearchingContext == null)
                 {
-                    return new LookResult("SearchingContext was null");
+                    return LookResult.Error("SearchingContext was null");
                 }
             }
 
@@ -161,7 +161,7 @@ namespace Our.Umbraco.Look.Services
 
                             if (conflictIds.Any())
                             {
-                                return new LookResult($"Conflict in NodeQuery, Ids: '{ string.Join(",", conflictIds) }' are in both Ids and NotIds");
+                                return LookResult.Error($"Conflict in NodeQuery, Ids: '{ string.Join(",", conflictIds) }' are in both Ids and NotIds");
                             }
                         }
 
@@ -185,7 +185,7 @@ namespace Our.Umbraco.Look.Services
 
                             if (conflictKeys.Any())
                             {
-                                return new LookResult($"Conflict in NodeQuery, keys: '{ string.Join(",", conflictKeys) }' are in both Keys and NotKeys");
+                                return LookResult.Error($"Conflict in NodeQuery, keys: '{ string.Join(",", conflictKeys) }' are in both Keys and NotKeys");
                             }
                         }
 
@@ -241,7 +241,7 @@ namespace Our.Umbraco.Look.Services
                         {
                             if (!lookQuery.NameQuery.Is.StartsWith(lookQuery.NameQuery.StartsWith))
                             {
-                                return new LookResult("Conflict in NameQuery between Is and StartsWith");
+                                return LookResult.Error("Conflict in NameQuery between Is and StartsWith");
                             }
                         }
                         else
@@ -256,7 +256,7 @@ namespace Our.Umbraco.Look.Services
                         {
                             if (!lookQuery.NameQuery.Is.EndsWith(lookQuery.NameQuery.EndsWith))
                             {
-                                return new LookResult("Conflict in NameQuery between Is and EndsWith");
+                                return LookResult.Error("Conflict in NameQuery between Is and EndsWith");
                             }                            
                         }
                         else
@@ -278,7 +278,7 @@ namespace Our.Umbraco.Look.Services
                         {
                             if (!lookQuery.NameQuery.Is.Contains(lookQuery.NameQuery.Contains))
                             {
-                                return new LookResult("Conflict in NameQuery between Is and Contains");
+                                return LookResult.Error("Conflict in NameQuery between Is and Contains");
                             }
                         }
                         else
@@ -366,7 +366,7 @@ namespace Our.Umbraco.Look.Services
                         }
                         catch
                         {
-                            return new LookResult($"Unable to parse LookQuery.TextQuery.SearchText: '{ lookQuery.TextQuery.SearchText }' into a Lucene query");
+                            return LookResult.Error($"Unable to parse LookQuery.TextQuery.SearchText: '{ lookQuery.TextQuery.SearchText }' into a Lucene query");
                         }
 
                         if (searchTextQuery != null)
@@ -415,7 +415,7 @@ namespace Our.Umbraco.Look.Services
 
                             if (conflictTags.Any())
                             {
-                                return new LookResult($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both AllTags and NotTags");
+                                return LookResult.Error($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both AllTags and NotTags");
                             }
                         }
 
@@ -440,7 +440,7 @@ namespace Our.Umbraco.Look.Services
 
                             if (conflictTags.Any())
                             {
-                                return new LookResult($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both AnyTags and NotTags");
+                                return LookResult.Error($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both AnyTags and NotTags");
                             }
                         }
 
@@ -555,7 +555,7 @@ namespace Our.Umbraco.Look.Services
 
             if (!hasQuery)
             {
-                return new LookResult("No query clauses supplied"); // empty failure
+                return LookResult.Error("No query clauses supplied"); // empty failure
             }
 
             TopDocs topDocs = lookQuery
@@ -602,18 +602,12 @@ namespace Our.Umbraco.Look.Services
                 }
 
                 return new LookResult(
-                                LookService.GetLookMatches(
-                                                        lookQuery.SearcherName,
-                                                        lookQuery.SearchingContext.IndexSearcher,
-                                                        topDocs,
-                                                        lookQuery.RequestFields ?? LookService.Instance.RequestFields,
-                                                        lookQuery.Compiled.GetHighlight,
-                                                        lookQuery.Compiled.GetDistance),
-                                topDocs.TotalHits,
+                                lookQuery,
+                                topDocs,
                                 facets != null ? facets.ToArray() : new Facet[] { });
             }
 
-            return new LookResult(); // empty success
+            return LookResult.Empty(); // empty success
         }
     }
 }

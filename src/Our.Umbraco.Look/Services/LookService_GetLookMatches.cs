@@ -22,10 +22,10 @@ namespace Our.Umbraco.Look.Services
         /// <param name="getHighlight">Function used to get the highlight text for a given result text</param>
         /// <param name="getDistance">Function used to calculate distance (if a location was supplied in the original query)</param>
         /// <returns></returns>
-        private static IEnumerable<LookMatch> GetLookMatches(
+        internal static IEnumerable<LookMatch> GetLookMatches(
                                                     string searcherName,
                                                     IndexSearcher indexSearcher,
-                                                    TopDocs topDocs,
+                                                    ScoreDoc[] scoreDocs,
                                                     RequestFields requestFields,
                                                     Func<string, IHtmlString> getHighlight,
                                                     Func<int, double?> getDistance)
@@ -64,11 +64,7 @@ namespace Our.Umbraco.Look.Services
 
             var getCultureInfo = new Func<string, CultureInfo>(x =>
             {
-                if (int.TryParse(x, out int lcid))
-                {
-                    return new CultureInfo(lcid);
-                }
-
+                if (int.TryParse(x, out int lcid)) { return new CultureInfo(lcid); }
                 return null;
             });
 
@@ -84,7 +80,7 @@ namespace Our.Umbraco.Look.Services
                 return new LookTag[] { };
             });
 
-            foreach (var scoreDoc in topDocs.ScoreDocs)
+            foreach (var scoreDoc in scoreDocs)
             {
                 var docId = scoreDoc.doc;
 
@@ -139,9 +135,7 @@ namespace Our.Umbraco.Look.Services
                 {
                     // look fields only
 
-                    // TODO: map fields
-
-                    
+                    // TODO: map fields                    
                 }
 
                 yield return lookMatch;
