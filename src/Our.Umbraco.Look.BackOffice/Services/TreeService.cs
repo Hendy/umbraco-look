@@ -27,8 +27,17 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
                     return new SearcherTreeNode(queryStrings);
 
-                case "tags":
-                    
+                case "nodes":
+                    queryStrings.ReadAsNameValueCollection()["searcherName"] = nodeParams;
+
+                    return new NodesTreeNode(queryStrings);
+
+                case "nodeType":
+                    queryStrings.ReadAsNameValueCollection()["searcherName"] = nodeParams;
+
+                    return new NodeTypeTreeNode(queryStrings);
+
+                case "tags":                    
                     queryStrings.ReadAsNameValueCollection()["searcherName"] = nodeParams;
 
                     return new TagsTreeNode(queryStrings);

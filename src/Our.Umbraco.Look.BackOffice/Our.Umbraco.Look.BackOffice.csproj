@@ -218,16 +218,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Client\Services\SortService.js" />
+    <Content Include="Client\Controllers\NodesController.js" />
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\TreeController.cs" />
     <Compile Include="Interfaces\ILookTreeNode.cs" />
     <Compile Include="Models\Api\ConfigurationData.cs" />
     <Compile Include="Models\Api\MatchesResult.cs" />
+    <Compile Include="Models\Api\NodesViewData.cs" />
     <Compile Include="Models\Api\SearcherViewData.cs" />
     <Compile Include="Models\Api\TagGroupViewData.cs" />
     <Compile Include="Models\Api\TagsViewData.cs" />
     <Compile Include="Models\Api\TagViewData.cs" />
     <Compile Include="Models\Tree\BaseTreeNode.cs" />
+    <Compile Include="Models\Tree\NodesTreeNode.cs" />
+    <Compile Include="Models\Tree\NodeTypeTreeNode.cs" />
     <Compile Include="Models\Tree\RootTreeNode.cs" />
     <Compile Include="Models\Tree\SearcherTreeNode.cs" />
     <Compile Include="Models\Tree\TagGroupTreeNode.cs" />
@@ -254,6 +258,7 @@
     <Content Include="Client\Directives\LazyLoadDirective.js" />
     <Content Include="Client\Look.css" />
     <Content Include="Client\Services\ApiService.js" />
+    <Content Include="Client\Views\Nodes.html" />
     <Content Include="Client\Views\Partials\Matches.html" />
     <Content Include="Client\Views\Partials\Sort.html" />
     <Content Include="Client\Views\Searcher.html" />

@@ -38,6 +38,25 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         /// <param name="searcherName"></param>
         /// <returns></returns>
         [HttpGet]
+        public IHttpActionResult GetViewDataForNodes([FromUri]string searcherName)
+        {
+            var viewData = new NodesViewData();
+
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+            //// The tags node renders all tag groups
+            //viewData.TagGroups = QueryService.GetTagGroups(searcherName);
+
+            return this.Ok(viewData);
+        }
+
+        /// <summary>
+        /// Get the view model for the top level 'Tags' tree node (for a searcher)
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <returns></returns>
+        [HttpGet]
         public IHttpActionResult GetViewDataForTags([FromUri]string searcherName)
         {
             var viewData = new TagsViewData();

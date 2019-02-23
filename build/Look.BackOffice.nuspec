@@ -26,6 +26,7 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Look.css" target="Content\App_Plugins\Look\Look.css" />
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\MatchesController.js" target="Content\App_Plugins\Look\Controllers\MatchesController.js" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\NodesController.js" target="Content\App_Plugins\Look\Controllers\NodesController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\SearcherController.js" target="Content\App_Plugins\Look\Controllers\SearcherController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\SortController.js" target="Content\App_Plugins\Look\Controllers\SortController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\TagController.js" target="Content\App_Plugins\Look\Controllers\TagController.js" />

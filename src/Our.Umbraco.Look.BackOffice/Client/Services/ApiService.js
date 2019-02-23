@@ -12,6 +12,7 @@
 
         return {
             getViewDataForSearcher: getViewDataForSearcher,
+            getViewDataForNodes: getViewDataForNodes,
             getViewDataForTags: getViewDataForTags,
             getViewDataForTagGroup: getViewDataForTagGroup,
             getViewDataForTag: getViewDataForTag,
@@ -26,6 +27,16 @@
             return $http({
                 method: 'GET',
                 url: 'BackOffice/Look/Api/GetViewDataForSearcher',
+                params: {
+                    'searcherName': searcherName
+                }
+            });
+        }
+
+        function getViewDataForNodes(searcherName) {
+            return $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetViewDataForNodes',
                 params: {
                     'searcherName': searcherName
                 }

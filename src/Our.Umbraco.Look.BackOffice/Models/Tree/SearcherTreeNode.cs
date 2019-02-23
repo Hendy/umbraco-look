@@ -57,7 +57,10 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
             {
                 //base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
 
-                return new ILookTreeNode[] { new TagsTreeNode(base.QueryStrings) };
+                return new ILookTreeNode[] {
+                    new NodesTreeNode(base.QueryStrings),
+                    new TagsTreeNode(base.QueryStrings)
+                };
             }
 
             return base.GetChildren(); // empty
@@ -68,6 +71,8 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
             var menu = new MenuItemCollection();
 
             menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
+
+            // TODO: rebuild index option
 
             return menu;
         }
