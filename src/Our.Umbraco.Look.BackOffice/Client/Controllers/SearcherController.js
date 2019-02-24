@@ -38,21 +38,6 @@
                 $scope.viewData = response.data;
         });
 
-        // matches
-        $scope.getMatches = function (sort, skip, take) {
-
-            var q = $q.defer();
-
-            apiService
-                .getMatches($scope.searcherName, sort, skip, take)
-                .then(function (response) {
-                    q.resolve(response.data.matches);
-                });
-
-            return q.promise;
-        };
-
-
     }
 
 })();
