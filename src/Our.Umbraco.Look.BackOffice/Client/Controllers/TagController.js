@@ -34,11 +34,7 @@
         // view data
         apiService
             .getViewDataForTag($scope.searcherName, $scope.tagGroup, $scope.tagName)
-            .then(function (response) {
-
-                $scope.viewData = response.data;
-
-            });
+            .then(function (response) { $scope.viewData = response.data; });
 
         // matches
         $scope.getMatches = function (sort, skip, take) {

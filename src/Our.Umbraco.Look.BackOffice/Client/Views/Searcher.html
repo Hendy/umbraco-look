@@ -3,7 +3,7 @@
     <div class="umb-panel-header">
 
         <div class="look-header">
-            <span class="icon {{ icon }} look-header-icon">&nbsp;</span>
+            <span class="icon {{ viewData.icon }} look-header-icon">&nbsp;</span>
             <span class="look-header-title">{{ searcherName }}</span>
         </div>
         
@@ -20,10 +20,10 @@
                     <dd>{{ searcherName }}</dd>
 
                     <dt>Description</dt>
-                    <dd>{{ searcherDescription }}</dd>
+                    <dd>{{ viewData.searcherDescription }}</dd>
 
                     <dt>Type</dt>
-                    <dd>{{ searcherType }}</dd>
+                    <dd>{{ viewData.searcherType }}</dd>
 
 
                     <!--
