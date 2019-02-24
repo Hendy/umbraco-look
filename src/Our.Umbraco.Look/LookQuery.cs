@@ -17,9 +17,9 @@ namespace Our.Umbraco.Look
         private LookQueryCompiled _compiled = null;
 
         /// <summary>
-        /// Property to override the default RequestFields behaviour
+        /// Property to override the default RequestFields behaviour (initially set to default)
         /// </summary>
-        public RequestFields? RequestFields { get; set; } = null;
+        public RequestFields RequestFields { get; set; } = LookService.GetRequestFields();
 
         /// <summary>
         /// (Optional) set a raw Lucene query

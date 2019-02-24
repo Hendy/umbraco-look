@@ -65,10 +65,9 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             matchesResult.TotalItemCount = lookResult.TotalItemCount;
             matchesResult.Matches = lookResult
-                                        .Matches
-                                        .Skip(skip)
+                                        .SkipMatches(skip)
                                         .Take(take)
-                                        .Select(x => (MatchesResult.Match)x)
+                                        .Select(x => (MatchesResult.Match)x) // convert match to model for serialization
                                         .ToArray();
 
             return matchesResult;
@@ -144,8 +143,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             matchesResult.TotalItemCount = lookResult.TotalItemCount;
             matchesResult.Matches = lookResult
-                                        .Matches
-                                        .Skip(skip)
+                                        .SkipMatches(skip)
                                         .Take(take)
                                         .Select(x => (MatchesResult.Match)x)
                                         .ToArray();

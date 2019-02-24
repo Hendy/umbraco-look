@@ -40,6 +40,9 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             [JsonProperty("isDetached")]
             public bool IsDetached { get; set; }
 
+            [JsonProperty("culture")]
+            public string Culture { get; set; }
+
             //[JsonProperty("hasName")]
             //public bool HasName => !string.IsNullOrWhiteSpace(this.Name);
 
@@ -132,6 +135,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 match.Score = lookMatch.Score;
                 match.Id = lookMatch.Id;
                 match.Key = lookMatch.Key;
+                match.Culture = lookMatch.CultureInfo?.Name;
                 match.Name = lookMatch.Name;
 
                 var item = lookMatch.IsDetached ? lookMatch.HostItem : lookMatch.Item; // set it to be the non-detached

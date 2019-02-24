@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Our.Umbraco.Look.Extensions;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using Umbraco.Core.Models;
@@ -38,6 +39,11 @@ namespace Our.Umbraco.Look
         /// </summary>
         [JsonIgnore]
         public IPublishedContent Item => this._item.Value;
+
+        /// <summary>
+        /// Culture in Umbraco associate with this node
+        /// </summary>
+        public CultureInfo CultureInfo { get; set; }
 
         /// <summary>
         /// Flag to indicate whether this result is a detached item
@@ -98,6 +104,7 @@ namespace Our.Umbraco.Look
         /// <param name="hostId">host (if item is detached)</param>
         /// <param name="itemId">passed in so we don't have to get infalte IPublishedContent from itemGuid to get the int (required for the base SearchResult)</param>
         /// <param name="itemGuid">expected to be null in unit tests (as outside of Umbraco context)</param>
+        /// <param name="cultureInfo"></param>
         /// <param name="name"></param>
         /// <param name="date"></param>
         /// <param name="text"></param>
@@ -114,6 +121,7 @@ namespace Our.Umbraco.Look
                     int? hostId,
                     int itemId, 
                     Guid? itemGuid,
+                    CultureInfo cultureInfo,
                     string name,
                     DateTime? date,
                     string text,
@@ -129,6 +137,7 @@ namespace Our.Umbraco.Look
             this.Score = score;
             this.Id = itemId;
             this.Key = itemGuid ?? Guid.Empty;
+            this.CultureInfo = cultureInfo;
             this.IsDetached = hostId.HasValue;
             this.Name = name;
             this.Date = date;
