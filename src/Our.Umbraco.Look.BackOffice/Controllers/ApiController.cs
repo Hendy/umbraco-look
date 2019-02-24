@@ -23,7 +23,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             viewData.SearcherName = searcher.Name;
             viewData.SearcherDescription = searcher.Description;
             viewData.SearcherType = searcher is LookSearcher ? "Look" : "Examine";
-            viewData.Icon = TreeService.GetSearcherIcon(searcher);
+            viewData.Icon = IconService.GetSearcherIcon(searcher);
 
             // number of documents in index
             // indexers operational
@@ -53,6 +53,25 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         }
 
         // TODO: GetViewDataForNodeType
+        [HttpGet]
+        public IHttpActionResult GetViewDataForNodeType([FromUri]string searcherName, [FromUri]PublishedItemType nodeType)
+        {
+            var viewData = new NodeTypeViewData();
+
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+            //viewData.NodeType = nodeType;
+            viewData.Name = nodeType == PublishedItemType.Content ? "Content"
+                            : nodeType == PublishedItemType.Media ? "Media"
+                            : nodeType == PublishedItemType.Member ? "Members"
+                            : null;
+
+            viewData.Icon = IconService.GetNodeTypeIcon(nodeType);
+
+            return this.Ok(viewData);
+        }
+
 
         /// <summary>
         /// Get the view model for the top level 'Tags' tree node (for a searcher)

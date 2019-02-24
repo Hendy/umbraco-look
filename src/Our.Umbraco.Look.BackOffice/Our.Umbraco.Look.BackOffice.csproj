@@ -226,6 +226,7 @@
     <Compile Include="Models\Api\ConfigurationData.cs" />
     <Compile Include="Models\Api\MatchesResult.cs" />
     <Compile Include="Models\Api\NodesViewData.cs" />
+    <Compile Include="Models\Api\NodeTypeViewData.cs" />
     <Compile Include="Models\Api\SearcherViewData.cs" />
     <Compile Include="Models\Api\TagGroupViewData.cs" />
     <Compile Include="Models\Api\TagsViewData.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="Models\Tree\TagsTreeNode.cs" />
     <Compile Include="Models\Tree\TagTreeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IconService.cs" />
     <Compile Include="Services\TreeService.cs" />
     <Compile Include="Services\QueryService.cs" />
   </ItemGroup>

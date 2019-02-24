@@ -11,12 +11,15 @@
     function ApiService($http) {
 
         return {
+            // get viewData
             getViewDataForSearcher: getViewDataForSearcher,
             getViewDataForNodes: getViewDataForNodes,
+            getViewDataForNodeType: getViewDataForNodeType,
             getViewDataForTags: getViewDataForTags,
             getViewDataForTagGroup: getViewDataForTagGroup,
             getViewDataForTag: getViewDataForTag,
 
+            // get matches
             getMatches: getMatches,
             getNodeTypeMatches: getNodeTypeMatches,
             getTagMatches: getTagMatches,
@@ -44,7 +47,16 @@
             });
         }
 
-        // TODO: getViewDataForNodeType
+        function getViewDataForNodeType(searcherName, nodeType) {
+            return $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetViewDataForNodeType',
+                params: {
+                    'searcherName': searcherName,
+                    'nodeType': nodeType
+                }
+            });
+        }
 
         function getViewDataForTags(searcherName) {
             return $http({

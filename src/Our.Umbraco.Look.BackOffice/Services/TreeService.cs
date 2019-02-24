@@ -1,9 +1,7 @@
-﻿using Examine.Providers;
-using Our.Umbraco.Look.BackOffice.Interfaces;
+﻿using Our.Umbraco.Look.BackOffice.Interfaces;
 using Our.Umbraco.Look.BackOffice.Models.Tree;
 using System.Linq;
 using System.Net.Http.Formatting;
-using Umbraco.Core;
 
 namespace Our.Umbraco.Look.BackOffice.Services
 {
@@ -64,32 +62,6 @@ namespace Our.Umbraco.Look.BackOffice.Services
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// The icon for a searcher varies dependent on its state
-        /// </summary>
-        /// <param name="searcher"></param>
-        /// <returns></returns>
-        internal static string GetSearcherIcon(BaseSearchProvider searcher)
-        {
-            if (searcher is LookSearcher)
-            {
-                return "icon-files";
-            }
-            else // must be an examine one
-            {
-                var name = searcher.Name.TrimEnd("Searcher");
-
-                if (LookConfiguration.ExamineIndexers.Select(x => x.TrimEnd("Indexer")).Any(x => x == name))
-                {
-                    return "icon-categories";
-                }
-                else // not hooked in 
-                {
-                    return "icon-file-cabinet";
-                }
-            }
         }
     }
 }

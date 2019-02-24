@@ -29,11 +29,9 @@
             });
         }, 500);
 
-        //// view data
-        //apiService.getViewDataForNodeType($scope.searcherName)
-        //    .then(function (response) {
-        //        $scope.viewData = response.data;
-        //    });
+        // get view data
+        apiService.getViewDataForNodeType($scope.searcherName, $scope.nodeType)
+            .then(function (response) { $scope.viewData = response.data; });
 
         // matches
         $scope.getMatches = function (sort, skip, take) {

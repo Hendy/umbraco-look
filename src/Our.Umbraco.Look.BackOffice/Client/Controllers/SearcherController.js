@@ -30,12 +30,12 @@
         // view data
         apiService.getViewDataForSearcher($scope.searcherName)
             .then(function (response) {
+                $scope.viewData = response.data;
 
                 $scope.searcherDescription = response.data.SearcherDescription;
                 $scope.searcherType = response.data.SearcherType;
                 $scope.icon = response.data.Icon;
 
-                $scope.viewData = response.data;
         });
 
     }
