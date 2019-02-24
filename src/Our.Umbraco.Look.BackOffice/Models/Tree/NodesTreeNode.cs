@@ -1,5 +1,4 @@
 ﻿using Our.Umbraco.Look.BackOffice.Interfaces;
-using Our.Umbraco.Look.BackOffice.Services;
 using System.Collections.Generic;
 using System.Net.Http.Formatting;
 using umbraco;
@@ -26,20 +25,20 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
         public override ILookTreeNode[] GetChildren()
         {
-            var children = new List<TagGroupTreeNode>();
+            var children = new List<NodeTypeTreeNode>();
 
-            base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
+            var queryStrings = base.QueryStrings;
 
-            /// <summary>
-            /// The types of node to find, eg. Content, Media, Members
-            /// </summary>
-            //PublishedItemType.
+            queryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
 
-            //base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = nodeType;
-            //children.Add(new NodeTypeTreeNode(base.QueryStrings));
+            queryStrings.ReadAsNameValueCollection()["nodeType"] = PublishedItemType.Content.ToString();
+            children.Add(new NodeTypeTreeNode(queryStrings));
 
-            //children.Add(new NodeTypeTreeNode(base.QueryStrings));
-            //children.Add(new NodeTypeTreeNode(base.QueryStrings));
+            queryStrings.ReadAsNameValueCollection()["nodeType"] = PublishedItemType.Media.ToString();
+            children.Add(new NodeTypeTreeNode(queryStrings));
+
+            queryStrings.ReadAsNameValueCollection()["nodeType"] = PublishedItemType.Member.ToString();
+            children.Add(new NodeTypeTreeNode(queryStrings));
 
             return children.ToArray();
         }

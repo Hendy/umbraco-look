@@ -217,6 +217,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\Controllers\NodeTypeController.js" />
     <Content Include="Client\Services\SortService.js" />
     <Content Include="Client\Controllers\NodesController.js" />
     <Compile Include="Controllers\ApiController.cs" />
@@ -259,6 +260,7 @@
     <Content Include="Client\Look.css" />
     <Content Include="Client\Services\ApiService.js" />
     <Content Include="Client\Views\Nodes.html" />
+    <Content Include="Client\Views\NodeType.html" />
     <Content Include="Client\Views\Partials\Matches.html" />
     <Content Include="Client\Views\Partials\Sort.html" />
     <Content Include="Client\Views\Searcher.html" />

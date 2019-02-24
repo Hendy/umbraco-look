@@ -3,6 +3,7 @@ using Our.Umbraco.Look;
 using Our.Umbraco.Look.BackOffice.Models.Api;
 using Our.Umbraco.Look.BackOffice.Services;
 using System.Web.Http;
+using Umbraco.Core.Models;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 
@@ -50,6 +51,8 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
 
             return this.Ok(viewData);
         }
+
+        // TODO: GetViewDataForNodeType
 
         /// <summary>
         /// Get the view model for the top level 'Tags' tree node (for a searcher)
@@ -118,6 +121,20 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(QueryService.GetMatches(searcherName, sort, skip, take));
         }
 
+        [HttpGet]
+        public IHttpActionResult GetNodeTypeMatches(
+            [FromUri]string searcherName,
+            [FromUri]PublishedItemType nodeType,
+            [FromUri]string sort,
+            [FromUri]int skip,
+            [FromUri]int take)
+        {
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+            return this.Ok(QueryService.GetNodeTypeMatches(searcherName, nodeType, sort, skip, take));
+        }
+
         /// <summary>
         /// Get matches based on tags
         /// </summary>
@@ -149,6 +166,8 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
             if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+            // TODO:
 
             var configurationData = new ConfigurationData();
 

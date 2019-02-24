@@ -18,6 +18,7 @@
             getViewDataForTag: getViewDataForTag,
 
             getMatches: getMatches,
+            getNodeTypeMatches: getNodeTypeMatches,
             getTagMatches: getTagMatches,
 
             getConfigurationData: getConfigurationData // get details about indexers in use (sort will use to enable options)
@@ -42,6 +43,8 @@
                 }
             });
         }
+
+        // TODO: getViewDataForNodeType
 
         function getViewDataForTags(searcherName) {
             return $http({
@@ -88,6 +91,29 @@
                 url: 'BackOffice/Look/Api/GetMatches',
                 params: {
                     'searcherName': searcherName,
+                    'sort': sort,
+                    'skip': skip,
+                    'take': take
+                }
+            });
+
+            return matches;
+        }
+
+        function getNodeTypeMatches(searcherName, nodeType, sort, skip, take) {
+
+            if (angular.isUndefined(searcherName)) { searcherName = ''; }
+            if (angular.isUndefined(nodeType)) { { nodeType = ''; }}
+            if (angular.isUndefined(sort)) { sort = ''; }
+            if (angular.isUndefined(skip)) { skip = 0; }
+            if (angular.isUndefined(take)) { take = 0; }
+
+            var matches = $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetNodeTypeMatches',
+                params: {
+                    'searcherName': searcherName,
+                    'nodeType': nodeType,
                     'sort': sort,
                     'skip': skip,
                     'take': take

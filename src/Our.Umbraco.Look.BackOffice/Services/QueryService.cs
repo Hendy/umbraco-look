@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.BackOffice.Services
 {
@@ -73,6 +74,39 @@ namespace Our.Umbraco.Look.BackOffice.Services
             return matchesResult;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <param name="sort"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        internal static MatchesResult GetNodeTypeMatches(string searcherName, PublishedItemType nodeType, string sort, int skip, int take)
+        {
+            var matchesResult = new MatchesResult();
+
+            var lookQuery = new LookQuery(searcherName);
+
+            lookQuery.NodeQuery = new NodeQuery()
+            {
+                Types = new PublishedItemType[] { nodeType }
+            };
+
+            QueryService.SetSort(lookQuery, sort);
+
+            var lookResult = lookQuery.Search();
+
+            matchesResult.TotalItemCount = lookResult.TotalItemCount;
+            matchesResult.Matches = lookResult
+                                        .Matches
+                                        .Skip(skip)
+                                        .Take(take)
+                                        .Select(x => (MatchesResult.Match)x)
+                                        .ToArray();
+
+            return matchesResult;
+        }
 
         /// <summary>
         /// get a chunk of matches
