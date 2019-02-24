@@ -33,7 +33,10 @@ namespace Our.Umbraco.Look.BackOffice.Services
                     return new NodesTreeNode(queryStrings);
 
                 case "nodeType":
-                    queryStrings.ReadAsNameValueCollection()["searcherName"] = nodeParams;
+                    var nodeTypeParams = nodeParams.Split('|');
+
+                    queryStrings.ReadAsNameValueCollection()["searcherName"] = nodeTypeParams[0];
+                    queryStrings.ReadAsNameValueCollection()["nodeType"] = nodeTypeParams[1];
 
                     return new NodeTypeTreeNode(queryStrings);
 

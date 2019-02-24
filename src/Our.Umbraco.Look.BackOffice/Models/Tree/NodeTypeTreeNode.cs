@@ -51,8 +51,6 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
         {
             var menu = new MenuItemCollection();
 
-            menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
-
             return menu;
         }
     }
