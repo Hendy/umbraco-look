@@ -42,6 +42,8 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Partials\Matches.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Partials\Matches.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Partials\Sort.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Partials\Sort.html" />
 
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Nodes.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Nodes.html" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\NodeType.html" target="Content\App_Plugins\Look\BackOffice\LookTree\NodeType.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Searcher.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Searcher.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Tag.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Tag.Html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\TagGroup.html" target="Content\App_Plugins\Look\BackOffice\LookTree\TagGroup.html" />
