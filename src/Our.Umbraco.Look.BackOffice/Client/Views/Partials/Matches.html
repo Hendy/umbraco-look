@@ -16,16 +16,21 @@
                     <span class="look-match-icon {{match.icon}}">&nbsp;</span>                                        
                 </span>
 
-                <!--<span class="match-id">{{match.id}}</span> |-->
-                <!--<span class="match-key">{{match.key}}</span> |--> 
-
-                <div class="look-match-details">
-                    <div><span>Name: </span> {{match.name}}</div>
-                    <div><span>Date: </span> {{match.date | date:'d MMMM yyyy, HH:mm:ss'}}</div>
+                <div class="look-match-umbraco-details">
                     <div><span>Path: </span> {{match.path}}<a href="{{match.link}}">{{match.linkText}}</a>{{ match.isDetached ? '\\' + match.name : ''}}</div>
+                    <div><span>Id: {{match.id}}</span></div>
+                    <div><span>Key: {{match.key}}</span></div>
                     <div><span>Culture: </span> {{match.culture}}</div>
+
+                    <!--<div><span>Name: </span> {{match.name}}</div>
+                    <div><span>Date: </span> {{match.date | date:'d MMMM yyyy, HH:mm:ss'}}</div>-->
                 </div>
                 
+                <div class="look-match-look-details">
+                    Look
+                </div>
+
+
                 <div class="look-match-tags">
                     <span class="look-match-no-tags" ng-if="match.tagGroups.length === 0">No Tags</span>
                     <div class="look-match-tag-group" ng-repeat="tagGroup in match.tagGroups">

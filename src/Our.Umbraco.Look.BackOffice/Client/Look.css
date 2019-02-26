@@ -9,7 +9,6 @@
     font-size: small;
 }
 
-
 .look-header {
     margin: 35px 15px;
 }
@@ -108,19 +107,24 @@
 }
 
 
-.look-match-details {
+.look-match-umbraco-details {
     border: solid 1px grey;
     float: left;
     width:40%;
 }
 
-    .look-match-details div {
+    .look-match-umbraco-details div {
     }
 
-    .look-match-details div span {
+    .look-match-umbraco-details div span {
         font-size:small;
     }
 
+
+.look-match-look-details {
+    /*color:blue;
+    border: solid 1px red;*/
+}
 
 .look-match-tags {
     float:left;
