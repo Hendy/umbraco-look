@@ -246,6 +246,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LocationBoundary.cs" />
     <Compile Include="Events\LookIndexing.cs" />
     <Compile Include="Events\HookIndexing.cs" />
     <Compile Include="Extensions\GuidExtensions\GuidToLuceneString.cs" />

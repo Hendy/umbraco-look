@@ -30,6 +30,45 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         }
 
         [TestMethod]
+        public void Boundary_London()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.LocationQuery = new LocationQuery()
+            {
+                Boundary = new LocationBoundary(new Location(52, -1), new Location(50, 0.3))
+            };
+
+            Assert.AreEqual(1, lookQuery.Search().TotalItemCount);
+        }
+
+        [TestMethod]
+        public void Boundary_European()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.LocationQuery = new LocationQuery()
+            {
+                Boundary = new LocationBoundary(new Location(45, -1), new Location(56, 12.6))
+            };
+
+            Assert.AreEqual(3, lookQuery.Search().TotalItemCount);
+        }
+
+        [TestMethod]
+        public void Boundary_All()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.LocationQuery = new LocationQuery()
+            {
+                Boundary = new LocationBoundary(new Location(40, -75), new Location(56, 12.6))
+            };
+
+            Assert.AreEqual(4, lookQuery.Search().TotalItemCount);
+        }
+
+        [TestMethod]
         public void Distance_Sorting()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());

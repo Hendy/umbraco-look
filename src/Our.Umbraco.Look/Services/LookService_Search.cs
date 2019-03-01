@@ -5,6 +5,7 @@ using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Spatial.Tier;
+using Lucene.Net.Util;
 using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Models;
 using System;
@@ -482,7 +483,28 @@ namespace Our.Umbraco.Look.Services
 
                     query.Add(new TermQuery(new Term(LookConstants.HasLocationField, "1")), BooleanClause.Occur.MUST);
 
-                    if (lookQuery.LocationQuery.Location != null)
+                    if (lookQuery.LocationQuery.Boundary != null) // limit results within an lat lng fixed view (eg, typical map bounds)
+                    {
+                        query.Add(
+                                new TermRangeQuery(
+                                    LookConstants.LocationField + "_Latitude",
+                                    NumericUtils.DoubleToPrefixCoded(lookQuery.LocationQuery.Boundary.LatitudeMin),
+                                    NumericUtils.DoubleToPrefixCoded(lookQuery.LocationQuery.Boundary.LatitudeMax),
+                                    true,
+                                    true),
+                                BooleanClause.Occur.MUST);
+                        
+                        query.Add(
+                                new TermRangeQuery(
+                                    LookConstants.LocationField + "_Longitude",
+                                    NumericUtils.DoubleToPrefixCoded(lookQuery.LocationQuery.Boundary.LongitudeMin),
+                                    NumericUtils.DoubleToPrefixCoded(lookQuery.LocationQuery.Boundary.LongitudeMax),
+                                    true,
+                                    true),
+                                BooleanClause.Occur.MUST);
+                    }
+
+                    if (lookQuery.LocationQuery.Location != null) // location set, so can calculate distance
                     {
                         double maxDistance = LookService.MaxDistance;
 
