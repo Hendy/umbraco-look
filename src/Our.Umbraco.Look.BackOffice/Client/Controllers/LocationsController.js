@@ -29,11 +29,11 @@
 
             var q = $q.defer();
 
-            //apiService
-            //    .getMatches($scope.searcherName, sort, skip, take)
-            //    .then(function (response) {
-            //        q.resolve(response.data.matches);
-            //    });
+            apiService
+                .getLocationMatches($scope.searcherName, sort, skip, take)
+                .then(function (response) {
+                    q.resolve(response.data.matches);
+                });
 
             return q.promise;
         };

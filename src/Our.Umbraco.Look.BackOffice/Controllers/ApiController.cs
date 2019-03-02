@@ -198,6 +198,26 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(QueryService.GetTagMatches(searcherName, tagGroup, tagName, sort, skip, take));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <param name="sort"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult GetLocationMatches(
+            [FromUri]string searcherName,
+            [FromUri]string sort,
+            [FromUri]int skip,
+            [FromUri]int take)
+        {
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+            return this.Ok(QueryService.GetLocationMatches(searcherName, sort, skip, take));
+        }
 
         [HttpGet]
         public IHttpActionResult GetConfigurationData([FromUri]string searcherName)

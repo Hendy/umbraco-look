@@ -151,6 +151,37 @@ namespace Our.Umbraco.Look.BackOffice.Services
             return matchesResult;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <param name="sort"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        internal static MatchesResult GetLocationMatches(string searcherName, string sort, int skip, int take)
+        {
+            var matchesResult = new MatchesResult();
+
+            var lookQuery = new LookQuery(searcherName);
+
+            lookQuery.LocationQuery = new LocationQuery();
+
+            QueryService.SetSort(lookQuery, sort);
+
+            var lookResult = lookQuery.Search();
+
+            matchesResult.TotalItemCount = lookResult.TotalItemCount;
+            matchesResult.Matches = lookResult
+                                        .Matches
+                                        .Skip(skip)
+                                        .Take(take)
+                                        .Select(x => (MatchesResult.Match)x)
+                                        .ToArray();
+
+            return matchesResult;
+        }
+
         private static void SetSort(LookQuery lookQuery, string sort)
         {
             switch (sort)
