@@ -261,6 +261,7 @@
     <Content Include="Client\Directives\LazyLoadDirective.js" />
     <Content Include="Client\Look.css" />
     <Content Include="Client\Services\ApiService.js" />
+    <Content Include="Client\Services\TreeService.js" />
     <Content Include="Client\Views\Nodes.html" />
     <Content Include="Client\Views\NodeType.html" />
     <Content Include="Client\Views\Partials\Matches.html" />

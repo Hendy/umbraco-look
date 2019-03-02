@@ -38,6 +38,7 @@
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\ApiService.js" target="Content\App_Plugins\Look\Services\ApiService.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\SortService.js" target="Content\App_Plugins\Look\Services\SortService.js" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\TreeService.js" target="Content\App_Plugins\Look\Services\TreeService.js" />
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Partials\Matches.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Partials\Matches.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Partials\Sort.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Partials\Sort.html" />

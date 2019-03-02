@@ -12,7 +12,8 @@
     "~/App_Plugins/Look/Directives/LazyLoadDirective.js",
 
     "~/App_Plugins/Look/Services/ApiService.js",
-    "~/App_Plugins/Look/Services/SortService.js"
+    "~/App_Plugins/Look/Services/SortService.js",
+    "~/App_Plugins/Look/Services/TreeService.js"
   ],
   "css": [
     "~/App_Plugins/Look/Look.css"
