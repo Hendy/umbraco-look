@@ -59,6 +59,11 @@ namespace Our.Umbraco.Look.BackOffice.Services
                     queryStrings.ReadAsNameValueCollection()["tagName"] = tagParams[2];
 
                     return new TagTreeNode(queryStrings); // create tag node without count
+
+                case "locations":
+                    queryStrings.ReadAsNameValueCollection()["searcherName"] = nodeParams;
+
+                    return new LocationsTreeNode(queryStrings);
             }
 
             return null;

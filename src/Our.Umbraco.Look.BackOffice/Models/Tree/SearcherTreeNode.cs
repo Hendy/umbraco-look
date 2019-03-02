@@ -57,9 +57,10 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
             {
                 //base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
 
-                return new ILookTreeNode[] {
+                return new ILookTreeNode[] {                    
                     new NodesTreeNode(base.QueryStrings),
-                    new TagsTreeNode(base.QueryStrings)
+                    new TagsTreeNode(base.QueryStrings),
+                    new LocationsTreeNode(base.QueryStrings)
                 };
             }
 

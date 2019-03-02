@@ -217,6 +217,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\Controllers\LocationsController.js" />
     <Content Include="Client\Controllers\NodeTypeController.js" />
     <Content Include="Client\Services\SortService.js" />
     <Content Include="Client\Controllers\NodesController.js" />
@@ -224,6 +225,7 @@
     <Compile Include="Controllers\TreeController.cs" />
     <Compile Include="Interfaces\ILookTreeNode.cs" />
     <Compile Include="Models\Api\ConfigurationData.cs" />
+    <Compile Include="Models\Api\LocationsViewData.cs" />
     <Compile Include="Models\Api\MatchesResult.cs" />
     <Compile Include="Models\Api\NodesViewData.cs" />
     <Compile Include="Models\Api\NodeTypeViewData.cs" />
@@ -232,6 +234,7 @@
     <Compile Include="Models\Api\TagsViewData.cs" />
     <Compile Include="Models\Api\TagViewData.cs" />
     <Compile Include="Models\Tree\BaseTreeNode.cs" />
+    <Compile Include="Models\Tree\LocationsTreeNode.cs" />
     <Compile Include="Models\Tree\NodesTreeNode.cs" />
     <Compile Include="Models\Tree\NodeTypeTreeNode.cs" />
     <Compile Include="Models\Tree\RootTreeNode.cs" />
@@ -262,6 +265,7 @@
     <Content Include="Client\Look.css" />
     <Content Include="Client\Services\ApiService.js" />
     <Content Include="Client\Services\TreeService.js" />
+    <Content Include="Client\Views\Locations.html" />
     <Content Include="Client\Views\Nodes.html" />
     <Content Include="Client\Views\NodeType.html" />
     <Content Include="Client\Views\Partials\Matches.html" />

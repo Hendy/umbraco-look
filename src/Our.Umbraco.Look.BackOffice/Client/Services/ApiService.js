@@ -18,6 +18,7 @@
             getViewDataForTags: getViewDataForTags,
             getViewDataForTagGroup: getViewDataForTagGroup,
             getViewDataForTag: getViewDataForTag,
+            getViewDataForLocations: getViewDataForLocations,
 
             // get matches
             getMatches: getMatches,
@@ -87,6 +88,16 @@
                     'searcherName': searcherName,
                     'tagGroup': tagGroup,
                     'tagName': tagName
+                }
+            });
+        }
+
+        function getViewDataForLocations(searcherName) {
+            return $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetViewDataForLocations',
+                params: {
+                    'searcherName': searcherName
                 }
             });
         }
