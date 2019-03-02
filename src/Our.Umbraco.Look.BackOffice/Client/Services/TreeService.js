@@ -13,7 +13,6 @@
 
         // register a callback to be triggered on change
         function update(path) {
-            console.log('tree service !');
             $timeout(function () { // timeout required to ensure navigationService ready
                 navigationService.syncTree({
                     tree: 'lookTree',

@@ -5,25 +5,18 @@
         .module('umbraco')
         .controller('Look.BackOffice.NodesController', NodesController);
 
-    NodesController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService', '$q', 'navigationService', '$timeout'];
+    NodesController.$inject = ['$scope', '$routeParams', '$q', 'Look.BackOffice.ApiService', 'Look.BackOffice.TreeService'];
 
-    function NodesController($scope, $routeParams, apiService, $q, navigationService, $timeout) {
+    function NodesController($scope, $routeParams, $q, apiService, treeService) {
 
         // input params
         $scope.searcherName = $routeParams.id;
 
-        // sync tree
-        $timeout(function () { // HACK: timeout required as navigationService not ready on inital load
-            navigationService.syncTree({
-                tree: 'lookTree',
-                path: [
-                    '-1',
-                    'searcher-' + $scope.searcherName,
-                    'nodes-' + $scope.searcherName
-                ],
-                forceReload: true
-            });
-        }, 500);
+        treeService.update([
+            '-1',
+            'searcher-' + $scope.searcherName,
+            'nodes-' + $scope.searcherName
+        ]);
 
         // view data
         apiService.getViewDataForNodes($scope.searcherName)
