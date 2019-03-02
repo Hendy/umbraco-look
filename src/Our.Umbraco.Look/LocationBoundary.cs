@@ -2,22 +2,33 @@
 
 namespace Our.Umbraco.Look
 {
+    /// <summary>
+    /// Specify a pane on latitude/longitude axis (typically boundary of rendered map)
+    /// </summary>
     public class LocationBoundary
     {
+        /// <summary>
+        /// Southernmost coordinate
+        /// </summary>
         public double LatitudeMin { get; }
 
+        /// <summary>
+        /// Northenmost coordinate
+        /// </summary>
         public double LatitudeMax { get; }
 
+        /// <summary>
+        /// Westernmost coordinate
+        /// </summary>
         public double LongitudeMin { get; }
 
+        /// <summary>
+        /// Easternmost coordinate
+        /// </summary>
         public double LongitudeMax { get; }
 
-        //public LocationBoundary(double latitudeMin, double latitudeMax, double longitudeMin, double longitudeMax)
-        //{
-        //}
-
         /// <summary>
-        /// Construct with two points, each of which indicating opposing corners
+        /// Construct with two points, each indicating diagonally opposing corners
         /// </summary>
         /// <param name="locationOne"></param>
         /// <param name="locationTwo"></param>
