@@ -3,7 +3,9 @@ using Our.Umbraco.Look;
 using Our.Umbraco.Look.BackOffice.Attributes;
 using Our.Umbraco.Look.BackOffice.Models.Api;
 using Our.Umbraco.Look.BackOffice.Services;
+using System.Linq;
 using System.Web.Http;
+using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
@@ -27,7 +29,9 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             viewData.SearcherType = searcher is LookSearcher ? "Look" : "Examine";
             viewData.Icon = IconService.GetSearcherIcon(searcher);
 
-            //viewData.LookIndexingEnabled = viewData.SearcherDescription == "Look" || 
+            viewData.LookIndexingEnabled = searcher is LookSearcher || LookConfiguration.ExamineIndexers.Contains(searcher.Name.TrimEnd("Searcher") + "Indexer");
+
+            
             //viewData.NameIndexerEnabled = 
             // number of documents in index
             // indexers operational
@@ -47,8 +51,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new NodesViewData();
 
-            //var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
-
             return this.Ok(viewData);
         }
 
@@ -59,9 +61,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new NodeTypeViewData();
 
-            //var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
-
-            //viewData.NodeType = nodeType;
             viewData.Name = nodeType == PublishedItemType.Content ? "Content"
                             : nodeType == PublishedItemType.Media ? "Media"
                             : nodeType == PublishedItemType.Member ? "Members"
@@ -84,8 +83,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new TagsViewData();
 
-            //var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
-
             // The tags node renders all tag groups
             viewData.TagGroups = QueryService.GetTagGroups(searcherName);
 
@@ -103,8 +100,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new TagGroupViewData();
 
-            //var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
-
             viewData.Tags = QueryService.GetTags(searcherName, tagGroup);
 
             return this.Ok(viewData);
@@ -121,8 +116,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new TagViewData();
 
-            //var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
-
             return this.Ok(viewData);
         }
 
@@ -136,8 +129,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         public IHttpActionResult GetViewDataForLocations([FromUri]string searcherName)
         {
             var viewData = new LocationsViewData();
-
-            //var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
 
             return this.Ok(viewData);
         }
@@ -164,8 +155,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             [FromUri]int skip,
             [FromUri]int take)
         {
-            //var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
-
             return this.Ok(QueryService.GetNodeTypeMatches(searcherName, nodeType, sort, skip, take));
         }
 
@@ -189,8 +178,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
                     [FromUri]int skip,
                     [FromUri]int take)
         {
-            //var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
-
             return this.Ok(QueryService.GetTagMatches(searcherName, tagGroup, tagName, sort, skip, take));
         }
 
@@ -210,8 +197,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             [FromUri]int skip,
             [FromUri]int take)
         {
-            //var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
-
             return this.Ok(QueryService.GetLocationMatches(searcherName, sort, skip, take));
         }
 
@@ -219,8 +204,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         [ValidateSearcher]
         public IHttpActionResult GetConfigurationData([FromUri]string searcherName)
         {
-            //var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
-
             // TODO:
 
             var configurationData = new ConfigurationData();
