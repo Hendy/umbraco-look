@@ -57,6 +57,8 @@ namespace Our.Umbraco.Look
         /// <param name="indexerName"></param>
         private void Indexer_DocumentWriting(object sender, DocumentWritingEventArgs e, UmbracoHelper umbracoHelper, string indexerName)
         {
+            // TODO: safety check to ensure this Exmaine index can be used ?
+
             IPublishedContent publishedContent = null;
 
             publishedContent = umbracoHelper.TypedContent(e.NodeId);
