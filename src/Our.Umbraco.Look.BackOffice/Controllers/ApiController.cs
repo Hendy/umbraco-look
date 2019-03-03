@@ -127,6 +127,25 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(viewData);
         }
 
+        /// <summary>
+        /// Get the view model for the 'Locations' tree node (for a searcher)
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult GetViewDataForLocations([FromUri]string searcherName)
+        {
+            var viewData = new LocationsViewData();
+
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+            //// The tags node renders all tag groups
+            //viewData.TagGroups = QueryService.GetTagGroups(searcherName);
+
+            return this.Ok(viewData);
+        }
+
         [HttpGet]
         public IHttpActionResult GetMatches(
             [FromUri]string searcherName,
@@ -179,6 +198,26 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(QueryService.GetTagMatches(searcherName, tagGroup, tagName, sort, skip, take));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <param name="sort"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult GetLocationMatches(
+            [FromUri]string searcherName,
+            [FromUri]string sort,
+            [FromUri]int skip,
+            [FromUri]int take)
+        {
+            var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            if (searcher == null) { return this.BadRequest("Unknown Searcher"); }
+
+            return this.Ok(QueryService.GetLocationMatches(searcherName, sort, skip, take));
+        }
 
         [HttpGet]
         public IHttpActionResult GetConfigurationData([FromUri]string searcherName)

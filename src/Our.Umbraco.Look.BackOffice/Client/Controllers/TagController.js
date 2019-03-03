@@ -5,9 +5,9 @@
         .module('umbraco')
         .controller('Look.BackOffice.TagController', TagController);
 
-    TagController.$inject = ['$scope', '$routeParams', 'Look.BackOffice.ApiService', '$q', 'navigationService', '$timeout'];
+    TagController.$inject = ['$scope', '$routeParams', '$q', 'Look.BackOffice.ApiService', 'Look.BackOffice.TreeService'];
 
-    function TagController($scope, $routeParams, apiService, $q, navigationService, $timeout) {
+    function TagController($scope, $routeParams, $q, apiService, treeService) {
 
         // input params
         var parsedId = $routeParams.id.split('|'); // limit to three, as tag may contain pipes (TODO: need to handle pipes)
@@ -16,20 +16,13 @@
         $scope.tagGroup = parsedId[1];
         $scope.tagName = parsedId[2];
 
-        // sync tree
-        $timeout(function () { // HACK: timeout required as navigationService not ready on inital load
-            navigationService.syncTree({
-                tree: 'lookTree',
-                path: [
-                    '-1',
-                    'searcher-' + $scope.searcherName,
-                    'tags-' + $scope.searcherName,
-                    'tagGroup-' + $scope.searcherName + '|' + $scope.tagGroup,
-                    'tag-' + $scope.searcherName + '|' + $scope.tagGroup + '|' + $scope.tagName
-                ],
-                forceReload: true
-            });
-        }, 500); 
+        treeService.update([
+            '-1',
+            'searcher-' + $scope.searcherName,
+            'tags-' + $scope.searcherName,
+            'tagGroup-' + $scope.searcherName + '|' + $scope.tagGroup,
+            'tag-' + $scope.searcherName + '|' + $scope.tagGroup + '|' + $scope.tagName
+        ]);
 
         // view data
         apiService

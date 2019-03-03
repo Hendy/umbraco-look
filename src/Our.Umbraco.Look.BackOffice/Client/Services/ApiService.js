@@ -18,11 +18,13 @@
             getViewDataForTags: getViewDataForTags,
             getViewDataForTagGroup: getViewDataForTagGroup,
             getViewDataForTag: getViewDataForTag,
+            getViewDataForLocations: getViewDataForLocations,
 
             // get matches
             getMatches: getMatches,
             getNodeTypeMatches: getNodeTypeMatches,
             getTagMatches: getTagMatches,
+            getLocationMatches: getLocationMatches,
 
             getConfigurationData: getConfigurationData // get details about indexers in use (sort will use to enable options)
         };
@@ -91,6 +93,16 @@
             });
         }
 
+        function getViewDataForLocations(searcherName) {
+            return $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetViewDataForLocations',
+                params: {
+                    'searcherName': searcherName
+                }
+            });
+        }
+
         function getMatches(searcherName, sort, skip, take) {
 
             if (angular.isUndefined(searcherName)) { searcherName = ''; }
@@ -151,6 +163,27 @@
                     'searcherName': searcherName,
                     'tagGroup': tagGroup,
                     'tagName': tagName,
+                    'sort': sort,
+                    'skip': skip,
+                    'take': take
+                }
+            });
+
+            return matches;
+        }
+
+        function getLocationMatches(searcherName, sort, skip, take) {
+
+            if (angular.isUndefined(searcherName)) { searcherName = ''; }
+            if (angular.isUndefined(sort)) { sort = ''; }
+            if (angular.isUndefined(skip)) { skip = 0; }
+            if (angular.isUndefined(take)) { take = 0; }
+
+            var matches = $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetLocationMatches',
+                params: {
+                    'searcherName': searcherName,
                     'sort': sort,
                     'skip': skip,
                     'take': take

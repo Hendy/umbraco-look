@@ -3,11 +3,11 @@
 
     angular
         .module('umbraco')
-        .controller('Look.BackOffice.NodesController', NodesController);
+        .controller('Look.BackOffice.LocationsController', LocationsController);
 
-    NodesController.$inject = ['$scope', '$routeParams', '$q', 'Look.BackOffice.ApiService', 'Look.BackOffice.TreeService'];
+    LocationsController.$inject = ['$scope', '$routeParams', '$q', 'Look.BackOffice.ApiService', 'Look.BackOffice.TreeService'];
 
-    function NodesController($scope, $routeParams, $q, apiService, treeService) {
+    function LocationsController($scope, $routeParams, $q, apiService, treeService) {
 
         // input params
         $scope.searcherName = $routeParams.id;
@@ -15,11 +15,11 @@
         treeService.update([
             '-1',
             'searcher-' + $scope.searcherName,
-            'nodes-' + $scope.searcherName
+            'locations-' + $scope.searcherName
         ]);
 
         // view data
-        apiService.getViewDataForNodes($scope.searcherName)
+        apiService.getViewDataForLocations($scope.searcherName)
             .then(function (response) {
                 $scope.viewData = response.data;
             });
@@ -30,7 +30,7 @@
             var q = $q.defer();
 
             apiService
-                .getMatches($scope.searcherName, sort, skip, take)
+                .getLocationMatches($scope.searcherName, sort, skip, take)
                 .then(function (response) {
                     q.resolve(response.data.matches);
                 });

@@ -25,6 +25,7 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\package.manifest" target="Content\App_Plugins\Look\package.manifest" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Look.css" target="Content\App_Plugins\Look\Look.css" />
 
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\LocationsController.js" target="Content\App_Plugins\Look\Controllers\LocationsController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\MatchesController.js" target="Content\App_Plugins\Look\Controllers\MatchesController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\NodesController.js" target="Content\App_Plugins\Look\Controllers\NodesController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\NodeTypeController.js" target="Content\App_Plugins\Look\Controllers\NodeTypeController.js" />
@@ -38,10 +39,12 @@
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\ApiService.js" target="Content\App_Plugins\Look\Services\ApiService.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\SortService.js" target="Content\App_Plugins\Look\Services\SortService.js" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\TreeService.js" target="Content\App_Plugins\Look\Services\TreeService.js" />
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Partials\Matches.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Partials\Matches.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Partials\Sort.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Partials\Sort.html" />
 
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Locations.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Locations.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Nodes.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Nodes.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\NodeType.html" target="Content\App_Plugins\Look\BackOffice\LookTree\NodeType.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Searcher.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Searcher.html" />
