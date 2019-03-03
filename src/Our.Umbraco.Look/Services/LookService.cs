@@ -32,12 +32,12 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, string> NameIndexer { get; set; } //= x => x.Item.Name;
+        private Func<IndexingContext, string> NameIndexer { get; set; } = x => x.Item.Name;
 
         /// <summary>
         /// Function to get the date for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, DateTime?> DateIndexer { get; set; } //= x => x.Item.UpdateDate;
+        private Func<IndexingContext, DateTime?> DateIndexer { get; set; } = x => x.Item.UpdateDate;
 
         /// <summary>
         /// Function to get text for the IPublishedContent being indexed
