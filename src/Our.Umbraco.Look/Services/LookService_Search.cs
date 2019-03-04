@@ -407,7 +407,7 @@ namespace Our.Umbraco.Look.Services
 
                     query.Add(new TermQuery(new Term(LookConstants.HasTagsField, "1")), BooleanClause.Occur.MUST);
 
-                    // ALL
+                    // HasAll
                     if (lookQuery.TagQuery.HasAll != null && lookQuery.TagQuery.HasAll.Any())
                     {
                         if (lookQuery.TagQuery.NotAny != null)
@@ -416,7 +416,7 @@ namespace Our.Umbraco.Look.Services
 
                             if (conflictTags.Any())
                             {
-                                return LookResult.Error($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both AllTags and NotTags");
+                                return LookResult.Error($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both HasAllTags and NotTags");
                             }
                         }
 
@@ -428,24 +428,24 @@ namespace Our.Umbraco.Look.Services
                         }
                     }
 
-                    // ANY
-                    if (lookQuery.TagQuery.HasAnyOr != null && lookQuery.TagQuery.HasAnyOr.Any())
+                    // HasAnyAnd
+                    if (lookQuery.TagQuery.HasAnyAnd != null && lookQuery.TagQuery.HasAnyAnd.Any())
                     {
                         if (lookQuery.TagQuery.NotAny != null && lookQuery.TagQuery.NotAny.Any())
                         {
                             var conflictTags = lookQuery
                                                     .TagQuery
-                                                    .HasAnyOr
+                                                    .HasAnyAnd
                                                     .SelectMany(x => x.Select(y => y)) // flatten collections
                                                     .Where(x => lookQuery.TagQuery.NotAny.Contains(x));
 
                             if (conflictTags.Any())
                             {
-                                return LookResult.Error($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both AnyTags and NotTags");
+                                return LookResult.Error($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both HasAnyOrTags and NotTags");
                             }
                         }
 
-                        foreach(var tagCollection in lookQuery.TagQuery.HasAnyOr)
+                        foreach(var tagCollection in lookQuery.TagQuery.HasAnyAnd)
                         {
                             var anyTagQuery = new BooleanQuery();
 
@@ -461,7 +461,7 @@ namespace Our.Umbraco.Look.Services
 
                     }
 
-                    // NONE
+                    // NotAny
                     if (lookQuery.TagQuery.NotAny != null && lookQuery.TagQuery.NotAny.Any())
                     {
                         foreach (var tag in lookQuery.TagQuery.NotAny)

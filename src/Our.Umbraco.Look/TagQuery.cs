@@ -5,7 +5,8 @@ using System.Linq;
 namespace Our.Umbraco.Look
 {
     /// <summary>
-    /// 
+    /// When set on a look query, search results must have tags.
+    /// All properties are optional.
     /// </summary>
     public class TagQuery
     {
@@ -14,10 +15,15 @@ namespace Our.Umbraco.Look
         /// </summary>
         public LookTag[] HasAll { get; set; }
 
+        ///// <summary>
+        ///// Must have at least one tag from the collection
+        ///// </summary>
+        //public LookTag[] HasAny { get; set; }
+
         /// <summary>
         /// Must have at least one tag from each collection
         /// </summary>
-        public LookTag[][] HasAnyOr { get; set; }
+        public LookTag[][] HasAnyAnd { get; set; }
 
         /// <summary>
         /// Must not have any tags in the collection
@@ -66,9 +72,10 @@ namespace Our.Umbraco.Look
 
             return tagQuery != null
                     && tagQuery.HasAll.BothNullOrElementsEqual(this.HasAll)
+                    //&& tagQuery.HasAny.BothNullOrElementsEqual(this.HasAny)
+                    && tagQuery.HasAnyAnd.BothNullOrElementCollectionsEqual(this.HasAnyAnd) 
                     && tagQuery.NotAny.BothNullOrElementsEqual(this.NotAny)
-                    && tagQuery.FacetOn.BothNullOrEquals(this.FacetOn)
-                    && tagQuery.HasAnyOr.BothNullOrElementCollectionsEqual(this.HasAnyOr);  // potentially the slowest of all clauses, so last
+                    && tagQuery.FacetOn.BothNullOrEquals(this.FacetOn);
         }
 
         internal TagQuery Clone()
