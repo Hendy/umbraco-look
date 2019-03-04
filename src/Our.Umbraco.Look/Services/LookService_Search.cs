@@ -429,13 +429,13 @@ namespace Our.Umbraco.Look.Services
                     }
 
                     // ANY
-                    if (lookQuery.TagQuery.Any != null && lookQuery.TagQuery.Any.Any())
+                    if (lookQuery.TagQuery.HasAnyOr != null && lookQuery.TagQuery.HasAnyOr.Any())
                     {
                         if (lookQuery.TagQuery.None != null && lookQuery.TagQuery.None.Any())
                         {
                             var conflictTags = lookQuery
                                                     .TagQuery
-                                                    .Any
+                                                    .HasAnyOr
                                                     .SelectMany(x => x.Select(y => y)) // flatten collections
                                                     .Where(x => lookQuery.TagQuery.None.Contains(x));
 
@@ -445,7 +445,7 @@ namespace Our.Umbraco.Look.Services
                             }
                         }
 
-                        foreach(var tagCollection in lookQuery.TagQuery.Any)
+                        foreach(var tagCollection in lookQuery.TagQuery.HasAnyOr)
                         {
                             var anyTagQuery = new BooleanQuery();
 

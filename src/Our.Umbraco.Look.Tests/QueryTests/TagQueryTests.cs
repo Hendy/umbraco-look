@@ -50,7 +50,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.TagQuery = new TagQuery()
             {
                 HasAll = TagQuery.MakeTags("shape:circle"),
-                Any = new LookTag[][] { TagQuery.MakeTags("size:small", "size:medium") }
+                HasAnyOr = new LookTag[][] { TagQuery.MakeTags("size:small", "size:medium") }
             };
 
             var lookResult = lookQuery.Search();
@@ -66,7 +66,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TagQuery = new TagQuery()
             {
-                Any = new LookTag[][] {
+                HasAnyOr = new LookTag[][] {
                         TagQuery.MakeTags("shape:circle", "shape:oblong"), // either of these
                         TagQuery.MakeTags("size:small", "size:medium") // and either of these
                 }

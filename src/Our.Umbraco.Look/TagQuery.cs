@@ -17,7 +17,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Must have at least one tag from each collection
         /// </summary>
-        public LookTag[][] Any { get; set; }
+        public LookTag[][] HasAnyOr { get; set; }
 
         /// <summary>
         /// Must not have any tags in the collection
@@ -68,7 +68,7 @@ namespace Our.Umbraco.Look
                     && tagQuery.HasAll.BothNullOrElementsEqual(this.HasAll)
                     && tagQuery.None.BothNullOrElementsEqual(this.None)
                     && tagQuery.FacetOn.BothNullOrEquals(this.FacetOn)
-                    && tagQuery.Any.BothNullOrElementCollectionsEqual(this.Any);  // potentially the slowest of all clauses, so last
+                    && tagQuery.HasAnyOr.BothNullOrElementCollectionsEqual(this.HasAnyOr);  // potentially the slowest of all clauses, so last
         }
 
         internal TagQuery Clone()

@@ -56,7 +56,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TagQuery = new TagQuery()
             {
-                Any = new LookTag[][] { TagQuery.MakeTags("tag1") },
+                HasAnyOr = new LookTag[][] { TagQuery.MakeTags("tag1") },
                 None = TagQuery.MakeTags("tag1")
             };
 
