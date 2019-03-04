@@ -86,7 +86,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.TagQuery = new TagQuery()
             {
                 HasAll = TagQuery.MakeTags("shape"),
-                None = TagQuery.MakeTags("shape:circle")
+                NotAny = TagQuery.MakeTags("shape:circle")
             };
 
             var lookResult = lookQuery.Search();

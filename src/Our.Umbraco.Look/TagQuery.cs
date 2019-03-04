@@ -22,7 +22,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Must not have any tags in the collection
         /// </summary>
-        public LookTag[] None { get; set; }
+        public LookTag[] NotAny { get; set; }
 
         /// <summary>
         /// when null, facets are not calculated, but when string[], each string value represents the tag group field to facet on, the empty string or whitespace = empty group
@@ -66,7 +66,7 @@ namespace Our.Umbraco.Look
 
             return tagQuery != null
                     && tagQuery.HasAll.BothNullOrElementsEqual(this.HasAll)
-                    && tagQuery.None.BothNullOrElementsEqual(this.None)
+                    && tagQuery.NotAny.BothNullOrElementsEqual(this.NotAny)
                     && tagQuery.FacetOn.BothNullOrEquals(this.FacetOn)
                     && tagQuery.HasAnyOr.BothNullOrElementCollectionsEqual(this.HasAnyOr);  // potentially the slowest of all clauses, so last
         }

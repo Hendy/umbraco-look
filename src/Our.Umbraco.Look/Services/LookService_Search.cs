@@ -410,9 +410,9 @@ namespace Our.Umbraco.Look.Services
                     // ALL
                     if (lookQuery.TagQuery.HasAll != null && lookQuery.TagQuery.HasAll.Any())
                     {
-                        if (lookQuery.TagQuery.None != null)
+                        if (lookQuery.TagQuery.NotAny != null)
                         {
-                            var conflictTags = lookQuery.TagQuery.HasAll.Where(x => lookQuery.TagQuery.None.Contains(x));
+                            var conflictTags = lookQuery.TagQuery.HasAll.Where(x => lookQuery.TagQuery.NotAny.Contains(x));
 
                             if (conflictTags.Any())
                             {
@@ -431,13 +431,13 @@ namespace Our.Umbraco.Look.Services
                     // ANY
                     if (lookQuery.TagQuery.HasAnyOr != null && lookQuery.TagQuery.HasAnyOr.Any())
                     {
-                        if (lookQuery.TagQuery.None != null && lookQuery.TagQuery.None.Any())
+                        if (lookQuery.TagQuery.NotAny != null && lookQuery.TagQuery.NotAny.Any())
                         {
                             var conflictTags = lookQuery
                                                     .TagQuery
                                                     .HasAnyOr
                                                     .SelectMany(x => x.Select(y => y)) // flatten collections
-                                                    .Where(x => lookQuery.TagQuery.None.Contains(x));
+                                                    .Where(x => lookQuery.TagQuery.NotAny.Contains(x));
 
                             if (conflictTags.Any())
                             {
@@ -462,9 +462,9 @@ namespace Our.Umbraco.Look.Services
                     }
 
                     // NONE
-                    if (lookQuery.TagQuery.None != null && lookQuery.TagQuery.None.Any())
+                    if (lookQuery.TagQuery.NotAny != null && lookQuery.TagQuery.NotAny.Any())
                     {
-                        foreach (var tag in lookQuery.TagQuery.None)
+                        foreach (var tag in lookQuery.TagQuery.NotAny)
                         {
                             query.Add(
                                 new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),

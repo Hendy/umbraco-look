@@ -39,7 +39,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.TagQuery = new TagQuery()
             {
                 HasAll = TagQuery.MakeTags("tag1"),
-                None = TagQuery.MakeTags("tag1")
+                NotAny = TagQuery.MakeTags("tag1")
             };
 
             var lookResult = lookQuery.Search();
@@ -57,7 +57,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.TagQuery = new TagQuery()
             {
                 HasAnyOr = new LookTag[][] { TagQuery.MakeTags("tag1") },
-                None = TagQuery.MakeTags("tag1")
+                NotAny = TagQuery.MakeTags("tag1")
             };
 
             var lookResult = lookQuery.Search();
