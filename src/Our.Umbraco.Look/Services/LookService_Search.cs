@@ -410,15 +410,15 @@ namespace Our.Umbraco.Look.Services
                     // HasAll
                     if (lookQuery.TagQuery.HasAll != null && lookQuery.TagQuery.HasAll.Any())
                     {
-                        if (lookQuery.TagQuery.NotAny != null)
-                        {
-                            var conflictTags = lookQuery.TagQuery.HasAll.Where(x => lookQuery.TagQuery.NotAny.Contains(x));
+                        //if (lookQuery.TagQuery.NotAny != null)
+                        //{
+                        //    var conflictTags = lookQuery.TagQuery.HasAll.Where(x => lookQuery.TagQuery.NotAny.Contains(x));
 
-                            if (conflictTags.Any())
-                            {
-                                return LookResult.Error($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both HasAllTags and NotTags");
-                            }
-                        }
+                        //    if (conflictTags.Any())
+                        //    {
+                        //        return LookResult.Error($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both HasAllTags and NotTags");
+                        //    }
+                        //}
 
                         foreach (var tag in lookQuery.TagQuery.HasAll)
                         {
@@ -431,19 +431,19 @@ namespace Our.Umbraco.Look.Services
                     // HasAnyAnd
                     if (lookQuery.TagQuery.HasAnyAnd != null && lookQuery.TagQuery.HasAnyAnd.Any())
                     {
-                        if (lookQuery.TagQuery.NotAny != null && lookQuery.TagQuery.NotAny.Any())
-                        {
-                            var conflictTags = lookQuery
-                                                    .TagQuery
-                                                    .HasAnyAnd
-                                                    .SelectMany(x => x.Select(y => y)) // flatten collections
-                                                    .Where(x => lookQuery.TagQuery.NotAny.Contains(x));
+                        //if (lookQuery.TagQuery.NotAny != null && lookQuery.TagQuery.NotAny.Any())
+                        //{
+                        //    var conflictTags = lookQuery
+                        //                            .TagQuery
+                        //                            .HasAnyAnd
+                        //                            .SelectMany(x => x.Select(y => y)) // flatten collections
+                        //                            .Where(x => lookQuery.TagQuery.NotAny.Contains(x));
 
-                            if (conflictTags.Any())
-                            {
-                                return LookResult.Error($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both HasAnyOrTags and NotTags");
-                            }
-                        }
+                        //    if (conflictTags.Any())
+                        //    {
+                        //        return LookResult.Error($"Conflict in TagQuery, tags: '{ string.Join(",", conflictTags) }' are in both HasAnyOrTags and NotTags");
+                        //    }
+                        //}
 
                         foreach(var tagCollection in lookQuery.TagQuery.HasAnyAnd)
                         {
