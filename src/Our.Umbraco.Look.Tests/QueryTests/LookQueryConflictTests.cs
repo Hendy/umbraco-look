@@ -38,7 +38,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TagQuery = new TagQuery()
             {
-                All = TagQuery.MakeTags("tag1"),
+                HasAll = TagQuery.MakeTags("tag1"),
                 None = TagQuery.MakeTags("tag1")
             };
 

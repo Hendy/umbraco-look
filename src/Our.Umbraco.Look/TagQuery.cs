@@ -12,7 +12,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Must have all the tags in the collection
         /// </summary>
-        public LookTag[] All { get; set; }
+        public LookTag[] HasAll { get; set; }
 
         /// <summary>
         /// Must have at least one tag from each collection
@@ -65,7 +65,7 @@ namespace Our.Umbraco.Look
             var tagQuery = obj as TagQuery;
 
             return tagQuery != null
-                    && tagQuery.All.BothNullOrElementsEqual(this.All)
+                    && tagQuery.HasAll.BothNullOrElementsEqual(this.HasAll)
                     && tagQuery.None.BothNullOrElementsEqual(this.None)
                     && tagQuery.FacetOn.BothNullOrEquals(this.FacetOn)
                     && tagQuery.Any.BothNullOrElementCollectionsEqual(this.Any);  // potentially the slowest of all clauses, so last

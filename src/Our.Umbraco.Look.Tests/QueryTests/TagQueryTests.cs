@@ -34,7 +34,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.TagQuery = new TagQuery() { All = new [] { new LookTag("shape", "circle") } };
+            lookQuery.TagQuery = new TagQuery() { HasAll = new [] { new LookTag("shape", "circle") } };
 
             var lookResult = lookQuery.Search();
 
@@ -49,7 +49,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TagQuery = new TagQuery()
             {
-                All = TagQuery.MakeTags("shape:circle"),
+                HasAll = TagQuery.MakeTags("shape:circle"),
                 Any = new LookTag[][] { TagQuery.MakeTags("size:small", "size:medium") }
             };
 
@@ -85,7 +85,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.TagQuery = new TagQuery()
             {
-                All = TagQuery.MakeTags("shape"),
+                HasAll = TagQuery.MakeTags("shape"),
                 None = TagQuery.MakeTags("shape:circle")
             };
 

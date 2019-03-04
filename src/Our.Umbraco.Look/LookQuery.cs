@@ -144,13 +144,13 @@ namespace Our.Umbraco.Look
                     this.TagQuery = new TagQuery();
                 }
 
-                if (this.TagQuery.All == null)
+                if (this.TagQuery.HasAll == null)
                 {
-                    this.TagQuery.All = facet.Tags;
+                    this.TagQuery.HasAll = facet.Tags;
                 }
                 else
                 {
-                    this.TagQuery.All = this.TagQuery.All.Concat(facet.Tags).ToArray();
+                    this.TagQuery.HasAll = this.TagQuery.HasAll.Concat(facet.Tags).ToArray();
                 }
             }
 

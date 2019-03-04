@@ -132,7 +132,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
             }
             else if (!string.IsNullOrWhiteSpace(tagName)) // we have a specifc tag
             {
-                tagQuery.All = new[] { new LookTag(tagGroup, tagName) };
+                tagQuery.HasAll = new[] { new LookTag(tagGroup, tagName) };
             }
 
             lookQuery.TagQuery = tagQuery;

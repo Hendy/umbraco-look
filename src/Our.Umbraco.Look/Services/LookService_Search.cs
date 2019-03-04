@@ -408,11 +408,11 @@ namespace Our.Umbraco.Look.Services
                     query.Add(new TermQuery(new Term(LookConstants.HasTagsField, "1")), BooleanClause.Occur.MUST);
 
                     // ALL
-                    if (lookQuery.TagQuery.All != null && lookQuery.TagQuery.All.Any())
+                    if (lookQuery.TagQuery.HasAll != null && lookQuery.TagQuery.HasAll.Any())
                     {
                         if (lookQuery.TagQuery.None != null)
                         {
-                            var conflictTags = lookQuery.TagQuery.All.Where(x => lookQuery.TagQuery.None.Contains(x));
+                            var conflictTags = lookQuery.TagQuery.HasAll.Where(x => lookQuery.TagQuery.None.Contains(x));
 
                             if (conflictTags.Any())
                             {
@@ -420,7 +420,7 @@ namespace Our.Umbraco.Look.Services
                             }
                         }
 
-                        foreach (var tag in lookQuery.TagQuery.All)
+                        foreach (var tag in lookQuery.TagQuery.HasAll)
                         {
                             query.Add(
                                     new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
