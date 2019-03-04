@@ -228,12 +228,18 @@ lookQuery.TagQuery = new TagQuery() {
 
 #### LocationQuery
 
-A location query is used together with a custom location indexer. If a Location alone is set, then all results which 
-have a location indexed will have a distance value returned. However if a MaxDistance is also set, then only results
+A location query is used together with a custom location indexer. 
+All properties are optional, but if a LocationQuery is set, then only results with a location will be returned.
+A Boundary can be set using two points to define a pane on the latitude/longitude axis.
+If a Location is set, then a distance value returned. However if a MaxDistance is also set, then only results
 within that range are returned.
 
 ```csharp
 lookQuery.LocationQuery = new LocationQuery() {
+	Boundary = new Boundary(
+		new Location(55, 10),
+		new Location(56, 11)
+	),
 	Location = new Location(55.406330, 10.388500),
 	MaxDistance = new Distance(500, DistanceUnit.Miles)
 };
