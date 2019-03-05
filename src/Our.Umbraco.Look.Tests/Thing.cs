@@ -10,7 +10,6 @@ namespace Our.Umbraco.Look.Tests
         internal Thing()
         {
             this.Name = Guid.NewGuid().ToString();
-            this.Date = DateTime.Now;
         }
 
         internal string Name { get; set; }

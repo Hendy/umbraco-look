@@ -10,7 +10,10 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         public static void ClassInitialize(TestContext testContext)
         {
             // create an index (doesn't need any data) but it needs to exist so we can get context
-            TestHelper.IndexThings(new Thing[] { });
+            TestHelper.IndexThings(new Thing[] {
+                new Thing() { Tags = TagQuery.MakeTags("tag1") },
+                new Thing() { Tags = TagQuery.MakeTags("tag2") }
+            });
         }
 
         [TestMethod]
