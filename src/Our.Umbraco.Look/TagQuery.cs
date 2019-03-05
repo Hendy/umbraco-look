@@ -26,6 +26,11 @@ namespace Our.Umbraco.Look
         public LookTag[] HasAll { get; set; }
 
         /// <summary>
+        /// Must have all tags in at least one of these collections
+        /// </summary>
+        public LookTag[][] HasAllOr { get; set; }
+
+        /// <summary>
         /// Must have at least one tag from the collection
         /// </summary>
         public LookTag[] HasAny { get; set; }
@@ -84,6 +89,7 @@ namespace Our.Umbraco.Look
                     && tagQuery.Has == this.Has
                     && tagQuery.Not == this.Not
                     && tagQuery.HasAll.BothNullOrElementsEqual(this.HasAll)
+                    && tagQuery.HasAllOr.BothNullOrElementCollectionsEqual(this.HasAllOr)
                     && tagQuery.HasAny.BothNullOrElementsEqual(this.HasAny)
                     && tagQuery.HasAnyAnd.BothNullOrElementCollectionsEqual(this.HasAnyAnd) 
                     && tagQuery.NotAny.BothNullOrElementsEqual(this.NotAny)

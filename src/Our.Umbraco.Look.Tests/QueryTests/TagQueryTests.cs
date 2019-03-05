@@ -29,7 +29,6 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsTrue(new LookQuery(TestHelper.GetSearchingContext()) { TagQuery = new TagQuery() }.Search().TotalItemCount > 0);
         }
 
-
         [TestMethod]
         public void Has()
         {
@@ -64,13 +63,69 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.TagQuery = new TagQuery() { HasAll = new [] { new LookTag("shape", "circle") } };
+            lookQuery.TagQuery = new TagQuery() { HasAll = TagQuery.MakeTags("shape:circle") };
 
             var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
             Assert.AreEqual(3, lookResult.TotalItemCount);
         }
+
+        [TestMethod]
+        public void Has_All_Or()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery()
+            {
+                HasAllOr = new LookTag[][]
+                {
+                    TagQuery.MakeTags("shape:circle", "size:large"),
+                    TagQuery.MakeTags("shape:square", "size:large"),
+                    TagQuery.MakeTags("unknown")
+                }
+            };
+
+            var lookResult = lookQuery.Search();
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.AreEqual(2, lookResult.TotalItemCount);
+        }
+
+        [TestMethod]
+        public void Has_All_Or_Empty_Outer_Collection()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery()
+            {
+                Has = new LookTag("shape"), // HACK: need to clear index on startup of this class
+                HasAllOr = new LookTag[][] { }
+            };
+
+            var lookResult = lookQuery.Search();
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.AreEqual(9, lookResult.TotalItemCount);
+        }
+
+        [TestMethod]
+        public void Has_All_Or_Empty_Inner_Collections()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery()
+            {
+                Has = new LookTag("shape"), // HACK: need to clear index on startup of this class
+                HasAllOr = new LookTag[][] { new LookTag[] { } }
+            };
+
+            var lookResult = lookQuery.Search();
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.AreEqual(9, lookResult.TotalItemCount);
+        }
+
 
         [TestMethod]
         public void Has_Any()
@@ -105,6 +160,40 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsTrue(lookResult.Success);
             Assert.AreEqual(4, lookResult.TotalItemCount);
+        }
+
+        [TestMethod]
+        public void Has_Any_And_Empty_Outer_Collection()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery()
+            {
+                Has = new LookTag("shape"), // HACK: need to clear index on startup of this class
+                HasAnyAnd = new LookTag[][] { }
+            };
+
+            var lookResult = lookQuery.Search();
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.AreEqual(9, lookResult.TotalItemCount);
+        }
+
+        [TestMethod]
+        public void Has_Any_And_Empty_Inner_Collections()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery()
+            {
+                Has = new LookTag("shape"), // HACK: need to clear index on startup of this class
+                HasAnyAnd = new LookTag[][] { new LookTag[] { } }
+            };
+
+            var lookResult = lookQuery.Search();
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.AreEqual(9, lookResult.TotalItemCount);
         }
 
         [TestMethod]

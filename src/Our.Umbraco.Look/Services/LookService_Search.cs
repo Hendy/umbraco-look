@@ -91,6 +91,7 @@ namespace Our.Umbraco.Look.Services
 
                     query.Add(new TermQuery(new Term(LookConstants.HasNodeField, "1")), BooleanClause.Occur.MUST);
 
+                    // Types
                     if (lookQuery.NodeQuery.Types != null && lookQuery.NodeQuery.Types.Any())
                     {
                         var nodeTypeQuery = new BooleanQuery();
@@ -106,6 +107,7 @@ namespace Our.Umbraco.Look.Services
                         query.Add(nodeTypeQuery, BooleanClause.Occur.MUST);
                     }
 
+                    // Detached
                     switch (lookQuery.NodeQuery.DetachedQuery)
                     {
                         case DetachedQuery.ExcludeDetached:
@@ -125,6 +127,7 @@ namespace Our.Umbraco.Look.Services
                             break;
                     }
 
+                    // Cultures
                     if (lookQuery.NodeQuery.Cultures != null && lookQuery.NodeQuery.Cultures.Any())
                     {
                         var nodeCultureQuery = new BooleanQuery();
@@ -140,6 +143,7 @@ namespace Our.Umbraco.Look.Services
                         query.Add(nodeCultureQuery, BooleanClause.Occur.MUST);
                     }
 
+                    // Aliases
                     if (lookQuery.NodeQuery.Aliases != null && lookQuery.NodeQuery.Aliases.Any())
                     {
                         var nodeAliasQuery = new BooleanQuery();
@@ -154,6 +158,7 @@ namespace Our.Umbraco.Look.Services
                         query.Add(nodeAliasQuery, BooleanClause.Occur.MUST);
                     }
 
+                    // Ids
                     if (lookQuery.NodeQuery.Ids != null && lookQuery.NodeQuery.Ids.Any())
                     {
                         if (lookQuery.NodeQuery.NotIds != null)
@@ -178,6 +183,7 @@ namespace Our.Umbraco.Look.Services
                         query.Add(idQuery, BooleanClause.Occur.MUST);
                     }
 
+                    // Keys
                     if (lookQuery.NodeQuery.Keys != null && lookQuery.NodeQuery.Keys.Any())
                     {
                         if (lookQuery.NodeQuery.NotKeys != null)
@@ -202,6 +208,7 @@ namespace Our.Umbraco.Look.Services
                         query.Add(keyQuery, BooleanClause.Occur.MUST);
                     }
 
+                    // NotIds
                     if (lookQuery.NodeQuery.NotIds != null && lookQuery.NodeQuery.NotIds.Any())
                     {
                         foreach (var exculudeId in lookQuery.NodeQuery.NotIds)
@@ -212,6 +219,7 @@ namespace Our.Umbraco.Look.Services
                         }
                     }
 
+                    // NotKeys
                     if (lookQuery.NodeQuery.NotKeys != null && lookQuery.NodeQuery.NotKeys.Any())
                     {
                         foreach (var excludeKey in lookQuery.NodeQuery.NotKeys)
@@ -434,6 +442,31 @@ namespace Our.Umbraco.Look.Services
                         }
                     }
 
+                    // HasAllOr
+                    if (lookQuery.TagQuery.HasAllOr != null && lookQuery.TagQuery.HasAllOr.Any() && lookQuery.TagQuery.HasAllOr.SelectMany(x => x).Any())
+                    {
+                        var orQuery = new BooleanQuery();
+
+                        foreach (var tagCollection in lookQuery.TagQuery.HasAllOr)
+                        {
+                            if (tagCollection.Any())
+                            {
+                                var allTagQuery = new BooleanQuery();
+
+                                foreach (var tag in tagCollection)
+                                {
+                                    allTagQuery.Add(
+                                        new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
+                                        BooleanClause.Occur.MUST);
+                                }
+
+                                orQuery.Add(allTagQuery, BooleanClause.Occur.SHOULD);
+                            }
+                        }
+
+                        query.Add(orQuery, BooleanClause.Occur.MUST);
+                    }
+
                     // HasAny
                     if (lookQuery.TagQuery.HasAny != null && lookQuery.TagQuery.HasAny.Any())
                     {
@@ -468,7 +501,6 @@ namespace Our.Umbraco.Look.Services
                                 query.Add(anyTagQuery, BooleanClause.Occur.MUST);
                             }
                         }
-
                     }
 
                     // NotAny
