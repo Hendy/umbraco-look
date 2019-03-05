@@ -219,16 +219,16 @@ lookQuery.TagQuery = new TagQuery() {
 	Not = new LookTag("colour:white"),
 
 	// must have all these tags
-	HasAll = TagQuery.MakeTags("colour:red", "colour:blue") },
+	HasAll = TagQuery.MakeTags("colour:red", "colour:blue"),
 
 	// must have at least one of these tags
 	HasAny = TagQuery.MakeTags("color:green", "colour:yellow"),
 
-	// must have at least one tags from each collection
+	// must have at least one tag from each collection
 	HasAnyAnd= new LookTag[][] { 
 		TagQuery.MakeTags("colour:red", "size:large"), 
 		TagQuery.MakeTags("colour:red", "size:medium")
-	};
+	},
 
 	// must not have any of these tags
 	NotAny = TagQuery.MakeTags("colour:black"),
