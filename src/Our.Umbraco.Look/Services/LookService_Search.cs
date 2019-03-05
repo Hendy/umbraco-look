@@ -407,6 +407,22 @@ namespace Our.Umbraco.Look.Services
 
                     query.Add(new TermQuery(new Term(LookConstants.HasTagsField, "1")), BooleanClause.Occur.MUST);
 
+                    // Has
+                    if (lookQuery.TagQuery.Has != null)
+                    {
+                        query.Add(
+                                new TermQuery(new Term(LookConstants.TagsField + lookQuery.TagQuery.Has.Group, lookQuery.TagQuery.Has.Name)),
+                                BooleanClause.Occur.MUST);
+                    }
+
+                    // Not
+                    if (lookQuery.TagQuery.Not != null)
+                    {
+                        query.Add(
+                                new TermQuery(new Term(LookConstants.TagsField + lookQuery.TagQuery.Not.Group, lookQuery.TagQuery.Not.Name)),
+                                BooleanClause.Occur.MUST_NOT);
+                    }
+
                     // HasAll
                     if (lookQuery.TagQuery.HasAll != null && lookQuery.TagQuery.HasAll.Any())
                     {

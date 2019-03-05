@@ -11,6 +11,16 @@ namespace Our.Umbraco.Look
     public class TagQuery
     {
         /// <summary>
+        /// Must have this tag
+        /// </summary>
+        public LookTag Has { get; set; }
+
+        /// <summary>
+        /// Must not have this tag
+        /// </summary>
+        public LookTag Not { get; set; }
+
+        /// <summary>
         /// Must have all the tags in the collection
         /// </summary>
         public LookTag[] HasAll { get; set; }
@@ -71,6 +81,8 @@ namespace Our.Umbraco.Look
             var tagQuery = obj as TagQuery;
 
             return tagQuery != null
+                    && tagQuery.Has == this.Has
+                    && tagQuery.Not == this.Not
                     && tagQuery.HasAll.BothNullOrElementsEqual(this.HasAll)
                     && tagQuery.HasAny.BothNullOrElementsEqual(this.HasAny)
                     && tagQuery.HasAnyAnd.BothNullOrElementCollectionsEqual(this.HasAnyAnd) 

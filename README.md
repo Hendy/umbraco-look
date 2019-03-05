@@ -212,6 +212,12 @@ All properties are optional.
 ```csharp
 lookQuery.TagQuery = new TagQuery() {    
 
+	// must have this tag
+	Has = new LookTag("color:red"),
+
+	// must not have this tag
+	Not = new LookTag("colour:white"),
+
 	// must have all these tags
 	HasAll = TagQuery.MakeTags("colour:red", "colour:blue") },
 
