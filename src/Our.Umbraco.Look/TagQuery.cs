@@ -15,10 +15,10 @@ namespace Our.Umbraco.Look
         /// </summary>
         public LookTag[] HasAll { get; set; }
 
-        ///// <summary>
-        ///// Must have at least one tag from the collection
-        ///// </summary>
-        //public LookTag[] HasAny { get; set; }
+        /// <summary>
+        /// Must have at least one tag from the collection
+        /// </summary>
+        public LookTag[] HasAny { get; set; }
 
         /// <summary>
         /// Must have at least one tag from each collection
@@ -72,7 +72,7 @@ namespace Our.Umbraco.Look
 
             return tagQuery != null
                     && tagQuery.HasAll.BothNullOrElementsEqual(this.HasAll)
-                    //&& tagQuery.HasAny.BothNullOrElementsEqual(this.HasAny)
+                    && tagQuery.HasAny.BothNullOrElementsEqual(this.HasAny)
                     && tagQuery.HasAnyAnd.BothNullOrElementCollectionsEqual(this.HasAnyAnd) 
                     && tagQuery.NotAny.BothNullOrElementsEqual(this.NotAny)
                     && tagQuery.FacetOn.BothNullOrEquals(this.FacetOn);
