@@ -29,8 +29,38 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsTrue(new LookQuery(TestHelper.GetSearchingContext()) { TagQuery = new TagQuery() }.Search().TotalItemCount > 0);
         }
 
+
         [TestMethod]
-        public void All_Circles()
+        public void Has()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery() { Has = new LookTag("shape") };
+
+            var lookResult = lookQuery.Search();
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.AreEqual(9, lookResult.TotalItemCount);
+        }
+
+        [TestMethod]
+        public void Not()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery() {
+                Has = new LookTag("shape"), // HACK: need to clear index on startup of this class
+                Not = new LookTag("shape", "circle")
+            };
+
+            var lookResult = lookQuery.Search();
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.AreEqual(6, lookResult.TotalItemCount);
+        }
+
+        [TestMethod]
+        public void Has_All()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
@@ -43,24 +73,23 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         }
 
         [TestMethod]
-        public void All_Small_Or_Medium_Circles()
+        public void Has_Any()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
             lookQuery.TagQuery = new TagQuery()
             {
-                HasAll = TagQuery.MakeTags("shape:circle"),
-                HasAnyAnd = new LookTag[][] { TagQuery.MakeTags("size:small", "size:medium") }
+                HasAny = TagQuery.MakeTags("shape:circle", "shape:square")
             };
 
             var lookResult = lookQuery.Search();
 
             Assert.IsTrue(lookResult.Success);
-            Assert.AreEqual(2, lookResult.TotalItemCount);
+            Assert.AreEqual(6, lookResult.TotalItemCount);
         }
 
         [TestMethod]
-        public void All_Small_Or_Medium_Circles_Or_Oblongs()
+        public void Has_Any_And()
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
@@ -78,6 +107,23 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.AreEqual(4, lookResult.TotalItemCount);
         }
 
+        [TestMethod]
+        public void Not_Any()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.TagQuery = new TagQuery() {
+                Has = new LookTag("shape"), // HACK: need to clear index on startup of this class
+                NotAny = TagQuery.MakeTags("shape:circle", "shape:oblong")
+            };
+
+            var lookResult = lookQuery.Search();
+
+            Assert.IsTrue(lookResult.Success);
+            Assert.AreEqual(3, lookResult.TotalItemCount);
+        }
+
+        // all shapes except circles
         [TestMethod]
         public void All_Shapes_Except_Circles()
         {
