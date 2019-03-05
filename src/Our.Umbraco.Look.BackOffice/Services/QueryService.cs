@@ -127,12 +127,12 @@ namespace Our.Umbraco.Look.BackOffice.Services
                 // TODO: add a new field into the lucene index (would avoid additional query to first look up the tags in this group)
                 var tagsInGroup = QueryService.GetTags(searcherName, tagGroup).Select(x => x.Key).ToArray();
 
-                tagQuery.HasAnyAnd = new LookTag[][] { tagsInGroup };
+                tagQuery.HasAny = tagsInGroup;
 
             }
             else if (!string.IsNullOrWhiteSpace(tagName)) // we have a specifc tag
             {
-                tagQuery.HasAll = new[] { new LookTag(tagGroup, tagName) };
+                tagQuery.Has = new LookTag(tagGroup, tagName);
             }
 
             lookQuery.TagQuery = tagQuery;
