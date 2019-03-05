@@ -206,22 +206,28 @@ lookQuery.TextQuery = new TextQuery() {
 #### TagQuery
 
 A tag query is used together with a custom tag indexer (all properties are optional).
-If a tag query is set (ie, not null), then each result must have at least one tag.
-
-
-All = each result must contain all of these tags.
-
-Any = each result must contain at least one tag from each of the collections supplied.
-
-None = each result must not contain any of these tags.
-
-The FacetOn proeperty is used to specify how tag faceting is caluculated (see Facets section below).
+If a tag query is set then only results with tags are returned.
+All properties are optional.
 
 ```csharp
-lookQuery.TagQuery = new TagQuery() {
-	All = new[] { new LookTag("size:large") };
-	Any = new LookTag[][] { new[] { new LookTag("colour:red"), new LookTag("colour:green") } };
-	None = TagQuery.MakeTags("colour:black"), // helper to make collection
+lookQuery.TagQuery = new TagQuery() {    
+
+	// must have all these tags
+	HasAll = TagQuery.MakeTags("colour:red", "colour:blue") },
+
+	// must have at least one of these tags
+	HasAny = TagQuery.MakeTags("color:green", "colour:yellow"),
+
+	// must have at least one tags from each collection
+	HasAnyAnd= new LookTag[][] { 
+		TagQuery.MakeTags("colour:red", "size:large"), 
+		TagQuery.MakeTags("colour:red", "size:medium")
+	};
+
+	// must not have any of these tags
+	NotAny = TagQuery.MakeTags("colour:black"),
+
+	// return facet data for the tag groups
 	FacetOn = new TagFacetQuery("colour", "size", "shape")
 };
 ```
