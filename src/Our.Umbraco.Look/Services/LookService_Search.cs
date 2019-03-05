@@ -454,16 +454,19 @@ namespace Our.Umbraco.Look.Services
                     {
                         foreach (var tagCollection in lookQuery.TagQuery.HasAnyAnd)
                         {
-                            var anyTagQuery = new BooleanQuery();
-
-                            foreach (var tag in tagCollection)
+                            if (tagCollection.Any())
                             {
-                                anyTagQuery.Add(
-                                                new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
-                                                BooleanClause.Occur.SHOULD);
-                            }
+                                var anyTagQuery = new BooleanQuery();
 
-                            query.Add(anyTagQuery, BooleanClause.Occur.MUST);
+                                foreach (var tag in tagCollection)
+                                {
+                                    anyTagQuery.Add(
+                                                    new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
+                                                    BooleanClause.Occur.SHOULD);
+                                }
+
+                                query.Add(anyTagQuery, BooleanClause.Occur.MUST);
+                            }
                         }
 
                     }
