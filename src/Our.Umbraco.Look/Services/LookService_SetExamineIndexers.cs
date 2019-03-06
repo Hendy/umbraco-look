@@ -42,9 +42,6 @@ namespace Our.Umbraco.Look.Services
         /// <param name="examineIndexers">names of Examine indexers to hook into (null or empty array = none)</param>
         internal static void SetExamineIndexers(string[] examineIndexerNames)
         {
-            // safety check to ensure LookService.Instance.UmbracoHelper exists (as will be set by a look or hook startup event)
-            if (LookService.Instance.UmbracoHelper == null) return;
-
             LookService.Instance._examineIndexersConfigured = true; // set flag so that hook indexing startup event doens't reset any conumser set configuration
 
             // all examine indexers that should be hooked into (string key = indexer name)
@@ -66,11 +63,16 @@ namespace Our.Umbraco.Look.Services
             var removeEvents = LookService
                                 .Instance
                                 ._examineDocumentWritingEvents
-                                .Where(x => !examineIndexers.ContainsKey(x.Key));
+                                .Where(x => !examineIndexers.ContainsKey(x.Key))
+                                .ToDictionary(x => x.Key, x => x.Value);
 
             foreach(var removeEvent in removeEvents)
             {
-                examineIndexers[removeEvent.Key].DocumentWriting -= removeEvent.Value;
+                var indexer = ExamineManager.Instance.IndexProviderCollection[removeEvent.Key] as BaseUmbracoIndexer;
+
+                indexer.DocumentWriting -= removeEvent.Value;
+
+                LookService.Instance._examineDocumentWritingEvents.Remove(removeEvent.Key);
             }
 
             // add events if not already registered
@@ -78,7 +80,7 @@ namespace Our.Umbraco.Look.Services
             {
                 if (!LookService.Instance._examineDocumentWritingEvents.ContainsKey(examineIndexer.Key))
                 {
-                    EventHandler<DocumentWritingEventArgs> addEvent = (sender, e) => LookService.DocumentWriting(sender, e, LookService.Instance.UmbracoHelper, examineIndexer.Key);
+                    EventHandler<DocumentWritingEventArgs> addEvent = (sender, e) => LookService.DocumentWriting(sender, e, examineIndexer.Key);
 
                     LookService.Instance._examineDocumentWritingEvents[examineIndexer.Key] = addEvent;
 
@@ -96,21 +98,26 @@ namespace Our.Umbraco.Look.Services
         /// <param name="e"></param>
         /// <param name="umbracoHelper"></param>
         /// <param name="indexerName"></param>
-        private static void DocumentWriting(object sender, DocumentWritingEventArgs e, UmbracoHelper umbracoHelper, string indexerName)
+        private static void DocumentWriting(object sender, DocumentWritingEventArgs e, string indexerName)
         {
             IPublishedContent publishedContent = null;
 
-            publishedContent = umbracoHelper.TypedContent(e.NodeId);
+            if (LookService.Instance.UmbracoHelper == null)
+            {
+                throw new Exception("Look not initialized");
+            }
+
+            publishedContent = LookService.Instance.UmbracoHelper.TypedContent(e.NodeId);
 
             if (publishedContent == null)
             {
                 // attempt to get as media
-                publishedContent = umbracoHelper.TypedMedia(e.NodeId);
+                publishedContent = LookService.Instance.UmbracoHelper.TypedMedia(e.NodeId);
 
                 if (publishedContent == null)
                 {
                     // attempt to get as member
-                    publishedContent = umbracoHelper.SafeTypedMember(e.NodeId);
+                    publishedContent = LookService.Instance.UmbracoHelper.SafeTypedMember(e.NodeId);
                 }
             }
 
