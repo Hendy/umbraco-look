@@ -3,11 +3,25 @@ using Lucene.Net.Store;
 using System;
 using System.Collections.Generic;
 using Umbraco.Web;
+using Examine.LuceneEngine;
 
 namespace Our.Umbraco.Look.Services
 {
     internal partial class LookService
     {
+        /// <summary>
+        /// Flag used to indicate if the examine indexers to hook into have been configured
+        /// (by default, all examine indexes will be hooked into unless the consumer says otherwise)
+        /// </summary>
+        private bool _examineIndexersConfigured = false;
+
+        /// <summary>
+        /// Collection of document indexing event handlers for Examine Umbraco indexes (collection persisted so that events can be de-registered)
+        /// key = indexer name
+        /// value = bound event
+        /// </summary>
+        private Dictionary<string, EventHandler<DocumentWritingEventArgs>> _examineDocumentWritingEvents = new Dictionary<string, EventHandler<DocumentWritingEventArgs>>();
+
         /// <summary>
         /// Flag to indicate whether the look service has been initialized
         /// </summary>
@@ -22,7 +36,8 @@ namespace Our.Umbraco.Look.Services
         /// Collection of Examine indexer names that Look should hook into
         /// When null, indicates that all avaiable should be used
         /// </summary>
-        private string[] ExamineIndexers { get; set; }
+        [Obsolete]
+        private string[] ExamineIndexers { get; set; } = null; // default to all
 
         /// <summary>
         /// Lucene directory representations for each of the Examine index sets

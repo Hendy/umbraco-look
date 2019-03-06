@@ -1,24 +1,23 @@
-﻿using System;
-using System.Linq;
-using Our.Umbraco.Look.Services;
+﻿using Our.Umbraco.Look.Services;
+using System;
 
 namespace Our.Umbraco.Look
 {
+    /// <summary>
+    /// Set properties on this static class to configure how Look operates
+    /// </summary>
     public static class LookConfiguration
     {
         /// <summary>
         /// 'Hook indexing'
         /// Get or set the index names of all the Exmaine indexes to hook into.
-        /// If not set (or null) all Examine indexes are returned.
+        /// supplying a null or empty array means no examine indexers will be hooked into (by default if this isn't set, then all examine indexers will be hooked into)
         /// </summary>
         public static string[] ExamineIndexers
         {
             get
             {
-                return LookService
-                        .GetExamineIndexers()
-                        .Select(x => x.Name)
-                        .ToArray();
+                return LookService.GetExamineIndexers();
             }
             set
             {

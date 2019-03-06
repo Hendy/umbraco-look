@@ -1,6 +1,4 @@
-﻿using Examine;
-using System.Linq;
-using UmbracoExamine;
+﻿using System.Linq;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -10,15 +8,9 @@ namespace Our.Umbraco.Look.Services
         /// Get all Examine indexers that Look should hook into (this collection doesn't include the Look indexer/searcher, only the Examine ones)
         /// </summary>
         /// <returns></returns>
-        internal static BaseUmbracoIndexer[] GetExamineIndexers()
+        internal static string[] GetExamineIndexers()
         {
-            return ExamineManager
-                        .Instance
-                        .IndexProviderCollection
-                        .Select(x => x as BaseUmbracoIndexer) // UmbracoContentIndexer, UmbracoMemberIndexer
-                        .Where(x => x != null)
-                        .Where(x => LookService.Instance.ExamineIndexers == null || LookService.Instance.ExamineIndexers.Contains(x.Name))
-                        .ToArray();
+            return LookService.Instance._examineDocumentWritingEvents.Select(x => x.Key).ToArray();
         }
     }
 }

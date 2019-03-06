@@ -281,6 +281,7 @@
     <Compile Include="LookQuery.cs" />
     <Compile Include="RequestFields.cs" />
     <Compile Include="Models\SearchingContext.cs" />
+    <Compile Include="Services\LookService_ExamineIndexersConfigured.cs" />
     <Compile Include="Services\LookService_GetRequestFields.cs" />
     <Compile Include="SortOn.cs" />
     <Compile Include="LookTag.cs" />

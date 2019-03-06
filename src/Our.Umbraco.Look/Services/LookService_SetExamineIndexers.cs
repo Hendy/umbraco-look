@@ -1,14 +1,139 @@
-﻿using Umbraco.Core.Logging;
+﻿using Examine;
+using Examine.LuceneEngine;
+using Our.Umbraco.Look.Extensions;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Hosting;
+using Umbraco.Core;
+using Umbraco.Core.Configuration;
+using Umbraco.Core.Models;
+using Umbraco.Web;
+using Umbraco.Web.Routing;
+using Umbraco.Web.Security;
+using UmbracoExamine;
 
 namespace Our.Umbraco.Look.Services
 {
     internal partial class LookService
     {
-        internal static void SetExamineIndexers(string[] examineIndexers)
+        /// <summary>
+        /// Set all examine indexers (this may be called from the Hook indexing startup event)
+        /// </summary>
+        internal static void SetExamineIndexers()
         {
-            LogHelper.Info(typeof(LookService), "Examine indexers to hook into set");
+            // get all examine indexer names
+            var examineIndexerNames = ExamineManager
+                                        .Instance
+                                        .IndexProviderCollection
+                                        .Select(x => x as BaseUmbracoIndexer) // UmbracoContentIndexer, UmbracoMemberIndexer
+                                        .Where(x => x != null)
+                                        .Select(x => x.Name)
+                                        .ToArray();
 
-            LookService.Instance.ExamineIndexers = examineIndexers;
+            LookService.SetExamineIndexers(examineIndexerNames);
+        }
+
+        /// <summary>
+        /// Set the supplied examine indexers (this may be called by the consumer to specify the Examine indexes to hook into)
+        /// </summary>
+        /// <param name="examineIndexers">names of Examine indexers to hook into (null or empty array = none)</param>
+        internal static void SetExamineIndexers(string[] examineIndexerNames)
+        {
+            // safety check to ensure LookService.Instance.UmbracoHelper exists (as will be set by a look or hook startup event)
+            if (LookService.Instance.UmbracoHelper == null) return;
+
+            LookService.Instance._examineIndexersConfigured = true; // set flag so that hook indexing startup event doens't reset any conumser set configuration
+
+            // all examine indexers that should be hooked into (string key = indexer name)
+            var examineIndexers = new Dictionary<string, BaseUmbracoIndexer>(); // default to empty - ie, no examine indexers to hook into
+
+            if (examineIndexerNames != null && examineIndexerNames.Any())
+            {
+                // we (might) have indexers to hook into
+                examineIndexers = ExamineManager
+                                    .Instance
+                                    .IndexProviderCollection
+                                    .Select(x => x as BaseUmbracoIndexer) // UmbracoContentIndexer, UmbracoMemberIndexer
+                                    .Where(x => x != null)
+                                    .Where(x => examineIndexerNames.Contains(x.Name))
+                                    .ToDictionary(x => x.Name, x => x);
+            }
+
+            // if there are indexers already registered, remove those that are not in the collection
+            var removeEvents = LookService
+                                .Instance
+                                ._examineDocumentWritingEvents
+                                .Where(x => !examineIndexers.ContainsKey(x.Key));
+
+            foreach(var removeEvent in removeEvents)
+            {
+                examineIndexers[removeEvent.Key].DocumentWriting -= removeEvent.Value;
+            }
+
+            // add events if not already registered
+            foreach(var examineIndexer in examineIndexers)
+            {
+                if (!LookService.Instance._examineDocumentWritingEvents.ContainsKey(examineIndexer.Key))
+                {
+                    EventHandler<DocumentWritingEventArgs> addEvent = (sender, e) => LookService.DocumentWriting(sender, e, LookService.Instance.UmbracoHelper, examineIndexer.Key);
+
+                    LookService.Instance._examineDocumentWritingEvents[examineIndexer.Key] = addEvent;
+
+                    examineIndexers[examineIndexer.Key].DocumentWriting += addEvent;
+                }
+            }
+
+            //LogHelper.Info(typeof(LookService), $"Hooking into Examine indexers '{ string.Join(", ", examineIndexerNames) }'");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="umbracoHelper"></param>
+        /// <param name="indexerName"></param>
+        private static void DocumentWriting(object sender, DocumentWritingEventArgs e, UmbracoHelper umbracoHelper, string indexerName)
+        {
+            IPublishedContent publishedContent = null;
+
+            publishedContent = umbracoHelper.TypedContent(e.NodeId);
+
+            if (publishedContent == null)
+            {
+                // attempt to get as media
+                publishedContent = umbracoHelper.TypedMedia(e.NodeId);
+
+                if (publishedContent == null)
+                {
+                    // attempt to get as member
+                    publishedContent = umbracoHelper.SafeTypedMember(e.NodeId);
+                }
+            }
+
+            if (publishedContent != null)
+            {
+                var dummyHttpContext = new HttpContextWrapper(new HttpContext(new SimpleWorkerRequest("", "", new StringWriter())));
+
+                UmbracoContext.EnsureContext(
+                                    dummyHttpContext,
+                                    ApplicationContext.Current,
+                                    new WebSecurity(dummyHttpContext, ApplicationContext.Current),
+                                    UmbracoConfig.For.UmbracoSettings(),
+                                    UrlProviderResolver.Current.Providers,
+                                    true,
+                                    false);
+
+                var indexingContext = new IndexingContext(
+                                            hostNode: null,
+                                            node: publishedContent,
+                                            indexerName: indexerName);
+
+                LookService.Index(indexingContext, e.Document);
+            }
         }
     }
 }
