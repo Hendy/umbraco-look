@@ -5,7 +5,7 @@ namespace Our.Umbraco.Look.Services
     internal partial class LookService
     {
         /// <summary>
-        /// Get all Examine indexers that Look should hook into (this collection doesn't include the Look indexer/searcher, only the Examine ones)
+        /// Get all Examine indexers that Look is currently hooked into (this collection doesn't include the Look indexer/searcher, only the Examine ones)
         /// </summary>
         /// <returns></returns>
         internal static string[] GetExamineIndexers()

@@ -11,7 +11,7 @@ namespace Our.Umbraco.Look.Services
         /// <param name="textIndexer">Your custom text indexing function</param>
         internal static void SetTextIndexer(Func<IndexingContext, string> textIndexer)
         {
-            if (LookService.Instance.TextIndexer == null)
+            if (LookService.Instance._textIndexer == null)
             {
                 LogHelper.Info(typeof(LookService), "Text indexing function set");
             }
@@ -20,7 +20,7 @@ namespace Our.Umbraco.Look.Services
                 LogHelper.Warn(typeof(LookService), "Text indexing function replaced");
             }
             
-            LookService.Instance.TextIndexer = textIndexer;
+            LookService.Instance._textIndexer = textIndexer;
         }
     }
 }

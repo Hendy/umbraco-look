@@ -97,13 +97,13 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            if (LookService.Instance.NameIndexer != null)
+            if (LookService.Instance._nameIndexer != null)
             {
                 string name = null;
 
                 try
                 {
-                    name = LookService.Instance.NameIndexer(indexingContext);
+                    name = LookService.Instance._nameIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -147,13 +147,13 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            if (LookService.Instance.DateIndexer != null)
+            if (LookService.Instance._dateIndexer != null)
             {
                 DateTime? date = null;
 
                 try
                 {
-                    date = LookService.Instance.DateIndexer(indexingContext);
+                    date = LookService.Instance._dateIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -190,13 +190,13 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            if (LookService.Instance.TextIndexer != null)
+            if (LookService.Instance._textIndexer != null)
             {
                 string text = null;
 
                 try
                 {
-                    text = LookService.Instance.TextIndexer(indexingContext);
+                    text = LookService.Instance._textIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -223,13 +223,13 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            if (LookService.Instance.TagIndexer != null)
+            if (LookService.Instance._tagIndexer != null)
             {
                 LookTag[] tags = null;
 
                 try
                 {
-                    tags = LookService.Instance.TagIndexer(indexingContext);
+                    tags = LookService.Instance._tagIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -267,13 +267,13 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            if (LookService.Instance.LocationIndexer != null)
+            if (LookService.Instance._locationIndexer != null)
             {
                 Location location = null;
 
                 try
                 {
-                    location = LookService.Instance.LocationIndexer(indexingContext);
+                    location = LookService.Instance._locationIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -311,7 +311,7 @@ namespace Our.Umbraco.Look.Services
                     document.Add(locationLatitudeField);
                     document.Add(locationLongitudeField);
 
-                    foreach (var cartesianTierPlotter in LookService.Instance.CartesianTierPlotters)
+                    foreach (var cartesianTierPlotter in LookService.Instance._cartesianTierPlotters)
                     {
                         var boxId = cartesianTierPlotter.GetTierBoxId(location.Latitude, location.Longitude);
 

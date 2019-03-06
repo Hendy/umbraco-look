@@ -39,7 +39,7 @@ namespace Our.Umbraco.Look.Services
             }
             else
             {
-                var indexSetDirectory = LookService.Instance.IndexSetDirectories[searcher.IndexSetName];
+                var indexSetDirectory = LookService.Instance._indexSetDirectories[searcher.IndexSetName];
 
                 if (indexSetDirectory != null)
                 {

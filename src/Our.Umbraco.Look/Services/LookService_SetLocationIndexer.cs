@@ -11,7 +11,7 @@ namespace Our.Umbraco.Look.Services
         /// <param name="locationIndexer">Your custom location indexing function</param>
         internal static void SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
         {
-            if (LookService.Instance.LocationIndexer == null)
+            if (LookService.Instance._locationIndexer == null)
             {
                 LogHelper.Info(typeof(LookService), "Location indexing function set");
             }
@@ -20,7 +20,7 @@ namespace Our.Umbraco.Look.Services
                 LogHelper.Warn(typeof(LookService), "Location indexing function replaced");
             }
 
-            LookService.Instance.LocationIndexer = locationIndexer;
+            LookService.Instance._locationIndexer = locationIndexer;
         }
     }
 }

@@ -96,28 +96,27 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        /// <param name="umbracoHelper"></param>
-        /// <param name="indexerName"></param>
+        /// <param name="indexerName">Name of the indexer for which this DocumentWriting event is being executed on</param>
         private static void DocumentWriting(object sender, DocumentWritingEventArgs e, string indexerName)
         {
             IPublishedContent publishedContent = null;
 
-            if (LookService.Instance.UmbracoHelper == null)
+            if (LookService.Instance._umbracoHelper == null)
             {
                 throw new Exception("Unexpected null value for UmbracoHelper - Look not initialized");
             }
 
-            publishedContent = LookService.Instance.UmbracoHelper.TypedContent(e.NodeId);
+            publishedContent = LookService.Instance._umbracoHelper.TypedContent(e.NodeId);
 
             if (publishedContent == null)
             {
                 // attempt to get as media
-                publishedContent = LookService.Instance.UmbracoHelper.TypedMedia(e.NodeId);
+                publishedContent = LookService.Instance._umbracoHelper.TypedMedia(e.NodeId);
 
                 if (publishedContent == null)
                 {
                     // attempt to get as member
-                    publishedContent = LookService.Instance.UmbracoHelper.SafeTypedMember(e.NodeId);
+                    publishedContent = LookService.Instance._umbracoHelper.SafeTypedMember(e.NodeId);
                 }
             }
 

@@ -11,7 +11,7 @@ namespace Our.Umbraco.Look.Services
         /// <param name="nameIndexer">The custom name indexing function</param>
         internal static void SetNameIndexer(Func<IndexingContext, string> nameIndexer)
         {
-            if (LookService.Instance.NameIndexer == null)
+            if (LookService.Instance._nameIndexer == null)
             {
                 LogHelper.Info(typeof(LookService), "Name indexing function set");
             }
@@ -20,7 +20,7 @@ namespace Our.Umbraco.Look.Services
                 LogHelper.Warn(typeof(LookService), "Name indexing function replaced");
             }
 
-            LookService.Instance.NameIndexer = nameIndexer;
+            LookService.Instance._nameIndexer = nameIndexer;
         }
     }
 }

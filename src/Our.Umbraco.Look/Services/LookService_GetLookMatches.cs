@@ -102,7 +102,7 @@ namespace Our.Umbraco.Look.Services
                     doc.Get(LookConstants.LocationField) != null ? Location.FromString(doc.Get(LookConstants.LocationField)) : null,
                     getDistance(docId),
                     getNodeType(doc.Get(LookConstants.NodeTypeField)),
-                    LookService.Instance.UmbracoHelper
+                    LookService.Instance._umbracoHelper
                 );
 
                 // populate the Examine SearchResult.Fields collection

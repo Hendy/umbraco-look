@@ -8,7 +8,7 @@
         /// <returns></returns>
         internal static RequestFields GetRequestFields()
         {
-            return LookService.Instance.RequestFields;
+            return LookService.Instance._requestFields;
         }
     }
 }

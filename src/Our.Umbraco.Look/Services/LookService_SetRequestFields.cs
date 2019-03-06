@@ -8,7 +8,7 @@
         /// <param name="requestFields">The enum value specificy which fields should be returned for queries</param>
         internal static void SetRequestFields(RequestFields requestFields)
         {
-            LookService.Instance.RequestFields = requestFields;
+            LookService.Instance._requestFields = requestFields;
         }
     }
 }

@@ -548,7 +548,7 @@ namespace Our.Umbraco.Look.Services
 
                     if (lookQuery.LocationQuery.Location != null) // location set, so can calculate distance
                     {
-                        double maxDistance = LookService.MaxDistance;
+                        double maxDistance = LookService._maxDistance;
 
                         if (lookQuery.LocationQuery.MaxDistance != null)
                         {
@@ -628,7 +628,7 @@ namespace Our.Umbraco.Look.Services
                                 .Search(
                                     lookQuery.Compiled.Query,
                                     lookQuery.Compiled.Filter,
-                                    LookService.MaxLuceneResults,
+                                    LookService._maxLuceneResults,
                                     lookQuery.Compiled.Sort);
 
             if (topDocs.TotalHits > 0)

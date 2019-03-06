@@ -15,15 +15,15 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         internal static void Initialize(UmbracoHelper umbracoHelper)
         {
-            if (!LookService.Instance.Initialized)
+            if (!LookService.Instance._initialized)
             {
-                lock (LookService.Instance.InitializationLock)
+                lock (LookService.Instance._initializationLock)
                 {
-                    if (!LookService.Instance.Initialized)
+                    if (!LookService.Instance._initialized)
                     {
                         LogHelper.Info(typeof(LookService), "Initializing...");
 
-                        LookService.Instance.UmbracoHelper = umbracoHelper;
+                        LookService.Instance._umbracoHelper = umbracoHelper;
 
                         IndexProviderCollection indexProviderCollection = null;
 
@@ -44,28 +44,28 @@ namespace Our.Umbraco.Look.Services
                                                     .ToArray();
 
                             // cache the collection of Lucene Directory objs (so don't have to at query time)
-                            LookService.Instance.IndexSetDirectories = indexProviders.ToDictionary(x => x.IndexSetName, x => x.GetLuceneDirectory());
+                            LookService.Instance._indexSetDirectories = indexProviders.ToDictionary(x => x.IndexSetName, x => x.GetLuceneDirectory());
                         }
 
                         // init collection of cartesian tier plotters
                         IProjector projector = new SinusoidalProjector();
                         var plotter = new CartesianTierPlotter(0, projector, LookConstants.LocationTierFieldPrefix);
 
-                        var startTier = plotter.BestFit(LookService.MaxDistance);
+                        var startTier = plotter.BestFit(LookService._maxDistance);
                         var endTier = plotter.BestFit(1); // min of a 1 mile search
 
                         for (var tier = startTier; tier <= endTier; tier++)
                         {
                             LookService
                                 .Instance
-                                .CartesianTierPlotters
+                                ._cartesianTierPlotters
                                 .Add(new CartesianTierPlotter(
                                                     tier,
                                                     projector,
                                                     LookConstants.LocationTierFieldPrefix));
                         }
 
-                        LookService.Instance.Initialized = true;
+                        LookService.Instance._initialized = true;
                     }
                 }
             }
