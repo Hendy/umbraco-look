@@ -282,6 +282,11 @@
     <Compile Include="RequestFields.cs" />
     <Compile Include="Models\SearchingContext.cs" />
     <Compile Include="Services\LookService_ExamineIndexersConfigured.cs" />
+    <Compile Include="Services\LookService_GetLocationIndexer.cs" />
+    <Compile Include="Services\LookService_GetTagIndexer.cs" />
+    <Compile Include="Services\LookService_GetTextIndexer.cs" />
+    <Compile Include="Services\LookService_GetDateIndexer.cs" />
+    <Compile Include="Services\LookService_GetNameIndexer.cs" />
     <Compile Include="Services\LookService_GetRequestFields.cs" />
     <Compile Include="SortOn.cs" />
     <Compile Include="LookTag.cs" />

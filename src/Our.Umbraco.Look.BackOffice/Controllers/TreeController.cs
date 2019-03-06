@@ -1,5 +1,4 @@
-﻿using Our.Umbraco.Look.BackOffice.Interfaces;
-using Our.Umbraco.Look.BackOffice.Services;
+﻿using Our.Umbraco.Look.BackOffice.Services;
 using System.Linq;
 using System.Net.Http.Formatting;
 using Umbraco.Web.Models.Trees;
