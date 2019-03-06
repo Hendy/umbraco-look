@@ -33,6 +33,9 @@ If a function is set and returns a value then custom Lucene field(s) prefixed wi
 ```csharp
 public static class LookConfiguration
 {
+	// specify which Examine indexers to hook into (if not set, then all will be used by default)
+	public static string[] ExamineIndexers { get; set; }
+
 	// creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
 	public static Func<IndexingContext, string> NameIndexer { set; }
 
