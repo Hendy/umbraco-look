@@ -6,7 +6,7 @@ using Umbraco.Web;
 namespace Our.Umbraco.Look
 {
     /// <summary>
-    /// Hooks into all configured Exmaine Umbraco indexers, allowing Look to add additional fields
+    /// Hooks into all configured Exmaine Umbraco indexers (unless configured otherwise by the consumer)
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)] // hide from api intellisense
     public class HookIndexing : ApplicationEventHandler
@@ -20,10 +20,11 @@ namespace Our.Umbraco.Look
         {
             LookService.Initialize(new UmbracoHelper(UmbracoContext.Current));
 
-            // if consumer hasn't (yet) set the examine indexers to use then register them all
+            // if consumer hasn't (yet) set the examine indexers, then register them all
             if (!LookService.ExamineIndexersConfigured)
             {
-                LookService.SetExamineIndexers(); // wire-up all
+                // register all
+                LookService.SetExamineIndexers();
             }
         }
     }

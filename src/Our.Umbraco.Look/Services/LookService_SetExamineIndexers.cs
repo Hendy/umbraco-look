@@ -104,7 +104,7 @@ namespace Our.Umbraco.Look.Services
 
             if (LookService.Instance.UmbracoHelper == null)
             {
-                throw new Exception("Look not initialized");
+                throw new Exception("Unexpected null value for UmbracoHelper - Look not initialized");
             }
 
             publishedContent = LookService.Instance.UmbracoHelper.TypedContent(e.NodeId);
