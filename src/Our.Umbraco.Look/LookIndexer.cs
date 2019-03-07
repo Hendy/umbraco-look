@@ -1,16 +1,10 @@
-﻿using Examine;
-using Examine.LuceneEngine;
-using Examine.LuceneEngine.Config;
-using Examine.LuceneEngine.Providers;
+﻿using Examine.LuceneEngine.Providers;
 using Lucene.Net.Documents;
-using Lucene.Net.Index;
-using Lucene.Net.Store;
 using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Xml.Linq;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 
@@ -18,14 +12,19 @@ namespace Our.Umbraco.Look
 {
     public class LookIndexer : LuceneIndexer
     {
-        private UmbracoHelper UmbracoHelper { get; }
+        UmbracoHelper _umbracoHelper = null;
 
-        /// <summary>
-        /// Constructor to set privates
-        /// </summary>
-        public LookIndexer()
+        private UmbracoHelper UmbracoHelper
         {
-            this.UmbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+            get
+            {
+                if (this._umbracoHelper == null)
+                {
+                    this._umbracoHelper = new UmbracoHelper(UmbracoContext.Current);  
+                }
+
+                return this._umbracoHelper;
+            }
         }
 
         public override void Initialize(string name, NameValueCollection config)
