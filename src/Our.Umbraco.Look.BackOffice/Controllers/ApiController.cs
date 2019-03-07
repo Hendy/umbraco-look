@@ -21,21 +21,24 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new SearcherViewData();
 
-            var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
-            //var searcher = ExamineManager.Instance.SearchProviderCollection[searcherName];
+            var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"]; //ExamineManager.Instance.SearchProviderCollection[searcherName];
 
             viewData.SearcherName = searcher.Name;
             viewData.SearcherDescription = searcher.Description;
             viewData.SearcherType = searcher is LookSearcher ? "Look" : "Examine";
             viewData.Icon = IconService.GetSearcherIcon(searcher);
-
             viewData.LookIndexingEnabled = searcher is LookSearcher || LookConfiguration.ExamineIndexers.Contains(searcher.Name.TrimEnd("Searcher") + "Indexer");
+            viewData.NameIndexerEnabled = viewData.LookIndexingEnabled && LookConfiguration.NameIndexerEnabled;
+            viewData.DateIndexerEnabled = viewData.LookIndexingEnabled && LookConfiguration.DateIndexerEnabled;
+            viewData.TextIndexerEnabled = viewData.LookIndexingEnabled && LookConfiguration.TextIndexerEnabled;
+            viewData.TagIndexerEnabled = viewData.LookIndexingEnabled && LookConfiguration.TagIndexerEnabled;
+            viewData.LocationIndexerEnabled = viewData.LookIndexingEnabled && LookConfiguration.LocationIndexerEnabled;
 
-            
-            //viewData.NameIndexerEnabled = 
-            // number of documents in index
-            // indexers operational
-            //viewData.LookIndexingEnabled = 
+            // TODO: 
+            //number of documents in index
+            //fields in index
+            //text analyzer
+            //lucene index folder
 
             return this.Ok(viewData);
         }
@@ -54,7 +57,12 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(viewData);
         }
 
-        // TODO: GetViewDataForNodeType
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <param name="nodeType"></param>
+        /// <returns></returns>
         [HttpGet]
         [ValidateSearcher]
         public IHttpActionResult GetViewDataForNodeType([FromUri]string searcherName, [FromUri]PublishedItemType nodeType)

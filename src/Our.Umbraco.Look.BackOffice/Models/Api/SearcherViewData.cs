@@ -40,22 +40,31 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
         /// <summary>
         /// should default to true when indexing enabled (as default indexing behaviour will be to index the IPublishedContent.Name property)
         /// </summary>
-        [JsonProperty("nameIndexerSet")]
-        public bool NameIndexerSet { get; set; }
+        [JsonProperty("nameIndexerEnabled")]
+        public bool NameIndexerEnabled { get; set; }
 
         /// <summary>
         /// should default to true when indexing enabled (as default indexing behaviour will be to index the IPublishedContent.UpdateDate property)
         /// </summary>
-        [JsonProperty("dateIndexerSet")]
-        public bool DateIndexerSet { get; set; }
+        [JsonProperty("dateIndexerEnabled")]
+        public bool DateIndexerEnabled { get; set; }
 
-        [JsonProperty("textIndexerSet")]
-        public bool TextIndexerSet { get; set; }
+        /// <summary>
+        /// Flag to indicate whether a custom indexer has been set
+        /// </summary>
+        [JsonProperty("textIndexerEnabled")]
+        public bool TextIndexerEnabled { get; set; }
 
-        [JsonProperty("tagIndexerSet")]
-        public bool TagIndexerSet { get; set; }
+        /// <summary>
+        /// Flag to indicate whether a custom indexer has been set
+        /// </summary>
+        [JsonProperty("tagIndexerEnabled")]
+        public bool TagIndexerEnabled { get; set; }
 
-        [JsonProperty("locationIndexerSet")]
-        public bool LocationIndexerSet { get; set; }
+        /// <summary>
+        /// Flag to indicate whether a custom indexer has been set
+        /// </summary>
+        [JsonProperty("locationIndexerEnabled")]
+        public bool LocationIndexerEnabled { get; set; }
     }
 }
