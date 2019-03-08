@@ -1,6 +1,7 @@
 ﻿using Examine;
 using Our.Umbraco.Look.BackOffice.Interfaces;
 using Our.Umbraco.Look.BackOffice.Services;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
 using umbraco;
@@ -57,11 +58,21 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
             {
                 //base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
 
-                return new ILookTreeNode[] {                    
-                    new NodesTreeNode(base.QueryStrings),
-                    new TagsTreeNode(base.QueryStrings),
-                    new LocationsTreeNode(base.QueryStrings)
-                };
+                var childTreeNodes = new List<ILookTreeNode>();
+
+                childTreeNodes.Add(new NodesTreeNode(base.QueryStrings));
+
+                if (LookConfiguration.TagIndexerEnabled)
+                {
+                    childTreeNodes.Add(new TagsTreeNode(base.QueryStrings));
+                }
+
+                if (LookConfiguration.LocationIndexerEnabled)
+                {
+                    childTreeNodes.Add(new LocationsTreeNode(base.QueryStrings));
+                }
+
+                return childTreeNodes.ToArray();
             }
 
             return base.GetChildren(); // empty
