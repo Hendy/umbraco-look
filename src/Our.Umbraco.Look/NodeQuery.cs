@@ -120,10 +120,14 @@ namespace Our.Umbraco.Look
 
             return nodeQuery != null
                 && nodeQuery.Types.BothNullOrElementsEqual(this.Types)
+                && nodeQuery.DetachedQuery == this.DetachedQuery
                 && nodeQuery.Cultures.BothNullOrElementsEqual(this.Cultures)
                 && nodeQuery.Aliases.BothNullOrElementsEqual(this.Aliases)
+                && nodeQuery.Ids.BothNullOrElementsEqual(this.Ids)
                 && nodeQuery.Keys.BothNullOrElementsEqual(this.Keys)
+                && nodeQuery.NotId == this.NotId
                 && nodeQuery.NotIds.BothNullOrElementsEqual(this.NotIds)
+                && nodeQuery.NotKey == this.NotKey
                 && nodeQuery.NotKeys.BothNullOrElementsEqual(this.Keys);
         }
 
