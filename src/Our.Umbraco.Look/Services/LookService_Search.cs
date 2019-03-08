@@ -208,6 +208,14 @@ namespace Our.Umbraco.Look.Services
                         query.Add(keyQuery, BooleanClause.Occur.MUST);
                     }
 
+                    // NotId
+                    if (lookQuery.NodeQuery.NotId != null)
+                    {
+                        query.Add(
+                                new TermQuery(new Term(LookConstants.NodeIdField, lookQuery.NodeQuery.NotId.ToString())),
+                                BooleanClause.Occur.MUST_NOT);
+                    }
+
                     // NotIds
                     if (lookQuery.NodeQuery.NotIds != null && lookQuery.NodeQuery.NotIds.Any())
                     {
@@ -217,6 +225,14 @@ namespace Our.Umbraco.Look.Services
                                     new TermQuery(new Term(LookConstants.NodeIdField, exculudeId.ToString())),
                                     BooleanClause.Occur.MUST_NOT);
                         }
+                    }
+
+                    // NotKey
+                    if (lookQuery.NodeQuery.NotKey != null)
+                    {
+                        query.Add(
+                                new TermQuery(new Term(LookConstants.NodeKeyField, lookQuery.NodeQuery.NotKey.ToString())),
+                                BooleanClause.Occur.MUST_NOT);
                     }
 
                     // NotKeys

@@ -155,14 +155,19 @@ lookQuery.NodeQuery = new NodeQuery() {
 		"myMediaTypeAlias",
 		"myMemberTypeAlias"
 	},
-	Ids = new [] { 1,2,3 },
+	Ids = new [] { 1, 2 },
 	Keys = new [] { 
 		Guid.Parse("dc890492-4571-4701-8085-b874837d597a"), 
 		Guid.Parse("9f60f10f-74ea-4323-98bb-13b6f6423ad6"),
+	}
+	NotId = 3, // (eg. exclude current page)
+	NotIds = new [] { 4, 5 },
+	NotKey = Guid.Parse("3e919e10-b702-4478-87ed-4a42ec52b337"),
+	NotKeys = new [] { 
+		Guid.Parse("6bb24ed2-9466-422f-a9d4-27a805db2d47"), 
 		Guid.Parse("88a9e4e3-d4cb-4641-aff3-8579f1d60399")
 	}
-	NotIds = new [] { 123 }, // (eg. exclude current page)
-	NotKeys = new [] { Guid.Parse("6bb24ed2-9466-422f-a9d4-27a805db2d47") }
+}
 };
 ```
 
