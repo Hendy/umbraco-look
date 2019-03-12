@@ -89,7 +89,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             lookQuery.NodeQuery = new NodeQuery()
             {
-                HasTypeAny = new PublishedItemType[] { nodeType }
+                HasType = nodeType
             };
 
             QueryService.SetSort(lookQuery, sort);
