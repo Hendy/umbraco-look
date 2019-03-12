@@ -22,19 +22,11 @@ namespace Our.Umbraco.Look
         /// </summary>
         public DateBoundary Boundary { get; set; } = DateBoundary.Inclusive;
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="before"></param>
-        ///// <param name="after"></param>
-        ///// <param name="boundary"></param>
-        //public DateQuery(DateTime? before = null, DateTime? after = null, DateBoundary boundary = DateBoundary.Inclusive)
-        //{
-        //    this.Before = before;
-        //    this.After = after;
-        //    this.Boundary = boundary;
-        //}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             var dateQuery = obj as DateQuery;
@@ -45,6 +37,10 @@ namespace Our.Umbraco.Look
                 && dateQuery.Boundary == this.Boundary;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         internal DateQuery Clone()
         {
             return (DateQuery)this.MemberwiseClone();

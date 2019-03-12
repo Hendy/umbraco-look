@@ -12,17 +12,11 @@
         /// </summary>
         public bool GetHighlight { get; set; } = false;
 
-        ///// <summary>
-        ///// Create a new TextQuery search criteria
-        ///// </summary>
-        ///// <param name="searchText">The text to search for - can include wildcards</param>
-        ///// <param name="getHighlight">Set to true to return highlight fragment per result</param>
-        //public TextQuery(string searchText = null, bool getHighlight = false)
-        //{
-        //    this.SearchText = searchText;
-        //    this.GetHighlight = getHighlight;
-        //}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             var textQuery = obj as TextQuery;
@@ -32,6 +26,10 @@
                 && textQuery.GetHighlight == this.GetHighlight;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         internal TextQuery Clone()
         {
             return (TextQuery)this.MemberwiseClone();

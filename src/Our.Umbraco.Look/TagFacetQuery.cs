@@ -23,6 +23,11 @@ namespace Our.Umbraco.Look
             this.TagGroups = tagGroups;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             var tagFacetQuery = obj as TagFacetQuery;

@@ -19,17 +19,11 @@ namespace Our.Umbraco.Look
         /// </summary>
         public Distance MaxDistance { get; set; } = null;
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="location"></param>
-        ///// <param name="maxDistance"></param>
-        //public LocationQuery(Location location = null, Distance maxDistance = null)
-        //{
-        //    this.Location = location;
-        //    this.MaxDistance = maxDistance;
-        //}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             var locationQuery = obj as LocationQuery;
@@ -39,6 +33,10 @@ namespace Our.Umbraco.Look
                 && locationQuery.MaxDistance.BothNullOrEquals(this.MaxDistance);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         internal LocationQuery Clone()
         {
             var clone = new LocationQuery();

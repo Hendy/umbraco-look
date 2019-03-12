@@ -37,6 +37,11 @@ namespace Our.Umbraco.Look
             return this.Latitude.ToString() + "|" + this.Longitude.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             var location = obj as Location;
@@ -45,11 +50,20 @@ namespace Our.Umbraco.Look
                 && location.ToString() == this.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         internal Location Clone()
         {
             return (Location)this.MemberwiseClone();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         internal static Location FromString(string value)
         {
             Location location = null;

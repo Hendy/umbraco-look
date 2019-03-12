@@ -108,6 +108,11 @@ namespace Our.Umbraco.Look
         /// </summary>
         public bool CaseSensitive { get; set; } = true;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             NameQuery nameQuery = obj as NameQuery;
@@ -120,6 +125,10 @@ namespace Our.Umbraco.Look
                 && nameQuery.CaseSensitive == this.CaseSensitive;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         internal NameQuery Clone()
         {
             return (NameQuery)this.MemberwiseClone();

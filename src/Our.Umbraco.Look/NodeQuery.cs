@@ -57,63 +57,11 @@ namespace Our.Umbraco.Look
         /// </summary>
         public Guid[] NotKeys { get; set; } = null;
 
-        ///// <summary>
-        ///// Create new empty NodeQuery search criteria
-        ///// </summary>
-        //public NodeQuery()
-        //{
-        //}
-
-        ///// <summary>
-        ///// Create new NodeQuery search criteria for nodes of a given type, eg content, media or members
-        ///// (detached items are associated with their host type)
-        ///// </summary>
-        ///// <param name="type">The node type. eg. content, media or member</param>
-        //public NodeQuery(PublishedItemType type)
-        //{
-        //    this.Types = new PublishedItemType[] { type };
-        //}
-
-        ///// <summary>
-        ///// Create new NodeQuery search critera (specifying a culture implies that the PublishedItemType will be Content)
-        ///// </summary>
-        ///// <param name="cultureInfo"></param>
-        //public NodeQuery(CultureInfo cultureInfo)
-        //{
-        //    this.Cultures = new CultureInfo[] { cultureInfo };
-        //}
-
-        ///// <summary>
-        ///// Create new NodeQuery search criteria for all nodes of any of these aliases
-        ///// </summary>
-        ///// <param name="aliases">array of string aliases for the content, media or members</param>
-        //public NodeQuery(params string[] aliases)
-        //{
-        //    this.Aliases = aliases;
-        //}
-
-        ///// <summary>
-        ///// Create new NodeQuery search critera 
-        ///// </summary>
-        ///// <param name="type"></param>
-        ///// <param name="aliases"></param>
-        //public NodeQuery(PublishedItemType type, params string[] aliases)
-        //{
-        //    this.Types = new PublishedItemType[] { type };
-        //    this.Aliases = aliases;
-        //}
-
-        ///// <summary>
-        ///// Create new NodeQuery search critera 
-        ///// </summary>
-        ///// <param name="cultureInfo"></param>
-        ///// <param name="aliases"></param>
-        //public NodeQuery(CultureInfo cultureInfo, params string[] aliases)
-        //{
-        //    this.Cultures = new CultureInfo[] { cultureInfo };
-        //    this.Aliases = aliases;
-        //}
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             NodeQuery nodeQuery = obj as NodeQuery;
@@ -131,6 +79,10 @@ namespace Our.Umbraco.Look
                 && nodeQuery.NotKeys.BothNullOrElementsEqual(this.Keys);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         internal NodeQuery Clone()
         {
             return (NodeQuery)this.MemberwiseClone();

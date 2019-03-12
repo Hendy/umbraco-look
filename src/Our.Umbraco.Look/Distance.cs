@@ -19,6 +19,11 @@ namespace Our.Umbraco.Look
             this.DistanceUnit = unit;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             var distance = obj as Distance;
@@ -28,6 +33,10 @@ namespace Our.Umbraco.Look
                 && distance.DistanceUnit == this.DistanceUnit;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         internal Distance Clone()
         {
             var clone = (Distance)this.MemberwiseClone();
@@ -37,6 +46,10 @@ namespace Our.Umbraco.Look
             return clone;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         internal double GetMiles()
         {
             switch (this.DistanceUnit)

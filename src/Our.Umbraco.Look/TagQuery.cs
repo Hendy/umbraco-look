@@ -81,6 +81,11 @@ namespace Our.Umbraco.Look
             return TagQuery.MakeTags(tags.ToArray());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             var tagQuery = obj as TagQuery;
@@ -96,6 +101,10 @@ namespace Our.Umbraco.Look
                     && tagQuery.FacetOn.BothNullOrEquals(this.FacetOn);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         internal TagQuery Clone()
         {
             return (TagQuery)this.MemberwiseClone();

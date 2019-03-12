@@ -189,6 +189,10 @@ namespace Our.Umbraco.Look
                 && lookQuery.SearcherName == this.SearcherName;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         internal LookQuery Clone()
         {
             var clone = new LookQuery();
