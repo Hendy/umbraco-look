@@ -91,7 +91,16 @@ namespace Our.Umbraco.Look.Services
 
                     query.Add(new TermQuery(new Term(LookConstants.HasNodeField, "1")), BooleanClause.Occur.MUST);
 
-                    // Types
+                    // HasType
+                    if (lookQuery.NodeQuery.HasType != null)
+                    {
+                        query.Add(
+                                new TermQuery(
+                                    new Term(LookConstants.NodeTypeField, lookQuery.NodeQuery.HasType.ToString())),
+                                    BooleanClause.Occur.MUST);
+                    }
+
+                    // HasTypeAny
                     if (lookQuery.NodeQuery.HasTypeAny != null && lookQuery.NodeQuery.HasTypeAny.Any())
                     {
                         var nodeTypeQuery = new BooleanQuery();
@@ -127,7 +136,16 @@ namespace Our.Umbraco.Look.Services
                             break;
                     }
 
-                    // Cultures
+                    // HasCulture
+                    if (lookQuery.NodeQuery.HasCulture != null)
+                    {
+                        query.Add(
+                                new TermQuery(
+                                    new Term(LookConstants.CultureField, lookQuery.NodeQuery.HasCulture.LCID.ToString())),
+                                    BooleanClause.Occur.MUST);
+                    }
+
+                    // HasCultureAny
                     if (lookQuery.NodeQuery.HasCultureAny != null && lookQuery.NodeQuery.HasCultureAny.Any())
                     {
                         var nodeCultureQuery = new BooleanQuery();
@@ -143,7 +161,16 @@ namespace Our.Umbraco.Look.Services
                         query.Add(nodeCultureQuery, BooleanClause.Occur.MUST);
                     }
 
-                    // Aliases
+                    // HasAlias
+                    if (lookQuery.NodeQuery.HasAlias != null)
+                    {
+                        query.Add(
+                                new TermQuery(
+                                    new Term(LookConstants.NodeAliasField, lookQuery.NodeQuery.HasAlias.ToString())),
+                                    BooleanClause.Occur.MUST);
+                    }
+
+                    // HasAliasAny
                     if (lookQuery.NodeQuery.HasAliasAny != null && lookQuery.NodeQuery.HasAliasAny.Any())
                     {
                         var nodeAliasQuery = new BooleanQuery();
@@ -151,7 +178,8 @@ namespace Our.Umbraco.Look.Services
                         foreach (var typeAlias in lookQuery.NodeQuery.HasAliasAny)
                         {
                             nodeAliasQuery.Add(
-                                                new TermQuery(new Term(LookConstants.NodeAliasField, typeAlias)),
+                                            new TermQuery(
+                                                new Term(LookConstants.NodeAliasField, typeAlias)),
                                                 BooleanClause.Occur.SHOULD);
                         }
 

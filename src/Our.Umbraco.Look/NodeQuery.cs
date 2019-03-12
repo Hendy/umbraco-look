@@ -8,6 +8,11 @@ namespace Our.Umbraco.Look
     public class NodeQuery
     {
         /// <summary>
+        /// Type type of content to find
+        /// </summary>
+        public PublishedItemType? HasType { get; set; } = null;
+
+        /// <summary>
         /// The types of node to find, eg. Content, Media, Members
         /// </summary>
         public PublishedItemType[] HasTypeAny { get; set; } = null;
@@ -18,9 +23,19 @@ namespace Our.Umbraco.Look
         public DetachedQuery DetachedQuery { get; set; } = DetachedQuery.IncludeDetached;
 
         /// <summary>
+        /// 
+        /// </summary>
+        public CultureInfo HasCulture { get; set; } = null;
+
+        /// <summary>
         /// The cultures of the content nodes to find
         /// </summary>
         public CultureInfo[] HasCultureAny { get; set; } = null;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string HasAlias { get; set; } = null;
 
         /// <summary>
         /// The document type, media type or member type aliases
@@ -67,9 +82,12 @@ namespace Our.Umbraco.Look
             NodeQuery nodeQuery = obj as NodeQuery;
 
             return nodeQuery != null
+                && nodeQuery.HasType == this.HasType
                 && nodeQuery.HasTypeAny.BothNullOrElementsEqual(this.HasTypeAny)
                 && nodeQuery.DetachedQuery == this.DetachedQuery
+                && nodeQuery.HasCulture == this.HasCulture
                 && nodeQuery.HasCultureAny.BothNullOrElementsEqual(this.HasCultureAny)
+                && nodeQuery.HasAlias == this.HasAlias
                 && nodeQuery.HasAliasAny.BothNullOrElementsEqual(this.HasAliasAny)
                 && nodeQuery.Ids.BothNullOrElementsEqual(this.Ids)
                 && nodeQuery.Keys.BothNullOrElementsEqual(this.Keys)
