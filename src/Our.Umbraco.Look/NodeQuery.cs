@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// The types of node to find, eg. Content, Media, Members
         /// </summary>
-        public PublishedItemType[] Types { get; set; } = null;
+        public PublishedItemType[] HasTypeAny { get; set; } = null;
 
         /// <summary>
         /// Flags to indicate whether detached content should be returned
@@ -67,7 +67,7 @@ namespace Our.Umbraco.Look
             NodeQuery nodeQuery = obj as NodeQuery;
 
             return nodeQuery != null
-                && nodeQuery.Types.BothNullOrElementsEqual(this.Types)
+                && nodeQuery.HasTypeAny.BothNullOrElementsEqual(this.HasTypeAny)
                 && nodeQuery.DetachedQuery == this.DetachedQuery
                 && nodeQuery.Cultures.BothNullOrElementsEqual(this.Cultures)
                 && nodeQuery.Aliases.BothNullOrElementsEqual(this.Aliases)

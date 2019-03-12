@@ -92,11 +92,11 @@ namespace Our.Umbraco.Look.Services
                     query.Add(new TermQuery(new Term(LookConstants.HasNodeField, "1")), BooleanClause.Occur.MUST);
 
                     // Types
-                    if (lookQuery.NodeQuery.Types != null && lookQuery.NodeQuery.Types.Any())
+                    if (lookQuery.NodeQuery.HasTypeAny != null && lookQuery.NodeQuery.HasTypeAny.Any())
                     {
                         var nodeTypeQuery = new BooleanQuery();
 
-                        foreach(var nodeType in lookQuery.NodeQuery.Types)
+                        foreach(var nodeType in lookQuery.NodeQuery.HasTypeAny)
                         {
                             nodeTypeQuery.Add(
                                 new TermQuery(
