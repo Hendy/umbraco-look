@@ -30,7 +30,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void New_Query_Executed_To_Make_Compiled()
         {
-            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery() { Aliases = new[] { "thing" } } };
 
             var lookResult = lookQuery.Search();
 
@@ -41,7 +41,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Invalidate_Compiled_By_Raw_Query_Change()
         {
-            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery() { Aliases = new[] { "thing" } } };
 
             var lookResult = lookQuery.Search();
 
@@ -53,7 +53,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Invalidate_Compiled_By_Node_Query_Change()
         {
-            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery() { Aliases = new[] { "thing" } } };
 
             var lookResult = lookQuery.Search();
 
@@ -65,7 +65,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Invalidate_Compiled_By_Name_Query_Change()
         {
-            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery() { Aliases = new[] { "thing" } } };
 
             var lookResult = lookQuery.Search();
 
@@ -78,7 +78,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Invalidate_Compiled_By_Date_Query_Change()
         {
-            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery() { Aliases = new[] { "thing" } } };
 
             var lookResult = lookQuery.Search();
 
@@ -91,7 +91,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Invalidate_Compiled_By_Text_Query_Change()
         {
-            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery() { Aliases = new[] { "thing" } } };
 
             var lookResult = lookQuery.Search();
 
@@ -104,7 +104,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Invalidate_Compiled_By_Tag_Query_Change()
         {
-            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery() { Aliases = new[] { "thing" } } };
 
             var lookResult = lookQuery.Search();
 
@@ -117,7 +117,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [TestMethod]
         public void Invalidate_Compiled_By_Location_Query_Change()
         {
-            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery("thing") };
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NodeQuery = new NodeQuery() { Aliases = new[] { "thing" } } };
 
             var lookResult = lookQuery.Search();
 

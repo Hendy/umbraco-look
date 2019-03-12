@@ -226,7 +226,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModelTests\LookQueryTests.cs" />
-    <Compile Include="ModelTests\NodeQueryConstructorTests.cs" />
     <Compile Include="ModelTests\TagFacetQueryComparrisonTests.cs" />
     <Compile Include="ModelTests\TagQueryComparrisonTests.cs" />
     <Compile Include="QueryTests\LookQueryConflictTests.cs" />
