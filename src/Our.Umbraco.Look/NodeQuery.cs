@@ -5,17 +5,20 @@ using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look
 {
+    /// <summary>
+    /// All property clauses are ANDed
+    /// </summary>
     public class NodeQuery
     {
         /// <summary>
-        /// Type type of content to find
+        /// If set, then items returned must be of this type
         /// </summary>
-        public PublishedItemType? HasType { get; set; } = null;
+        public PublishedItemType? Type { get; set; } = null;
 
         /// <summary>
-        /// The types of node to find, eg. Content, Media, Members
+        /// If set, then items returned can be any of these types
         /// </summary>
-        public PublishedItemType[] HasTypeAny { get; set; } = null;
+        public PublishedItemType[] TypeAny { get; set; } = null;
 
         /// <summary>
         /// Flags to indicate whether detached content should be returned
@@ -23,24 +26,24 @@ namespace Our.Umbraco.Look
         public DetachedQuery DetachedQuery { get; set; } = DetachedQuery.IncludeDetached;
 
         /// <summary>
-        /// 
+        /// If set, then items returned must be of this culture
         /// </summary>
-        public CultureInfo HasCulture { get; set; } = null;
+        public CultureInfo Culture { get; set; } = null;
 
         /// <summary>
         /// The cultures of the content nodes to find
         /// </summary>
-        public CultureInfo[] HasCultureAny { get; set; } = null;
+        public CultureInfo[] CultureAny { get; set; } = null;
 
         /// <summary>
-        /// 
+        /// If set, then items returned must be of this alias
         /// </summary>
-        public string HasAlias { get; set; } = null;
+        public string Alias { get; set; } = null;
 
         /// <summary>
         /// The document type, media type or member type aliases
         /// </summary>
-        public string[] HasAliasAny { get; set; } = null;
+        public string[] AliasAny { get; set; } = null;
 
         /// <summary>
         /// Only content, media or members with these ids will be retuned (detached items don't have ids)
@@ -82,13 +85,13 @@ namespace Our.Umbraco.Look
             NodeQuery nodeQuery = obj as NodeQuery;
 
             return nodeQuery != null
-                && nodeQuery.HasType == this.HasType
-                && nodeQuery.HasTypeAny.BothNullOrElementsEqual(this.HasTypeAny)
+                && nodeQuery.Type == this.Type
+                && nodeQuery.TypeAny.BothNullOrElementsEqual(this.TypeAny)
                 && nodeQuery.DetachedQuery == this.DetachedQuery
-                && nodeQuery.HasCulture == this.HasCulture
-                && nodeQuery.HasCultureAny.BothNullOrElementsEqual(this.HasCultureAny)
-                && nodeQuery.HasAlias == this.HasAlias
-                && nodeQuery.HasAliasAny.BothNullOrElementsEqual(this.HasAliasAny)
+                && nodeQuery.Culture == this.Culture
+                && nodeQuery.CultureAny.BothNullOrElementsEqual(this.CultureAny)
+                && nodeQuery.Alias == this.Alias
+                && nodeQuery.AliasAny.BothNullOrElementsEqual(this.AliasAny)
                 && nodeQuery.Ids.BothNullOrElementsEqual(this.Ids)
                 && nodeQuery.Keys.BothNullOrElementsEqual(this.Keys)
                 && nodeQuery.NotId == this.NotId
