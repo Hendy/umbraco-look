@@ -128,11 +128,11 @@ namespace Our.Umbraco.Look.Services
                     }
 
                     // Cultures
-                    if (lookQuery.NodeQuery.HasCulturesAny != null && lookQuery.NodeQuery.HasCulturesAny.Any())
+                    if (lookQuery.NodeQuery.HasCultureAny != null && lookQuery.NodeQuery.HasCultureAny.Any())
                     {
                         var nodeCultureQuery = new BooleanQuery();
 
-                        foreach(var nodeCulture in lookQuery.NodeQuery.HasCulturesAny)
+                        foreach(var nodeCulture in lookQuery.NodeQuery.HasCultureAny)
                         {
                             nodeCultureQuery.Add(
                                 new TermQuery(
