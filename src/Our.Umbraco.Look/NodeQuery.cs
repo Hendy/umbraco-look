@@ -6,12 +6,12 @@ using Umbraco.Core.Models;
 namespace Our.Umbraco.Look
 {
     /// <summary>
-    /// All property clauses are ANDed
+    /// All properies are optional, when set clauses are ANDed
     /// </summary>
     public class NodeQuery
     {
         /// <summary>
-        /// If set, then items returned must be of this type
+        /// If set, then items returned must be of this type (will take precedence over TypeAny)
         /// </summary>
         public PublishedItemType? Type { get; set; } = null;
 
@@ -26,7 +26,7 @@ namespace Our.Umbraco.Look
         public DetachedQuery DetachedQuery { get; set; } = DetachedQuery.IncludeDetached;
 
         /// <summary>
-        /// If set, then items returned must be of this culture
+        /// If set, then items returned must be of this culture (will take precedence over CultureAny)
         /// </summary>
         public CultureInfo Culture { get; set; } = null;
 
@@ -36,7 +36,7 @@ namespace Our.Umbraco.Look
         public CultureInfo[] CultureAny { get; set; } = null;
 
         /// <summary>
-        /// If set, then items returned must be of this alias
+        /// If set, then items returned must be of this alias (will take precedence over AliasAny)
         /// </summary>
         public string Alias { get; set; } = null;
 
