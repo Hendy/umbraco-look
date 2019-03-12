@@ -133,7 +133,7 @@ namespace Our.Umbraco.Look
         {
             var lookQuery = new LookQuery(this.Name)
             {
-                TextQuery = new TextQuery(searchText)
+                TextQuery = new TextQuery() {  SearchText = searchText }
             };
 
             var lookResult = lookQuery.Search();           

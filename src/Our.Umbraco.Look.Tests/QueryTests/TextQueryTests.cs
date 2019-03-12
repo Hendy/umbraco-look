@@ -28,7 +28,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.TextQuery = new TextQuery("dolor");
+            lookQuery.TextQuery = new TextQuery() { SearchText = "dolor" };
 
             var lookResult = lookQuery.Search();
 
@@ -43,7 +43,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         {
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
-            lookQuery.TextQuery = new TextQuery("dolor", true);
+            lookQuery.TextQuery = new TextQuery() { SearchText = "dolor", GetHighlight = true };
 
             var lookResult = lookQuery.Search();
 
