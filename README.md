@@ -141,19 +141,19 @@ A node query is used to specify search criteria based on common properties of IP
 
 ```csharp
 lookQuery.NodeQuery = new NodeQuery() {
-	HasType = PublishedItemType.Content,
-	//HasTypeAny = new [] { 
+	Type = PublishedItemType.Content,
+	//TypeAny = new [] { 
 	//	PublishedItemType.Content, 
 	//	PublishedItemType.Media, 
 	//	PublishedItemType.Member 
 	//},
 	DetachedQuery = DetachedQuery.IncludeDetached, // enum options
-	HasCulture = new CultureInfo("fr"),
-	//HasCultureAny = new [] {
+	Culture = new CultureInfo("fr"),
+	//CultureAny = new [] {
 	//	new CultureInfo("fr")	
 	//},
-	HasAlias = "myDocTypeAlias",
-	//HasAliasAny = new [] { 
+	Alias = "myDocTypeAlias",
+	//AliasAny = new [] { 
 	//	"myDocTypeAlias", 
 	//	"myMediaTypeAlias",
 	//	"myMemberTypeAlias"
