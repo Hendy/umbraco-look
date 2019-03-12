@@ -159,10 +159,12 @@ namespace Our.Umbraco.Look.Services
 
             #endregion
 
+            #region Date
+
+            DateTime? date = null;
+
             if (LookService.Instance._dateIndexer != null)
             {
-                DateTime? date = null;
-
                 try
                 {
                     date = LookService.Instance._dateIndexer(indexingContext);
@@ -171,36 +173,44 @@ namespace Our.Umbraco.Look.Services
                 {
                     LogHelper.WarnWithException(typeof(LookService), "Error in date indexer", exception);
                 }
-
-                if (date != null)
-                {
-                    var hasDateField = new Field(
-                                            LookConstants.HasDateField,
-                                            "1",
-                                            Field.Store.NO,
-                                            Field.Index.NOT_ANALYZED);
-
-                    var dateValue = DateTools.DateToString(date.Value, DateTools.Resolution.SECOND);
-
-                    var dateField = new Field(
-                                            LookConstants.DateField,
-                                            dateValue,
-                                            Field.Store.YES,
-                                            Field.Index.ANALYZED,
-                                            Field.TermVector.YES);
-
-                    var dateSortedField = new Field(
-                                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField,
-                                                dateValue,
-                                                Field.Store.NO,
-                                                Field.Index.NOT_ANALYZED,
-                                                Field.TermVector.NO);
-
-                    document.Add(hasDateField);
-                    document.Add(dateField);
-                    document.Add(dateSortedField);
-                }
             }
+            else if (indexingContext.Item != null)
+            {
+                date = indexingContext.Item.UpdateDate;
+            }
+
+            if (date != null)
+            {
+                var hasDateField = new Field(
+                                        LookConstants.HasDateField,
+                                        "1",
+                                        Field.Store.NO,
+                                        Field.Index.NOT_ANALYZED);
+
+                var dateValue = DateTools.DateToString(date.Value, DateTools.Resolution.SECOND);
+
+                var dateField = new Field(
+                                        LookConstants.DateField,
+                                        dateValue,
+                                        Field.Store.YES,
+                                        Field.Index.ANALYZED,
+                                        Field.TermVector.YES);
+
+                var dateSortedField = new Field(
+                                            LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField,
+                                            dateValue,
+                                            Field.Store.NO,
+                                            Field.Index.NOT_ANALYZED,
+                                            Field.TermVector.NO);
+
+                document.Add(hasDateField);
+                document.Add(dateField);
+                document.Add(dateSortedField);
+            }
+
+            #endregion
+
+            #region Text
 
             if (LookService.Instance._textIndexer != null)
             {
@@ -234,6 +244,10 @@ namespace Our.Umbraco.Look.Services
                     document.Add(textField);
                 }
             }
+
+            #endregion
+
+            #region Tag
 
             if (LookService.Instance._tagIndexer != null)
             {
@@ -278,6 +292,10 @@ namespace Our.Umbraco.Look.Services
                     }
                 }
             }
+
+            #endregion
+
+            #region Location
 
             if (LookService.Instance._locationIndexer != null)
             {
@@ -337,6 +355,8 @@ namespace Our.Umbraco.Look.Services
                     }
                 }
             }
+
+            #endregion  
         }
     }
 }

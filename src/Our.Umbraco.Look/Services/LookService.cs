@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Function to get the date for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, DateTime?> _dateIndexer = x => x.Item.UpdateDate;
+        private Func<IndexingContext, DateTime?> _dateIndexer;
 
         /// <summary>
         /// Function to get text for the IPublishedContent being indexed
