@@ -20,7 +20,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// The cultures of the content nodes to find
         /// </summary>
-        public CultureInfo[] Cultures { get; set; } = null;
+        public CultureInfo[] HasCulturesAny { get; set; } = null;
 
         /// <summary>
         /// The document type, media type or member type aliases
@@ -69,7 +69,7 @@ namespace Our.Umbraco.Look
             return nodeQuery != null
                 && nodeQuery.HasTypeAny.BothNullOrElementsEqual(this.HasTypeAny)
                 && nodeQuery.DetachedQuery == this.DetachedQuery
-                && nodeQuery.Cultures.BothNullOrElementsEqual(this.Cultures)
+                && nodeQuery.HasCulturesAny.BothNullOrElementsEqual(this.HasCulturesAny)
                 && nodeQuery.Aliases.BothNullOrElementsEqual(this.Aliases)
                 && nodeQuery.Ids.BothNullOrElementsEqual(this.Ids)
                 && nodeQuery.Keys.BothNullOrElementsEqual(this.Keys)
