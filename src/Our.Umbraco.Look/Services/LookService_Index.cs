@@ -18,6 +18,8 @@ namespace Our.Umbraco.Look.Services
         /// <param name="document"></param>
         internal static void Index(IndexingContext indexingContext, Document document)
         {
+            #region Node
+
             if (indexingContext.Item != null)
             {
                 var publishedItemType = indexingContext?.HostItem?.ItemType ?? indexingContext.Item.ItemType;
@@ -97,10 +99,14 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
+            #endregion
+
+            #region Name
+
+            string name = null;
+
             if (LookService.Instance._nameIndexer != null)
             {
-                string name = null;
-
                 try
                 {
                     name = LookService.Instance._nameIndexer(indexingContext);
@@ -109,43 +115,49 @@ namespace Our.Umbraco.Look.Services
                 {
                     LogHelper.WarnWithException(typeof(LookService), "Error in name indexer", exception);
                 }
+            }
+            else if (indexingContext.Item != null)
+            {
+                name = indexingContext.Item.Name;
+            }
 
-                if (name != null)
-                {
-                    var hasNameField = new Field(
-                            LookConstants.HasNameField,
-                            "1",                            
-                            Field.Store.NO,
-                            Field.Index.NOT_ANALYZED);
+            if (name != null)
+            {
+                var hasNameField = new Field(
+                        LookConstants.HasNameField,
+                        "1",                            
+                        Field.Store.NO,
+                        Field.Index.NOT_ANALYZED);
 
-                    var nameField = new Field(
-                                            LookConstants.NameField,
-                                            name,
-                                            Field.Store.YES,
-                                            Field.Index.NOT_ANALYZED,
-                                            Field.TermVector.YES);
+                var nameField = new Field(
+                                        LookConstants.NameField,
+                                        name,
+                                        Field.Store.YES,
+                                        Field.Index.NOT_ANALYZED,
+                                        Field.TermVector.YES);
 
-                    // field for lower case searching
-                    var nameFieldLowered = new Field(
-                                            LookConstants.NameField + "_Lowered",
-                                            name.ToLower(),
+                // field for lower case searching
+                var nameFieldLowered = new Field(
+                                        LookConstants.NameField + "_Lowered",
+                                        name.ToLower(),
+                                        Field.Store.NO,
+                                        Field.Index.NOT_ANALYZED,
+                                        Field.TermVector.YES);
+
+                var nameSortedField = new Field(
+                                            LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField,
+                                            name.ToLower(), // force case insentive sorting
                                             Field.Store.NO,
                                             Field.Index.NOT_ANALYZED,
-                                            Field.TermVector.YES);
+                                            Field.TermVector.NO);
 
-                    var nameSortedField = new Field(
-                                                LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField,
-                                                name.ToLower(), // force case insentive sorting
-                                                Field.Store.NO,
-                                                Field.Index.NOT_ANALYZED,
-                                                Field.TermVector.NO);
-
-                    document.Add(hasNameField);
-                    document.Add(nameField);
-                    document.Add(nameFieldLowered);
-                    document.Add(nameSortedField);
-                }
+                document.Add(hasNameField);
+                document.Add(nameField);
+                document.Add(nameFieldLowered);
+                document.Add(nameSortedField);
             }
+
+            #endregion
 
             if (LookService.Instance._dateIndexer != null)
             {
