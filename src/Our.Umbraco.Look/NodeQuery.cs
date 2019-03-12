@@ -25,7 +25,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// The document type, media type or member type aliases
         /// </summary>
-        public string[] Aliases { get; set; } = null;
+        public string[] HasAliasAny { get; set; } = null;
 
         /// <summary>
         /// Only content, media or members with these ids will be retuned (detached items don't have ids)
@@ -70,7 +70,7 @@ namespace Our.Umbraco.Look
                 && nodeQuery.HasTypeAny.BothNullOrElementsEqual(this.HasTypeAny)
                 && nodeQuery.DetachedQuery == this.DetachedQuery
                 && nodeQuery.HasCulturesAny.BothNullOrElementsEqual(this.HasCulturesAny)
-                && nodeQuery.Aliases.BothNullOrElementsEqual(this.Aliases)
+                && nodeQuery.HasAliasAny.BothNullOrElementsEqual(this.HasAliasAny)
                 && nodeQuery.Ids.BothNullOrElementsEqual(this.Ids)
                 && nodeQuery.Keys.BothNullOrElementsEqual(this.Keys)
                 && nodeQuery.NotId == this.NotId

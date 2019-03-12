@@ -144,11 +144,11 @@ namespace Our.Umbraco.Look.Services
                     }
 
                     // Aliases
-                    if (lookQuery.NodeQuery.Aliases != null && lookQuery.NodeQuery.Aliases.Any())
+                    if (lookQuery.NodeQuery.HasAliasAny != null && lookQuery.NodeQuery.HasAliasAny.Any())
                     {
                         var nodeAliasQuery = new BooleanQuery();
 
-                        foreach (var typeAlias in lookQuery.NodeQuery.Aliases)
+                        foreach (var typeAlias in lookQuery.NodeQuery.HasAliasAny)
                         {
                             nodeAliasQuery.Add(
                                                 new TermQuery(new Term(LookConstants.NodeAliasField, typeAlias)),
