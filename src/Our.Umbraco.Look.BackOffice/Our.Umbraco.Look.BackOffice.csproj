@@ -269,6 +269,7 @@
     <Content Include="Client\Views\Locations.html" />
     <Content Include="Client\Views\Nodes.html" />
     <Content Include="Client\Views\NodeType.html" />
+    <Content Include="Client\Views\Partials\Details.html" />
     <Content Include="Client\Views\Partials\Matches.html" />
     <Content Include="Client\Views\Partials\Sort.html" />
     <Content Include="Client\Views\Searcher.html" />
