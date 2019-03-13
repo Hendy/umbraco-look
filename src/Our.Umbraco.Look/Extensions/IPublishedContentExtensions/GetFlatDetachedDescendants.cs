@@ -9,17 +9,19 @@ namespace Our.Umbraco.Look.Extensions
     internal static partial class IPublishedContentExtensions
     {
         /// <summary>
-        /// For the supplied IPublishedContent, find all detached IPublishedContent exposed via properties
+        /// For the supplied IPublishedContent item, recurse all of its properties that return collections of IPublishedContent items
+        /// Return an array of all distinct detached (by guid key) IPublishedContent items
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
+        /// <param name="item">The IPublishedContent item to get all detached IPublihedContent items for</param>
+        /// <param name="flatDetachedItems">The List into which to add the detached IPublishedContent items</param>
+        /// <returns>All detached IPublishedContent items as a flat Array</returns>
         internal static IPublishedContent[] GetFlatDetachedDescendants(this IPublishedContent item, List<IPublishedContent> flatDetachedItems = null)
         {
             flatDetachedItems = flatDetachedItems ?? new List<IPublishedContent>();
 
             if (item != null)
             {
-                LogHelper.Debug(typeof(IPublishedContentExtensions), $"GetFlatDetachedDescendants() for Name = '{ item.Name }', Guid = '{ item.GetGuidKey().ToString() }'");
+                LogHelper.Debug(typeof(IPublishedContentExtensions), $"GetFlatDetachedDescendants() for Name = '{ item.Name }', Key = '{ item.GetGuidKey() }'");
 
                 var detachedItems = item
                                     .Properties
@@ -29,14 +31,17 @@ namespace Our.Umbraco.Look.Extensions
                                     .Where(x => x != null)
                                     .Where(x => x.Id == 0) // ensure only detached items are added
                                     .Where(x => x.GetGuidKey() != Guid.Empty) // detached items must have a valid key
-                                    .Where(x => !flatDetachedItems.Select(y => y.GetGuidKey()).Contains(x.GetGuidKey())) // safety check to prevent duplicates
+
+                                    // safety check to prevent duplicates
+                                    .Where(x => !flatDetachedItems.Select(y => y.GetGuidKey()).Contains(x.GetGuidKey())) 
                                     .ToArray();
 
                 foreach (var detachedItem in detachedItems)
                 {                    
                     flatDetachedItems.Add(detachedItem);
 
-                    detachedItem.GetFlatDetachedDescendants(flatDetachedItems); // recurse and forget result (as collection passed back in and built-up)
+                    // recurse and ignore result (as flatDetachedItems list is added to)
+                    detachedItem.GetFlatDetachedDescendants(flatDetachedItems); 
                 }
             }
 
