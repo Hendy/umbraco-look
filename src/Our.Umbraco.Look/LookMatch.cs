@@ -178,7 +178,7 @@ namespace Our.Umbraco.Look
                     }
                     else // get the host item and then all of it's detached items to find by key
                     {                        
-                        return this.HostItem.GetFlatDetachedDescendants().SingleOrDefault(x => x.GetKey() == itemGuid.Value);
+                        return this.HostItem.GetFlatDetachedDescendants().FirstOrDefault(x => x.GetKey() == itemGuid.Value);
                     }
                 }
 
