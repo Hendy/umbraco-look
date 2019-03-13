@@ -238,9 +238,9 @@ namespace Our.Umbraco.Look
                 }
 
                 indexWriter.Commit();
-
-                //indexWriter.Optimize();
             }
+
+            //indexWriter.Optimize();
         }
     }
 }
