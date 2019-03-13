@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Our.Umbraco.Look</id>
-    <version>0.26.0</version>
+    <version>0.27.0</version>
     <authors>Hendy Racher</authors>
     <owners>Hendy Racher</owners>
     <licenseUrl>https://github.com/Hendy/umbraco-look/blob/master/LICENSE</licenseUrl>
