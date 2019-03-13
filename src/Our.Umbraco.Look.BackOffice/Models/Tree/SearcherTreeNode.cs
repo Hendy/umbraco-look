@@ -62,12 +62,12 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
                 childTreeNodes.Add(new NodesTreeNode(base.QueryStrings));
 
-                if (LookConfiguration.TagIndexerEnabled)
+                if (LookConfiguration.TagIndexerIsSet)
                 {
                     childTreeNodes.Add(new TagsTreeNode(base.QueryStrings));
                 }
 
-                if (LookConfiguration.LocationIndexerEnabled)
+                if (LookConfiguration.LocationIndexerIsSet)
                 {
                     childTreeNodes.Add(new LocationsTreeNode(base.QueryStrings));
                 }

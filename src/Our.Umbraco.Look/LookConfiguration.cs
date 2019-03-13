@@ -53,27 +53,27 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Flag to indicate whether a name indexer is enabled
         /// </summary>
-        public static bool NameIndexerEnabled => LookService.GetNameIndexer() != null;
+        public static bool NameIndexerIsSet => LookService.GetNameIndexer() != null;
 
         /// <summary>
         /// Flag to indicate whether a date indexer is enabled
         /// </summary>
-        public static bool DateIndexerEnabled => LookService.GetDateIndexer() != null;
+        public static bool DateIndexerIsSet => LookService.GetDateIndexer() != null;
 
         /// <summary>
         /// Flag to indicate whether a text indexer is enabled
         /// </summary>
-        public static bool TextIndexerEnabled => LookService.GetTextIndexer() != null;
+        public static bool TextIndexerIsSet => LookService.GetTextIndexer() != null;
 
         /// <summary>
         /// Flag to indicate whether a tag indexer is enabled
         /// </summary>
-        public static bool TagIndexerEnabled => LookService.GetTagIndexer() != null;
+        public static bool TagIndexerIsSet => LookService.GetTagIndexer() != null;
 
         /// <summary>
         /// Flag to indicate whether a location indexer is enabled
         /// </summary>
-        public static bool LocationIndexerEnabled => LookService.GetLocationIndexer() != null;
+        public static bool LocationIndexerIsSet => LookService.GetLocationIndexer() != null;
 
         /// <summary>
         /// Specify which fields to return in the result set.
