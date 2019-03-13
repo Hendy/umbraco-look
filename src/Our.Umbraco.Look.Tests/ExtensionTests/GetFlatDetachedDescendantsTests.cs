@@ -19,6 +19,7 @@ namespace Our.Umbraco.Look.Tests.ModelTests
             var result = content.GetFlatDetachedDescendants();
 
             Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Length);
         }
 
         [TestMethod]
@@ -31,6 +32,7 @@ namespace Our.Umbraco.Look.Tests.ModelTests
             var result = content.Object.GetFlatDetachedDescendants();
 
             Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Length);
         }
 
         [TestMethod]
@@ -163,6 +165,7 @@ namespace Our.Umbraco.Look.Tests.ModelTests
             var result = content.Object.GetFlatDetachedDescendants();
 
             Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Count());
         }
     }
 }
