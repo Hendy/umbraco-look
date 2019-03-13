@@ -25,6 +25,7 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\package.manifest" target="Content\App_Plugins\Look\package.manifest" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Look.css" target="Content\App_Plugins\Look\Look.css" />
 
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\DetailsController.js" target="Content\App_Plugins\Look\Controllers\DetailsController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\LocationsController.js" target="Content\App_Plugins\Look\Controllers\LocationsController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\MatchesController.js" target="Content\App_Plugins\Look\Controllers\MatchesController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\NodesController.js" target="Content\App_Plugins\Look\Controllers\NodesController.js" />
@@ -38,6 +39,7 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Directives\LazyLoadDirective.js" target="Content\App_Plugins\Look\Directives\LazyLoadDirective.js" />
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\ApiService.js" target="Content\App_Plugins\Look\Services\ApiService.js" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\MatchService.js" target="Content\App_Plugins\Look\Services\MatchService.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\SortService.js" target="Content\App_Plugins\Look\Services\SortService.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\TreeService.js" target="Content\App_Plugins\Look\Services\TreeService.js" />
 

@@ -219,9 +219,11 @@
   <ItemGroup>
     <Content Include="Client\Controllers\LocationsController.js" />
     <Content Include="Client\Controllers\NodeTypeController.js" />
+    <Content Include="Client\Services\MatchService.js" />
     <Content Include="Client\Services\SortService.js" />
     <Content Include="Client\Controllers\NodesController.js" />
     <Compile Include="Attributes\ValidateSearcherAttribute.cs" />
+    <Content Include="Client\Controllers\DetailsController.js" />
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\TreeController.cs" />
     <Compile Include="Interfaces\ILookTreeNode.cs" />

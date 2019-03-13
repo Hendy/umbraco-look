@@ -6,10 +6,10 @@
         .module('umbraco')
         .controller('Look.BackOffice.MatchesController', MatchesController);
 
-    MatchesController.$inject = ['$scope', 'Look.BackOffice.SortService', '$q', 'dialogService'];
+    MatchesController.$inject = ['$scope', 'Look.BackOffice.SortService', '$q', 'dialogService', 'Look.BackOffice.MatchService'];
 
     // this controller will handle paging for more results
-    function MatchesController($scope, sortService, $q, dialogService) {
+    function MatchesController($scope, sortService, $q, dialogService, matchService) {
 
         $scope.matches = []; // full collection of matches to render
         $scope.currentlyLoading = false;
@@ -75,18 +75,15 @@
             return enableNameBreaker;
         };
 
-
-        $scope.showDetails = function (id) {
-            console.log(id);
-
+        $scope.showDetails = function (match) {
+            
+            matchService.selectedMatch = match;
 
             dialogService.open({
                 template: '/App_Plugins/Look/BackOffice/LookTree/Partials/Details.html',
                 show: true
             });
         };
-
-
 
 
         $scope.reload = function () {
