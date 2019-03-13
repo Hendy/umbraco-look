@@ -10,11 +10,10 @@ namespace Our.Umbraco.Look.Extensions
     {
         /// <summary>
         /// For the supplied IPublishedContent, find all detached IPublishedContent collection exposed via properties
-        /// TODO: yield return
         /// </summary>
         /// <param name="publishedContent"></param>
         /// <returns></returns>
-        internal static IEnumerable<IPublishedContent> GetFlatDetachedDescendants(this IPublishedContent publishedContent)
+        internal static IPublishedContent[] GetFlatDetachedDescendants(this IPublishedContent publishedContent)
         {
             var detachedPublishedContent = new List<IPublishedContent>();
 
@@ -30,6 +29,7 @@ namespace Our.Umbraco.Look.Extensions
                                                     .Where(x => x != null)
                                                     .Where(x => x.Id == 0) // ensure only detached items are added
                                                     .Where(x => x.GetGuidKey() != Guid.Empty)
+                                                    //.Where(x => !detachedPublishedContent.Select(y => y.GetGuidKey()).Contains(x.GetGuidKey())) // safety check to prevent duplicates
                                                     .ToArray();
 
                 foreach (var childPublishedContent in publishedContentProperties)
