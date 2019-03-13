@@ -9,38 +9,38 @@ namespace Our.Umbraco.Look.Extensions
     internal static partial class IPublishedContentExtensions
     {
         /// <summary>
-        /// For the supplied IPublishedContent, find all detached IPublishedContent collection exposed via properties
+        /// For the supplied IPublishedContent, find all detached IPublishedContent exposed via properties
         /// </summary>
-        /// <param name="publishedContent"></param>
+        /// <param name="item"></param>
         /// <returns></returns>
-        internal static IPublishedContent[] GetFlatDetachedDescendants(this IPublishedContent publishedContent)
+        internal static IPublishedContent[] GetFlatDetachedDescendants(this IPublishedContent item, List<IPublishedContent> flatDetachedItems = null)
         {
-            var detachedPublishedContent = new List<IPublishedContent>();
+            flatDetachedItems = flatDetachedItems ?? new List<IPublishedContent>();
 
-            if (publishedContent != null)
+            if (item != null)
             {
-                LogHelper.Debug(typeof(IPublishedContentExtensions), $"GetFlatDetachedDescendants() for Name = '{ publishedContent.Name }', Guid = '{ publishedContent.GetGuidKey().ToString() }'");
+                LogHelper.Debug(typeof(IPublishedContentExtensions), $"GetFlatDetachedDescendants() for Name = '{ item.Name }', Guid = '{ item.GetGuidKey().ToString() }'");
 
-                var publishedContentProperties = publishedContent
-                                                    .Properties
-                                                    .Where(x => x.Value is IEnumerable<IPublishedContent>)
-                                                    .Select(x => x.Value as IEnumerable<IPublishedContent>)
-                                                    .SelectMany(x => x)
-                                                    .Where(x => x != null)
-                                                    .Where(x => x.Id == 0) // ensure only detached items are added
-                                                    .Where(x => x.GetGuidKey() != Guid.Empty)
-                                                    //.Where(x => !detachedPublishedContent.Select(y => y.GetGuidKey()).Contains(x.GetGuidKey())) // safety check to prevent duplicates
-                                                    .ToArray();
+                var detachedItems = item
+                                    .Properties
+                                    .Where(x => x.Value is IEnumerable<IPublishedContent>)
+                                    .Select(x => x.Value as IEnumerable<IPublishedContent>)
+                                    .SelectMany(x => x)
+                                    .Where(x => x != null)
+                                    .Where(x => x.Id == 0) // ensure only detached items are added
+                                    .Where(x => x.GetGuidKey() != Guid.Empty) // detached items must have a valid key
+                                    .Where(x => !flatDetachedItems.Select(y => y.GetGuidKey()).Contains(x.GetGuidKey())) // safety check to prevent duplicates
+                                    .ToArray();
 
-                foreach (var childPublishedContent in publishedContentProperties)
+                foreach (var detachedItem in detachedItems)
                 {                    
-                    detachedPublishedContent.Add(childPublishedContent);
+                    flatDetachedItems.Add(detachedItem);
 
-                    detachedPublishedContent.AddRange(childPublishedContent.GetFlatDetachedDescendants()); // recurse
+                    detachedItem.GetFlatDetachedDescendants(flatDetachedItems); // recurse and forget result (as collection passed back in and built-up)
                 }
             }
 
-            return detachedPublishedContent.ToArray();
+            return flatDetachedItems.ToArray();
         }
     }
 }

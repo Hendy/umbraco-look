@@ -126,23 +126,43 @@ namespace Our.Umbraco.Look.Tests.ModelTests
             Assert.AreEqual(3, result.Count());
         }
 
-        //[TestMethod]
-        //public void Infinite_Loop_Populated_Collection_Property()
-        //{
-        //    var content = new Mock<IPublishedContent>();
-        //    var detached = new Mock<IPublishedContent>();
-        //    var property = new Mock<IPublishedProperty>();
+        [TestMethod]
+        public void Infinite_Loop_No_Key_Populated_Collection_Property()
+        {
+            var content = new Mock<IPublishedContent>();
+            var detached = new Mock<IPublishedContent>();
+            var property = new Mock<IPublishedProperty>();
 
-        //    content.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
+            content.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
 
-        //    detached.SetupGet(x => x.Id).Returns(0);
-        //    detached.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
+            detached.SetupGet(x => x.Id).Returns(0);
+            detached.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
 
-        //    property.SetupGet(x => x.Value).Returns(new IPublishedContent[] { detached.Object });
+            property.SetupGet(x => x.Value).Returns(new IPublishedContent[] { detached.Object });
 
-        //    var result = content.Object.GetFlatDetachedDescendants();
+            var result = content.Object.GetFlatDetachedDescendants();
 
-        //    Assert.IsNotNull(result);
-        //}
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void Infinite_Loop_Same_Key_Populated_Collection_Property()
+        {
+            var content = new Mock<IPublishedContent>();
+            var detached = new Mock<IPublishedContentWithKey>();
+            var property = new Mock<IPublishedProperty>();
+
+            content.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
+
+            detached.SetupGet(x => x.Id).Returns(0);
+            detached.SetupGet(x => x.Key).Returns(new Guid("ebd75668-4456-44e0-a205-af0ea92c1cc9"));
+            detached.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
+
+            property.SetupGet(x => x.Value).Returns(new IPublishedContent[] { detached.Object });
+
+            var result = content.Object.GetFlatDetachedDescendants();
+
+            Assert.IsNotNull(result);
+        }
     }
 }
