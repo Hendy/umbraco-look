@@ -10,15 +10,15 @@ namespace Our.Umbraco.Look.Tests.ModelTests
     [TestClass]
     public class GetFlatDetachedDescendants
     {
-        //[TestMethod]
-        //public void Null_IPublishedContent()
-        //{
-        //    IPublishedContent content = null;
+        [TestMethod]
+        public void Null_IPublishedContent()
+        {
+            IPublishedContent content = null;
 
-        //    var result = content.GetFlatDetachedDescendants();
+            var result = content.GetFlatDetachedDescendants();
 
-        //    Assert.IsNotNull(result);
-        //}
+            Assert.IsNotNull(result);
+        }
 
         [TestMethod]
         public void No_Properties()

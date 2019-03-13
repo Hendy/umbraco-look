@@ -16,20 +16,23 @@ namespace Our.Umbraco.Look.Extensions
         {
             var detachedPublishedContent = new List<IPublishedContent>();
 
-            var publishedContentCollections = publishedContent
-                                                .Properties
-                                                .Where(y => y.Value is IEnumerable<IPublishedContent>)
-                                                .Select(y => y.Value as IEnumerable<IPublishedContent>);
-
-            foreach (var publishedContentCollection in publishedContentCollections)
+            if (publishedContent != null)
             {
-                // ensure only detached items are added
-                detachedPublishedContent.AddRange(publishedContentCollection.Where(x => x.Id == 0)); // TODO: ensure not null & key a valid non-empty guid
-                
-                foreach (var childPublishedContent in publishedContentCollection)
+                var publishedContentCollections = publishedContent
+                                                    .Properties
+                                                    .Where(y => y.Value is IEnumerable<IPublishedContent>)
+                                                    .Select(y => y.Value as IEnumerable<IPublishedContent>);
+
+                foreach (var publishedContentCollection in publishedContentCollections)
                 {
-                    // recurse
-                    detachedPublishedContent.AddRange(IPublishedContentExtensions.GetFlatDetachedDescendants(childPublishedContent));
+                    // ensure only detached items are added
+                    detachedPublishedContent.AddRange(publishedContentCollection.Where(x => x.Id == 0)); // TODO: ensure not null & key a valid non-empty guid
+
+                    foreach (var childPublishedContent in publishedContentCollection)
+                    {
+                        // recurse
+                        detachedPublishedContent.AddRange(IPublishedContentExtensions.GetFlatDetachedDescendants(childPublishedContent));
+                    }
                 }
             }
 
