@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Extensions
@@ -19,6 +20,8 @@ namespace Our.Umbraco.Look.Extensions
 
             if (publishedContent != null)
             {
+                LogHelper.Debug(typeof(IPublishedContentExtensions), $"GetFlatDetachedDescendants() for '{ publishedContent.Name }'");
+
                 var publishedContentProperties = publishedContent
                                                     .Properties
                                                     .Where(x => x.Value is IEnumerable<IPublishedContent>)
