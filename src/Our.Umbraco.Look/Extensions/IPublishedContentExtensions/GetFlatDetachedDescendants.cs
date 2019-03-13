@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Core.Models;
 
@@ -18,21 +19,21 @@ namespace Our.Umbraco.Look.Extensions
 
             if (publishedContent != null)
             {
-                var publishedContentCollections = publishedContent
+                var publishedContentChildren = publishedContent
                                                     .Properties
-                                                    .Where(y => y.Value is IEnumerable<IPublishedContent>)
-                                                    .Select(y => y.Value as IEnumerable<IPublishedContent>);
+                                                    .Where(x => x.Value is IEnumerable<IPublishedContent>)
+                                                    .Select(x => x.Value as IEnumerable<IPublishedContent>)
+                                                    .SelectMany(x => x)
+                                                    .Where(x => x != null)
+                                                    .Where(x => x.Id == 0) // ensure only detached items are added
+                                                    //.Where(x => x.GetGuidKey() != Guid.Empty)
+                                                    .ToArray();
 
-                foreach (var publishedContentCollection in publishedContentCollections)
-                {
-                    // ensure only detached items are added
-                    detachedPublishedContent.AddRange(publishedContentCollection.Where(x => x.Id == 0)); // TODO: ensure not null & key a valid non-empty guid
+                foreach (var childPublishedContent in publishedContentChildren)
+                {                    
+                    detachedPublishedContent.Add(childPublishedContent); // TODO: ensure not null & key a valid non-empty guid
 
-                    foreach (var childPublishedContent in publishedContentCollection)
-                    {
-                        // recurse
-                        detachedPublishedContent.AddRange(IPublishedContentExtensions.GetFlatDetachedDescendants(childPublishedContent));
-                    }
+                    detachedPublishedContent.AddRange(childPublishedContent.GetFlatDetachedDescendants()); // recurse
                 }
             }
 

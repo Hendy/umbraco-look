@@ -48,21 +48,21 @@ namespace Our.Umbraco.Look.Tests.ModelTests
             Assert.AreEqual(0, result.Count());
         }
 
-        //[TestMethod]
-        //public void Null_Populated_Collection_Property()
-        //{
-        //    var content = new Mock<IPublishedContent>();
-        //    var property = new Mock<IPublishedProperty>();
+        [TestMethod]
+        public void Null_Populated_Collection_Property()
+        {
+            var content = new Mock<IPublishedContent>();
+            var property = new Mock<IPublishedProperty>();
 
-        //    property.SetupGet(x => x.Value).Returns(new IPublishedContent[] { null, null });
+            property.SetupGet(x => x.Value).Returns(new IPublishedContent[] { null, null });
 
-        //    content.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
+            content.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
 
-        //    var result = content.Object.GetFlatDetachedDescendants();
+            var result = content.Object.GetFlatDetachedDescendants();
 
-        //    Assert.IsNotNull(result);
-        //    Assert.AreEqual(0, result.Count());
-        //}
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Count());
+        }
 
         [TestMethod]
         public void Populated_Collection_Property()
