@@ -13,14 +13,13 @@
 
         $scope.sortOn = sortService.sortOn;
 
-        // default sort order - TODO: only enable if there are items in the index
-        $scope.sortOptions.push({ value: 'Score', label: 'Score', disabled: false });
+        // TODO: only enable if there are items in the index
+        $scope.sortOptions.push({ value: 'Score', label: 'Score', disabled: false }); // default sort order
+        $scope.sortOptions.push({ value: 'Name', label: 'Name', disabled: false });
 
-        // only enable these, if these fields have indexeres set on them
-        $scope.sortOptions.push({ value: 'Name', label: 'Name', disabled: false }); // DEBUG
-
-        $scope.sortOptions.push({ value: 'DateAscending', label: 'Date Ascending', disabled: true });
-        $scope.sortOptions.push({ value: 'DateDecending', label: 'Date Decending', disabled: true });
+        // add later after 0.1.0
+        //$scope.sortOptions.push({ value: 'DateAscending', label: 'Date Ascending', disabled: true });
+        //$scope.sortOptions.push({ value: 'DateDecending', label: 'Date Decending', disabled: true });
 
         $scope.change = function () {
             sortService.change($scope.sortOn);
