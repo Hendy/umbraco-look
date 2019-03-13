@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Our.Umbraco.Look.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Core.Models;
@@ -69,9 +70,10 @@ namespace Our.Umbraco.Look.Tests.ModelTests
         {
             var content = new Mock<IPublishedContent>();
             var property = new Mock<IPublishedProperty>();
-            var detached = new Mock<IPublishedContent>();
+            var detached = new Mock<IPublishedContentWithKey>();
 
             detached.SetupGet(x => x.Id).Returns(0);
+            detached.SetupGet(x => x.Key).Returns(Guid.NewGuid());
 
             detached.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>());
 
@@ -90,9 +92,9 @@ namespace Our.Umbraco.Look.Tests.ModelTests
         {
             var content = new Mock<IPublishedContent>();
 
-            var detached1 = new Mock<IPublishedContent>();
-            var detached2 = new Mock<IPublishedContent>();
-            var detached3 = new Mock<IPublishedContent>();
+            var detached1 = new Mock<IPublishedContentWithKey>();
+            var detached2 = new Mock<IPublishedContentWithKey>();
+            var detached3 = new Mock<IPublishedContentWithKey>();
 
             var property1 = new Mock<IPublishedProperty>();
             var property2 = new Mock<IPublishedProperty>();
@@ -104,6 +106,10 @@ namespace Our.Umbraco.Look.Tests.ModelTests
             detached1.SetupGet(x => x.Id).Returns(0);
             detached2.SetupGet(x => x.Id).Returns(0);
             detached3.SetupGet(x => x.Id).Returns(0);
+
+            detached1.SetupGet(x => x.Key).Returns(Guid.NewGuid());
+            detached2.SetupGet(x => x.Key).Returns(Guid.NewGuid());
+            detached3.SetupGet(x => x.Key).Returns(Guid.NewGuid());
 
             detached1.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property2.Object });
             detached2.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property3.Object });

@@ -19,19 +19,19 @@ namespace Our.Umbraco.Look.Extensions
 
             if (publishedContent != null)
             {
-                var publishedContentChildren = publishedContent
+                var publishedContentProperties = publishedContent
                                                     .Properties
                                                     .Where(x => x.Value is IEnumerable<IPublishedContent>)
                                                     .Select(x => x.Value as IEnumerable<IPublishedContent>)
                                                     .SelectMany(x => x)
                                                     .Where(x => x != null)
                                                     .Where(x => x.Id == 0) // ensure only detached items are added
-                                                    //.Where(x => x.GetGuidKey() != Guid.Empty)
+                                                    .Where(x => x.GetGuidKey() != Guid.Empty)
                                                     .ToArray();
 
-                foreach (var childPublishedContent in publishedContentChildren)
+                foreach (var childPublishedContent in publishedContentProperties)
                 {                    
-                    detachedPublishedContent.Add(childPublishedContent); // TODO: ensure not null & key a valid non-empty guid
+                    detachedPublishedContent.Add(childPublishedContent);
 
                     detachedPublishedContent.AddRange(childPublishedContent.GetFlatDetachedDescendants()); // recurse
                 }
