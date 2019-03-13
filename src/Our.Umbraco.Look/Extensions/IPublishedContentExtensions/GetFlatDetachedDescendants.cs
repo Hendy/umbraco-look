@@ -20,7 +20,7 @@ namespace Our.Umbraco.Look.Extensions
 
             if (publishedContent != null)
             {
-                LogHelper.Debug(typeof(IPublishedContentExtensions), $"GetFlatDetachedDescendants() for '{ publishedContent.Name }'");
+                LogHelper.Debug(typeof(IPublishedContentExtensions), $"GetFlatDetachedDescendants() for Name = '{ publishedContent.Name }', Guid = '{ publishedContent.GetGuidKey().ToString() }'");
 
                 var publishedContentProperties = publishedContent
                                                     .Properties
