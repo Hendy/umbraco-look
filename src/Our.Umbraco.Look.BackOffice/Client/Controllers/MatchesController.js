@@ -87,6 +87,7 @@
 
 
         $scope.reload = function () {
+            dialogService.closeAll();
             reset();
         };
 

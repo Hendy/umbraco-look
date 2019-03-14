@@ -1,5 +1,43 @@
-﻿<div ng-controller="Look.BackOffice.DetailsController">
-    <p>Details</p>
+﻿<div ng-controller="Look.BackOffice.DetailsController" ng-mouseleave="hideDetails()" class="look-details">
 
-    <pre>{{ viewData | json}}</pre>
+    <h2>{{ viewData.match.name }}</h2>
+
+    <div><span>Date: </span> {{ viewData.match.date | date:'d MMMM yyyy, HH:mm:ss' }}</div>
+    <div><span>Path: </span> {{ viewData.match.path}}<a href="{{ viewData.match.link }}">{{ viewData.match.linkText }}</a>{{ viewData.match.isDetached ? '\\' +  viewData.match.name : '' }}</div>
+    <div><span>Culture: </span> {{ viewData.match.culture }}</div>
+    <div><span>Id: </span>{{ viewData.match.id }}</div>
+    <div><span>Key: </span>{{ viewData.match.key }}</div>
+
+    <div ng-if="viewData.match.hasTags">
+        <hr/>
+        <span>Tags: </span>
+
+        <div ng-repeat="tagGroup in viewData.match.tagGroups">
+            <br/>
+
+            <span class="icon icon-tags">&nbsp;</span>
+
+            <a ng-if="tagGroup.link !== null" href="{{tagGroup.link}}">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</a>
+            <span ng-if="tagGroup.link === null">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</span>
+                                                
+            <ul>
+                <li ng-repeat="tag in tagGroup.tags">
+
+                    <span class="icon icon-tag">&nbsp;</span>
+                    <a ng-if="tag.link !== null" href="{{tag.link}}">{{tag.name}}</a>
+                    <span ng-if="tag.link === null">{{tag.name}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div ng-if="viewData.match.hasLocation">
+        <hr/>
+        <span>Location: </span>
+        <br/>
+
+    </div>
+
+    <!--<pre>{{ viewData | json}}</pre>-->
+
 </div>

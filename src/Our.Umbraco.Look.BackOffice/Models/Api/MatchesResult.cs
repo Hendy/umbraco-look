@@ -55,14 +55,14 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             [JsonProperty("date")]
             public DateTime? Date { get; set; }
 
-            //[JsonProperty("hasTags")]
-            //public bool HasTags { get; set; }
+            [JsonProperty("hasText")]
+            public bool HasText { get; set; }
+
+            [JsonProperty("hasTags")]
+            public bool HasTags { get; set; }
 
             [JsonProperty("tagGroups")]
             public TagGroup[] TagGroups { get; set; }
-
-            [JsonProperty("hasText")]
-            public bool HasText { get; set; }
 
             [JsonProperty("hasLocation")]
             public bool HasLocation { get; set; }
@@ -175,6 +175,8 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 match.IsDetached = lookMatch.IsDetached;
                 match.Date = lookMatch.Date;
 
+                match.HasText = !string.IsNullOrWhiteSpace(lookMatch.Text);
+
                 var tags = lookMatch
                                 .Tags
                                 .Select(x => new Tag()
@@ -184,6 +186,8 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                                     Link = "#/developer/lookTree/Tag/" + lookMatch.SearcherName + "|" + x.Group + "|" + x.Name
                                 })
                                 .ToArray();
+
+                match.HasTags = tags.Any();
 
                 match.TagGroups = tags
                                     .Select(x => x.Group)
@@ -197,7 +201,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                                     })
                                     .ToArray();
 
-                match.HasText = !string.IsNullOrWhiteSpace(lookMatch.Text);
+
                 match.HasLocation = lookMatch.Location != null;
 
                 return match;

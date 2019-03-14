@@ -10,47 +10,27 @@
             <div class="look-match" ng-class-even="'even'" ng-class-odd="'odd'" ng-click="showDetails(match)">
                 
                 <span class="look-match-score">{{match.score}}</span>
+
                 
                 <span class="look-match-type{{match.isDetached ? ' look-match-detached' : ''}}">
                     <span class="look-match-detached-icon icon-out" ng-if="match.isDetached">&nbsp;</span>
                     <span class="look-match-icon {{match.icon}}">&nbsp;</span>                                        
                 </span>
 
-                <!--<span class="match-id">{{match.id}}</span> |-->
-                <!--<span class="match-key">{{match.key}}</span> |--> 
+                <div class="look-match-checkboxes">
+                    <div><span class="{{ match.hasText ? 'icon-checkbox' : 'icon-checkbox-empty' }}">&nbsp;</span>Text</div>
+                    <div><span class="{{ match.hasTags ? 'icon-checkbox' : 'icon-checkbox-empty' }}">&nbsp;</span>Tags</div>
+                    <div><span class="{{ match.hasLocation ? 'icon-checkbox' : 'icon-checkbox-empty' }}">&nbsp;</span>Location</div>
+                </div>
+
 
                 <div class="look-match-details">
                     <div><span>Name: </span> {{match.name}}</div>
                     <div><span>Date: </span> {{match.date | date:'d MMMM yyyy, HH:mm:ss'}}</div>
                     <div><span>Path: </span> {{match.path}}<a href="{{match.link}}">{{match.linkText}}</a>{{ match.isDetached ? '\\' + match.name : ''}}</div>
-                    <div><span>Culture: </span> {{match.culture}}</div>
                 </div>
+
                 
-                <div class="look-match-tags">
-                    <span class="look-match-no-tags" ng-if="match.tagGroups.length === 0">No Tags</span>
-                    <div class="look-match-tag-group" ng-repeat="tagGroup in match.tagGroups">
-                        <span class="icon icon-tags">&nbsp;</span>
-                        <a ng-if="tagGroup.link !== null" href="{{tagGroup.link}}">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</a>
-                        <span ng-if="tagGroup.link === null">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</span>
-                                                
-                        <span class="look-match-tag" ng-repeat="tag in tagGroup.tags">
-                            <span class="icon icon-tag">&nbsp;</span>
-                            <a ng-if="tag.link !== null" href="{{tag.link}}">{{tag.name}}</a>
-                            <span ng-if="tag.link === null">{{tag.name}}</span>
-                            <!--{{ $last ? '.' : ', '}}-->
-                        </span>
-                    </div>
-                </div>
-
-
-                <div class="look-match-text">
-                    Has Text: {{ match.hasText ? 'Yes' : 'No'}}
-                </div>
-
-                <div class="look-match-location">
-                    Has Location: {{ match.hasLocation ? 'Yes' : 'No'}}
-                </div>
-
                 <div style="clear:both;"></div>
             </div>
             

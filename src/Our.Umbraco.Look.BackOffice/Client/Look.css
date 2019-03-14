@@ -29,6 +29,8 @@
 .look-body {
 }
 
+/* Searcher */
+
     .look-body dl {
         display: flex;
         flex-flow: row wrap;
@@ -50,11 +52,13 @@
         border-bottom: 1px dashed lightgrey;
     }
 
-    .look-body a {
+    /*.look-body a {
         text-decoration: underline;
         color:blue;
-    }
+    }*/
 
+
+/* Matches */
 
 .look-match-breaker {
     font-size:x-large;
@@ -78,12 +82,12 @@
 }
 
 
-
 .look-match-score {
     float: right;
     font-size: xx-small;
-    border: solid 1px black;
 }
+
+
 
 .look-match-type {
     float: left;
@@ -108,47 +112,13 @@
 }
 
 
+.look-match-checkboxes {
+    float: left;
+}
+
 .look-match-details {
-    border: solid 1px grey;
+    margin-left:30px;
     float: left;
-    width:40%;
-}
-
-    .look-match-details div {
-    }
-
-    .look-match-details div span {
-        font-size:small;
-    }
-
-
-.look-match-tags {
-    float:left;
-    border: solid 1px grey;
-    font-size:small;
-}
-
-.look-match-no-tags {
-
-}
-
-.look-match-tag-group {
-}
-
-.look-match-tag {
-}
-
-
-.look-match-text {
-    float: left;
-    border: solid 1px grey;
-    font-size: small;
-}
-
-.look-match-location {
-    float: left;
-    border: solid 1px grey;
-    font-size: small;
 }
 
 
@@ -158,3 +128,13 @@
     text-align:center;
     padding:30px;
 }
+
+/* Details */
+
+.look-details {
+    margin:0 10px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x:hidden;
+}
+

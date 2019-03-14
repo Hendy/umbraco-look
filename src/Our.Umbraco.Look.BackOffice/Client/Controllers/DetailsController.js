@@ -5,12 +5,16 @@
         .module('umbraco')
         .controller('Look.BackOffice.DetailsController', DetailsController);
 
-    DetailsController.$inject = ['$scope', 'Look.BackOffice.MatchService'];
+    DetailsController.$inject = ['$scope', 'dialogService', 'Look.BackOffice.MatchService'];
 
-    function DetailsController($scope, matchService) {
+    function DetailsController($scope, dialogService, matchService) {
 
         $scope.viewData = {
-            debug: matchService
+            match: matchService.selectedMatch
+        };
+
+        $scope.hideDetails = function () {
+            dialogService.closeAll();
         };
 
     }
