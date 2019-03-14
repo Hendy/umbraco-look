@@ -1,22 +1,18 @@
 ﻿<div ng-controller="Look.BackOffice.DetailsController" ng-mouseleave="hideDetails()" class="look-details">
 
-    <h2>{{ viewData.match.name }}</h2>
+    <h3>{{ viewData.match.name }}</h3>
 
-    <div><span>Date: </span> {{ viewData.match.date | date:'d MMMM yyyy, HH:mm:ss' }}</div>
-    <div><span>Path: </span> {{ viewData.match.path}}<a href="{{ viewData.match.link }}">{{ viewData.match.linkText }}</a>{{ viewData.match.isDetached ? '\\' +  viewData.match.name : '' }}</div>
-    <div><span>Culture: </span> {{ viewData.match.culture }}</div>
     <div><span>Id: </span>{{ viewData.match.id }}</div>
     <div><span>Key: </span>{{ viewData.match.key }}</div>
+    <div><span>Type: </span>{{ viewData.match.type }}</div>
+    <div><span>Path: </span> {{ viewData.match.path}}<a href="{{ viewData.match.link }}">{{ viewData.match.linkText }}</a>{{ viewData.match.isDetached ? '\\' +  viewData.match.name : '' }}</div>
+    <div><span>Date: </span> {{ viewData.match.date | date:'d MMMM yyyy, HH:mm:ss' }}</div>
+    <div ng-if="viewData.match.culture"><span>Culture: </span> {{ viewData.match.culture }}</div>
 
     <div ng-if="viewData.match.hasTags">
         <hr/>
-        <span>Tags: </span>
-
         <div ng-repeat="tagGroup in viewData.match.tagGroups">
-            <br/>
-
             <span class="icon icon-tags">&nbsp;</span>
-
             <a ng-if="tagGroup.link !== null" href="{{tagGroup.link}}">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</a>
             <span ng-if="tagGroup.link === null">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</span>
                                                 
@@ -33,9 +29,7 @@
 
     <div ng-if="viewData.match.hasLocation">
         <hr/>
-        <span>Location: </span>
-        <br/>
-
+        <iframe width="400" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{viewData.match.latitide}},{{viewData.match.longitude}}&amp;ie=UTF8&amp;&amp;output=embed"></iframe><br />
     </div>
 
     <!--<pre>{{ viewData | json}}</pre>-->

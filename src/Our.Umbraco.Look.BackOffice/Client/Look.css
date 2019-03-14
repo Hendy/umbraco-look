@@ -65,12 +65,20 @@
     text-transform:uppercase;
 }
 
-
-
 .look-match {
     margin: 0 0 10px 0;
     clear: both;
     background-color: #f3f3f5;
+}
+
+.look-match:hover {
+    cursor:pointer;
+    background-color:white;
+}
+
+.look-match.active {
+    cursor:default;
+    background-color:white;
 }
 
 .look-match.even {
@@ -138,3 +146,6 @@
     overflow-x:hidden;
 }
 
+.look-details ul {
+    list-style-type: none;
+}

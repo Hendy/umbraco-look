@@ -11,6 +11,8 @@
     // this controller will handle paging for more results
     function MatchesController($scope, sortService, $q, dialogService, matchService) {
 
+        dialogService.closeAll(); // close all on load
+
         $scope.matches = []; // full collection of matches to render
         $scope.currentlyLoading = false;
         $scope.finishedLoading = false;

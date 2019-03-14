@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Linq;
 using Umbraco.Web;
@@ -34,6 +35,10 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             [JsonProperty("key")]
             public Guid Key { get; set; }
 
+            [JsonProperty("type")]
+            [JsonConverter(typeof(StringEnumConverter))]
+            public PublishedItemType Type { get; set; }
+
             [JsonProperty("icon")]
             public string Icon { get; set; }
 
@@ -67,12 +72,24 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             [JsonProperty("hasLocation")]
             public bool HasLocation { get; set; }
 
+            [JsonProperty("latitide")]
+            public double? Latitude { get; set; }
+
+            [JsonProperty("longitude")]
+            public double? Longitude { get; set; }
+
             /// <summary>
             /// names of all ancestors of this content / media
             /// (string rendered before the link text)
             /// </summary>
             [JsonProperty("path")]
             public string Path { get; set; }
+
+            /// <summary>
+            /// The name of the Umbraco item
+            /// </summary>
+            [JsonProperty("pathItem")]
+            public string PathItem { get; set; }
 
             /// <summary>
             /// #/content/content/edit/1074
@@ -135,6 +152,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 match.Score = lookMatch.Score;
                 match.Id = lookMatch.Id;
                 match.Key = lookMatch.Key;
+                match.Type = lookMatch.PublishedItemType;
                 match.Culture = lookMatch.CultureInfo?.Name;
                 match.Name = lookMatch.Name;
 
@@ -153,6 +171,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                     case PublishedItemType.Content:                        
                         match.Icon = "icon-umb-content";
                         match.Path = pathIds.Any() ? string.Join("\\", pathIds.Select(x => umbracoHelper.TypedContent(x).Name)) + "\\" : string.Empty;
+                        match.PathItem = item.Name;
                         match.Link = "#/content/content/edit/" + item.Id;
                         match.LinkText = item.Name;
                         break;
@@ -160,6 +179,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                     case PublishedItemType.Media:
                         match.Icon = "icon-umb-media";
                         match.Path = pathIds.Any() ? string.Join("\\", pathIds.Select(x => umbracoHelper.TypedMedia(x).Name)) + "\\" : string.Empty;
+                        match.PathItem = item.Name;
                         match.Link = "#/media/media/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Id : lookMatch.Item.Id);
                         match.LinkText = item.Name;
                         break;
@@ -167,6 +187,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                     case PublishedItemType.Member:
                         match.Icon = "icon-umb-members"; // "icon-selection-traymember";
                         match.Path = "";
+                        match.PathItem = item.Name;
                         //match.Link = "#/member/member/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Get : lookMatch.Key.ToString())
                         match.LinkText = item.Name;
                         break;
@@ -203,6 +224,8 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
 
 
                 match.HasLocation = lookMatch.Location != null;
+                match.Latitude = lookMatch?.Location?.Latitude;
+                match.Longitude = lookMatch?.Location?.Longitude;
 
                 return match;
             }
