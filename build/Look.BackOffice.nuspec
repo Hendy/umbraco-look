@@ -16,7 +16,7 @@
     <copyright>Copyright 2019</copyright>
     <tags>Umbraco</tags>
     <dependencies>
-      <dependency id="Our.Umbraco.Look" version="0.27.0" />
+      <dependency id="Our.Umbraco.Look" version="0.28.0" />
     </dependencies>
   </metadata>
   <files>
