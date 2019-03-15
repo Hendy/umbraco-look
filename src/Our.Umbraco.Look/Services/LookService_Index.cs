@@ -105,11 +105,11 @@ namespace Our.Umbraco.Look.Services
 
             string name = null;
 
-            if (LookService.Instance._nameIndexer != null)
+            if (LookService.GetNameIndexer() != null)
             {
                 try
                 {
-                    name = LookService.Instance._nameIndexer(indexingContext);
+                    name = LookService.GetNameIndexer()(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -163,11 +163,11 @@ namespace Our.Umbraco.Look.Services
 
             DateTime? date = null;
 
-            if (LookService.Instance._dateIndexer != null)
+            if (LookService.GetDateIndexer() != null)
             {
                 try
                 {
-                    date = LookService.Instance._dateIndexer(indexingContext);
+                    date = LookService.GetDateIndexer()(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -212,13 +212,13 @@ namespace Our.Umbraco.Look.Services
 
             #region Text
 
-            if (LookService.Instance._textIndexer != null)
+            if (LookService.GetTextIndexer() != null)
             {
                 string text = null;
 
                 try
                 {
-                    text = LookService.Instance._textIndexer(indexingContext);
+                    text = LookService.GetTextIndexer()(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -249,13 +249,13 @@ namespace Our.Umbraco.Look.Services
 
             #region Tag
 
-            if (LookService.Instance._tagIndexer != null)
+            if (LookService.GetTagIndexer() != null)
             {
                 LookTag[] tags = null;
 
                 try
                 {
-                    tags = LookService.Instance._tagIndexer(indexingContext);
+                    tags = LookService.GetTagIndexer()(indexingContext);
                 }
                 catch (Exception exception)
                 {
@@ -297,13 +297,13 @@ namespace Our.Umbraco.Look.Services
 
             #region Location
 
-            if (LookService.Instance._locationIndexer != null)
+            if (LookService.GetLocationIndexer() != null)
             {
                 Location location = null;
 
                 try
                 {
-                    location = LookService.Instance._locationIndexer(indexingContext);
+                    location = LookService.GetLocationIndexer()(indexingContext);
                 }
                 catch (Exception exception)
                 {
