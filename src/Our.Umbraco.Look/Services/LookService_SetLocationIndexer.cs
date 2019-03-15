@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Caching;
 using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Services
@@ -11,6 +12,8 @@ namespace Our.Umbraco.Look.Services
         /// <param name="locationIndexer">Your custom location indexing function</param>
         internal static void SetLocationIndexer(Func<IndexingContext, Location> locationIndexer)
         {
+            MemoryCache.Default.Remove(LookConstants.LocationIndexerCacheKey);
+
             if (LookService.Instance._locationIndexer == null)
             {
                 LogHelper.Info(typeof(LookService), "Location indexing function set");

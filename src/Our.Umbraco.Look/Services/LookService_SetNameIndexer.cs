@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Caching;
 using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Services
@@ -11,6 +12,8 @@ namespace Our.Umbraco.Look.Services
         /// <param name="nameIndexer">The custom name indexing function</param>
         internal static void SetNameIndexer(Func<IndexingContext, string> nameIndexer)
         {
+            MemoryCache.Default.Remove(LookConstants.NameIndexerCahceKey);
+
             if (LookService.Instance._nameIndexer == null)
             {
                 LogHelper.Info(typeof(LookService), "Name indexing function set");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Caching;
 using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Services
@@ -11,6 +12,8 @@ namespace Our.Umbraco.Look.Services
         /// <param name="textIndexer">Your custom text indexing function</param>
         internal static void SetTextIndexer(Func<IndexingContext, string> textIndexer)
         {
+            MemoryCache.Default.Remove(LookConstants.TextIndexerCacheKey);
+
             if (LookService.Instance._textIndexer == null)
             {
                 LogHelper.Info(typeof(LookService), "Text indexing function set");

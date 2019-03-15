@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Caching;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -6,7 +7,19 @@ namespace Our.Umbraco.Look.Services
     {
         internal static Func<IndexingContext, string> GetNameIndexer()
         {
-            return LookService.Instance._nameIndexer;
+            var nameIndexer = MemoryCache.Default.Get(LookConstants.NameIndexerCahceKey) as Func<IndexingContext, string>;
+
+            if (nameIndexer == null)
+            {
+                nameIndexer = LookService.Instance._nameIndexer;
+
+                if (nameIndexer != null)
+                {
+                    MemoryCache.Default.Set(LookConstants.NameIndexerCahceKey, nameIndexer, new CacheItemPolicy());
+                }
+            }
+
+            return nameIndexer;
         }
     }
 }
