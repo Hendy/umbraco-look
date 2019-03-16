@@ -246,6 +246,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\IPublishedContentExtensions\GetDetachedDescendant.cs" />
+    <Compile Include="Extensions\IPublishedContentExtensions\YieldFlatDetachedDescendants.cs" />
     <Compile Include="LocationBoundary.cs" />
     <Compile Include="Events\LookIndexing.cs" />
     <Compile Include="Events\HookIndexing.cs" />

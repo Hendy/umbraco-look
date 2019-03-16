@@ -176,9 +176,9 @@ namespace Our.Umbraco.Look
                             case PublishedItemType.Member: return umbracoHelper.SafeTypedMember(itemId);
                         }
                     }
-                    else // get the host item and then all of it's detached items to find by key
-                    {                        
-                        return this.HostItem.GetFlatDetachedDescendants().FirstOrDefault(x => x.GetKey() == itemGuid.Value);
+                    else
+                    {
+                        return this.HostItem.GetDetachedDescendant(itemGuid.Value);
                     }
                 }
 
