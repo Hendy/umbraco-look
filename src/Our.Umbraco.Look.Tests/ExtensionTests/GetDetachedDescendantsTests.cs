@@ -9,14 +9,14 @@ using Umbraco.Core.Models;
 namespace Our.Umbraco.Look.Tests.ModelTests
 {
     [TestClass]
-    public class GetFlatDetachedDescendants
+    public class GetDetachedDescendants
     {
         [TestMethod]
         public void Null_IPublishedContent()
         {
             IPublishedContent content = null;
 
-            var result = content.GetFlatDetachedDescendants();
+            var result = content.GetDetachedDescendants();
 
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Length);
@@ -29,7 +29,7 @@ namespace Our.Umbraco.Look.Tests.ModelTests
 
             content.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>());
 
-            var result = content.Object.GetFlatDetachedDescendants();
+            var result = content.Object.GetDetachedDescendants();
 
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Length);
@@ -45,7 +45,7 @@ namespace Our.Umbraco.Look.Tests.ModelTests
 
             content.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
 
-            var result = content.Object.GetFlatDetachedDescendants();
+            var result = content.Object.GetDetachedDescendants();
 
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count());
@@ -61,7 +61,7 @@ namespace Our.Umbraco.Look.Tests.ModelTests
 
             content.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
 
-            var result = content.Object.GetFlatDetachedDescendants();
+            var result = content.Object.GetDetachedDescendants();
 
             Assert.IsNotNull(result);
             Assert.AreEqual(0, result.Count());
@@ -83,7 +83,7 @@ namespace Our.Umbraco.Look.Tests.ModelTests
 
             content.SetupGet(x => x.Properties).Returns(new List<IPublishedProperty>() { property.Object });
 
-            var result = content.Object.GetFlatDetachedDescendants();
+            var result = content.Object.GetDetachedDescendants();
 
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count());
@@ -122,7 +122,7 @@ namespace Our.Umbraco.Look.Tests.ModelTests
             property3.SetupGet(x => x.Value).Returns(new IPublishedContent[] { detached3.Object });
             property4.SetupGet(x => x.Value).Returns(new List<IPublishedProperty>());
 
-            var result = content.Object.GetFlatDetachedDescendants();
+            var result = content.Object.GetDetachedDescendants();
 
             Assert.IsNotNull(result);
             Assert.AreEqual(3, result.Count());
@@ -142,7 +142,7 @@ namespace Our.Umbraco.Look.Tests.ModelTests
 
             property.SetupGet(x => x.Value).Returns(new IPublishedContent[] { detached.Object });
 
-            var result = content.Object.GetFlatDetachedDescendants();
+            var result = content.Object.GetDetachedDescendants();
 
             Assert.IsNotNull(result);
         }
@@ -162,7 +162,7 @@ namespace Our.Umbraco.Look.Tests.ModelTests
 
             property.SetupGet(x => x.Value).Returns(new IPublishedContent[] { detached.Object });
 
-            var result = content.Object.GetFlatDetachedDescendants();
+            var result = content.Object.GetDetachedDescendants();
 
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Count());

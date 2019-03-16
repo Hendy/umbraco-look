@@ -237,7 +237,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtensionTests\GetFlatDetachedDescendantsTests.cs" />
+    <Compile Include="ExtensionTests\GetDetachedDescendantsTests.cs" />
     <Compile Include="ModelTests\LookQueryTests.cs" />
     <Compile Include="ModelTests\TagFacetQueryComparrisonTests.cs" />
     <Compile Include="ModelTests\TagQueryComparrisonTests.cs" />

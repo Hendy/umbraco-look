@@ -8,11 +8,11 @@ namespace Our.Umbraco.Look.Extensions
     internal static partial class IPublishedContentExtensions
     {
         /// <summary>
-        /// For the supplied IPublishedContent item, recurse all of its properties that return collections of IPublishedContent items
+        /// For the supplied IPublishedContent item, get all of its properties that return collections of IPublishedContent items
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        private static IEnumerable<IPublishedContent> YieldFlatDetachedDescendants(IPublishedContent item)
+        private static IEnumerable<IPublishedContent> YieldDetachedProperties(IPublishedContent item)
         {
             if (item != null)
             {

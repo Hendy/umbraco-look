@@ -230,7 +230,7 @@ namespace Our.Umbraco.Look
 
                 indexWriter.AddDocument(document);
 
-                foreach (var detachedNode in node.GetFlatDetachedDescendants())
+                foreach (var detachedNode in node.GetDetachedDescendants())
                 {
                     indexingContext = new IndexingContext(
                                             hostNode: node,
