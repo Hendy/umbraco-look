@@ -3,6 +3,7 @@ using Lucene.Net.Documents;
 using Lucene.Net.Util;
 using Our.Umbraco.Look.Extensions;
 using System;
+using System.Diagnostics;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
@@ -18,6 +19,10 @@ namespace Our.Umbraco.Look.Services
         /// <param name="document"></param>
         internal static void Index(IndexingContext indexingContext, Document document)
         {
+#if DEBUG
+            var stopwatch = Stopwatch.StartNew();
+#endif
+
             #region Node
 
             if (indexingContext.Item != null)
@@ -356,7 +361,13 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            #endregion  
+            #endregion
+
+#if DEBUG
+            stopwatch.Stop();
+
+            LogHelper.Debug(typeof(LookService), $"Indexing Item '{ indexingContext.Item.GetGuidKey() }' Took { stopwatch.ElapsedMilliseconds }ms");
+#endif
         }
     }
 }

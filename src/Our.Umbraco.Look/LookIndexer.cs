@@ -5,7 +5,9 @@ using Our.Umbraco.Look.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 
@@ -211,6 +213,10 @@ namespace Our.Umbraco.Look
         /// <param name="nodes">collection of nodes (and any detached content they may have) to be indexed</param>
         internal void Index(IPublishedContent[] nodes)
         {
+#if DEBUG
+            var stopwatch = Stopwatch.StartNew();
+#endif
+
             var indexWriter = this.GetIndexWriter();
 
             Parallel.ForEach(nodes, node =>
@@ -244,6 +250,12 @@ namespace Our.Umbraco.Look
             });
 
             //indexWriter.Optimize();
+
+#if DEBUG
+            stopwatch.Stop();
+
+            LogHelper.Debug(typeof(LookService), $"Indexing { nodes.Length } Items Took { stopwatch.ElapsedMilliseconds }ms");
+#endif
         }
     }
 }

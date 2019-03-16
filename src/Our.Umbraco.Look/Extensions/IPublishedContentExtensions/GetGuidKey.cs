@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.Extensions
     internal static partial class IPublishedContentExtensions
     {
         /// <summary>
-        /// Custom key key method
+        /// 
         /// </summary>
         /// <param name="publishedContent"></param>
         /// <returns></returns>
