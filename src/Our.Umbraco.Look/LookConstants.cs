@@ -106,15 +106,5 @@
         /// Not stored in index, but used as a result field
         /// </summary>
         internal static string DistanceField => "Look_Distance";
-
-        internal static string NameIndexerCahceKey => "Look_NameIndexer";
-
-        internal static string DateIndexerCacheKey => "Look_DateIndexer";
-
-        internal static string TextIndexerCacheKey => "Look_TextIndexer";
-
-        internal static string TagIndexerCacheKey => "Look_TagIndexer";
-
-        internal static string LocationIndexerCacheKey => "Look_LocationIndexer";
     }
 }
