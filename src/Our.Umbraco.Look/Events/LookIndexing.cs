@@ -63,65 +63,47 @@ namespace Our.Umbraco.Look
 
         private void ContentService_Published(IPublishingStrategy sender, PublishEventArgs<IContent> e)
         {
-            foreach (var entity in e.PublishedEntities)
-            {
-                this.Update(this._umbracoHelper.TypedContent(entity.Id));
-            }
+            this.Update(e.PublishedEntities.Select(x => this._umbracoHelper.TypedContent(x.Id)).ToArray());
         }
 
         private void MediaService_Saved(IMediaService sender, SaveEventArgs<IMedia> e)
         {
-            foreach (var entity in e.SavedEntities)
-            {
-                this.Update(this._umbracoHelper.TypedMedia(entity.Id));
-            }
+            this.Update(e.SavedEntities.Select(x => this._umbracoHelper.TypedMedia(x.Id)).ToArray());
         }
 
         private void MemberService_Saved(IMemberService sender, SaveEventArgs<IMember> e)
         {
-            foreach (var entity in e.SavedEntities)
-            {
-                this.Update(this._umbracoHelper.TypedMember(entity.Id));
-            }
+            this.Update(e.SavedEntities.Select(x => this._umbracoHelper.TypedMember(x.Id)).ToArray());
         }
 
         private void ContentService_UnPublished(IPublishingStrategy sender, PublishEventArgs<IContent> e)
         {
-            foreach (var entity in e.PublishedEntities)
-            {
-                this.Remove(entity.Id);
-            }
+            this.Remove(e.PublishedEntities.Select(x => x.Id).ToArray());
         }
 
         private void MediaService_Deleted(IMediaService sender, DeleteEventArgs<IMedia> e)
         {
-            foreach (var entity in e.DeletedEntities)
-            {
-                this.Remove(entity.Id);
-            }
+            this.Remove(e.DeletedEntities.Select(x => x.Id).ToArray());
         }
 
         private void MemberService_Deleted(IMemberService sender, DeleteEventArgs<IMember> e)
         {
-            foreach (var entity in e.DeletedEntities)
-            {
-                this.Remove(entity.Id);
-            }
+            this.Remove(e.DeletedEntities.Select(x => x.Id).ToArray());
         }
 
         /// <summary>
         /// Update the Lucene document in all indexes
         /// </summary>
-        /// <param name="publishedContent"></param>
-        private void Update(IPublishedContent publishedContent)
+        /// <param name="publishedContentItems"></param>
+        private void Update(IPublishedContent[] publishedContentItems)
         {
-            if (publishedContent == null) return; // content may have been saved, but not yet published
+            if (publishedContentItems == null || !publishedContentItems.Any()) return;
 
-            this.Remove(publishedContent.Id);
+            this.Remove(publishedContentItems.Select(x => x.Id).ToArray());
 
-            foreach (var lookIndexer in this._lookIndexers)
+            foreach(var lookIndexer in this._lookIndexers)
             {
-                lookIndexer.Index(new IPublishedContent[] { publishedContent });
+                lookIndexer.Index(publishedContentItems);
             }
         }
 
@@ -129,17 +111,20 @@ namespace Our.Umbraco.Look
         /// Delete from all indexes all Lucene documents where the id identifies 
         /// the Umbraco Content, Media or Member item and any of its Detached items
         /// </summary>
-        /// <param name="id">The Umbraco Content, Media or Member Id (Detached items do not have Ids)</param>
-        private void Remove(int id)
+        /// <param name="ids">The Umbraco Content, Media or Member Ids (Detached items do not have Ids)</param>
+        private void Remove(int[] ids)
         {
             foreach (var lookIndexer in this._lookIndexers)
             {
                 var indexWriter = lookIndexer.GetIndexWriter();
 
-                indexWriter.DeleteDocuments(new Term[] {
-                    new Term(LookConstants.NodeIdField, id.ToString()), // the actual item
-                    new Term(LookConstants.HostIdField, id.ToString()) // any detached items
-                });
+                foreach (var id in ids)
+                {
+                    indexWriter.DeleteDocuments(new Term[] {
+                        new Term(LookConstants.NodeIdField, id.ToString()), // the actual item
+                        new Term(LookConstants.HostIdField, id.ToString()) // any detached items
+                    });
+                }
 
                 indexWriter.Commit();
             }
