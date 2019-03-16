@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Our.Umbraco.Look.Extensions;
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Web;
 using Umbraco.Core.Models;
 using Umbraco.Web;

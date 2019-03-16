@@ -5,6 +5,7 @@ using Our.Umbraco.Look.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 
@@ -52,6 +53,8 @@ namespace Our.Umbraco.Look
             //}
 
             this.Index(nodes.ToArray()); // index all nodes
+
+            this.GetIndexWriter().Optimize();
 
             this.OnIndexOperationComplete(new EventArgs()); // causes the backoffice rebuild to end (UI thread watches a cache value)
         }
@@ -210,11 +213,11 @@ namespace Our.Umbraco.Look
         {
             var indexWriter = this.GetIndexWriter();
 
-            foreach (var node in nodes)
+            Parallel.ForEach(nodes, node =>
             {
                 var indexingContext = new IndexingContext(
-                                                hostNode: null, 
-                                                node: node, 
+                                                hostNode: null,
+                                                node: node,
                                                 indexerName: this.Name);
 
                 var document = new Document();
@@ -226,8 +229,8 @@ namespace Our.Umbraco.Look
                 foreach (var detachedNode in node.GetFlatDetachedDescendants())
                 {
                     indexingContext = new IndexingContext(
-                                            hostNode: node, 
-                                            node: detachedNode, 
+                                            hostNode: node,
+                                            node: detachedNode,
                                             indexerName: this.Name);
 
                     document = new Document();
@@ -238,7 +241,7 @@ namespace Our.Umbraco.Look
                 }
 
                 indexWriter.Commit();
-            }
+            });
 
             //indexWriter.Optimize();
         }

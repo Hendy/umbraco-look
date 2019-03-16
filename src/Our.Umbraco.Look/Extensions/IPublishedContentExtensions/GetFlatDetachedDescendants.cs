@@ -20,8 +20,6 @@ namespace Our.Umbraco.Look.Extensions
 
             if (item != null)
             {
-                LogHelper.Debug(typeof(IPublishedContentExtensions), $"GetFlatDetachedDescendants() for Name = '{ item.Name }', Key = '{ item.GetGuidKey() }'");
-
                 var detachedItems = IPublishedContentExtensions
                                     .YieldFlatDetachedDescendants(item)
 
