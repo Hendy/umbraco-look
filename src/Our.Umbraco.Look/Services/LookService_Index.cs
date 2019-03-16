@@ -22,7 +22,6 @@ namespace Our.Umbraco.Look.Services
 #if DEBUG
             var stopwatch = Stopwatch.StartNew();
 #endif
-
             #region Node
 
             if (indexingContext.Item != null)
@@ -362,11 +361,9 @@ namespace Our.Umbraco.Look.Services
             }
 
             #endregion
-
 #if DEBUG
             stopwatch.Stop();
-
-            LogHelper.Debug(typeof(LookService), $"Indexing Item '{ indexingContext.Item.GetGuidKey() }' Took { stopwatch.ElapsedMilliseconds }ms");
+            LogHelper.Debug(typeof(LookService), $"Building Lucene Document For '{ indexingContext.Item.GetGuidKey() }' Took { stopwatch.ElapsedMilliseconds }ms");
 #endif
         }
     }

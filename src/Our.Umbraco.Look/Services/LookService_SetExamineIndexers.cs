@@ -3,16 +3,10 @@ using Examine.LuceneEngine;
 using Our.Umbraco.Look.Extensions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Web;
-using System.Web.Hosting;
-using Umbraco.Core;
-using Umbraco.Core.Configuration;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
-using Umbraco.Web.Routing;
-using Umbraco.Web.Security;
 using UmbracoExamine;
 
 namespace Our.Umbraco.Look.Services
@@ -88,14 +82,8 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
-            //LogHelper.Info(typeof(LookService), $"Hooking into Examine indexers '{ string.Join(", ", examineIndexerNames) }'");
+            LogHelper.Info(typeof(LookService), $"Hooking into Examine indexers '{ string.Join(", ", examineIndexerNames) }'");
         }
-
-        /// <summary>
-        /// Flag used to determine whether the http context has been ensured for the current thread
-        /// </summary>
-        [ThreadStatic]
-        private static bool ContextEnsured = false;
 
         /// <summary>
         /// 
@@ -128,26 +116,12 @@ namespace Our.Umbraco.Look.Services
 
             if (publishedContent != null)
             {
-                if (!LookService.ContextEnsured)
-                {
-                    var httpContext = new HttpContextWrapper(new HttpContext(new SimpleWorkerRequest("", "", new StringWriter())));
-
-                    UmbracoContext.EnsureContext(
-                                        httpContext,
-                                        ApplicationContext.Current,
-                                        new WebSecurity(httpContext, ApplicationContext.Current),
-                                        UmbracoConfig.For.UmbracoSettings(),
-                                        UrlProviderResolver.Current.Providers,
-                                        true,
-                                        false);
-
-                    LookService.ContextEnsured = true;
-                }
-
                 var indexingContext = new IndexingContext(
                                             hostNode: null,
                                             node: publishedContent,
                                             indexerName: indexerName);
+
+                LookService.EnsureContext();
 
                 LookService.Index(indexingContext, e.Document);
             }

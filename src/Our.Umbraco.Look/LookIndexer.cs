@@ -216,10 +216,9 @@ namespace Our.Umbraco.Look
 #if DEBUG
             var stopwatch = Stopwatch.StartNew();
 #endif
-
             var indexWriter = this.GetIndexWriter();
 
-            Parallel.ForEach(nodes, node =>
+            foreach(var node in nodes)
             {
                 var indexingContext = new IndexingContext(
                                                 hostNode: null,
@@ -245,16 +244,12 @@ namespace Our.Umbraco.Look
 
                     indexWriter.AddDocument(document); // index each detached item
                 }
+            }
 
-                indexWriter.Commit();
-            });
-
-            //indexWriter.Optimize();
-
+            indexWriter.Commit();
 #if DEBUG
             stopwatch.Stop();
-
-            LogHelper.Debug(typeof(LookService), $"Indexing { nodes.Length } Items Took { stopwatch.ElapsedMilliseconds }ms");
+            LogHelper.Debug(typeof(LookService), $"Indexing { nodes.Length } Item(s) Took { stopwatch.ElapsedMilliseconds }ms");
 #endif
         }
     }
