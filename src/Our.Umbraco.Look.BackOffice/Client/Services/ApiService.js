@@ -40,7 +40,7 @@
             });
         }
 
-        function getViewDataForRebuild(seacherName) {
+        function getViewDataForRebuild(searcherName) {
             return $http({
                 method: 'GET',
                 url: 'BackOffice/Look/Api/GetViewDataForRebuild',

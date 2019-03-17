@@ -9,24 +9,15 @@
 
     function RebuildController($scope, $routeParams, apiService, navigationService) {
 
-        //console.log($routeParams);
-       /// console.log($scope.currentNode);
-
-        //var searcherName;
-
-        //// init function used to get the tree node id from the view ! (as can't find a suitable resource to inject so as to get at this value)
-        //// the current node represents the tree node associated with the current menu option
+        // init function used to get the tree node id from the view ! (as can't find a suitable resource to inject so as to get at this value)
+        // the current node represents the tree node associated with the current menu option (not necessarilty the currently selected tree node)
         $scope.init = function (currentNode) {
 
-            console.log(currentNode);
-
-            $scope.searcherName = currentNode.id.split('-')[1]; // strip the 'appender|' prefix
+            $scope.searcherName = currentNode.id.split('-')[1]; // strip the 'searcher-' prefix
 
             apiService.getViewDataForRebuild($scope.searcherName)
                 .then(function (response) { $scope.viewData = response.data; });
-
         };
-
 
         $scope.hide = function () {
             navigationService.hideNavigation();
