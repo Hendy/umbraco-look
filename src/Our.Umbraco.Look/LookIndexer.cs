@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using Umbraco.Core;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
@@ -48,10 +49,10 @@ namespace Our.Umbraco.Look
                 nodes.AddRange(media.DescendantsOrSelf());
             }
 
-            //foreach (var member in ApplicationContext.Current.Services.MemberService.GetAll(0, int.MaxValue, out int totalRecords))
-            //{
-            //    nodes.Add(this.UmbracoHelper.TypedMember(member.Id));
-            //}
+            foreach (var member in ApplicationContext.Current.Services.MemberService.GetAll(0, int.MaxValue, out int totalRecords))
+            {
+                nodes.Add(this.UmbracoHelper.TypedMember(member.Id));
+            }
 
             this.Index(nodes.ToArray()); // index all nodes
 
