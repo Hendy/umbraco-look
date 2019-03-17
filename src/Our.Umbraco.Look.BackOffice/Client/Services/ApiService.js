@@ -27,6 +27,9 @@
             getTagMatches: getTagMatches,
             getLocationMatches: getLocationMatches,
 
+            // menu actions
+            rebuildIndex: rebuildIndex,
+
             getConfigurationData: getConfigurationData // get details about indexers in use (sort will use to enable options)
         };
      
@@ -202,6 +205,16 @@
             });
 
             return matches;
+        }
+
+        function rebuildIndex(indexerName) {
+            return $http({
+                method: 'POST',
+                url: 'BackOffice/Look/Api/RebuildIndex',
+                params: {
+                    'indexerName': indexerName
+                }
+            });
         }
 
         function getConfigurationData(searcherName) {

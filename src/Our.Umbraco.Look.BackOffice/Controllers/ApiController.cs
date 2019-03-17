@@ -1,4 +1,5 @@
-﻿using Examine.Providers;
+﻿using Examine;
+using Examine.Providers;
 using Our.Umbraco.Look;
 using Our.Umbraco.Look.BackOffice.Attributes;
 using Our.Umbraco.Look.BackOffice.Models.Api;
@@ -49,8 +50,19 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new RebuildViewData();
 
-            viewData.IndexName = "unknown";
+            var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"]; //ExamineManager.Instance.SearchProviderCollection[searcherName];
 
+            // is there a single index that matches this searcher - if 1 to 1 then re-indexing can happen, else warning to view
+            var indexerName = searcher.Name.TrimEnd("Searcher") + "Indexer";
+
+            var indexer = ExamineManager.Instance.IndexProviderCollection.SingleOrDefault(x => x.Name == indexerName);
+
+            if (indexer != null)
+            {
+                viewData.ValidIndexer = true;
+                viewData.IndexerName = indexer.Name;
+            }
+            
             return this.Ok(viewData);
         }
 
@@ -219,6 +231,27 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(QueryService.GetLocationMatches(searcherName, sort, skip, take));
         }
 
+        /// <summary>
+        /// Rebuild the Emamine index
+        /// </summary>
+        /// <param name="indexerName"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult RebuildIndex([FromUri]string indexerName)
+        {
+            var indexer = ExamineManager.Instance.IndexProviderCollection.SingleOrDefault(x => x.Name == indexerName);
+
+            if (indexer != null)
+            {
+                // NOTE: not async
+                indexer.RebuildIndex();
+
+                return this.Ok();
+            }
+
+            return this.BadRequest("Unknown Indexer");
+        }
+           
         [HttpGet]
         [ValidateSearcher]
         public IHttpActionResult GetConfigurationData([FromUri]string searcherName)

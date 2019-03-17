@@ -16,15 +16,27 @@
             $scope.searcherName = currentNode.id.split('-')[1]; // strip the 'searcher-' prefix
 
             apiService.getViewDataForRebuild($scope.searcherName)
-                .then(function (response) { $scope.viewData = response.data; });
+                .then(function (response) {
+                    $scope.viewData = response.data;
+                    $scope.viewData.ready = true;
+                });
         };
 
         $scope.hide = function () {
-            navigationService.hideNavigation();
+            navigationService.hideNavigation(); // TODO: fix this so only the menu closes - no redirecting
         };
 
         $scope.rebuild = function () {
 
+            // TODO: set flag on service to indicate this index is being rebuilt (tree rendering will also use this)
+
+            apiService.rebuildIndex($scope.viewData.indexerName)
+                .then(function (response) {
+
+                });
+            
+
+            // TODO: setup a polling func to reset flag, once any search results are found
         };
     }
 

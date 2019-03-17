@@ -1,11 +1,13 @@
 ﻿<div ng-controller="Look.BackOffice.RebuildController" ng-init="init(currentNode)" class="look-rebuild">
 
-    <div class="umb-pane">
+    <div class="umb-pane" ng-if="viewData.ready">
 
-        <p>Are you sure you want to rebuild the index: <strong>{{ viewData.IndexerName  }}</strong></p>
+        <p ng-if="viewData.validIndexer">Are you sure you want to rebuild the index: <strong>{{ viewData.indexerName }}</strong></p>
+
+        <p ng-if="!viewData.validIndexer">Error, unable to identify a corresponding indexer for this searcher</p>
 
         <a href="#" class="btn btn-link" ng-click="hide()">Cancel</a>
-        <a href="#" class="btn btn-primary" ng-click="rebuild()">Rebuild index</a>
+        <a href="#" ng-if="viewData.validIndexer"class="btn btn-primary" ng-click="rebuild()">Rebuild index</a>
 
     </div>
 </div>

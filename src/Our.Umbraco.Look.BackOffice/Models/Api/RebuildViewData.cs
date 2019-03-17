@@ -3,8 +3,11 @@
 namespace Our.Umbraco.Look.BackOffice.Models.Api
 {
     public class RebuildViewData
-    { 
-        [JsonProperty("IndexName")]
-        public string IndexName { get; set; }
+    {
+        [JsonProperty("validIndexer")]
+        public bool ValidIndexer { get; set; } = false;
+
+        [JsonProperty("indexerName")]
+        public string IndexerName { get; set; }
     }
 }
