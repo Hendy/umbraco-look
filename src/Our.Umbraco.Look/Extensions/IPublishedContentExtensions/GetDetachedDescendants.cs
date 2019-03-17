@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Extensions
@@ -31,6 +32,10 @@ namespace Our.Umbraco.Look.Extensions
                     if (ok)
                     {
                         items.Add(detachedItem);
+                    }
+                    else
+                    {
+                        LogHelper.Warn(typeof(IPublishedContentExtensions), $"Detached IPublishedContent found with duplicate key: '{detachedItem.GetGuidKey()}'");
                     }
 
                 } while (enumerator.MoveNext() && ok);

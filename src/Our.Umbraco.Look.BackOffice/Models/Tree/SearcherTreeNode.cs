@@ -84,7 +84,10 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
             menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
 
-            // TODO: rebuild index option
+            if (this.Active)
+            {
+                menu.Items.Add(new MenuItem("Rebuild", "Rebuild index") { Icon = "axis-rotation", SeperatorBefore = true });
+            }
 
             return menu;
         }

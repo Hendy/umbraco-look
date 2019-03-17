@@ -217,6 +217,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\Controllers\RebuildController.js" />
     <Content Include="Client\Controllers\LocationsController.js" />
     <Content Include="Client\Controllers\NodeTypeController.js" />
     <Content Include="Client\Services\MatchService.js" />
@@ -232,6 +233,7 @@
     <Compile Include="Models\Api\MatchesResult.cs" />
     <Compile Include="Models\Api\NodesViewData.cs" />
     <Compile Include="Models\Api\NodeTypeViewData.cs" />
+    <Compile Include="Models\Api\RebuildViewData.cs" />
     <Compile Include="Models\Api\SearcherViewData.cs" />
     <Compile Include="Models\Api\TagGroupViewData.cs" />
     <Compile Include="Models\Api\TagsViewData.cs" />
@@ -274,6 +276,7 @@
     <Content Include="Client\Views\Partials\Details.html" />
     <Content Include="Client\Views\Partials\Matches.html" />
     <Content Include="Client\Views\Partials\Sort.html" />
+    <Content Include="Client\Views\Rebuild.html" />
     <Content Include="Client\Views\Searcher.html" />
   </ItemGroup>
   <ItemGroup>

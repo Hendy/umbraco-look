@@ -13,6 +13,7 @@
         return {
             // get viewData
             getViewDataForSearcher: getViewDataForSearcher,
+            getViewDataForRebuild: getViewDataForRebuild,
             getViewDataForNodes: getViewDataForNodes,
             getViewDataForNodeType: getViewDataForNodeType,
             getViewDataForTags: getViewDataForTags,
@@ -39,6 +40,16 @@
             });
         }
 
+        function getViewDataForRebuild(seacherName) {
+            return $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetViewDataForRebuild',
+                params: {
+                    'searcherName': searcherName
+                }
+            });
+
+        }
         function getViewDataForNodes(searcherName) {
             return $http({
                 method: 'GET',

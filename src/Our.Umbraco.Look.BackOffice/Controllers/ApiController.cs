@@ -43,6 +43,17 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(viewData);
         }
 
+        [HttpGet]
+        [ValidateSearcher]
+        public IHttpActionResult GetViewDataForRebuild([FromUri]string searcherName)
+        {
+            var viewData = new RebuildViewData();
+
+            viewData.IndexName = "unknown";
+
+            return this.Ok(viewData);
+        }
+
         /// <summary>
         /// Get the view model for the top level 'Tags' tree node (for a searcher)
         /// </summary>
