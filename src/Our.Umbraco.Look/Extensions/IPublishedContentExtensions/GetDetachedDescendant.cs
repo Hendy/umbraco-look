@@ -16,8 +16,6 @@ namespace Our.Umbraco.Look.Extensions
             return IPublishedContentExtensions
                     .YieldDetachedDescendants(item)
                     .FirstOrDefault(x => x.GetGuidKey() == key);
-
         }
     }
-
 }

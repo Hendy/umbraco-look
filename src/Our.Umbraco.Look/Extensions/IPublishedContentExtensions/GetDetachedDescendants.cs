@@ -7,35 +7,36 @@ namespace Our.Umbraco.Look.Extensions
     internal static partial class IPublishedContentExtensions
     {
         /// <summary>
-        /// For the supplied IPublishedContent item, recurse all of its properties that return collections of IPublishedContent items
+        /// For the supplied IPublishedContent item, recurse all of its properties that return collections of IPublishedContent items (doing a safety check to ensure duplicates are not returned)
         /// Return an array of all distinct detached (by guid key) IPublishedContent items
         /// </summary>
         /// <param name="item">The IPublishedContent item to get all detached IPublihedContent items for</param>
         /// <param name="flatDetachedItems">The List into which to add the detached IPublishedContent items</param>
         /// <returns>All detached IPublishedContent items as a flat Array</returns>
-        internal static IPublishedContent[] GetDetachedDescendants(this IPublishedContent item, List<IPublishedContent> flatDetachedItems = null)
+        internal static IPublishedContent[] GetDetachedDescendants(this IPublishedContent item)
         {
-            flatDetachedItems = flatDetachedItems ?? new List<IPublishedContent>();
+            var enumerator = IPublishedContentExtensions.YieldDetachedDescendants(item).GetEnumerator();
 
-            if (item != null)
+            var items = new List<IPublishedContent>();
+            var ok = false;
+
+            if (enumerator.MoveNext())
             {
-                var detachedItems = IPublishedContentExtensions
-                                    .YieldDetachedProperties(item)
+                do
+                {
+                    var detachedItem = enumerator.Current;
 
-                                    // safety check to prevent duplicates (shouldn't be needed - could become a slow call so may want to disable?)
-                                    .Where(x => !flatDetachedItems.Select(y => y.GetGuidKey()).Contains(x.GetGuidKey())) 
-                                    .ToArray(); // enumerate
+                    ok = !items.Any(x => x.GetGuidKey() == detachedItem.GetGuidKey());
 
-                foreach (var detachedItem in detachedItems)
-                {                    
-                    flatDetachedItems.Add(detachedItem);
+                    if (ok)
+                    {
+                        items.Add(detachedItem);
+                    }
 
-                    // recurse and ignore result (as flatDetachedItems list is added to)
-                    detachedItem.GetDetachedDescendants(flatDetachedItems); 
-                }
+                } while (enumerator.MoveNext() && ok);
             }
 
-            return flatDetachedItems.ToArray();
+            return items.ToArray();
         }
     }
 }
