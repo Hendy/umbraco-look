@@ -239,6 +239,8 @@
     <Compile Include="Models\Api\TagsViewData.cs" />
     <Compile Include="Models\Api\TagViewData.cs" />
     <Compile Include="Models\Tree\BaseTreeNode.cs" />
+    <Compile Include="Models\Tree\CulturesTreeNode.cs" />
+    <Compile Include="Models\Tree\CultureTreeNode.cs" />
     <Compile Include="Models\Tree\LocationsTreeNode.cs" />
     <Compile Include="Models\Tree\NodesTreeNode.cs" />
     <Compile Include="Models\Tree\NodeTypeTreeNode.cs" />

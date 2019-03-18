@@ -1,6 +1,7 @@
 ﻿using Our.Umbraco.Look.BackOffice.Models.Api;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Umbraco.Core.Models;
 
@@ -11,6 +12,26 @@ namespace Our.Umbraco.Look.BackOffice.Services
     /// </summary>
     internal static class QueryService
     {
+        /// <summary>
+        /// Get a distinct collection of cultures
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <returns></returns>
+        internal static CultureInfo[] GetCultures(string searcherName)
+        {
+            // TODO: change to only query for cultures setup in the current umbraco site
+
+            return new LookQuery(searcherName) {
+                                NodeQuery = new NodeQuery() {  Type = PublishedItemType.Content },
+                                RawQuery = "Look_Culture:*"
+                            }
+                            .Search()
+                            .Matches
+                            .Select(x => x.CultureInfo)
+                            .Distinct()
+                            .ToArray();
+        }
+
         /// <summary>
         /// get all tag groups in seacher
         /// </summary>

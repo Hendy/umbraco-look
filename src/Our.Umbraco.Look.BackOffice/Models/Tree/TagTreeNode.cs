@@ -6,7 +6,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
     {
         public override string Icon => "icon-tag";
 
-        public override string Name => this.LookTag.Name + $" ({ this.Count })";
+        public override string Name => this.LookTag.Name; //+ $" ({ this.Count })";
 
         public override string RoutePath => "developer/lookTree/Tag/" + this.SearcherName + "|" + this.LookTag.Group + "|" + this.LookTag.Name;
 

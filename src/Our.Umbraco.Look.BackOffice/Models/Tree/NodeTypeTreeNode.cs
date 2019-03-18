@@ -35,9 +35,13 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
         public override ILookTreeNode[] GetChildren()
         {
-            var children = new List<TagGroupTreeNode>();
+            var children = new List<ILookTreeNode>();
 
-            // if node type = content, then children of cultures ?
+            // content nodes can be associated with a culture - only show if there's more than 1
+            if (this.NodeType == PublishedItemType.Content && QueryService.GetCultures(this.SearcherName).Length > 1)
+            {
+                children.Add(new CulturesTreeNode(base.QueryStrings));
+            }
 
             return children.ToArray();
         }
