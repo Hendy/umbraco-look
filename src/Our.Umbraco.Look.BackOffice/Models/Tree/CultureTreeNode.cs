@@ -11,7 +11,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
     internal class CultureTreeNode : BaseTreeNode
     {
-        public override string Icon => "icon-delete-key";
+        public override string Icon => "icon-chat";
 
         public override string Name => this.CultureInfo != null ? this.CultureInfo.Name : "Unknown";
 

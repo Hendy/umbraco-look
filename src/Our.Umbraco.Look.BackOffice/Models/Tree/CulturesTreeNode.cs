@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
     internal class CulturesTreeNode : BaseTreeNode
     {
-        public override string Icon => "icon-delete-key";
+        public override string Icon => "icon-globe";
 
         public override string Name => "Cultures";
 
