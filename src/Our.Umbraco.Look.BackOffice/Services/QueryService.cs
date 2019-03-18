@@ -20,10 +20,11 @@ namespace Our.Umbraco.Look.BackOffice.Services
         internal static CultureInfo[] GetCultures(string searcherName)
         {
             // TODO: change to only query for cultures setup in the current umbraco site
-
-            return new LookQuery(searcherName) {
+            
+            return new LookQuery(searcherName)
+                            {
                                 NodeQuery = new NodeQuery() {  Type = PublishedItemType.Content },
-                                RawQuery = "Look_Culture:*"
+                                //RawQuery = "Look_Culture:*"
                             }
                             .Search()
                             .Matches
