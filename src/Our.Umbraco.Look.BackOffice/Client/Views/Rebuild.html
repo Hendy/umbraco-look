@@ -8,8 +8,8 @@
 
             <p ng-if="!viewData.validIndexer">Error, unable to identify a corresponding indexer for this searcher</p>
 
-            <a href="#" class="btn btn-link" ng-click="hide()">Cancel</a>
-            <a href="#" ng-if="viewData.validIndexer"class="btn btn-primary" ng-click="rebuild()">Rebuild index</a>
+            <a class="btn btn-link" ng-click="hide()">Cancel</a>
+            <a ng-if="viewData.validIndexer"class="btn btn-primary" ng-click="rebuild()">Rebuild index</a>
 
         </div>
 
@@ -22,7 +22,7 @@
         <div class="umb-pane" ng-if="viewData.indexingComplete">
 
             <p>Indexing Complete</p>
-            <a href="#" class="btn btn-primary" ng-click="hide()">OK</a>
+            <a class="btn btn-primary" ng-click="hide()">OK</a>
 
         </div>
 

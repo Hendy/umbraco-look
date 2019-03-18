@@ -5,9 +5,9 @@
         .module('umbraco')
         .controller('Look.BackOffice.RebuildController', RebuildController);
 
-    RebuildController.$inject = ['$scope', 'Look.BackOffice.ApiService'];
+    RebuildController.$inject = ['$scope', 'navigationService', 'Look.BackOffice.ApiService'];
 
-    function RebuildController($scope, apiService) {
+    function RebuildController($scope, navigationService, apiService) {
 
         $scope.viewData = {
             ready: false,
@@ -32,6 +32,7 @@
 
         $scope.hide = function () {
             // TODO: close the menu - no redirecting
+            navigationService.hideMenu();
         };
 
         $scope.rebuild = function () {
