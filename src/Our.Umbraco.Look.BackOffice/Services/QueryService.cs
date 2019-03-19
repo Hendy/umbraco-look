@@ -67,6 +67,8 @@ namespace Our.Umbraco.Look.BackOffice.Services
                                 .ToDictionary(x => x.Item1, x => x.Item2);
         }
 
+        #region Get Matches
+
         /// <summary>
         /// get a chunk of matches
         /// </summary>
@@ -114,6 +116,46 @@ namespace Our.Umbraco.Look.BackOffice.Services
                 Type = nodeType
             };
 
+            QueryService.SetSort(lookQuery, sort);
+
+            var lookResult = lookQuery.Search();
+
+            matchesResult.TotalItemCount = lookResult.TotalItemCount;
+            matchesResult.Matches = lookResult
+                                        .Matches
+                                        .Skip(skip)
+                                        .Take(take)
+                                        .Select(x => (MatchesResult.Match)x)
+                                        .ToArray();
+
+            return matchesResult;
+        }
+
+        /// <summary>
+        /// Get matches by culture - all content (except detached) has a culture set in Umbraco
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <param name="lcid"></param>
+        /// <param name="sort"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        internal static MatchesResult GetCultureMatches(string searcherName, int? lcid, string sort, int skip, int take)
+        {
+            var matchesResult = new MatchesResult();
+
+            var lookQuery = new LookQuery(searcherName) { NodeQuery = new NodeQuery() };
+
+            if (lcid.HasValue)
+            {
+                lookQuery.NodeQuery.Culture = new CultureInfo(lcid.Value);
+            }
+            else // no culture suppled, so get all content (but not detached)
+            {
+                lookQuery.NodeQuery.Type = PublishedItemType.Content;
+                lookQuery.NodeQuery.DetachedQuery = DetachedQuery.ExcludeDetached;
+            }
+            
             QueryService.SetSort(lookQuery, sort);
 
             var lookResult = lookQuery.Search();
@@ -203,6 +245,8 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             return matchesResult;
         }
+
+        #endregion
 
         private static void SetSort(LookQuery lookQuery, string sort)
         {

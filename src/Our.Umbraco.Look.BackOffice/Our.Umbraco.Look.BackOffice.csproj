@@ -220,11 +220,13 @@
     <Content Include="Client\Controllers\RebuildController.js" />
     <Content Include="Client\Controllers\LocationsController.js" />
     <Content Include="Client\Controllers\NodeTypeController.js" />
+    <Content Include="Client\Controllers\CulturesController.js" />
     <Content Include="Client\Services\MatchService.js" />
     <Content Include="Client\Services\SortService.js" />
     <Content Include="Client\Controllers\NodesController.js" />
     <Compile Include="Attributes\ValidateSearcherAttribute.cs" />
     <Content Include="Client\Controllers\DetailsController.js" />
+    <Content Include="Client\Controllers\CultureController.js" />
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\TreeController.cs" />
     <Compile Include="Interfaces\ILookTreeNode.cs" />
@@ -272,6 +274,8 @@
     <Content Include="Client\Look.css" />
     <Content Include="Client\Services\ApiService.js" />
     <Content Include="Client\Services\TreeService.js" />
+    <Content Include="Client\Views\Culture.html" />
+    <Content Include="Client\Views\Cultures.html" />
     <Content Include="Client\Views\Locations.html" />
     <Content Include="Client\Views\Nodes.html" />
     <Content Include="Client\Views\NodeType.html" />

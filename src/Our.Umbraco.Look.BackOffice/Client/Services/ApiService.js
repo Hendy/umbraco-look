@@ -24,6 +24,7 @@
             // get matches
             getMatches: getMatches,
             getNodeTypeMatches: getNodeTypeMatches,
+            getCultureMatches: getCultureMatches,
             getTagMatches: getTagMatches,
             getLocationMatches: getLocationMatches,
 
@@ -32,7 +33,9 @@
 
             getConfigurationData: getConfigurationData // get details about indexers in use (sort will use to enable options)
         };
-     
+
+        // get viewData ----------------------------------------
+
         function getViewDataForSearcher(searcherName) {
             return $http({
                 method: 'GET',
@@ -117,6 +120,8 @@
             });
         }
 
+        // get matches ----------------------------------------
+
         function getMatches(searcherName, sort, skip, take) {
 
             if (angular.isUndefined(searcherName)) { searcherName = ''; }
@@ -152,6 +157,29 @@
                 params: {
                     'searcherName': searcherName,
                     'nodeType': nodeType,
+                    'sort': sort,
+                    'skip': skip,
+                    'take': take
+                }
+            });
+
+            return matches;
+        }
+
+        function getCultureMatches(searcherName, lcid, sort, skip, take) {
+
+            if (angular.isUndefined(searcherName)) { searcherName = ''; }
+            if (angular.isUndefined(lcid)) { { lcid = -1; } }
+            if (angular.isUndefined(sort)) { sort = ''; }
+            if (angular.isUndefined(skip)) { skip = 0; }
+            if (angular.isUndefined(take)) { take = 0; }
+
+            var matches = $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetCultureMatches',
+                params: {
+                    'searcherName': searcherName,
+                    'lcid': lcid,
                     'sort': sort,
                     'skip': skip,
                     'take': take
@@ -206,6 +234,8 @@
 
             return matches;
         }
+
+        // menu actions ----------------------------------------
 
         function rebuildIndex(indexerName) {
             return $http({

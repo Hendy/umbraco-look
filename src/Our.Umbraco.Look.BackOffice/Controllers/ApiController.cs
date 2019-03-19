@@ -16,6 +16,8 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
     [PluginController("Look")]
     public class ApiController : UmbracoAuthorizedApiController
     {
+        #region Get ViewData
+
         [HttpGet]
         [ValidateSearcher] // if searcher name valid, then sets routeData value 'searcher'
         public IHttpActionResult GetViewDataForSearcher([FromUri]string searcherName)
@@ -102,6 +104,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(viewData);
         }
 
+        //public IHttpActionResult GetViewDataForCultures()
 
         /// <summary>
         /// Get the view model for the top level 'Tags' tree node (for a searcher)
@@ -164,6 +167,10 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(viewData);
         }
 
+        #endregion
+
+        #region Get Matches
+
         [HttpGet]
         [ValidateSearcher]
         public IHttpActionResult GetMatches(
@@ -187,6 +194,18 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             [FromUri]int take)
         {
             return this.Ok(QueryService.GetNodeTypeMatches(searcherName, nodeType, sort, skip, take));
+        }
+
+        [HttpGet]
+        [ValidateSearcher]
+        public IHttpActionResult GetCultureMatches(
+            [FromUri]string searcherName,
+            [FromUri]int lcid,
+            [FromUri]string sort,
+            [FromUri]int skip,
+            [FromUri]int take)
+        {
+            return this.Ok(QueryService.GetCultureMatches(searcherName, lcid > 0 ? (int?)lcid : null, sort, skip, take));
         }
 
         /// <summary>
@@ -230,6 +249,8 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             return this.Ok(QueryService.GetLocationMatches(searcherName, sort, skip, take));
         }
+
+        #endregion
 
         /// <summary>
         /// Rebuild the Emamine index
