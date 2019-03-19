@@ -26,7 +26,6 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Look.css" target="Content\App_Plugins\Look\Look.css" />
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\CultureController.js" target="Content\App_Plugins\Look\Controllers\CultureController.js" />
-    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\CulturesController.js" target="Content\App_Plugins\Look\Controllers\CulturesController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\DetailsController.js" target="Content\App_Plugins\Look\Controllers\DetailsController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\LocationsController.js" target="Content\App_Plugins\Look\Controllers\LocationsController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\MatchesController.js" target="Content\App_Plugins\Look\Controllers\MatchesController.js" />
@@ -50,6 +49,7 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Partials\Matches.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Partials\Matches.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Partials\Sort.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Partials\Sort.html" />
 
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Culture.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Culture.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Locations.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Locations.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Nodes.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Nodes.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\NodeType.html" target="Content\App_Plugins\Look\BackOffice\LookTree\NodeType.html" />

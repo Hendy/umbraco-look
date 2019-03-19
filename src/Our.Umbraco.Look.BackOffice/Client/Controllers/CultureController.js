@@ -20,12 +20,11 @@
             'searcher-' + $scope.searcherName,
             'nodes-' + $scope.searcherName,
             'nodeType-' + $scope.searcherName + '|' + 'Content', // (this whole tree path patttern needs to be refactored)
-            'cultures-' + $scope.searcherName,
             'culture-' + $scope.searcherName + '|' + $scope.lcid
         ]);
 
         // view data
-        apiService.getViewDataForCulture($scope.searcherName)
+        apiService.getViewDataForCulture($scope.searcherName, $scope.lcid)
             .then(function (response) { $scope.viewData = response.data; });
 
         // matches

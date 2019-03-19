@@ -38,11 +38,6 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
                     return new NodeTypeTreeNode(queryStrings);
 
-                case "cultures":
-                    queryStrings.ReadAsNameValueCollection()["searcherName"] = nodeParams;
-
-                    return new CulturesTreeNode(queryStrings);
-
                 case "culture":
                     var cultrureParams = nodeParams.Split('|');
 

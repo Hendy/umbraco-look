@@ -106,17 +106,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
 
         [HttpGet]
         [ValidateSearcher]
-        public IHttpActionResult GetViewDataForCultures([FromUri]string searcherName)
-        {
-            var viewData = new CulturesViewData();
-
-            // TODO:
-
-            return this.Ok(viewData);
-        }
-
-        [HttpGet]
-        [ValidateSearcher]
         public IHttpActionResult GetViewDataForCulture([FromUri]string searcherName, int lcid)
         {
             var viewData = new CultureViewData();
