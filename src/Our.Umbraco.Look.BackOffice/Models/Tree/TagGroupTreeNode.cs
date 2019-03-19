@@ -2,9 +2,6 @@
 using Our.Umbraco.Look.BackOffice.Services;
 using System.Collections.Generic;
 using System.Net.Http.Formatting;
-using umbraco;
-using umbraco.BusinessLogic.Actions;
-using Umbraco.Web.Models.Trees;
 
 namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {

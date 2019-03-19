@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Umbraco.Core;
 using Umbraco.Core.Models;
+using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Look.BackOffice.Services
 {
@@ -19,18 +21,26 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <returns></returns>
         internal static CultureInfo[] GetCultures(string searcherName)
         {
-            // TODO: change to only query for cultures setup in the current umbraco site
-            
-            return new LookQuery(searcherName)
-                            {
-                                NodeQuery = new NodeQuery() {  Type = PublishedItemType.Content },
-                                //RawQuery = "Look_Culture:*"
-                            }
-                            .Search()
-                            .Matches
-                            .Select(x => x.CultureInfo)
-                            .Distinct()
-                            .ToArray();
+            var languages = ApplicationContext.Current?.Services.LocalizationService.GetAllLanguages().ToArray();
+
+            if (languages != null && languages.Any())
+            {
+                return new LookQuery(searcherName)
+                {
+                    NodeQuery = new NodeQuery()
+                    {
+                        Type = PublishedItemType.Content,
+                        CultureAny = languages.Select(x => x.CultureInfo).ToArray()
+                    },                    
+                }
+                .Search()
+                .Matches
+                .Select(x => x.CultureInfo)
+                .Distinct()
+                .ToArray();
+            }
+
+            return new CultureInfo[] { };
         }
 
         /// <summary>
