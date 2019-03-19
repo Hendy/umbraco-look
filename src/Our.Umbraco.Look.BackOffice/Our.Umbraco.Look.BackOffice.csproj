@@ -231,6 +231,8 @@
     <Compile Include="Controllers\TreeController.cs" />
     <Compile Include="Interfaces\ILookTreeNode.cs" />
     <Compile Include="Models\Api\ConfigurationData.cs" />
+    <Compile Include="Models\Api\CulturesViewData.cs" />
+    <Compile Include="Models\Api\CultureViewData.cs" />
     <Compile Include="Models\Api\LocationsViewData.cs" />
     <Compile Include="Models\Api\MatchesResult.cs" />
     <Compile Include="Models\Api\NodesViewData.cs" />

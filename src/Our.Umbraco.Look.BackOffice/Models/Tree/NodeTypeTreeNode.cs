@@ -40,6 +40,8 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
             // content nodes can be associated with a culture - only show if there's more than 1
             if (this.NodeType == PublishedItemType.Content && QueryService.GetCultures(this.SearcherName).Length > 1)
             {
+                base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
+
                 children.Add(new CulturesTreeNode(base.QueryStrings));
             }
 

@@ -132,7 +132,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         }
 
         /// <summary>
-        /// Get matches by culture - all content (except detached) has a culture set in Umbraco
+        /// Get matches by culture - all content has a culture set in Umbraco
         /// </summary>
         /// <param name="searcherName"></param>
         /// <param name="lcid"></param>
@@ -150,10 +150,9 @@ namespace Our.Umbraco.Look.BackOffice.Services
             {
                 lookQuery.NodeQuery.Culture = new CultureInfo(lcid.Value);
             }
-            else // no culture suppled, so get all content (but not detached)
+            else // no culture suppled, so get all content
             {
                 lookQuery.NodeQuery.Type = PublishedItemType.Content;
-                lookQuery.NodeQuery.DetachedQuery = DetachedQuery.ExcludeDetached;
             }
             
             QueryService.SetSort(lookQuery, sort);

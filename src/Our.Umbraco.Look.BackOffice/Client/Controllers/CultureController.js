@@ -24,9 +24,9 @@
             'culture-' + $scope.searcherName + '|' + $scope.lcid
         ]);
 
-        //// view data
-        //apiService.getViewDataForCulture($scope.searcherName)
-        //    .then(function (response) { $scope.viewData = response.data; });
+        // view data
+        apiService.getViewDataForCulture($scope.searcherName)
+            .then(function (response) { $scope.viewData = response.data; });
 
         // matches
         $scope.getMatches = function (sort, skip, take) {

@@ -16,6 +16,8 @@
             getViewDataForRebuild: getViewDataForRebuild,
             getViewDataForNodes: getViewDataForNodes,
             getViewDataForNodeType: getViewDataForNodeType,
+            getViewDataForCultures: getViewDataForCultures,
+            getViewDataForCulture: getViewDataForCulture,
             getViewDataForTags: getViewDataForTags,
             getViewDataForTagGroup: getViewDataForTagGroup,
             getViewDataForTag: getViewDataForTag,
@@ -73,6 +75,27 @@
                 params: {
                     'searcherName': searcherName,
                     'nodeType': nodeType
+                }
+            });
+        }
+
+        function getViewDataForCultures(searcherName) {
+            return $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetViewDataForCultures',
+                params: {
+                    'searcherName': searcherName
+                }
+            });
+        }
+
+        function getViewDataForCulture(searcherName, lcid) {
+            return $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetViewDataForCultures',
+                params: {
+                    'searcherName': searcherName,
+                    'lcid': lcid
                 }
             });
         }

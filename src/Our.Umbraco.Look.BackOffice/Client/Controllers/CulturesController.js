@@ -11,7 +11,7 @@
 
         // input params
         $scope.searcherName = $routeParams.id;
-
+        console.log($scope.searcherName);
         treeService.update([
             '-1',
             'searcher-' + $scope.searcherName,
@@ -20,9 +20,9 @@
             'cultures-' + $scope.searcherName
         ]);
 
-        //// view data
-        //apiService.getViewDataForCultures($scope.searcherName)
-        //    .then(function (response) { $scope.viewData = response.data; });
+        // view data
+        apiService.getViewDataForCultures($scope.searcherName)
+            .then(function (response) { $scope.viewData = response.data; });
 
         // matches
         $scope.getMatches = function (sort, skip, take) {
