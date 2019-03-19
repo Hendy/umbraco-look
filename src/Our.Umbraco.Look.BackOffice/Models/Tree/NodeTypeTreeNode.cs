@@ -53,12 +53,5 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
             return children.ToArray();
         }
-
-        public override MenuItemCollection GetMenu()
-        {
-            var menu = new MenuItemCollection();
-
-            return menu;
-        }
     }
 }
