@@ -21,26 +21,26 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <returns></returns>
         internal static CultureInfo[] GetCultures(string searcherName)
         {
+            var cultures = new List<CultureInfo>();
+
             var languages = ApplicationContext.Current?.Services.LocalizationService.GetAllLanguages().ToArray();
 
             if (languages != null && languages.Any())
             {
-                return new LookQuery(searcherName)
+                var lookQuery = new LookQuery(searcherName) { NodeQuery = new NodeQuery() };
+
+                foreach(var culture in languages.Select(x => x.CultureInfo))
                 {
-                    NodeQuery = new NodeQuery()
+                    lookQuery.NodeQuery.Culture = culture;
+
+                    if (lookQuery.Search().TotalItemCount > 0)
                     {
-                        Type = PublishedItemType.Content,
-                        CultureAny = languages.Select(x => x.CultureInfo).ToArray()
-                    },                    
+                        cultures.Add(culture);
+                    }
                 }
-                .Search()
-                .Matches
-                .Select(x => x.CultureInfo)
-                .Distinct()
-                .ToArray();
             }
 
-            return new CultureInfo[] { };
+            return cultures.ToArray();
         }
 
         /// <summary>
