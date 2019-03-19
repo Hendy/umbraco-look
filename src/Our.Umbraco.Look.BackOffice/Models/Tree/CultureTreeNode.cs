@@ -11,9 +11,9 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
     internal class CultureTreeNode : BaseTreeNode
     {
-        public override string Icon => "icon-chat";
+        public override string Icon => "icon-flag-alt";
 
-        public override string Name => this.CultureInfo != null ? this.CultureInfo.Name : "Unknown";
+        public override string Name => this.CultureInfo != null ? this.CultureInfo.DisplayName : "Unknown";
 
         public override string RoutePath => "developer/lookTree/Culture/" + this.SearcherName + "|" + this.CultureInfo?.LCID;
 

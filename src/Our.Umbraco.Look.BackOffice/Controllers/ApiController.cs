@@ -4,6 +4,7 @@ using Our.Umbraco.Look;
 using Our.Umbraco.Look.BackOffice.Attributes;
 using Our.Umbraco.Look.BackOffice.Models.Api;
 using Our.Umbraco.Look.BackOffice.Services;
+using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using Umbraco.Core;
@@ -110,7 +111,9 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new CultureViewData();
 
-            // TODO:
+            CultureInfo cultureInfo = new CultureInfo(lcid);
+
+            viewData.CultureName = cultureInfo.DisplayName;
 
             return this.Ok(viewData);
         }
