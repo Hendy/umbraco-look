@@ -180,7 +180,7 @@ namespace Our.Umbraco.Look.Services
             }
             else if (indexingContext.Item != null)
             {
-                date = indexingContext.Item.UpdateDate;
+                date = indexingContext.HostItem?.UpdateDate ?? indexingContext.Item.UpdateDate;
             }
 
             if (date != null)
