@@ -107,6 +107,20 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
 
         [HttpGet]
         [ValidateSearcher]
+        public IHttpActionResult GetViewDataForDetached([FromUri]string searcherName, [FromUri]PublishedItemType nodeType)
+        {
+            var viewData = new DetachedViewData();
+
+            viewData.Name = nodeType == PublishedItemType.Content ? "Detached Content"
+                            : nodeType == PublishedItemType.Media ? "Detached Media"
+                            : nodeType == PublishedItemType.Member ? "Detached Member"
+                            : null;
+
+            return this.Ok(viewData);
+        }
+
+        [HttpGet]
+        [ValidateSearcher]
         public IHttpActionResult GetViewDataForCulture([FromUri]string searcherName, int lcid)
         {
             var viewData = new CultureViewData();
@@ -206,6 +220,18 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             [FromUri]int take)
         {
             return this.Ok(QueryService.GetNodeTypeMatches(searcherName, nodeType, sort, skip, take));
+        }
+
+        [HttpGet]
+        [ValidateSearcher]
+        public IHttpActionResult GetDetachedeMatches(
+            [FromUri]string searcherName,
+            [FromUri]PublishedItemType nodeType,
+            [FromUri]string sort,
+            [FromUri]int skip,
+            [FromUri]int take)
+        {
+            return this.Ok(QueryService.GetDetachedMatches(searcherName, nodeType, sort, skip, take));
         }
 
         [HttpGet]

@@ -217,6 +217,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client\Controllers\DetachedController.js" />
     <Content Include="Client\Controllers\RebuildController.js" />
     <Content Include="Client\Controllers\LocationsController.js" />
     <Content Include="Client\Controllers\NodeTypeController.js" />
@@ -231,6 +232,7 @@
     <Compile Include="Interfaces\ILookTreeNode.cs" />
     <Compile Include="Models\Api\ConfigurationData.cs" />
     <Compile Include="Models\Api\CultureViewData.cs" />
+    <Compile Include="Models\Api\DetachedViewData.cs" />
     <Compile Include="Models\Api\LocationsViewData.cs" />
     <Compile Include="Models\Api\MatchesResult.cs" />
     <Compile Include="Models\Api\NodesViewData.cs" />
@@ -243,6 +245,7 @@
     <Compile Include="Models\Tree\BaseTreeNode.cs" />
     <Compile Include="Models\Tree\CultureTreeNode.cs" />
     <Compile Include="Models\Tree\LocationsTreeNode.cs" />
+    <Compile Include="Models\Tree\DetachedTreeNode.cs" />
     <Compile Include="Models\Tree\NodesTreeNode.cs" />
     <Compile Include="Models\Tree\NodeTypeTreeNode.cs" />
     <Compile Include="Models\Tree\RootTreeNode.cs" />
@@ -274,6 +277,7 @@
     <Content Include="Client\Services\ApiService.js" />
     <Content Include="Client\Services\TreeService.js" />
     <Content Include="Client\Views\Culture.html" />
+    <Content Include="Client\Views\Detached.html" />
     <Content Include="Client\Views\Locations.html" />
     <Content Include="Client\Views\Nodes.html" />
     <Content Include="Client\Views\NodeType.html" />

@@ -142,6 +142,36 @@ namespace Our.Umbraco.Look.BackOffice.Services
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="searcherName"></param>
+        /// <param name="nodeType"></param>
+        /// <param name="sort"></param>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        internal static MatchesResult GetDetachedMatches(string searcherName, PublishedItemType nodeType, string sort, int skip, int take)
+        {
+            var matchesResult = new MatchesResult();
+
+            var lookQuery = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType, DetachedQuery = DetachedQuery.OnlyDetached } };
+
+            QueryService.SetSort(lookQuery, sort);
+
+            var lookResult = lookQuery.Search();
+
+            matchesResult.TotalItemCount = lookResult.TotalItemCount;
+            matchesResult.Matches = lookResult
+                                        .Matches
+                                        .Skip(skip)
+                                        .Take(take)
+                                        .Select(x => (MatchesResult.Match)x)
+                                        .ToArray();
+
+            return matchesResult;
+        }
+
+        /// <summary>
         /// Get matches by culture - all content has a culture set in Umbraco
         /// </summary>
         /// <param name="searcherName"></param>

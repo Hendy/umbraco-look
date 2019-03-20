@@ -37,6 +37,21 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
         {
             var children = new List<ILookTreeNode>();
 
+            if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = this.NodeType, DetachedQuery = DetachedQuery.OnlyDetached } }.Search().TotalItemCount > 0)
+            {
+                base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
+                base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = this.NodeType.ToString();
+
+                children.Add(new DetachedTreeNode(base.QueryStrings));
+            }
+
+
+
+
+
+
+
+
             // content nodes can be associated with a culture - only show if there's more than 1
             if (this.NodeType == PublishedItemType.Content && QueryService.GetCultures(this.SearcherName).Length > 1)
             {

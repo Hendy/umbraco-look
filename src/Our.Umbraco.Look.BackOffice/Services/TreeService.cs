@@ -38,6 +38,14 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
                     return new NodeTypeTreeNode(queryStrings);
 
+                case "detached":
+                    var detachedParams = nodeParams.Split('|');
+
+                    queryStrings.ReadAsNameValueCollection()["searcherName"] = detachedParams[0];
+                    queryStrings.ReadAsNameValueCollection()["nodeType"] = detachedParams[1];
+
+                    return new DetachedTreeNode(queryStrings);
+
                 case "culture":
                     var cultrureParams = nodeParams.Split('|');
 

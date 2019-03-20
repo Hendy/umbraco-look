@@ -16,6 +16,7 @@
             getViewDataForRebuild: getViewDataForRebuild,
             getViewDataForNodes: getViewDataForNodes,
             getViewDataForNodeType: getViewDataForNodeType,
+            getViewDataForDetached: getViewDataForDetached,
             getViewDataForCulture: getViewDataForCulture,
             getViewDataForTags: getViewDataForTags,
             getViewDataForTagGroup: getViewDataForTagGroup,
@@ -25,6 +26,7 @@
             // get matches
             getMatches: getMatches,
             getNodeTypeMatches: getNodeTypeMatches,
+            getDetachedMatches: getDetachedMatches,
             getCultureMatches: getCultureMatches,
             getTagMatches: getTagMatches,
             getLocationMatches: getLocationMatches,
@@ -71,6 +73,17 @@
             return $http({
                 method: 'GET',
                 url: 'BackOffice/Look/Api/GetViewDataForNodeType',
+                params: {
+                    'searcherName': searcherName,
+                    'nodeType': nodeType
+                }
+            });
+        }
+
+        function getViewDataForDetached(searcherName, nodeType) {
+            return $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetViewDataForDetached',
                 params: {
                     'searcherName': searcherName,
                     'nodeType': nodeType
@@ -177,6 +190,31 @@
 
             return matches;
         }
+
+
+        function getDetachedMatches(searcherName, nodeType, sort, skip, take) {
+
+            if (angular.isUndefined(searcherName)) { searcherName = ''; }
+            if (angular.isUndefined(nodeType)) { { nodeType = ''; } }
+            if (angular.isUndefined(sort)) { sort = ''; }
+            if (angular.isUndefined(skip)) { skip = 0; }
+            if (angular.isUndefined(take)) { take = 0; }
+
+            var matches = $http({
+                method: 'GET',
+                url: 'BackOffice/Look/Api/GetDetachedeMatches',
+                params: {
+                    'searcherName': searcherName,
+                    'nodeType': nodeType,
+                    'sort': sort,
+                    'skip': skip,
+                    'take': take
+                }
+            });
+
+            return matches;
+        }
+
 
         function getCultureMatches(searcherName, lcid, sort, skip, take) {
 
