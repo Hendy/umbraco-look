@@ -4,9 +4,6 @@ using Our.Umbraco.Look.BackOffice.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Formatting;
-using umbraco;
-using umbraco.BusinessLogic.Actions;
-using Umbraco.Web.Models.Trees;
 
 namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
@@ -44,15 +41,6 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
             }
 
             return children.OrderBy(x => x.Name).ToArray();
-        }
-
-        public override MenuItemCollection GetMenu()
-        {
-            var menu = new MenuItemCollection();
-
-            menu.Items.Add<RefreshNode, ActionRefresh>(ui.Text("actions", ActionRefresh.Instance.Alias), true);
-
-            return menu;
         }
     }
 }
