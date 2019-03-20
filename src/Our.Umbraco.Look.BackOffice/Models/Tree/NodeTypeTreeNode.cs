@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http.Formatting;
 using Umbraco.Core.Models;
-using Umbraco.Web.Models.Trees;
 
 namespace Our.Umbraco.Look.BackOffice.Models.Tree
 {
@@ -43,27 +42,6 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
                 base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = this.NodeType.ToString();
 
                 children.Add(new DetachedTreeNode(base.QueryStrings));
-            }
-
-
-
-
-
-
-
-
-            // content nodes can be associated with a culture - only show if there's more than 1
-            if (this.NodeType == PublishedItemType.Content && QueryService.GetCultures(this.SearcherName).Length > 1)
-            {
-                var cultures = QueryService.GetCultures(this.SearcherName);
-
-                foreach (var culture in cultures)
-                {
-                    base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
-                    base.QueryStrings.ReadAsNameValueCollection()["lcid"] = culture.LCID.ToString();
-
-                    children.Add(new CultureTreeNode(base.QueryStrings));
-                }
             }
 
             return children.ToArray();

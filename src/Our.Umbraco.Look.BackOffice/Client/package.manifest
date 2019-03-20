@@ -1,6 +1,5 @@
 {
   "javascript": [
-    "~/App_Plugins/Look/Controllers/CultureController.js",
     "~/App_Plugins/Look/Controllers/DetachedController.js",
     "~/App_Plugins/Look/Controllers/DetailsController.js",
     "~/App_Plugins/Look/Controllers/LocationsController.js",

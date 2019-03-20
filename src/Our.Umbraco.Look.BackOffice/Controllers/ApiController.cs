@@ -119,19 +119,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(viewData);
         }
 
-        [HttpGet]
-        [ValidateSearcher]
-        public IHttpActionResult GetViewDataForCulture([FromUri]string searcherName, int lcid)
-        {
-            var viewData = new CultureViewData();
-
-            CultureInfo cultureInfo = new CultureInfo(lcid);
-
-            viewData.CultureName = cultureInfo.DisplayName;
-
-            return this.Ok(viewData);
-        }
-
         /// <summary>
         /// Get the view model for the top level 'Tags' tree node (for a searcher)
         /// </summary>

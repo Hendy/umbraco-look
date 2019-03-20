@@ -17,7 +17,6 @@
             getViewDataForNodes: getViewDataForNodes,
             getViewDataForNodeType: getViewDataForNodeType,
             getViewDataForDetached: getViewDataForDetached,
-            getViewDataForCulture: getViewDataForCulture,
             getViewDataForTags: getViewDataForTags,
             getViewDataForTagGroup: getViewDataForTagGroup,
             getViewDataForTag: getViewDataForTag,
@@ -27,7 +26,6 @@
             getMatches: getMatches,
             getNodeTypeMatches: getNodeTypeMatches,
             getDetachedMatches: getDetachedMatches,
-            getCultureMatches: getCultureMatches,
             getTagMatches: getTagMatches,
             getLocationMatches: getLocationMatches,
 
@@ -87,17 +85,6 @@
                 params: {
                     'searcherName': searcherName,
                     'nodeType': nodeType
-                }
-            });
-        }
-
-        function getViewDataForCulture(searcherName, lcid) {
-            return $http({
-                method: 'GET',
-                url: 'BackOffice/Look/Api/GetViewDataForCulture',
-                params: {
-                    'searcherName': searcherName,
-                    'lcid': lcid
                 }
             });
         }
@@ -206,30 +193,6 @@
                 params: {
                     'searcherName': searcherName,
                     'nodeType': nodeType,
-                    'sort': sort,
-                    'skip': skip,
-                    'take': take
-                }
-            });
-
-            return matches;
-        }
-
-
-        function getCultureMatches(searcherName, lcid, sort, skip, take) {
-
-            if (angular.isUndefined(searcherName)) { searcherName = ''; }
-            if (angular.isUndefined(lcid)) { { lcid = -1; } }
-            if (angular.isUndefined(sort)) { sort = ''; }
-            if (angular.isUndefined(skip)) { skip = 0; }
-            if (angular.isUndefined(take)) { take = 0; }
-
-            var matches = $http({
-                method: 'GET',
-                url: 'BackOffice/Look/Api/GetCultureMatches',
-                params: {
-                    'searcherName': searcherName,
-                    'lcid': lcid,
                     'sort': sort,
                     'skip': skip,
                     'take': take
