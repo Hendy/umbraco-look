@@ -60,14 +60,17 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
                 var childTreeNodes = new List<ILookTreeNode>();
 
-                childTreeNodes.Add(new NodesTreeNode(base.QueryStrings));
+                if (new LookQuery(this.SearcherName) {  NodeQuery = new NodeQuery() }.Search().TotalItemCount > 0)
+                {
+                    childTreeNodes.Add(new NodesTreeNode(base.QueryStrings));
+                }
 
-                if (LookConfiguration.TagIndexerIsSet)
+                if (LookConfiguration.TagIndexerIsSet && new LookQuery(this.SearcherName) { TagQuery = new TagQuery() }.Search().TotalItemCount > 0)
                 {
                     childTreeNodes.Add(new TagsTreeNode(base.QueryStrings));
                 }
 
-                if (LookConfiguration.LocationIndexerIsSet)
+                if (LookConfiguration.LocationIndexerIsSet && new LookQuery(this.SearcherName) { LocationQuery = new LocationQuery() }.Search().TotalItemCount > 0)
                 {
                     childTreeNodes.Add(new LocationsTreeNode(base.QueryStrings));
                 }
