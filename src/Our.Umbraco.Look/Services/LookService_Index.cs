@@ -56,7 +56,7 @@ namespace Our.Umbraco.Look.Services
                 var nodeAliasField = new Field(
                                             LookConstants.NodeAliasField,
                                             indexingContext.Item.DocumentTypeAlias,
-                                            Field.Store.NO,
+                                            Field.Store.YES,
                                             Field.Index.NOT_ANALYZED,
                                             Field.TermVector.NO);
 

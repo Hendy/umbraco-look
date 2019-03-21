@@ -55,6 +55,11 @@ namespace Our.Umbraco.Look
         public Guid Key { get; }
 
         /// <summary>
+        /// The docType, mediaType or memberType alias
+        /// </summary>
+        public string Alias { get; set; }
+
+        /// <summary>
         /// The custom name field
         /// </summary>
         public string Name { get; }
@@ -103,6 +108,7 @@ namespace Our.Umbraco.Look
         /// <param name="hostId">host (if item is detached)</param>
         /// <param name="itemId">passed in so we don't have to get infalte IPublishedContent from itemGuid to get the int (required for the base SearchResult)</param>
         /// <param name="itemGuid">expected to be null in unit tests (as outside of Umbraco context)</param>
+        /// <param name="alias">the docType, mediaType or memberType alias</param>
         /// <param name="cultureInfo"></param>
         /// <param name="name"></param>
         /// <param name="date"></param>
@@ -120,6 +126,7 @@ namespace Our.Umbraco.Look
                     int? hostId,
                     int itemId, 
                     Guid? itemGuid,
+                    string alias,
                     CultureInfo cultureInfo,
                     string name,
                     DateTime? date,
@@ -136,6 +143,7 @@ namespace Our.Umbraco.Look
             this.Score = score;
             this.Id = itemId;
             this.Key = itemGuid ?? Guid.Empty;
+            this.Alias = alias;
             this.CultureInfo = cultureInfo;
             this.IsDetached = hostId.HasValue;
             this.Name = name;

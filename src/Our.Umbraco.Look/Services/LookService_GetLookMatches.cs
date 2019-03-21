@@ -37,6 +37,7 @@ namespace Our.Umbraco.Look.Services
                 LookConstants.NodeIdField,
                 LookConstants.NodeKeyField,
                 LookConstants.NodeTypeField,
+                LookConstants.NodeAliasField,
                 LookConstants.HostIdField,
                 LookConstants.NameField,
                 LookConstants.DateField,
@@ -93,6 +94,7 @@ namespace Our.Umbraco.Look.Services
                     getHostId(doc.Get(LookConstants.HostIdField)), // could be null
                     Convert.ToInt32(doc.Get(LookConstants.NodeIdField)),
                     getItemGuid(doc.Get(LookConstants.NodeKeyField)), // this should only be null for unit tests (outside umbraco context)
+                    doc.Get(LookConstants.NodeAliasField),
                     getCultureInfo(doc.Get(LookConstants.CultureField)),
                     doc.Get(LookConstants.NameField),
                     doc.Get(LookConstants.DateField).LuceneStringToDate(),
