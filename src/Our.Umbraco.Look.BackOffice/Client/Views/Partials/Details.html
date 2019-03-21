@@ -4,6 +4,7 @@
 
     <div><span>Id: </span>{{ viewData.match.id }}</div>
     <div><span>Key: </span>{{ viewData.match.key }}</div>
+    <div><span>Alias: </span>{{ viewData.match.alias }}</div>
     <div><span>Type: </span>{{ viewData.match.type }}</div>
     <div><span>Path: </span> {{ viewData.match.path}}<a href="{{ viewData.match.link }}">{{ viewData.match.linkText }}</a>{{ viewData.match.isDetached ? '\\' +  viewData.match.name : '' }}</div>
     <div><span>Date: </span> {{ viewData.match.date | date:'d MMMM yyyy, HH:mm:ss' }}</div>

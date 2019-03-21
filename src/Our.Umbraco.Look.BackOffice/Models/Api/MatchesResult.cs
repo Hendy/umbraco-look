@@ -35,6 +35,12 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             [JsonProperty("key")]
             public Guid Key { get; set; }
 
+            /// <summary>
+            /// alias of the docType / mediaType or memberType alias - TODO: check alias NestedContent uses...
+            /// </summary>
+            [JsonProperty("alias")]
+            public string Alias { get; set; }
+
             [JsonProperty("type")]
             [JsonConverter(typeof(StringEnumConverter))]
             public PublishedItemType Type { get; set; }
@@ -152,6 +158,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 match.Score = lookMatch.Score;
                 match.Id = lookMatch.Id;
                 match.Key = lookMatch.Key;
+                match.Alias = lookMatch.Item.DocumentTypeAlias;
                 match.Type = lookMatch.PublishedItemType;
                 match.Culture = lookMatch.CultureInfo?.Name;
                 match.Name = lookMatch.Name;
