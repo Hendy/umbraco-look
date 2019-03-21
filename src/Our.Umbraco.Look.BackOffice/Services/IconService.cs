@@ -1,9 +1,5 @@
 ﻿using Examine.Providers;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 
@@ -47,6 +43,55 @@ namespace Our.Umbraco.Look.BackOffice.Services
             : nodeType == PublishedItemType.Media ? "icon-umb-media"
             : nodeType == PublishedItemType.Member ? "icon-umb-members"
             : null;
+        }
+
+        /// <summary>
+        /// gets the icon associated with the docType, mediaType or memberType (by alias)
+        /// </summary>
+        /// <param name="nodeType">whether it's a node, media or member</param>
+        /// <param name="isDetached">flag indicating the item is detached (so will always be a document type_</param>
+        /// <param name="alias">alias of the node, media or member type</param>
+        /// <returns></returns>
+        internal static string GetAliasIcon(PublishedItemType nodeType, bool isDetached, string alias)
+        {
+            string icon = null;
+
+            try
+            {
+                if (nodeType == PublishedItemType.Content || isDetached)
+                {
+                    var contentType = ApplicationContext.Current.Services.ContentTypeService.GetContentType(alias);
+
+                    icon = contentType.Icon;
+                }
+                else
+                {
+                    switch (nodeType)
+                    {
+                        case PublishedItemType.Media:
+
+                            var mediaType = ApplicationContext.Current.Services.ContentTypeService.GetMediaType(alias);
+
+                            icon = mediaType.Icon;
+
+                            break;
+
+                        case PublishedItemType.Member:
+
+                            var memberType = ApplicationContext.Current.Services.MemberTypeService.Get(alias);
+
+                            icon = memberType.Icon;
+
+                            break;
+                    }
+                }
+            }
+            catch
+            {
+                icon = "icon-alert-alt";
+            }
+
+            return icon;
         }
     }
 }

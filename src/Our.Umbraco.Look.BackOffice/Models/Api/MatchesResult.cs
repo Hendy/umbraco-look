@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Our.Umbraco.Look.BackOffice.Services;
 using System;
 using System.Linq;
 using Umbraco.Web;
@@ -36,15 +37,24 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
             public Guid Key { get; set; }
 
             /// <summary>
-            /// alias of the docType / mediaType or memberType alias - TODO: check alias NestedContent uses...
+            /// alias of the docType/mediaType/memberType
             /// </summary>
             [JsonProperty("alias")]
             public string Alias { get; set; }
+
+            /// <summary>
+            /// The icon of the docType/mediaType/memberType alias
+            /// </summary>
+            [JsonProperty("aliasIcon")]
+            public string AliasIcon { get; set; }
 
             [JsonProperty("type")]
             [JsonConverter(typeof(StringEnumConverter))]
             public PublishedItemType Type { get; set; }
 
+            /// <summary>
+            /// icon representing the type (content/media/member) and whether it's detached - TODO: rename to TypeIcon
+            /// </summary>
             [JsonProperty("icon")]
             public string Icon { get; set; }
 
@@ -159,6 +169,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 match.Id = lookMatch.Id;
                 match.Key = lookMatch.Key;
                 match.Alias = lookMatch.Item.DocumentTypeAlias;
+                match.AliasIcon = IconService.GetAliasIcon(lookMatch.PublishedItemType, lookMatch.IsDetached, lookMatch.Alias);
                 match.Type = lookMatch.PublishedItemType;
                 match.Culture = lookMatch.CultureInfo?.Name;
                 match.Name = lookMatch.Name;
