@@ -293,8 +293,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
             {
                 case "Score": lookQuery.SortOn = SortOn.Score; break;
                 case "Name": lookQuery.SortOn = SortOn.Name; break;
-                case "DateAscending": lookQuery.SortOn = SortOn.DateAscending; break;
-                case "DateDescending": lookQuery.SortOn = SortOn.DateDescending; break;
+                case "Date": lookQuery.SortOn = SortOn.DateDescending; break;
             }
         }
     }
