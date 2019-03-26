@@ -1,34 +1,34 @@
-# Look (Beta) for Umbraco Examine
-Look sits on top of [Umbraco Examine](https://our.umbraco.com/documentation/reference/searching/examine/) adding support for:
+# Look (Beta) for Umbraco v7
+Look sits on top of Umbraco Examine adding support for:
 
 * Indexing all IPublishedContent items (each as a Lucene Document) be they: Umbraco Content, Media, Members or properties on them that return IPublishedContent, eg. Nested Content. 
 
 * Text match highlighting - return fragments of contextual text relevant to the supplied search term.
 
-* Geospatial querying - calculate the distance from a geographical location for each item, this can also be used for filtering / sorting.
+* Geospatial querying - boundary and location distance querying (this can also be used for filtering / sorting).
 
-* Tag faceting - return a colleciton of facets, where each details the number of results that would be returned, should that facet be applied to the current query (useful for guided navigation).
+* Tag querying & faceting - query on tags and return facet data for tags.
 
 ## Installation
 
-[The NuGet Package](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
+There are two NuGet packages:
+
+[Our.Umbraco.Look](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
 
   * Umbraco 7.3.0 (min)
   * Examine 0.1.70 (min)
   * Lucene.Net.Contrib 2.9.4.1 (min)
 
+[Our.Umbraco.Look.BackOffice](https://www.nuget.org/packages/Our.Umbraco.Look.BackOffice) installs an assembly _Our.Umbraco.Look.BackOffice.dll_ and files in App_Plugins/Look with a dependency on:
+
+  * Our.Umbraco.Look
+
  ## Indexing
 
-Look can be used index additional `name`, `date`, `text`, `tag` and `location` for an IPublishedContent item into Lucene indexes, in two ways:
+Look can be used index additional `name`, `date`, `text`, `tag` and `location` fields item into existing Examine Lucene indexes (no config file changes required) and/or a Look Examine indexer
+can be configured which will also index 'detached' IPublsihedContent.
 
-Firstly, once installed, it offers .Net seams for adding such data into any configured Umbraco Examine indexers.
-This can be useful as no configuration files need to be changed as it can hook into the default _External_, _Internal_, and _InternalMember_ indexers (or any others that have been setup).
-
-Secondly Look includes an Examine indexer that when configured (see [Examine configuration](https://our.umbraco.com/Documentation/Reference/Config/ExamineSettings/)) can 
-also index properties that return collections of IPublishedContent (eg. Nested Content) in additional to the Umbraco Content, Media and Member nodes.
-
-To configure the indexing behaviour for either of the ways mentioned, functions can be set via static methods on the LookConfiguration class (all are optional).
-If a function is set and returns a value then custom Lucene field(s) prefixed with "Look_" will be used to store that value.
+To implement indexing behaviour, functions can be set via static methods on the LookConfiguration class (all are optional).
 
 ```csharp
 public static class LookConfiguration
@@ -80,29 +80,7 @@ public class IndexingContext
 
 ## Searching
 
-Searching is performed using a configured (Umbraco or Look) Examine Searcher and can be done using the Exmaine API, or with the Look API.
-
-To be able to use the additional query types that Look introduces with the Exmaine API, a Look searcher needs to be used
-(rather than an Umbraco searcher). This is because a Look searcher will return an object as ISearchCritera that can be cast to LookSearchCriteria where the Look query types can be set.
-
-### Examine API
-
-```csharp
-var searcher = ExamineManager.Instance.SearchProviderCollection["MyLookSearcher"];
-var searchCriteria = searcher.CreateSearchCriteria();
-var lookSearchCriteria = (LookSearchCriteria)searchCriteria;
-
-lookSearchCriteria.NodeQuery = ...
-lookSearchCriteria.NameQuery = ...
-lookSearchCriteria.DateQuery = ...
-lookSearchCriteria.TextQuery = ...
-lookSearchCriteria.TagQuery = ...
-lookSearchCriteria.LocationQuery = ...
-lookSearchCriteria.ExamineQuery = ...
-lookSearchCriteria.RawQuery = ...
-
-var results = searcher.Search(searchCriteria);
-```
+Searching is performed using an (Umbraco or Look) Examine Searcher and can be done using the Exmaine API, or with the Look API.
 
 ### Look API
 
@@ -142,22 +120,22 @@ A node query is used to specify search criteria based on common properties of IP
 ```csharp
 lookQuery.NodeQuery = new NodeQuery() {
 	Type = PublishedItemType.Content,
-	//TypeAny = new [] { 
-	//	PublishedItemType.Content, 
-	//	PublishedItemType.Media, 
-	//	PublishedItemType.Member 
-	//},
+	TypeAny = new [] { 
+		PublishedItemType.Content, 
+		PublishedItemType.Media, 
+		PublishedItemType.Member 
+	},
 	DetachedQuery = DetachedQuery.IncludeDetached, // enum options
 	Culture = new CultureInfo("fr"),
-	//CultureAny = new [] {
-	//	new CultureInfo("fr")	
-	//},
+	CultureAny = new [] {
+		new CultureInfo("fr")	
+	},
 	Alias = "myDocTypeAlias",
-	//AliasAny = new [] { 
-	//	"myDocTypeAlias", 
-	//	"myMediaTypeAlias",
-	//	"myMemberTypeAlias"
-	//},
+	AliasAny = new [] { 
+		"myDocTypeAlias", 
+		"myMediaTypeAlias",
+		"myMemberTypeAlias"
+	},
 	Ids = new [] { 1, 2 },
 	Keys = new [] { 
 		Guid.Parse("dc890492-4571-4701-8085-b874837d597a"), 
@@ -170,7 +148,6 @@ lookQuery.NodeQuery = new NodeQuery() {
 		Guid.Parse("6bb24ed2-9466-422f-a9d4-27a805db2d47"), 
 		Guid.Parse("88a9e4e3-d4cb-4641-aff3-8579f1d60399")
 	}
-}
 };
 ```
 
@@ -218,7 +195,6 @@ lookQuery.TextQuery = new TextQuery() {
 
 A tag query is used together with a custom tag indexer (all properties are optional).
 If a tag query is set then only results with tags are returned.
-All properties are optional.
 
 ```csharp
 lookQuery.TagQuery = new TagQuery() {    
@@ -254,6 +230,39 @@ lookQuery.TagQuery = new TagQuery() {
 	FacetOn = new TagFacetQuery("colour", "size", "shape")
 };
 ```
+
+##### LookTags
+
+A tag can be any string and exists within an optionally specified group (if a group isn't set, then the tag is put into a default un-named group - String.Empty).
+A group string must only contain aphanumberic/underscore chars, and be less than 50 chars (as it is also used to generate a custom Lucene field name).
+
+A LookTag can be constructed from specified group and tag values:
+
+```csharp
+LookTag(string group, string name)
+```
+
+or from a raw string value:
+
+```csharp
+LokTag(string value)
+````
+
+When constructing from a raw string value, the first colon char ':' is used as an optional delimiter between a group and tag.
+eg.
+
+```csharp
+var tag1 = new LookTag("red"); // tag 'red', in default un-named group
+var tag2 = new LookTag(":red"); // tag 'red', in default un-named group
+var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
+```
+
+There is also a static helper on the TagQuery model which can be used as a shorthand to create a LookTag array. Eg.
+
+```csharp
+var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue", "size:large");
+```
+
 
 #### LocationQuery
 
@@ -306,7 +315,6 @@ When the search is performed, the source LookQuery model is compiled (such that 
 
 The LookResult model returned implements Examine.ISearchResults, but extends it with a Matches property that will return the results enumerated as strongly typed LookMatch objects (useful for lazy access to the assocated IPublishedContent item and other data) and a Facets property for any facet results.
 
-
 ```csharp
 public class LookResult : ISearchResults
 {
@@ -331,126 +339,3 @@ public class LookResult : ISearchResults
 	public Facet[] Facets { get; }
 }
 ```
-
-Whilst the enumeration on the LookResult returns items as Exmaine SearchResult, they can be cast to LookMatch objects:
-
-```csharp
-public class LookMatch : SearchResult
-{
-	/// <summary>
-	/// Lazy evaluation of the hosting IPublishedContent (if Item is detached, otherwise this will be null)
-	/// </summary>
-	public IPublishedContent HostItem { get; }
-
-	/// <summary>
-	/// Lazy evaluation of the associated IPublishedContent
-	/// </summary>
-	public IPublishedContent Item { get; }
-	
-	/// <summary>
-	/// Unique key to this IPublishedContent
-	/// </summary>
-	public Guid Key { get; }
-
-	/// <summary>
-	/// The custom name field
-	/// </summary>
-	public string Name { get; }
-
-	/// <summary>
-	/// The custom date field
-	/// </summary>
-	public DateTime? Date { get; }
-
-	/// <summary>
-	/// The full text (only returned if specified)
-	/// </summary>
-	public string Text { get; }
-
-	/// <summary>
-	/// Highlight text (containing search text) extracted from the full text
-	/// </summary>
-	public IHtmlString Highlight { get; }
-
-	/// <summary>
-	/// Collection of all tags associated with this item
-	/// </summary>
-	public LookTag[] Tags { get; }
-
-	/// <summary>
-	/// The custom location (lat|lng) field
-	/// </summary>
-	public Location Location { get; }
-
-	/// <summary>
-	/// The calculated distance (only returned if a location supplied in query)
-	/// </summary>
-	public double? Distance { get; }
-}
-```
-
-```csharp
-public class Facet
-{
-	/// <summary>
-	/// The tags that would be added into the TagQuery.All clause
-	/// </summary>
-	public LookTag[] Tags { get; }
-
-	/// <summary>
-	/// The total number of results expected should this facet be applied to the curent query
-	/// </summary>
-	public int Count { get;  }
-}
-```
-
-```csharp
-public class LookTag
-{
-	/// <summary>
-	/// The tag group - must contain only alphanumeric / underscore chars and be less than 50 chars.
-	/// </summary>
-	public string Group { get; set; }
-
-	/// <summary>
-	/// The tag name - this can be any string.
-	/// </summary>
-	public string Tag { get; set; }
-}
-```
-
-### LookTags
-
-A tag can be any string and exists within an optionally specified group (if a group isn't set, then the tag is put into a default un-named group - String.Empty).
-A group string must only contain aphanumberic/underscore chars, and be less than 50 chars (as it is also used to generate a custom Lucene field name).
-
-A LookTag can be constructed from specified group and tag values:
-
-```csharp
-LookTag(string group, string name)
-```
-
-or from a raw string value:
-
-```csharp
-LokTag(string value)
-````
-
-When constructing from a raw string value, the first colon char ':' is used as an optional delimiter between a group and tag.
-eg.
-
-```csharp
-var tag1 = new LookTag("red"); // tag 'red', in default un-named group
-var tag2 = new LookTag(":red"); // tag 'red', in default un-named group
-var tag2 = new LookTag("colour:red"); // tag 'red', in group 'colour'
-```
-
-There is also a static helper on the TagQuery model which can be used as a shorthand to create a LookTag array. Eg.
-
-```csharp
-var tags = TagQuery.MakeTags("colour:red", "colour:green", "colour:blue", "size:large");
-```
-
-### Facets
-
-Look interprets facets to mean: "if the current query asked something slightly different (the facet being the difference), then how many results would be returned instead ?".
