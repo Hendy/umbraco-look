@@ -218,6 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Client\Controllers\DetachedController.js" />
+    <Content Include="Client\Controllers\FiltersController.js" />
     <Content Include="Client\Controllers\RebuildController.js" />
     <Content Include="Client\Controllers\LocationsController.js" />
     <Content Include="Client\Controllers\NodeTypeController.js" />
@@ -278,6 +279,7 @@
     <Content Include="Client\Views\Nodes.html" />
     <Content Include="Client\Views\NodeType.html" />
     <Content Include="Client\Views\Partials\Details.html" />
+    <Content Include="Client\Views\Partials\Filters.html" />
     <Content Include="Client\Views\Partials\Matches.html" />
     <Content Include="Client\Views\Partials\Sort.html" />
     <Content Include="Client\Views\Rebuild.html" />
