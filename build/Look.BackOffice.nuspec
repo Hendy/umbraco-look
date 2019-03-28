@@ -42,6 +42,7 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Directives\LazyLoadDirective.js" target="Content\App_Plugins\Look\Directives\LazyLoadDirective.js" />
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\ApiService.js" target="Content\App_Plugins\Look\Services\ApiService.js" />
+    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\FiltersService.js" target="Content\App_Plugins\Look\Services\FiltersService.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\MatchService.js" target="Content\App_Plugins\Look\Services\MatchService.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\SortService.js" target="Content\App_Plugins\Look\Services\SortService.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Services\TreeService.js" target="Content\App_Plugins\Look\Services\TreeService.js" />

@@ -222,6 +222,7 @@
     <Content Include="Client\Controllers\RebuildController.js" />
     <Content Include="Client\Controllers\LocationsController.js" />
     <Content Include="Client\Controllers\NodeTypeController.js" />
+    <Content Include="Client\Services\FiltersService.js" />
     <Content Include="Client\Services\MatchService.js" />
     <Content Include="Client\Services\SortService.js" />
     <Content Include="Client\Controllers\NodesController.js" />
