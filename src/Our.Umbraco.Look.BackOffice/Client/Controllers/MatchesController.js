@@ -85,7 +85,11 @@
                 template: '/App_Plugins/Look/BackOffice/LookTree/Partials/Details.html',
                 show: true
             });
-        };
+      };
+
+      $scope.isActive = function (match) {
+        return match === matchService.selectedMatch;
+      };
 
 
         $scope.reload = function () {
