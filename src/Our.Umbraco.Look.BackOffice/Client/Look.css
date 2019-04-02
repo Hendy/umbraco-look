@@ -76,16 +76,19 @@
     margin: 0 0 10px 0;
     clear: both;
     background-color: #f3f3f5;
+    border-left: #f3f3f5 4px solid;
+    padding: 0 3px 0 5px;
 }
 
-.look-match:hover {
-    cursor:pointer;
-    background-color:white;
+.look-match:hover, .look-match:focus, look-match:active {
+    cursor: pointer;
+    background-color: white;
 }
 
 .look-match.active {
-    cursor:default;
-    background-color:white;
+    cursor: default;
+    background-color: #eafffe;
+    border-color: #00aea2;
 }
 
 .look-match.even {
@@ -102,12 +105,15 @@
     font-size: xx-small;
 }
 
-
+.look-match-type, .look-match-details, .look-match-checkboxes {
+    display: inline-block;
+    vertical-align: middle;
+}
 
 .look-match-type {
-    float: left;
-    position:relative;
+    position: relative;
     margin-right: -15px;
+    margin-left: -5px;
 }
 
 .look-match-detached-icon {
@@ -126,17 +132,13 @@
     color: lightgray;
 }
 
-
 .look-match-checkboxes {
-    float: left;
+    margin-right: 18px;
 }
 
 .look-match-details {
-    margin-left:30px;
-    float: left;
+
 }
-
-
 
 .look-banner {
     border:solid 2px green;

@@ -1,4 +1,4 @@
-﻿<div ng-controller="Look.BackOffice.DetailsController" ng-mouseleave="hideDetails()" class="look-details">
+﻿<div ng-controller="Look.BackOffice.DetailsController" class="look-details">
 
     <h3>{{ viewData.match.name }}</h3>
 
@@ -11,12 +11,12 @@
     <div ng-if="viewData.match.culture"><span>Culture: </span> {{ viewData.match.culture }}</div>
 
     <div ng-if="viewData.match.hasTags">
-        <hr/>
+        <hr />
         <div ng-repeat="tagGroup in viewData.match.tagGroups">
             <span class="icon icon-tags">&nbsp;</span>
             <a ng-if="tagGroup.link !== null" href="{{tagGroup.link}}">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</a>
             <span ng-if="tagGroup.link === null">{{ tagGroup.name ? tagGroup.name : '&lt;Default&gt;' }}</span>
-                                                
+
             <ul>
                 <li ng-repeat="tag in tagGroup.tags">
 
@@ -29,8 +29,12 @@
     </div>
 
     <div ng-if="viewData.match.hasLocation">
-        <hr/>
+        <hr />
         <iframe width="400" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{viewData.match.latitide}},{{viewData.match.longitude}}&amp;ie=UTF8&amp;&amp;output=embed"></iframe><br />
+    </div>
+
+    <div class="umb-dialog-footer btn-toolbar umb-btn-toolbar">
+        <input ng-click="hideDetails()" type="button" class="btn btn-primary" value="Close">
     </div>
 
     <!--<pre>{{ viewData | json}}</pre>-->
