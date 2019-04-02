@@ -76,7 +76,8 @@
     margin: 0 0 10px 0;
     clear: both;
     background-color: #f3f3f5;
-    padding-right: 3px;
+    border-left: #f3f3f5 4px solid;
+    padding: 0 3px 0 5px;
 }
 
 .look-match:hover, .look-match:focus, look-match:active {
@@ -87,6 +88,7 @@
 .look-match.active {
     cursor: default;
     background-color: #eafffe;
+    border-color: #00aea2;
 }
 
 .look-match.even {
@@ -111,6 +113,7 @@
 .look-match-type {
     position: relative;
     margin-right: -15px;
+    margin-left: -5px;
 }
 
 .look-match-detached-icon {
