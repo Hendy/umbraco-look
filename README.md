@@ -13,15 +13,9 @@ Look sits on top of Umbraco Examine adding support for:
 
 There are two NuGet packages:
 
-[Our.Umbraco.Look](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
+[Our.Umbraco.Look](https://www.nuget.org/packages/Our.Umbraco.Look) (Required) the core Look indexer & searcher.
 
-  * Umbraco 7.3.0 (min)
-  * Examine 0.1.70 (min)
-  * Lucene.Net.Contrib 2.9.4.1 (min)
-
-[Our.Umbraco.Look.BackOffice](https://www.nuget.org/packages/Our.Umbraco.Look.BackOffice) installs an assembly _Our.Umbraco.Look.BackOffice.dll_ and files in App_Plugins/Look with a dependency on:
-
-  * Our.Umbraco.Look
+[Our.Umbraco.Look.BackOffice](https://www.nuget.org/packages/Our.Umbraco.Look.BackOffice) (Optional) index viewer for back office.
 
  ## Indexing
 
