@@ -26,6 +26,12 @@ namespace Our.Umbraco.Look
         }
 
         /// <summary>
+        /// Set a function that will be executed as the first indexing step to determine if the item should be indexed at all.
+        /// This will only work fully in preventing a Lucene document from being created with a Look indexer. Examine indexers will still maintain their behaviour, but Look will not add any additional data into them.
+        /// </summary>
+        public static Func<IndexingContext, bool> IndexIf { set { LookService.IndexIf(value); } }
+
+        /// <summary>
         /// Set a custom name indexer
         /// </summary>
         public static Func<IndexingContext, string> NameIndexer { set { LookService.SetNameIndexer(value); } }

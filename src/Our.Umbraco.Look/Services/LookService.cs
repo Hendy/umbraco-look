@@ -38,6 +38,11 @@ namespace Our.Umbraco.Look.Services
         private Dictionary<string, Directory> _indexSetDirectories;
 
         /// <summary>
+        /// Function called before indexing, to know if it should continue the indexing process
+        /// </summary>
+        private Func<IndexingContext, bool> _indexIf;
+
+        /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
         /// </summary>
         private Func<IndexingContext, string> _nameIndexer;
