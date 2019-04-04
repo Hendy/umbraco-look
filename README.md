@@ -27,13 +27,20 @@ To implement indexing behaviour, functions can be set via static methods on the 
 ```csharp
 public static class LookConfiguration
 {
-	// specify which Examine indexers to hook into (if not set, then all will be used by default)
+	// specify which Examine indexers to hook into 
+	// if not set, then all will be used by default
 	public static string[] ExamineIndexers { get; set; }
 
+    // function to indicate whether indexing should take place 
+	// if not set, then will indexing will always occur
+    public static Func<IndexingContext, bool> IndexIf { set; }
+
 	// creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
+	// if not set, then will use the IPublishedContent.Name
 	public static Func<IndexingContext, string> NameIndexer { set; }
 
 	// creates a date & sorting fields - for use with DateQuery
+	// if not set, then will use the IPublishedContent.UpdateDate
 	public static Func<IndexingContext, DateTime?> DateIndexer { set; }
 
 	// creates a text field (analyzed) - for use with TextQuery
