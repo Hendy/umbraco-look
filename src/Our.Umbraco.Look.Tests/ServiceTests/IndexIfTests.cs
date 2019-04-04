@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Our.Umbraco.Look.Tests.ServiceTests
 {
@@ -16,25 +17,30 @@ namespace Our.Umbraco.Look.Tests.ServiceTests
         [TestMethod]
         public void Index_Last_Item_Only()
         {            
-            var stack = new Stack<bool>(new[] { true, false, false }); // set of indexIf responses
+            var indexIf = new Queue<bool>(new[] { false, false, true }); // set of indexIf responses
 
-            var key = Guid.NewGuid().ToString("N");
+            var tag = new LookTag(Guid.NewGuid().ToString("N"));
 
-            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { NameQuery = new NameQuery() { Is = key } };
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { TagQuery = new TagQuery() { Has = tag }  };
 
             Assert.IsTrue(lookQuery.Search().TotalItemCount == 0);
 
+            var tags = new[] { tag };
+
             TestHelper.IndexThings(
                 new [] {
-                    new Thing() { Name = key },
-                    new Thing() { Name = key },
-                    new Thing() { Name = key }
+                    new Thing() { Name = "First", Tags = tags },
+                    new Thing() { Name = "Second", Tags = tags },
+                    new Thing() { Name = "Third", Tags = tags }
                 }, 
-                x => stack.Pop());
+                x => indexIf.Dequeue());
 
             lookQuery.SearchingContext = TestHelper.GetSearchingContext(); // reset the context
 
-            Assert.IsTrue(lookQuery.Search().TotalItemCount == 1);
+            var lookResult = lookQuery.Search();
+
+            Assert.IsTrue(lookResult.TotalItemCount == 1);
+            Assert.AreEqual("Third", lookResult.Matches.First().Name);
         }
     }
 }
