@@ -15,6 +15,7 @@
 
         $scope.hideDetails = function () {
             dialogService.closeAll();
+            matchService.selectedMatch = null;
         };
 
     }
