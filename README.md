@@ -31,9 +31,9 @@ public static class LookConfiguration
 	// if not set, then all will be used by default
 	public static string[] ExamineIndexers { get; set; }
 
-    // function to indicate whether indexing should take place 
+	// function to indicate whether indexing should take place 
 	// if not set, then will indexing will always occur
-    public static Func<IndexingContext, bool> IndexIf { set; }
+	public static Func<IndexingContext, bool> IndexIf { set; }
 
 	// creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
 	// if not set, then will use the IPublishedContent.Name
