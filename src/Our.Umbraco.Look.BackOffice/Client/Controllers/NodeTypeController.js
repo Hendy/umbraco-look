@@ -26,6 +26,11 @@
         apiService.getViewDataForNodeType($scope.searcherName, $scope.nodeType)
             .then(function (response) { $scope.viewData = response.data; });
 
+        // filters
+        $scope.filters = {
+            nodeType: $scope.nodeType
+        }; 
+
         // matches
         $scope.getMatches = function (sort, skip, take) {
 

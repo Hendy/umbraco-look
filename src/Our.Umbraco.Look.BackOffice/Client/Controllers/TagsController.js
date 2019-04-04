@@ -22,6 +22,9 @@
         apiService.getViewDataForTags($scope.searcherName)
             .then(function (response) { $scope.viewData = response.data; });
 
+        // filters
+        $scope.filters = {}; 
+
         // matches
         $scope.getMatches = function (sort, skip, take) {
 

@@ -24,6 +24,9 @@
                 $scope.viewData = response.data;
             });
 
+        // filters
+        $scope.filters = {}; 
+
         // matches
         $scope.getMatches = function (sort, skip, take) {
 

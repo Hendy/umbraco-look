@@ -32,6 +32,9 @@
                 //$scope.tags = response.data.TagCounts;
             });
 
+        // filters
+        $scope.filters = {}; 
+
         // matches
         $scope.getMatches = function (sort, skip, take) {
 
