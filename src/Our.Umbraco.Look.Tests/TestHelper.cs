@@ -69,7 +69,10 @@ namespace Our.Umbraco.Look.Tests
 
                 LookService.Index(indexingContext, document);
 
-                documents.Add(document);
+                if (!indexingContext.Cancelled)
+                {
+                    documents.Add(document);
+                }                
             }
 
             // reset indexers

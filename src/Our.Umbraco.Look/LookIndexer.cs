@@ -228,7 +228,10 @@ namespace Our.Umbraco.Look
 
                 LookService.Index(indexingContext, document);
 
-                indexWriter.AddDocument(document);
+                if (!indexingContext.Cancelled)
+                {
+                    indexWriter.AddDocument(document);
+                }
 
                 foreach (var detachedNode in node.GetDetachedDescendants())
                 {
@@ -241,7 +244,10 @@ namespace Our.Umbraco.Look
 
                     LookService.Index(indexingContext, document);
 
-                    indexWriter.AddDocument(document); // index each detached item
+                    if (!indexingContext.Cancelled)
+                    {
+                        indexWriter.AddDocument(document); // index each detached item
+                    }
                 }
             }
 
