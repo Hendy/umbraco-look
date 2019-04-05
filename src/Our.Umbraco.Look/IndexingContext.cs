@@ -39,5 +39,15 @@ namespace Our.Umbraco.Look
             this.Item = node;
             this.IndexerName = indexerName;
         }
+
+        /// <summary>
+        /// When called, the current IPublishedContent item will not be indexed.
+        /// If using an Examine Umbraco indexer, then Look will not add any data to the Lucene document being indexed.
+        /// If using a Look Exmaine indexer, then Look will not create a Lucene document for the IPublishedContent item being indexed.
+        /// </summary>
+        public void Cancel()
+        {
+
+        }
     }
 }

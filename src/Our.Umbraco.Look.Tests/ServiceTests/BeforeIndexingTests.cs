@@ -15,9 +15,17 @@ namespace Our.Umbraco.Look.Tests.ServiceTests
         }
 
         [TestMethod]
-        public void Index_Last_Item_Only()
-        {            
-            var beforeIndexing = new Queue<bool>(new[] { false, false, true });
+        public void BeforeIndexing_CancelFirstTwo()
+        {
+            var searchingContext = TestHelper.GetSearchingContext();
+
+            var beforeIndexing = new Queue<Action<IndexingContext>>(
+                    new Action<IndexingContext>[] {
+                        new Action<IndexingContext>(x => { x.Cancel(); }),
+                        new Action<IndexingContext>(x => { x.Cancel(); }),
+                        new Action<IndexingContext>(x => { })
+                    });
+
 
             var tag = new LookTag(Guid.NewGuid().ToString("N"));
 
