@@ -22,18 +22,18 @@ namespace Our.Umbraco.Look.Services
 #if DEBUG
             var stopwatch = Stopwatch.StartNew();
 #endif
-            var indexIf = false;
+            var beforeIndexing = false;
 
             try
             {
-                indexIf = LookService.GetIndexIf()(indexingContext);
+                beforeIndexing = LookService.GetBeforeIndexing()(indexingContext);
             }
             catch (Exception exception)
             {
                 LogHelper.WarnWithException(typeof(LookService), "Error in index if", exception);
             }
 
-            if (indexIf)
+            if (beforeIndexing)
             {
 
                 #region Node

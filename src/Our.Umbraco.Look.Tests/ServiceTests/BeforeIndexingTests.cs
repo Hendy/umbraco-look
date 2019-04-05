@@ -17,7 +17,7 @@ namespace Our.Umbraco.Look.Tests.ServiceTests
         [TestMethod]
         public void Index_Last_Item_Only()
         {            
-            var indexIf = new Queue<bool>(new[] { false, false, true }); // set of indexIf responses
+            var beforeIndexing = new Queue<bool>(new[] { false, false, true });
 
             var tag = new LookTag(Guid.NewGuid().ToString("N"));
 
@@ -33,7 +33,7 @@ namespace Our.Umbraco.Look.Tests.ServiceTests
                     new Thing() { Name = "Second", Tags = tags },
                     new Thing() { Name = "Third", Tags = tags }
                 }, 
-                x => indexIf.Dequeue());
+                x => beforeIndexing.Dequeue());
 
             lookQuery.SearchingContext = TestHelper.GetSearchingContext(); // reset the context
 

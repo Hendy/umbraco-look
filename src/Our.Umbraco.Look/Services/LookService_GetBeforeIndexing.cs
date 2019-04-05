@@ -4,9 +4,9 @@ namespace Our.Umbraco.Look.Services
 {
     internal partial class LookService
     {
-        internal static Func<IndexingContext, bool> GetIndexIf()
+        internal static Func<IndexingContext, bool> GetBeforeIndexing()
         {
-            return LookService.Instance._indexIf;
+            return LookService.Instance._beforeIndexing;
         }
     }
 }

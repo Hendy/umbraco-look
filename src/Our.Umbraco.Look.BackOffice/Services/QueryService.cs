@@ -66,7 +66,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <param name="searcherName"></param>
         /// <param name="tagGroup"></param>
         /// <returns></returns>
-        internal static Dictionary<LookTag, int> GetTags(string searcherName, string tagGroup) //TODO: change to Dictionary<LookTag, int> (to assoicate a count)
+        internal static Dictionary<LookTag, int> GetTags(string searcherName, string tagGroup)
         {
             return new LookQuery(searcherName) { TagQuery = new TagQuery() { FacetOn = new TagFacetQuery(tagGroup) } }
                                 .Search()

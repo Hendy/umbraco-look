@@ -40,7 +40,7 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Function called before indexing, to know if it should continue the indexing process (defaults to true)
         /// </summary>
-        private Func<IndexingContext, bool> _indexIf = indexingContext => true;
+        private Func<IndexingContext, bool> _beforeIndexing = indexingContext => true;
 
         /// <summary>
         /// Function to get the name for the IPublishedContent being indexed

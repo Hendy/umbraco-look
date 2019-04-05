@@ -293,7 +293,7 @@
     <Compile Include="Services\LookService_GetDateIndexer.cs" />
     <Compile Include="Services\LookService_GetNameIndexer.cs" />
     <Compile Include="Services\LookService_GetRequestFields.cs" />
-    <Compile Include="Services\LookService_SetIndexIf.cs" />
+    <Compile Include="Services\LookService_BeforeIndexing.cs" />
     <Compile Include="SortOn.cs" />
     <Compile Include="LookTag.cs" />
     <Compile Include="TagFacetQuery.cs" />

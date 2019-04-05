@@ -40,8 +40,8 @@ namespace Our.Umbraco.Look.Tests
         /// Add supplied collection into the test index
         /// </summary>
         /// <param name="things">The POCOs of things to add into the index</param>
-        /// <param name="indexIf">optional func to set the LookConfiguration.IndexIf</param>
-        internal static void IndexThings(IEnumerable<Thing> things, Func<IndexingContext, bool> indexIf = null)
+        /// <param name="beforeIndexing">optional func to set the LookConfiguration.IndexIf</param>
+        internal static void IndexThings(IEnumerable<Thing> things, Func<IndexingContext, bool> beforeIndexing = null)
         {
             var nameStack = new Stack<string>(things.Select(x => x.Name));
             var dateStack = new Stack<DateTime?>(things.Select(x => x.Date));
@@ -50,7 +50,7 @@ namespace Our.Umbraco.Look.Tests
             var locationStack = new Stack<Location>(things.Select(x => x.Location));
 
             // use supplied, or always index
-            LookConfiguration.IndexIf = indexIf ?? new Func<IndexingContext, bool>(x => true);
+            LookConfiguration.BeforeIndexing = beforeIndexing ?? new Func<IndexingContext, bool>(x => true);
 
             // setup indexers
             LookConfiguration.NameIndexer = x => nameStack.Pop();
