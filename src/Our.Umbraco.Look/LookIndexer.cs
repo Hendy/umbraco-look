@@ -213,9 +213,8 @@ namespace Our.Umbraco.Look
         /// <param name="nodes">collection of nodes (and any detached content they may have) to be indexed</param>
         internal void Index(IPublishedContent[] nodes)
         {
-#if DEBUG
             var stopwatch = Stopwatch.StartNew();
-#endif
+
             var indexWriter = this.GetIndexWriter();
 
             foreach(var node in nodes)
@@ -247,10 +246,9 @@ namespace Our.Umbraco.Look
             }
 
             indexWriter.Commit();
-#if DEBUG
+
             stopwatch.Stop();
             LogHelper.Debug(typeof(LookService), $"Indexing { nodes.Length } Item(s) Took { stopwatch.ElapsedMilliseconds }ms");
-#endif
         }
     }
 }
