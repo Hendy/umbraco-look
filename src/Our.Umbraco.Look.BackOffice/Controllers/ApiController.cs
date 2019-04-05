@@ -4,7 +4,6 @@ using Our.Umbraco.Look;
 using Our.Umbraco.Look.BackOffice.Attributes;
 using Our.Umbraco.Look.BackOffice.Models.Api;
 using Our.Umbraco.Look.BackOffice.Services;
-using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using Umbraco.Core;

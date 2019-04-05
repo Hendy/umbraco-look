@@ -30,7 +30,7 @@ namespace Our.Umbraco.Look.Services
             }
             catch (Exception exception)
             {
-                LogHelper.WarnWithException(typeof(LookService), "Error in indexer if", exception);
+                LogHelper.WarnWithException(typeof(LookService), "Error in index if", exception);
             }
 
             if (indexIf)
