@@ -220,18 +220,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             return this.Ok(QueryService.GetDetachedMatches(searcherName, nodeType, sort, skip, take));
         }
 
-        [HttpGet]
-        [ValidateSearcher]
-        public IHttpActionResult GetCultureMatches(
-            [FromUri]string searcherName,
-            [FromUri]int lcid,
-            [FromUri]string sort,
-            [FromUri]int skip,
-            [FromUri]int take)
-        {
-            return this.Ok(QueryService.GetCultureMatches(searcherName, lcid > 0 ? (int?)lcid : null, sort, skip, take));
-        }
-
         /// <summary>
         /// Get matches based on tags
         /// </summary>

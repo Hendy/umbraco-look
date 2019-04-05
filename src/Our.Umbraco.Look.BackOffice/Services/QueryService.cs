@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Models;
-using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Look.BackOffice.Services
 {
@@ -156,45 +155,6 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             var lookQuery = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType, DetachedQuery = DetachedQuery.OnlyDetached } };
 
-            QueryService.SetSort(lookQuery, sort);
-
-            var lookResult = lookQuery.Search();
-
-            matchesResult.TotalItemCount = lookResult.TotalItemCount;
-            matchesResult.Matches = lookResult
-                                        .Matches
-                                        .Skip(skip)
-                                        .Take(take)
-                                        .Select(x => (MatchesResult.Match)x)
-                                        .ToArray();
-
-            return matchesResult;
-        }
-
-        /// <summary>
-        /// Get matches by culture - all content has a culture set in Umbraco
-        /// </summary>
-        /// <param name="searcherName"></param>
-        /// <param name="lcid"></param>
-        /// <param name="sort"></param>
-        /// <param name="skip"></param>
-        /// <param name="take"></param>
-        /// <returns></returns>
-        internal static MatchesResult GetCultureMatches(string searcherName, int? lcid, string sort, int skip, int take)
-        {
-            var matchesResult = new MatchesResult();
-
-            var lookQuery = new LookQuery(searcherName) { NodeQuery = new NodeQuery() };
-
-            if (lcid.HasValue)
-            {
-                lookQuery.NodeQuery.Culture = new CultureInfo(lcid.Value);
-            }
-            else // no culture suppled, so get all content
-            {
-                lookQuery.NodeQuery.Type = PublishedItemType.Content;
-            }
-            
             QueryService.SetSort(lookQuery, sort);
 
             var lookResult = lookQuery.Search();
