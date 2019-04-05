@@ -31,8 +31,8 @@ public static class LookConfiguration
 	// if not set, then all will be used by default
 	public static string[] ExamineIndexers { get; set; }
 
-	// first function called before any indexers - can update indexingContext/cancel
-	public static Func<IndexingContext> BeforeIndexing { set; }
+	// first method called before any indexers - can update cancel
+	public static Action<IndexingContext> BeforeIndexing { set; }
 
 	// creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
 	// if not set, then will use the IPublishedContent.Name

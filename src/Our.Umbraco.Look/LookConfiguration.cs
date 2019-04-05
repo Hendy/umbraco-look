@@ -13,17 +13,7 @@ namespace Our.Umbraco.Look
         /// Get or set the index names of all the Exmaine indexes to hook into.
         /// supplying a null or empty array means no examine indexers will be hooked into (by default if this isn't set, then all examine indexers will be hooked into)
         /// </summary>
-        public static string[] ExamineIndexers
-        {
-            get
-            {
-                return LookService.GetExamineIndexers();
-            }
-            set
-            {
-                LookService.SetExamineIndexers(value);
-            }
-        }
+        public static string[] ExamineIndexers { get { return LookService.GetExamineIndexers(); } set { LookService.SetExamineIndexers(value); } }
 
         /// <summary>
         /// Set a function that will be executed as the first indexing step to determine if the item should be indexed at all.
