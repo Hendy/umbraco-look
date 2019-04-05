@@ -293,6 +293,12 @@
     <Compile Include="Services\LookService_GetDateIndexer.cs" />
     <Compile Include="Services\LookService_GetNameIndexer.cs" />
     <Compile Include="Services\LookService_GetRequestFields.cs" />
+    <Compile Include="Services\LookService_IndexDate.cs" />
+    <Compile Include="Services\LookService_IndexLocation.cs" />
+    <Compile Include="Services\LookService_IndexTags.cs" />
+    <Compile Include="Services\LookService_IndexText.cs" />
+    <Compile Include="Services\LookService_IndexName.cs" />
+    <Compile Include="Services\LookService_IndexNode.cs" />
     <Compile Include="Services\LookService_SetBeforeIndexing.cs" />
     <Compile Include="SortOn.cs" />
     <Compile Include="LookTag.cs" />
