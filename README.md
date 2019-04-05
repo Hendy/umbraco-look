@@ -58,21 +58,20 @@ The model supplied to the indexing functions:
 ```csharp
 public class IndexingContext
 {
-	/// <summary>
-	/// The name of the Examine indexer into which this item is being indexed
-	/// </summary>
+	// The name of the Examine indexer into which this item is being indexed
 	public string IndexerName { get; }
 
-	/// <summary>
-	/// The Content, Media, Member or Detached item being indexed (always has a value)
-	/// </summary>
+	// The Content, Media, Member or Detached item being indexed (always has a value)
 	public IPublishedContent Item { get; }
 
-	/// <summary>
-	/// When a detached item is being indexed, this property will be the hosting content, media or member 
-	/// (this value will null when the item being indexed is not Detached)
-	/// </summary>
+	// When a detached item is being indexed, this property will be the hosting content, media or member 
+	// (this value will null when the item being indexed is not Detached)
 	public IPublishedContent HostItem { get; }
+
+	// When called, the indexing of the current IPublishedContent item will be cancelled.
+	// If using an Exmaine Umbraco indexer, then Look will stop adding Look indexed data from the point of cancellation.
+	// If using a Look indexer, then full cancellation occurs and a Lucene document will not be created for the item being indexed.
+	public void Cancel()
 }
 ```
 [Example Indexing Code](../../wiki/Example-Indexing)

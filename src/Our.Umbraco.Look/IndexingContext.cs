@@ -46,9 +46,9 @@ namespace Our.Umbraco.Look
         }
 
         /// <summary>
-        /// When called, the current IPublishedContent item will not be indexed.
-        /// If using an Examine Umbraco indexer, then Look will not add any data to the Lucene document being indexed.
-        /// If using a Look Exmaine indexer, then Look will not create a Lucene document for the IPublishedContent item being indexed.
+        /// When called, the indexing of the current IPublishedContent item will be cancelled.
+        /// If using an Exmaine Umbraco indexer, then Look will stop adding Look indexed data from the point of cancellation.
+        /// If using a Look indexer, then full cancellation occurs and a Lucene document will not be created for the item being indexed.
         /// </summary>
         public void Cancel()
         {
