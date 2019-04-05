@@ -26,7 +26,6 @@ namespace Our.Umbraco.Look.Tests.ServiceTests
                         new Action<IndexingContext>(x => { })
                     });
 
-
             var tag = new LookTag(Guid.NewGuid().ToString("N"));
 
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext()) { TagQuery = new TagQuery() { Has = tag }  };

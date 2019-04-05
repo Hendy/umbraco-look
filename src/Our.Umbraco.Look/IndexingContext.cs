@@ -28,6 +28,11 @@ namespace Our.Umbraco.Look
         public string IndexerName { get; }
 
         /// <summary>
+        /// Returns true if the Cancel method was called
+        /// </summary>
+        internal bool Cancelled { get; private set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="hostNode">Only set when detached content ins being indexed</param>
@@ -47,7 +52,7 @@ namespace Our.Umbraco.Look
         /// </summary>
         public void Cancel()
         {
-
+            this.Cancelled = true;
         }
     }
 }

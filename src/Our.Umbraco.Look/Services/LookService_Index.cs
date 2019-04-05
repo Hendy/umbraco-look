@@ -19,9 +19,8 @@ namespace Our.Umbraco.Look.Services
         /// <param name="document"></param>
         internal static void Index(IndexingContext indexingContext, Document document)
         {
-#if DEBUG
             var stopwatch = Stopwatch.StartNew();
-#endif
+
             try
             {
                 LookService.GetBeforeIndexing()(indexingContext);
@@ -372,10 +371,8 @@ namespace Our.Umbraco.Look.Services
 
             #endregion
 
-#if DEBUG
             stopwatch.Stop();
             LogHelper.Debug(typeof(LookService), $"Building Lucene Document For '{ indexingContext.Item.GetGuidKey() }' Took { stopwatch.ElapsedMilliseconds }ms");
-#endif
         }
     }
 }
