@@ -286,14 +286,14 @@
     <Compile Include="Models\SearchingContext.cs" />
     <Compile Include="Services\LookService_EnsureContext.cs" />
     <Compile Include="Services\LookService_ExamineIndexersConfigured.cs" />
-    <Compile Include="Services\LookService_GetIndexIf.cs" />
+    <Compile Include="Services\LookService_GetBeforeIndexing.cs" />
     <Compile Include="Services\LookService_GetLocationIndexer.cs" />
     <Compile Include="Services\LookService_GetTagIndexer.cs" />
     <Compile Include="Services\LookService_GetTextIndexer.cs" />
     <Compile Include="Services\LookService_GetDateIndexer.cs" />
     <Compile Include="Services\LookService_GetNameIndexer.cs" />
     <Compile Include="Services\LookService_GetRequestFields.cs" />
-    <Compile Include="Services\LookService_BeforeIndexing.cs" />
+    <Compile Include="Services\LookService_SetBeforeIndexing.cs" />
     <Compile Include="SortOn.cs" />
     <Compile Include="LookTag.cs" />
     <Compile Include="TagFacetQuery.cs" />

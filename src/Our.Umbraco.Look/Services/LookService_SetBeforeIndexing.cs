@@ -9,7 +9,7 @@ namespace Our.Umbraco.Look.Services
         /// Register consumer code to perform before indexing
         /// </summary>
         /// <param name="beforeIndexing">Your custom function to determine if indexing should occur</param>
-        internal static void BeforeIndexing(Func<IndexingContext, bool> beforeIndexing)
+        internal static void SetBeforeIndexing(Action<IndexingContext> beforeIndexing)
         {
             if (LookService.Instance._beforeIndexing == null)
             {
