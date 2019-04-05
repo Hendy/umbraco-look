@@ -215,8 +215,6 @@ namespace Our.Umbraco.Look
 
             foreach(var node in nodes)
             {
-                counter++;
-
                 var indexingContext = new IndexingContext(
                                                 hostNode: null,
                                                 node: node,
@@ -228,6 +226,8 @@ namespace Our.Umbraco.Look
 
                 if (!indexingContext.Cancelled)
                 {
+                    counter++;
+
                     indexWriter.AddDocument(document);
                 }
 
@@ -244,6 +244,8 @@ namespace Our.Umbraco.Look
 
                     if (!indexingContext.Cancelled)
                     {
+                        counter++;
+
                         indexWriter.AddDocument(document); // index each detached item
                     }
                 }
