@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
@@ -40,21 +41,15 @@ namespace Our.Umbraco.Look
         /// </summary>
         protected override void PerformIndexRebuild()
         {
-            var nodes = new List<IPublishedContent>();
+            var content = this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]");
 
-            nodes.AddRange(this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]"));
+            var media = this.UmbracoHelper.TypedMediaAtRoot().SelectMany(x => x.DescendantsOrSelf());
 
-            foreach(var media in this.UmbracoHelper.TypedMediaAtRoot())
-            {
-                nodes.AddRange(media.DescendantsOrSelf());
-            }
+            var members = ApplicationContext.Current.Services.MemberService.GetAll(0, int.MaxValue, out int totalRecords).Select(x => this.UmbracoHelper.TypedMember(x.Id));
 
-            foreach (var member in ApplicationContext.Current.Services.MemberService.GetAll(0, int.MaxValue, out int totalRecords))
-            {
-                nodes.Add(this.UmbracoHelper.TypedMember(member.Id));
-            }
-
-            this.Index(nodes.ToArray()); // index all nodes
+            this.Index(content);
+            this.Index(media);
+            this.Index(members);
 
             this.GetIndexWriter().Optimize();
 
@@ -210,15 +205,18 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// index all supplied nodes (and their detached content)
         /// </summary>
-        /// <param name="nodes">collection of nodes (and any detached content they may have) to be indexed</param>
-        internal void Index(IPublishedContent[] nodes)
+        /// <param name="nodes">collection of nodes conent/media/member nodes to be indexed</param>
+        internal void Index(IEnumerable<IPublishedContent> nodes)
         {
             var stopwatch = Stopwatch.StartNew();
+            var counter = 0;
 
             var indexWriter = this.GetIndexWriter();
 
             foreach(var node in nodes)
             {
+                counter++;
+
                 var indexingContext = new IndexingContext(
                                                 hostNode: null,
                                                 node: node,
@@ -254,7 +252,7 @@ namespace Our.Umbraco.Look
             indexWriter.Commit();
 
             stopwatch.Stop();
-            LogHelper.Debug(typeof(LookService), $"Indexing { nodes.Length } Item(s) Took { stopwatch.ElapsedMilliseconds }ms");
+            LogHelper.Debug(typeof(LookService), $"Indexing { counter } Item(s) Took { stopwatch.ElapsedMilliseconds }ms");
         }
     }
 }
