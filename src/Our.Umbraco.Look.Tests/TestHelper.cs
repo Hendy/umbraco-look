@@ -40,7 +40,7 @@ namespace Our.Umbraco.Look.Tests
         /// Add supplied collection into the test index
         /// </summary>
         /// <param name="things">The POCOs of things to add into the index</param>
-        /// <param name="beforeIndexing">optional func to set the LookConfiguration.IndexIf</param>
+        /// <param name="beforeIndexing">optional action to call before indexing</param>
         internal static void IndexThings(IEnumerable<Thing> things, Action<IndexingContext> beforeIndexing = null)
         {
             var nameStack = new Stack<string>(things.Select(x => x.Name));
@@ -59,14 +59,13 @@ namespace Our.Umbraco.Look.Tests
             LookConfiguration.TagIndexer = x => tagStack.Pop();
             LookConfiguration.LocationIndexer = x => locationStack.Pop();
 
-            // null for IPublishedContent as not required
-            var indexingContext = new IndexingContext(null, null, null);
-
             List<Document> documents = new List<Document>();
 
             foreach (var thing in things)
             {
                 var document = new Document();
+                
+                var indexingContext = new IndexingContext(null, null, null); // null for IPublishedContent as not required
 
                 LookService.Index(indexingContext, document);
 

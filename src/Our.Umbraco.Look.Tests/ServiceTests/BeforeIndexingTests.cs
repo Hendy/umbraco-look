@@ -19,12 +19,12 @@ namespace Our.Umbraco.Look.Tests.ServiceTests
         {
             var searchingContext = TestHelper.GetSearchingContext();
 
-            var beforeIndexing = new Queue<Action<IndexingContext>>(
-                    new Action<IndexingContext>[] {
-                        new Action<IndexingContext>(x => { x.Cancel(); }),
-                        new Action<IndexingContext>(x => { x.Cancel(); }),
-                        new Action<IndexingContext>(x => { })
-                    });
+            var counter = 0;
+            var beforeIndexing = new Action<IndexingContext>(
+                        x => {
+                            counter++;
+                            if (counter != 3) { x.Cancel(); }                            
+                        });
 
             var tag = new LookTag(Guid.NewGuid().ToString("N"));
 
@@ -40,9 +40,9 @@ namespace Our.Umbraco.Look.Tests.ServiceTests
                     new Thing() { Name = "Second", Tags = tags },
                     new Thing() { Name = "Third", Tags = tags }
                 }, 
-                x => beforeIndexing.Dequeue());
+                beforeIndexing);
 
-            lookQuery.SearchingContext = TestHelper.GetSearchingContext(); // reset the context
+            lookQuery.SearchingContext = TestHelper.GetSearchingContext(); // reset the context (to take into account new things indexed)
 
             var lookResult = lookQuery.Search();
 

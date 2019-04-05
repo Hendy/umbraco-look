@@ -1,12 +1,8 @@
-﻿using Examine.LuceneEngine.Providers;
-using Lucene.Net.Documents;
-using Lucene.Net.Util;
+﻿using Lucene.Net.Documents;
 using Our.Umbraco.Look.Extensions;
 using System;
 using System.Diagnostics;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models;
-using Umbraco.Web;
 
 namespace Our.Umbraco.Look.Services
 {
