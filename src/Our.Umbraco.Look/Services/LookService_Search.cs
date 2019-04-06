@@ -34,7 +34,7 @@ namespace Our.Umbraco.Look.Services
 
             if (lookQuery.Compiled == null)
             {
-                var parsingContext = new ParsingContext();
+                var parsingContext = new ParsingContext(); // for building/compiling the query
 
                 try
                 {
@@ -53,8 +53,6 @@ namespace Our.Umbraco.Look.Services
                     LookService.ParseTagQuery(lookQuery, parsingContext);
 
                     LookService.ParseLocationQuery(lookQuery, parsingContext);
-
-                    LookService.ParseSortOn(lookQuery, parsingContext);
                 }
                 catch (ParsingException parsingException)
                 {
@@ -67,9 +65,10 @@ namespace Our.Umbraco.Look.Services
                 }
             }
 
+            // re-check
             if (lookQuery.Compiled == null)
             {
-                return LookResult.Error("No query clauses supplied"); // empty failure
+                return LookResult.Error("Unable to compile query - a query clause is required"); // empty failure
             }
 
             TopDocs topDocs = lookQuery

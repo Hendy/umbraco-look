@@ -1,4 +1,5 @@
-﻿using Lucene.Net.Index;
+﻿using Examine.LuceneEngine.Providers;
+using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Our.Umbraco.Look.Exceptions;
 using Our.Umbraco.Look.Models;
@@ -14,6 +15,12 @@ namespace Our.Umbraco.Look.Services
         /// <param name="parsingContext"></param>
         private static void ParseNameQuery(LookQuery lookQuery, ParsingContext parsingContext)
         {
+            // handle sorting first, as name query clause not required for a name sort
+            if (lookQuery.SortOn == SortOn.Name) // a -> z
+            {
+                parsingContext.Sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField, SortField.STRING));
+            }
+
             if (lookQuery.NameQuery != null)
             {
                 parsingContext.QueryAdd(new TermQuery(new Term(LookConstants.HasNameField, "1")), BooleanClause.Occur.MUST);

@@ -1,4 +1,5 @@
-﻿using Lucene.Net.Index;
+﻿using Examine.LuceneEngine.Providers;
+using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Models;
@@ -15,6 +16,18 @@ namespace Our.Umbraco.Look.Services
         /// <param name="parsingContext"></param>
         private static void ParseDateQuery(LookQuery lookQuery, ParsingContext parsingContext)
         {
+            // handle sorting first, as date query clause not required for a date sort
+            switch (lookQuery.SortOn)
+            {
+                case SortOn.DateAscending: // oldest -> newest
+                    parsingContext.Sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, false));
+                    break;
+
+                case SortOn.DateDescending: // newest -> oldest
+                    parsingContext.Sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
+                    break;
+            }
+
             if (lookQuery.DateQuery != null)
             {
                 parsingContext.QueryAdd(new TermQuery(new Term(LookConstants.HasDateField, "1")), BooleanClause.Occur.MUST);
