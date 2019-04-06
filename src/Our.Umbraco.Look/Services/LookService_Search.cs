@@ -84,13 +84,7 @@ namespace Our.Umbraco.Look.Services
                         // SortOn.Distance already set (if valid)
                     }
 
-                    lookQuery.Compiled = new LookQueryCompiled(
-                                                        lookQuery,
-                                                        parsingContext.Query,
-                                                        parsingContext.Filter,
-                                                        parsingContext.Sort ?? new Sort(SortField.FIELD_SCORE),
-                                                        parsingContext.GetHighlight,
-                                                        parsingContext.GetDistance);
+                    lookQuery.Compiled = new LookQueryCompiled(lookQuery, parsingContext);
                 }
             }
 

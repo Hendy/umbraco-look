@@ -40,28 +40,18 @@ namespace Our.Umbraco.Look.Models
         internal Func<int, double?> GetDistance { get; }
 
         /// <summary>
-        /// Constructor
+        /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="query"></param>
-        /// <param name="filter"></param>
-        /// <param name="sort"></param>
-        /// <param name="getHighlight"></param>
-        /// <param name="getDistance"></param>
-        internal LookQueryCompiled(
-                    LookQuery source,
-                    BooleanQuery query, 
-                    Filter filter, 
-                    Sort sort, 
-                    Func<string, IHtmlString> getHighlight, 
-                    Func<int, double?> getDistance)
+        /// <param name="parsingContext"></param>
+        internal LookQueryCompiled(LookQuery source, ParsingContext parsingContext)
         {
             this.Source = source.Clone();
-            this.Query = query;
-            this.Filter = filter;
-            this.Sort = sort;
-            this.GetHighlight = getHighlight;
-            this.GetDistance = getDistance;
+            this.Query = parsingContext.Query;
+            this.Filter = parsingContext.Filter;
+            this.Sort = parsingContext.Sort ?? new Sort(SortField.FIELD_SCORE);
+            this.GetHighlight = parsingContext.GetHighlight;
+            this.GetDistance = parsingContext.GetDistance;
         }
     }
 }

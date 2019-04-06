@@ -24,6 +24,9 @@ namespace Our.Umbraco.Look.Models
         /// </summary>
         internal bool HasQuery { get; private set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         internal ParsingContext()
         {
         }
