@@ -246,6 +246,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ParsingException.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\GetDetachedDescendant.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\YieldDetachedProperties.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\YieldDetachedDescendants.cs" />
@@ -278,6 +279,7 @@
     <Compile Include="Models\LookQueryCompiled.cs" />
     <Compile Include="LookResult.cs" />
     <Compile Include="LookSearchCriteria.cs" />
+    <Compile Include="Models\ParsingContext.cs" />
     <Compile Include="NameQuery.cs" />
     <Compile Include="NodeQuery.cs" />
     <Compile Include="LookMatch.cs" />
@@ -299,14 +301,14 @@
     <Compile Include="Services\LookService_IndexText.cs" />
     <Compile Include="Services\LookService_IndexName.cs" />
     <Compile Include="Services\LookService_IndexNode.cs" />
-    <Compile Include="Services\LookService_SearchExamineQuery.cs" />
-    <Compile Include="Services\LookService_SearchNodeQuery.cs" />
-    <Compile Include="Services\LookService_SearchNameQuery.cs" />
-    <Compile Include="Services\LookService_SearchDateQuery.cs" />
-    <Compile Include="Services\LookService_SearchTextQuery.cs" />
-    <Compile Include="Services\LookService_SearchTagQuery.cs" />
-    <Compile Include="Services\LookService_SearchLocationQuery.cs" />
-    <Compile Include="Services\LookService_SearchRawQuery.cs" />
+    <Compile Include="Services\LookService_ParseExamineQuery.cs" />
+    <Compile Include="Services\LookService_ParseNodeQuery.cs" />
+    <Compile Include="Services\LookService_ParseNameQuery.cs" />
+    <Compile Include="Services\LookService_ParseDateQuery.cs" />
+    <Compile Include="Services\LookService_ParseTextQuery.cs" />
+    <Compile Include="Services\LookService_ParseTagQuery.cs" />
+    <Compile Include="Services\LookService_ParseLocationQuery.cs" />
+    <Compile Include="Services\LookService_ParseRawQuery.cs" />
     <Compile Include="Services\LookService_SetBeforeIndexing.cs" />
     <Compile Include="SortOn.cs" />
     <Compile Include="LookTag.cs" />
