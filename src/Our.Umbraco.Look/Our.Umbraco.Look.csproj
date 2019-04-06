@@ -299,6 +299,14 @@
     <Compile Include="Services\LookService_IndexText.cs" />
     <Compile Include="Services\LookService_IndexName.cs" />
     <Compile Include="Services\LookService_IndexNode.cs" />
+    <Compile Include="Services\LookService_SearchExamineQuery.cs" />
+    <Compile Include="Services\LookService_SearchNodeQuery.cs" />
+    <Compile Include="Services\LookService_SearchNameQuery.cs" />
+    <Compile Include="Services\LookService_SearchDateQuery.cs" />
+    <Compile Include="Services\LookService_SearchTextQuery.cs" />
+    <Compile Include="Services\LookService_SearchTagQuery.cs" />
+    <Compile Include="Services\LookService_SearchLocationQuery.cs" />
+    <Compile Include="Services\LookService_SearchRawQuery.cs" />
     <Compile Include="Services\LookService_SetBeforeIndexing.cs" />
     <Compile Include="SortOn.cs" />
     <Compile Include="LookTag.cs" />
