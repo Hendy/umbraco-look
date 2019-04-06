@@ -2,6 +2,8 @@
 
     <div class="umb-panel-header">
 
+        <ng-include src="'/App_Plugins/Look/BackOffice/LookTree/Partials/Sort.html'"></ng-include>
+
         <div class="look-header">
             <span class="icon {{ viewData.icon }} look-header-icon">&nbsp;</span>
             <span class="look-header-title">{{ searcherName }}</span>
@@ -45,6 +47,7 @@
                     
                 </dl>
                 
+                <ng-include src="'/App_Plugins/Look/BackOffice/LookTree/Partials/Matches.html'"></ng-include>
 
                
             </div>       
