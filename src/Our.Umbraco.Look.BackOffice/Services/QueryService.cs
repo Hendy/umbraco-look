@@ -47,10 +47,8 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// </summary>
         /// <param name="searcherName"></param>
         /// <returns></returns>
-        internal static string[] GetTagGroups(string searcherName) //TODO: change to Dictionary<string, int> (to assoicate a count)
+        internal static string[] GetTagGroups(string searcherName)
         {
-            // TODO: return useage count for each (need new field)
-
             return new LookQuery(searcherName) { TagQuery = new TagQuery() }
                         .Search()
                         .Matches
@@ -61,19 +59,21 @@ namespace Our.Umbraco.Look.BackOffice.Services
         }
 
         /// <summary>
-        /// get all tags in group and gives each a count
+        /// get all tags in group
         /// </summary>
         /// <param name="searcherName"></param>
         /// <param name="tagGroup"></param>
         /// <returns></returns>
-        internal static Dictionary<LookTag, int> GetTags(string searcherName, string tagGroup)
+        internal static string[] GetTagNames(string searcherName, string tagGroup)
         {
-            return new LookQuery(searcherName) { TagQuery = new TagQuery() { FacetOn = new TagFacetQuery(tagGroup) } }
-                                .Search()
-                                .Facets
-                                .Select(x => new Tuple<LookTag, int>(x.Tags.Single(), x.Count))
-                                .OrderBy(x => x.Item1.Name)
-                                .ToDictionary(x => x.Item1, x => x.Item2);
+            return new LookQuery(searcherName) { TagQuery = new TagQuery() }
+                            .Search()
+                            .Matches
+                            .SelectMany(x => x.Tags.Where(y => y.Group == tagGroup))
+                            .Select(x => x.Name)
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToArray();
         }
 
         #region Get Matches
@@ -187,11 +187,10 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             if (!string.IsNullOrWhiteSpace(tagGroup) && string.IsNullOrWhiteSpace(tagName)) // only have the group to query
             {
-                // TODO: add a new field into the lucene index (would avoid additional query to first look up the tags in this group)
-                var tagsInGroup = QueryService.GetTags(searcherName, tagGroup).Select(x => x.Key).ToArray();
+                var tagNames = QueryService.GetTagNames(searcherName, tagGroup);
+                var tags = TagQuery.MakeTags(tagNames.Select(x => tagGroup + ":" + x));
 
-                tagQuery.HasAny = tagsInGroup;
-
+                tagQuery.HasAny = tags;
             }
             else if (!string.IsNullOrWhiteSpace(tagName)) // we have a specifc tag
             {

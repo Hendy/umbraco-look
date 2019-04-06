@@ -146,7 +146,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new TagGroupViewData();
 
-            viewData.Tags = QueryService.GetTags(searcherName, tagGroup);
+            viewData.TagNames = QueryService.GetTagNames(searcherName, tagGroup);
 
             return this.Ok(viewData);
         }
