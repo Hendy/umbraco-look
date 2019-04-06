@@ -18,48 +18,47 @@ namespace Our.Umbraco.Look.Services
         /// <param name="parsingContext"></param>
         private static void ParseTextQuery(LookQuery lookQuery, ParsingContext parsingContext)
         {
-            if (lookQuery.TextQuery != null)
+            if (lookQuery.TextQuery == null) return;
+            
+            parsingContext.QueryAdd(new TermQuery(new Term(LookConstants.HasTextField, "1")), BooleanClause.Occur.MUST);
+
+            if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
             {
-                parsingContext.QueryAdd(new TermQuery(new Term(LookConstants.HasTextField, "1")), BooleanClause.Occur.MUST);
+                var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, lookQuery.SearchingContext.Analyzer);
 
-                if (!string.IsNullOrWhiteSpace(lookQuery.TextQuery.SearchText))
+                Query searchTextQuery = null;
+
+                try
                 {
-                    var queryParser = new QueryParser(Lucene.Net.Util.Version.LUCENE_29, LookConstants.TextField, lookQuery.SearchingContext.Analyzer);
+                    searchTextQuery = queryParser.Parse(lookQuery.TextQuery.SearchText);
+                }
+                catch
+                {
+                    throw new ParsingException($"Unable to parse LookQuery.TextQuery.SearchText: '{ lookQuery.TextQuery.SearchText }' into a Lucene query");
+                }
 
-                    Query searchTextQuery = null;
+                if (searchTextQuery != null)
+                {
+                    parsingContext.QueryAdd(searchTextQuery, BooleanClause.Occur.MUST);
 
-                    try
+                    if (lookQuery.TextQuery.GetHighlight)
                     {
-                        searchTextQuery = queryParser.Parse(lookQuery.TextQuery.SearchText);
-                    }
-                    catch
-                    {
-                        throw new ParsingException($"Unable to parse LookQuery.TextQuery.SearchText: '{ lookQuery.TextQuery.SearchText }' into a Lucene query");
-                    }
+                        var queryScorer = new QueryScorer(searchTextQuery.Rewrite(lookQuery.SearchingContext.IndexSearcher.GetIndexReader()));
 
-                    if (searchTextQuery != null)
-                    {
-                        parsingContext.QueryAdd(searchTextQuery, BooleanClause.Occur.MUST);
+                        var highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
 
-                        if (lookQuery.TextQuery.GetHighlight)
+                        parsingContext.GetHighlight = (x) =>
                         {
-                            var queryScorer = new QueryScorer(searchTextQuery.Rewrite(lookQuery.SearchingContext.IndexSearcher.GetIndexReader()));
+                            var tokenStream = lookQuery.SearchingContext.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
 
-                            var highlighter = new Highlighter(new SimpleHTMLFormatter("<strong>", "</strong>"), queryScorer);
+                            var highlight = highlighter.GetBestFragments(
+                                                            tokenStream,
+                                                            x,
+                                                            1, // max number of fragments
+                                                            "...");
 
-                            parsingContext.GetHighlight = (x) =>
-                            {
-                                var tokenStream = lookQuery.SearchingContext.Analyzer.TokenStream(LookConstants.TextField, new StringReader(x));
-
-                                var highlight = highlighter.GetBestFragments(
-                                                                tokenStream,
-                                                                x,
-                                                                1, // max number of fragments
-                                                                "...");
-
-                                return new HtmlString(highlight);
-                            };
-                        }
+                            return new HtmlString(highlight);
+                        };
                     }
                 }
             }

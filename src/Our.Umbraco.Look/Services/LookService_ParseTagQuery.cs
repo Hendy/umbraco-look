@@ -14,109 +14,108 @@ namespace Our.Umbraco.Look.Services
         /// <param name="parsingContext"></param>
         private static void ParseTagQuery(LookQuery lookQuery, ParsingContext parsingContext)
         {
-            if (lookQuery.TagQuery != null)
-            {
-                parsingContext.QueryAdd(new TermQuery(new Term(LookConstants.HasTagsField, "1")), BooleanClause.Occur.MUST);
+            if (lookQuery.TagQuery == null) return;
 
-                // Has
-                if (lookQuery.TagQuery.Has != null)
+            parsingContext.QueryAdd(new TermQuery(new Term(LookConstants.HasTagsField, "1")), BooleanClause.Occur.MUST);
+
+            // Has
+            if (lookQuery.TagQuery.Has != null)
+            {
+                parsingContext.QueryAdd(
+                        new TermQuery(new Term(LookConstants.TagsField + lookQuery.TagQuery.Has.Group, lookQuery.TagQuery.Has.Name)),
+                        BooleanClause.Occur.MUST);
+            }
+
+            // Not
+            if (lookQuery.TagQuery.Not != null)
+            {
+                parsingContext.QueryAdd(
+                        new TermQuery(new Term(LookConstants.TagsField + lookQuery.TagQuery.Not.Group, lookQuery.TagQuery.Not.Name)),
+                        BooleanClause.Occur.MUST_NOT);
+            }
+
+            // HasAll
+            if (lookQuery.TagQuery.HasAll != null && lookQuery.TagQuery.HasAll.Any())
+            {
+                foreach (var tag in lookQuery.TagQuery.HasAll)
                 {
                     parsingContext.QueryAdd(
-                            new TermQuery(new Term(LookConstants.TagsField + lookQuery.TagQuery.Has.Group, lookQuery.TagQuery.Has.Name)),
+                            new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
                             BooleanClause.Occur.MUST);
                 }
+            }
 
-                // Not
-                if (lookQuery.TagQuery.Not != null)
-                {
-                    parsingContext.QueryAdd(
-                            new TermQuery(new Term(LookConstants.TagsField + lookQuery.TagQuery.Not.Group, lookQuery.TagQuery.Not.Name)),
-                            BooleanClause.Occur.MUST_NOT);
-                }
+            // HasAllOr
+            if (lookQuery.TagQuery.HasAllOr != null && lookQuery.TagQuery.HasAllOr.Any() && lookQuery.TagQuery.HasAllOr.SelectMany(x => x).Any())
+            {
+                var orQuery = new BooleanQuery();
 
-                // HasAll
-                if (lookQuery.TagQuery.HasAll != null && lookQuery.TagQuery.HasAll.Any())
+                foreach (var tagCollection in lookQuery.TagQuery.HasAllOr)
                 {
-                    foreach (var tag in lookQuery.TagQuery.HasAll)
+                    if (tagCollection.Any())
                     {
-                        parsingContext.QueryAdd(
+                        var allTagQuery = new BooleanQuery();
+
+                        foreach (var tag in tagCollection)
+                        {
+                            allTagQuery.Add(
                                 new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
                                 BooleanClause.Occur.MUST);
+                        }
+
+                        orQuery.Add(allTagQuery, BooleanClause.Occur.SHOULD);
                     }
                 }
 
-                // HasAllOr
-                if (lookQuery.TagQuery.HasAllOr != null && lookQuery.TagQuery.HasAllOr.Any() && lookQuery.TagQuery.HasAllOr.SelectMany(x => x).Any())
+                parsingContext.QueryAdd(orQuery, BooleanClause.Occur.MUST);
+            }
+
+            // HasAny
+            if (lookQuery.TagQuery.HasAny != null && lookQuery.TagQuery.HasAny.Any())
+            {
+                var anyTagQuery = new BooleanQuery();
+
+                foreach (var tag in lookQuery.TagQuery.HasAny)
                 {
-                    var orQuery = new BooleanQuery();
-
-                    foreach (var tagCollection in lookQuery.TagQuery.HasAllOr)
-                    {
-                        if (tagCollection.Any())
-                        {
-                            var allTagQuery = new BooleanQuery();
-
-                            foreach (var tag in tagCollection)
-                            {
-                                allTagQuery.Add(
+                    anyTagQuery.Add(
                                     new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
-                                    BooleanClause.Occur.MUST);
-                            }
-
-                            orQuery.Add(allTagQuery, BooleanClause.Occur.SHOULD);
-                        }
-                    }
-
-                    parsingContext.QueryAdd(orQuery, BooleanClause.Occur.MUST);
+                                    BooleanClause.Occur.SHOULD);
                 }
 
-                // HasAny
-                if (lookQuery.TagQuery.HasAny != null && lookQuery.TagQuery.HasAny.Any())
+                parsingContext.QueryAdd(anyTagQuery, BooleanClause.Occur.MUST);
+            }
+
+            // HasAnyAnd
+            if (lookQuery.TagQuery.HasAnyAnd != null && lookQuery.TagQuery.HasAnyAnd.Any())
+            {
+                foreach (var tagCollection in lookQuery.TagQuery.HasAnyAnd)
                 {
-                    var anyTagQuery = new BooleanQuery();
-
-                    foreach (var tag in lookQuery.TagQuery.HasAny)
+                    if (tagCollection.Any())
                     {
-                        anyTagQuery.Add(
-                                        new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
-                                        BooleanClause.Occur.SHOULD);
-                    }
+                        var anyTagQuery = new BooleanQuery();
 
-                    parsingContext.QueryAdd(anyTagQuery, BooleanClause.Occur.MUST);
-                }
-
-                // HasAnyAnd
-                if (lookQuery.TagQuery.HasAnyAnd != null && lookQuery.TagQuery.HasAnyAnd.Any())
-                {
-                    foreach (var tagCollection in lookQuery.TagQuery.HasAnyAnd)
-                    {
-                        if (tagCollection.Any())
+                        foreach (var tag in tagCollection)
                         {
-                            var anyTagQuery = new BooleanQuery();
-
-                            foreach (var tag in tagCollection)
-                            {
-                                anyTagQuery.Add(
-                                                new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
-                                                BooleanClause.Occur.SHOULD);
-                            }
-
-                            parsingContext.QueryAdd(anyTagQuery, BooleanClause.Occur.MUST);
+                            anyTagQuery.Add(
+                                            new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
+                                            BooleanClause.Occur.SHOULD);
                         }
-                    }
-                }
 
-                // NotAny
-                if (lookQuery.TagQuery.NotAny != null && lookQuery.TagQuery.NotAny.Any())
-                {
-                    foreach (var tag in lookQuery.TagQuery.NotAny)
-                    {
-                        parsingContext.QueryAdd(
-                            new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
-                            BooleanClause.Occur.MUST_NOT);
+                        parsingContext.QueryAdd(anyTagQuery, BooleanClause.Occur.MUST);
                     }
                 }
             }
+
+            // NotAny
+            if (lookQuery.TagQuery.NotAny != null && lookQuery.TagQuery.NotAny.Any())
+            {
+                foreach (var tag in lookQuery.TagQuery.NotAny)
+                {
+                    parsingContext.QueryAdd(
+                        new TermQuery(new Term(LookConstants.TagsField + tag.Group, tag.Name)),
+                        BooleanClause.Occur.MUST_NOT);
+                }
+            }            
         }
     }
 }

@@ -13,12 +13,11 @@ namespace Our.Umbraco.Look.Services
         /// <param name="parsingContext"></param>
         private static void ParseRawQuery(LookQuery lookQuery, ParsingContext parsingContext)
         {
-            if (!string.IsNullOrWhiteSpace(lookQuery.RawQuery))
-            {
-                parsingContext.QueryAdd(
-                        new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, lookQuery.SearchingContext.Analyzer).Parse(lookQuery.RawQuery),
-                        BooleanClause.Occur.MUST);
-            }
+            if (string.IsNullOrWhiteSpace(lookQuery.RawQuery)) return;
+
+            parsingContext.QueryAdd(
+                    new QueryParser(Lucene.Net.Util.Version.LUCENE_29, null, lookQuery.SearchingContext.Analyzer).Parse(lookQuery.RawQuery),
+                    BooleanClause.Occur.MUST);
         }
     }
 }
