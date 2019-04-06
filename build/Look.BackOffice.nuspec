@@ -29,7 +29,6 @@
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\DetailsController.js" target="Content\App_Plugins\Look\Controllers\DetailsController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\LocationsController.js" target="Content\App_Plugins\Look\Controllers\LocationsController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\MatchesController.js" target="Content\App_Plugins\Look\Controllers\MatchesController.js" />
-    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\NodesController.js" target="Content\App_Plugins\Look\Controllers\NodesController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\NodeTypeController.js" target="Content\App_Plugins\Look\Controllers\NodeTypeController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\RebuildController.js" target="Content\App_Plugins\Look\Controllers\RebuildController.js" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Controllers\SearcherController.js" target="Content\App_Plugins\Look\Controllers\SearcherController.js" />
@@ -51,7 +50,6 @@
 
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Detached.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Detached.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Locations.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Locations.html" />
-    <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Nodes.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Nodes.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\NodeType.html" target="Content\App_Plugins\Look\BackOffice\LookTree\NodeType.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Rebuild.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Rebuild.html" />
     <file src="..\src\Our.Umbraco.Look.BackOffice\Client\Views\Searcher.html" target="Content\App_Plugins\Look\BackOffice\LookTree\Searcher.html" />

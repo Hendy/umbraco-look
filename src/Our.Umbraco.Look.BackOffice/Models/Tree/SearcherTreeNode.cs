@@ -7,6 +7,7 @@ using System.Net.Http.Formatting;
 using umbraco;
 using umbraco.BusinessLogic.Actions;
 using Umbraco.Core;
+using Umbraco.Core.Models;
 using Umbraco.Web.Models.Trees;
 
 namespace Our.Umbraco.Look.BackOffice.Models.Tree
@@ -60,9 +61,22 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
                 var childTreeNodes = new List<ILookTreeNode>();
 
-                if (new LookQuery(this.SearcherName) {  NodeQuery = new NodeQuery() }.Search().TotalItemCount > 0)
+                if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = PublishedItemType.Content } }.Search().TotalItemCount > 0)
                 {
-                    childTreeNodes.Add(new NodesTreeNode(base.QueryStrings));
+                    base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = PublishedItemType.Content.ToString();
+                    childTreeNodes.Add(new NodeTypeTreeNode(base.QueryStrings));
+                }
+
+                if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = PublishedItemType.Media } }.Search().TotalItemCount > 0)
+                {
+                    base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = PublishedItemType.Media.ToString();
+                    childTreeNodes.Add(new NodeTypeTreeNode(base.QueryStrings));
+                }
+
+                if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = PublishedItemType.Member } }.Search().TotalItemCount > 0)
+                {
+                    base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = PublishedItemType.Member.ToString();
+                    childTreeNodes.Add(new NodeTypeTreeNode(base.QueryStrings));
                 }
 
                 if (LookConfiguration.TagIndexerIsSet && new LookQuery(this.SearcherName) { TagQuery = new TagQuery() }.Search().TotalItemCount > 0)

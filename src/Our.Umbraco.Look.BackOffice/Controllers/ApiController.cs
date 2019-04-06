@@ -69,20 +69,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         }
 
         /// <summary>
-        /// Get the view model for the top level 'Tags' tree node (for a searcher)
-        /// </summary>
-        /// <param name="searcherName"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [ValidateSearcher]
-        public IHttpActionResult GetViewDataForNodes([FromUri]string searcherName)
-        {
-            var viewData = new NodesViewData();
-
-            return this.Ok(viewData);
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="searcherName"></param>
