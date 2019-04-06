@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 
 namespace Our.Umbraco.Look.Tests.QueryTests
 {
@@ -80,6 +81,32 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.DateQuery.Boundary = DateBoundary.BeforeExclusiveAfterInclusive;
 
             Assert.AreEqual(1, lookQuery.Search().TotalItemCount);
+        }
+
+        [TestMethod]
+        public void Sort_On_Date_Ascending()
+        {
+            var lookResult = new LookQuery(TestHelper.GetSearchingContext())
+            {
+                DateQuery = new DateQuery(),
+                SortOn = SortOn.DateAscending
+            }
+            .Search();
+
+            Assert.AreEqual(DateTime.MinValue, lookResult.Matches.First().Date.Value);
+        }
+
+        [TestMethod]
+        public void Sort_On_Date_Descending()
+        {
+            var lookResult = new LookQuery(TestHelper.GetSearchingContext())
+            {
+                DateQuery = new DateQuery(),
+                SortOn = SortOn.DateDescending
+            }
+            .Search();
+
+            Assert.AreEqual(DateTime.MaxValue.ToString(), lookResult.Matches.First().Date.ToString()); // object comparrison didn't work
         }
 
     }
