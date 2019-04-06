@@ -305,6 +305,7 @@
     <Compile Include="Services\LookService_ParseNodeQuery.cs" />
     <Compile Include="Services\LookService_ParseNameQuery.cs" />
     <Compile Include="Services\LookService_ParseDateQuery.cs" />
+    <Compile Include="Services\LookService_ParseSortOn.cs" />
     <Compile Include="Services\LookService_ParseTextQuery.cs" />
     <Compile Include="Services\LookService_ParseTagQuery.cs" />
     <Compile Include="Services\LookService_ParseLocationQuery.cs" />

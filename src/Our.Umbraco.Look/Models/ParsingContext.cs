@@ -9,6 +9,9 @@ namespace Our.Umbraco.Look.Models
     /// </summary>
     internal class ParsingContext
     {
+        /// <summary>
+        /// The query being built up when parsing
+        /// </summary>
         internal BooleanQuery Query { get; } = new BooleanQuery();
 
         internal Filter Filter { get; set; }
@@ -32,7 +35,7 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// wrapper
+        /// Wrapper to set HasQuery flag
         /// </summary>
         /// <param name="clause"></param>
         internal void QueryAdd(BooleanClause clause)
@@ -42,7 +45,7 @@ namespace Our.Umbraco.Look.Models
         }
 
         /// <summary>
-        /// wrapper
+        /// Wrapper to set HasQuery flag
         /// </summary>
         /// <param name="query"></param>
         /// <param name="occur"></param>

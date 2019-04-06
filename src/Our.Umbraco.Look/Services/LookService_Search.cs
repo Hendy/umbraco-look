@@ -1,5 +1,4 @@
-﻿using Examine.LuceneEngine.Providers;
-using Lucene.Net.Search;
+﻿using Lucene.Net.Search;
 using Our.Umbraco.Look.Exceptions;
 using Our.Umbraco.Look.Models;
 using System;
@@ -17,9 +16,6 @@ namespace Our.Umbraco.Look.Services
         /// <returns>A LookResult model for the search response</returns>
         public static LookResult Search(LookQuery lookQuery)
         {
-            // flag to indicate whether there are any query clauses in the supplied LookQuery
-            bool hasQuery = lookQuery?.Compiled != null ? true : false;
-
             if (lookQuery == null)
             {
                 return LookResult.Error("LookQuery object was null");
@@ -57,6 +53,8 @@ namespace Our.Umbraco.Look.Services
                     LookService.ParseTagQuery(lookQuery, parsingContext);
 
                     LookService.ParseLocationQuery(lookQuery, parsingContext);
+
+                    LookService.ParseSortOn(lookQuery, parsingContext);
                 }
                 catch (ParsingException parsingException)
                 {
@@ -65,30 +63,11 @@ namespace Our.Umbraco.Look.Services
 
                 if (parsingContext.HasQuery)
                 {
-                    hasQuery = true;
-
-                    switch (lookQuery.SortOn)
-                    {
-                        case SortOn.Name: // a -> z
-                            parsingContext.Sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.NameField, SortField.STRING));
-                            break;
-
-                        case SortOn.DateAscending: // oldest -> newest
-                            parsingContext.Sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, false));
-                            break;
-
-                        case SortOn.DateDescending: // newest -> oldest
-                            parsingContext.Sort = new Sort(new SortField(LuceneIndexer.SortedFieldNamePrefix + LookConstants.DateField, SortField.LONG, true));
-                            break;
-
-                        // SortOn.Distance already set (if valid)
-                    }
-
                     lookQuery.Compiled = new LookQueryCompiled(lookQuery, parsingContext);
                 }
             }
 
-            if (!hasQuery)
+            if (lookQuery.Compiled == null)
             {
                 return LookResult.Error("No query clauses supplied"); // empty failure
             }
