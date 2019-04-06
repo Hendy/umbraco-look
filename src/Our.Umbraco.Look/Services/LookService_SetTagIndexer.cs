@@ -11,14 +11,7 @@ namespace Our.Umbraco.Look.Services
         /// <param name="tagIndexer">Your custom tag indexing function</param>
         internal static void SetTagIndexer(Func<IndexingContext, LookTag[]> tagIndexer)
         {
-            if (LookService.Instance._tagIndexer == null)
-            {
-                LogHelper.Info(typeof(LookService), "Tag indexing function set");
-            }
-            else
-            {
-                LogHelper.Warn(typeof(LookService), "Tag indexing function replaced");
-            }
+            LogHelper.Info(typeof(LookService), "Tag indexing function set");
             
             LookService.Instance._tagIndexer = tagIndexer;
         }

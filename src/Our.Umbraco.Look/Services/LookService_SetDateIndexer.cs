@@ -11,14 +11,7 @@ namespace Our.Umbraco.Look.Services
         /// <param name="dateIndexer">Your custom date indexing function</param>
         internal static void SetDateIndexer(Func<IndexingContext, DateTime?> dateIndexer)
         {
-            if (LookService.Instance._dateIndexer == null)
-            {
-                LogHelper.Info(typeof(LookService), "Date indexing function set");
-            }
-            else
-            {
-                LogHelper.Warn(typeof(LookService), "Date indexing function replaced");
-            }
+            LogHelper.Info(typeof(LookService), "Date indexing function set");
             
             LookService.Instance._dateIndexer = dateIndexer;
         }
