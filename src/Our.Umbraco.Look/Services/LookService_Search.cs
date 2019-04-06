@@ -63,12 +63,10 @@ namespace Our.Umbraco.Look.Services
                 {
                     lookQuery.Compiled = new LookQueryCompiled(lookQuery, parsingContext);
                 }
-            }
-
-            // re-check
-            if (lookQuery.Compiled == null)
-            {
-                return LookResult.Error("Unable to compile query - a query clause is required"); // empty failure
+                else
+                {
+                    return LookResult.Error("Unable to compile query - a query clause is required"); // empty failure
+                }
             }
 
             TopDocs topDocs = lookQuery
