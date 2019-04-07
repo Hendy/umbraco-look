@@ -1,5 +1,4 @@
 ﻿using Our.Umbraco.Look.BackOffice.Models.Api;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -66,7 +65,11 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <returns></returns>
         internal static string[] GetTagNames(string searcherName, string tagGroup)
         {
-            return new LookQuery(searcherName) { TagQuery = new TagQuery() }
+            return new LookQuery(searcherName)
+                            {
+                                TagQuery = new TagQuery(),
+                                RawQuery = "Look_TagGroup_" + tagGroup + ":1"
+                            }
                             .Search()
                             .Matches
                             .SelectMany(x => x.Tags.Where(y => y.Group == tagGroup))
