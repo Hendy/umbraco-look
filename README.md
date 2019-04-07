@@ -17,43 +17,63 @@ There are two NuGet packages:
 
 [Our.Umbraco.Look.BackOffice](https://www.nuget.org/packages/Our.Umbraco.Look.BackOffice) (Optional) index viewer for back office.
 
- ## Indexing
+## Configuration
 
-Look can be used index additional `name`, `date`, `text`, `tag` and `location` fields item into existing Examine Lucene indexes (no config file changes required) and/or a Look Examine indexer
-can be configured which will also index 'detached' IPublsihedContent.
+Once installed, by default Look will 'hook' into all Umbraco Examine indexers, augmenting each indexed item with its Guid key and Culture.
+Fields are also created to enable case-insensitive searches on Name and sorting by UpdateDate, as well as for the node type and its alias.
 
-To implement indexing behaviour, functions can be set via static methods on the LookConfiguration class (all are optional).
+This default indexing behaviour is so that the Look querying API can be used 'out of the box' without having to configure anything. 
+However all behaviour can all be configured via static methods on the LookConfiguration class:
 
 ```csharp
 public static class LookConfiguration
 {
-	// specify which Examine indexers to hook into 
-	// if not set, then all will be used by default
+	/// <summary>
+	/// 'Hook indexing'
+	/// Get or set the indexer names of all the Exmaine indexers to hook into.
+	/// By default, all Umbraco Examine indexers are hooked into.
+	/// Set to null (or an empty array) to remove all hooks. 
+	/// </summary>
 	public static string[] ExamineIndexers { get; set; }
 
-	// first method called before any indexers - can update cancel
+    /// <summary>
+    /// (Optional) custom method that can be called before the indexing of each IPublishedContent item.
+    /// </summary>
 	public static Action<IndexingContext> BeforeIndexing { set; }
 
-	// creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
-	// if not set, then will use the IPublishedContent.Name
+	/// <summary>
+	/// (Optional) set a custom name indexer.
+	/// By default, the IPublishedContent.Name value will be indexed.
+	/// </summary>
 	public static Func<IndexingContext, string> NameIndexer { set; }
 
-	// creates a date & sorting fields - for use with DateQuery
-	// if not set, then will use the IPublishedContent.UpdateDate
+	/// <summary>
+	/// (Optional) Set a custom date indexer.
+	/// By default, the IPublishedContent.UpdateDate value will be indexed. (Detached items use their Host value)
+	/// </summary>
 	public static Func<IndexingContext, DateTime?> DateIndexer { set; }
 
-	// creates a text field (analyzed) - for use with TextQuery
+    /// <summary>
+    /// (Optional) Set a custom text indexer.
+    /// By default, no value is indexed.
+    /// </summary>
 	public static Func<IndexingContext, string> TextIndexer { set; }
 
-	// creates a tag field for each tag group - for use with TagQuery
+	/// <summary>
+	/// (Optional) Set a custom tag indexer.
+	/// By default, no value is indexed.
+	/// </summary>
 	public static Func<IndexingContext, LookTag[]> TagIndexer { set; }
 
-	// creates multple fields - for use with LocationQuery
+	/// <summary>
+	/// (Optional) Set a custom location indexer.
+	/// By default, no value is indexed.
+	/// </summary>
 	public static Func<IndexingContext, Location> LocationIndexer { set; }
 }
 ```
 
-The model supplied to the indexing functions:
+The indexing context model supplied:
 
 ```csharp
 public class IndexingContext
@@ -65,7 +85,7 @@ public class IndexingContext
 	public IPublishedContent Item { get; }
 
 	// When a detached item is being indexed, this property will be the hosting content, media or member 
-	// (this value will null when the item being indexed is not Detached)
+	// (this value will null when the item being indexed is not detached)
 	public IPublishedContent HostItem { get; }
 
 	// When called, the indexing of the current IPublishedContent item will be cancelled.
@@ -75,6 +95,8 @@ public class IndexingContext
 }
 ```
 [Example Indexing Code](../../wiki/Example-Indexing)
+
+
 
 
 ## Searching

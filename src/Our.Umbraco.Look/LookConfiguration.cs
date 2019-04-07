@@ -10,39 +10,44 @@ namespace Our.Umbraco.Look
     {
         /// <summary>
         /// 'Hook indexing'
-        /// Get or set the index names of all the Exmaine indexes to hook into.
-        /// supplying a null or empty array means no examine indexers will be hooked into (by default if this isn't set, then all examine indexers will be hooked into)
+        /// Get or set the indexer names of all the Exmaine indexers to hook into.
+        /// By default, all Umbraco Examine indexers are hooked into.
+        /// Set to null (or an empty array) to remove all hooks. 
         /// </summary>
         public static string[] ExamineIndexers { get { return LookService.GetExamineIndexers(); } set { LookService.SetExamineIndexers(value); } }
 
         /// <summary>
-        /// Set a function that will be executed as the first indexing step to determine if the item should be indexed at all.
-        /// This will only work fully in preventing a Lucene document from being created with a Look indexer. Examine indexers will still maintain their behaviour, but Look will not add any additional data into them.
+        /// (Optional) custom method that can be called before the indexing of each IPublishedContent item.
         /// </summary>
         public static Action<IndexingContext> BeforeIndexing { set { LookService.SetBeforeIndexing(value); } }
 
         /// <summary>
-        /// Set a custom name indexer
+        /// (Optional) set a custom name indexer.
+        /// By default, the IPublishedContent.Name value will be indexed.
         /// </summary>
         public static Func<IndexingContext, string> NameIndexer { set { LookService.SetNameIndexer(value); } }
 
         /// <summary>
-        /// Set a custom date indexer
+        /// (Optional) Set a custom date indexer.
+        /// By default, the IPublishedContent.UpdateDate value will be indexed. (Detached items use their Host value)
         /// </summary>
         public static Func<IndexingContext, DateTime?> DateIndexer { set { LookService.SetDateIndexer(value); } }
 
         /// <summary>
-        /// Set a custom text indexer
+        /// (Optional) Set a custom text indexer.
+        /// By default, no value is indexed.
         /// </summary>
         public static Func<IndexingContext, string> TextIndexer { set { LookService.SetTextIndexer(value); } }
 
         /// <summary>
-        /// Set a custom tag indexer
+        /// (Optional) Set a custom tag indexer.
+        /// By default, no value is indexed.
         /// </summary>
         public static Func<IndexingContext, LookTag[]> TagIndexer { set { LookService.SetTagIndexer(value); } }
 
         /// <summary>
-        /// Set a custom location indexer
+        /// (Optional) Set a custom location indexer.
+        /// By default, no value is indexed.
         /// </summary>
         public static Func<IndexingContext, Location> LocationIndexer { set { LookService.SetLocationIndexer(value); } }
 
