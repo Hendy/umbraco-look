@@ -80,9 +80,9 @@ namespace Our.Umbraco.Look.Services
 
                     examineIndexers[examineIndexer.Key].DocumentWriting += addEvent;
                 }
-            }
 
-            LogHelper.Info(typeof(LookService), $"Hooking into Examine indexers '{ string.Join(", ", examineIndexerNames) }'");
+                LogHelper.Info(typeof(LookService), $"Hooking into Examine indexer '{ examineIndexer.Key }'");
+            }
         }
 
         /// <summary>
