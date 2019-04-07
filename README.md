@@ -21,11 +21,37 @@ There are two NuGet packages:
 
 ## Configuration
 
-Once installed, by default Look will 'hook' into all Umbraco Examine indexers, augmenting each indexed item with its Guid key and Culture.
-Fields are also created to enable case-insensitive searches on Name and sorting by UpdateDate, as well as for the node type and its alias.
+Once installed, by default Look will 'hook' into all Umbraco Examine indexers, augmenting each indexed item with its Guid key and Culture and
+fields to enable case-insensitive searches on Name and sorting by UpdateDate, as well as for the node type and its alias. 
+This default indexing behaviour is so that the Look querying API can be used 'out of the box' without having to configure anything, 
+however all behaviour can all be configured via static properties on the LookConfiguration class.
 
-This default indexing behaviour is so that the Look querying API can be used 'out of the box' without having to configure anything. 
-However all behaviour can all be configured via static methods on the LookConfiguration class:
+To configure a Look indexer, the Examine configuration files need to be updated:
+
+/config/ExamineIndex.config
+```xml
+<ExamineLuceneIndexSets>
+	<IndexSet SetName="MyLookIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/MyLookIndexSet/" />
+</ExamineLuceneIndexSets>
+```
+
+/config/ExamineSettings.config
+```xml
+<Examine>
+	<ExamineIndexProviders>
+		<providers>
+			<add name="MyLookIndexer" type="Our.Umbraco.Look.LookIndexer, Our.Umbraco.Look" />
+		</providers>
+	</ExamineIndexProviders>
+	<ExamineSearchProviders>
+		<providers>
+			<add name="MyLookSearcher" type="Our.Umbraco.Look.LookSearcher, Our.Umbraco.Look" />
+		</providers>
+	</ExamineSearchProviders>
+</Examine>
+```
+
+The static class where the indexing behaviour can be set:
 
 ```csharp
 public static class LookConfiguration
@@ -76,7 +102,7 @@ public static class LookConfiguration
 }
 ```
 
-The indexing context model supplied:
+The indexing context model:
 
 ```csharp
 public class IndexingContext
@@ -111,41 +137,6 @@ public class IndexingContext
 }
 ```
 [Example Indexing Code](../../wiki/Example-Indexing)
-
-### Look Indexer
-
-A Look indexer is required to be able to index detached items (Examine Umbraco indexers only index Content/Media or Members).
-To use a Look indexer, the Examine configuration files need to be updated:
-
-/config/ExamineIndex.config
-```xml
-<ExamineLuceneIndexSets>
-
-	<IndexSet SetName="MyLookIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/MyLookIndexSet/" />
-
-</ExamineLuceneIndexSets>
-```
-
-/config/ExamineSettings.config
-```xml
-<Examine>
-	<ExamineIndexProviders>
-		<providers>
-
-			<add name="MyLookIndexer" type="Our.Umbraco.Look.LookIndexer, Our.Umbraco.Look" />
-
-		</providers>
-	</ExamineIndexProviders>
-	<ExamineSearchProviders>
-		<providers>
-
-			<add name="MyLookSearcher" type="Our.Umbraco.Look.LookSearcher, Our.Umbraco.Look" />
-
-		</providers>
-	</ExamineSearchProviders>
-</Examine>
-```
-
 
 ## Searching
 
