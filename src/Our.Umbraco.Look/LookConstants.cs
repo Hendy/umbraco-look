@@ -83,6 +83,11 @@
         internal static string AllTagsField => "Look_AllTags";
 
         /// <summary>
+        /// Prefix to fields for the tag group flag
+        /// </summary>
+        internal static string TagGroupField => "Look_TagGroup_";
+
+        /// <summary>
         /// Gets the field name to use for the tags - this field will contain space delimited non-tokenizable strings
         /// </summary>
         internal static string TagsField => "Look_Tags_";

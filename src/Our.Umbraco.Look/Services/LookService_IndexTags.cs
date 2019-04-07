@@ -1,5 +1,6 @@
 ﻿using Lucene.Net.Documents;
 using System;
+using System.Linq;
 using Umbraco.Core.Logging;
 
 namespace Our.Umbraco.Look.Services
@@ -50,6 +51,17 @@ namespace Our.Umbraco.Look.Services
                         document.Add(hasTagsField);
                         document.Add(allTagsField);
                         document.Add(tagField);
+                    }
+
+                    var tagGroups = tags.Select(x => x.Group).Distinct();
+
+                    foreach (var tagGroup in tagGroups)
+                    {
+                        var tagGroupField = new Field(
+                                                LookConstants.TagGroupField + tagGroup,
+                                                "1",
+                                                Field.Store.NO,
+                                                Field.Index.NOT_ANALYZED);
                     }
                 }
             }
