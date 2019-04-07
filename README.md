@@ -388,10 +388,10 @@ When the search is performed, the source LookQuery model is compiled (such that 
 The LookResult model returned implements Examine.ISearchResults, but extends it with a Matches property that will return the results enumerated as strongly typed LookMatch objects (useful for lazy access to the assocated IPublishedContent item and other data) and a Facets property for any facet results.
 
 ```csharp
-public class LookResult : ISearchResults
+public class LookResult : Examine.ISearchResults
 {
 	/// <summary>
-	/// When true, indicates the Look Query was parsed and executed correctly
+	/// When true, indicates the query was parsed and executed correctly
 	/// </summary>
 	public bool Success { get; }
 	
@@ -414,5 +414,81 @@ public class LookResult : ISearchResults
 	/// Any returned facets
 	/// </summary>
 	public Facet[] Facets { get; }
+}
+```
+
+```csharp
+public class LookMatch : Examine.SearchResult
+{
+	/// <summary>
+	/// Lazy evaluation of item for the content, media, member or detached item (always has a value)
+	/// </summary>
+	public IPublishedContent Item => { get; }
+
+	/// <summary>
+	/// Lazy evaluation of the host item (if the item is detached) otherwize this will be null
+	/// </summary>
+	public IPublishedContent HostItem { get; }
+
+	/// <summary>
+	/// Culture in Umbraco this item is associated with
+	/// </summary>
+	public CultureInfo CultureInfo { get; set; }
+
+	/// <summary>
+	/// Flag to indicate whether this result is a detached item
+	/// </summary>
+	public bool IsDetached { get; }
+
+	/// <summary>
+	/// Guid key of the Content, media, member or detached item
+	/// </summary>
+	public Guid Key { get; }
+
+	/// <summary>
+	/// The docType, mediaType or memberType alias
+	/// </summary>
+	public string Alias { get; set; }
+
+	/// <summary>
+	/// The custom name field
+	/// </summary>
+	public string Name { get; }
+
+	/// <summary>
+	/// The custom date field
+	/// </summary>
+	public DateTime? Date { get; }
+
+	/// <summary>
+	/// The full text (only returned if specified)
+	/// </summary>
+	public string Text { get; }
+
+	/// <summary>
+	/// Highlight text (containing search text) extracted from from the full text
+	/// </summary>
+	public IHtmlString Highlight { get; }
+
+	/// <summary>
+	/// All tags associated with this item
+	/// </summary>
+	public LookTag[] Tags { get; }
+
+	/// <summary>
+	/// The custom location (lat|lng) field
+	/// </summary>
+	public Location Location { get; }
+
+	/// <summary>
+	/// Result field for calculated distance
+	/// (only used when a location query is set)
+	/// </summary>
+	public double? Distance { get; }
+
+	/// <summary>
+	/// The contextual type: content, media or member (a detached item belongs to its host one of these)
+	/// </summary>
+	public PublishedItemType PublishedItemType { get; }
 }
 ```
