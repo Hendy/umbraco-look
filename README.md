@@ -302,7 +302,7 @@ LookTag(string group, string name)
 or from a raw string value:
 
 ```csharp
-LokTag(string value)
+LookTag(string value)
 ````
 
 When constructing from a raw string value, the first colon char ':' is used as an optional delimiter between a group and tag.
