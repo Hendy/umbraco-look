@@ -62,6 +62,8 @@ namespace Our.Umbraco.Look.Services
                                                 "1",
                                                 Field.Store.NO,
                                                 Field.Index.NOT_ANALYZED);
+
+                        document.Add(tagGroupField);
                     }
                 }
             }

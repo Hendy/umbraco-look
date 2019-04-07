@@ -182,22 +182,18 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var matchesResult = new MatchesResult();
 
-            var lookQuery = new LookQuery(searcherName);
-            var tagQuery = new TagQuery(); // setting a tag query, means only items that have tags will be returned
+            var lookQuery = new LookQuery(searcherName) { TagQuery = new TagQuery() };
 
             if (!string.IsNullOrWhiteSpace(tagGroup) && string.IsNullOrWhiteSpace(tagName)) // only have the group to query
             {
-                var tagNames = QueryService.GetTagNames(searcherName, tagGroup);
-                var tags = TagQuery.MakeTags(tagNames.Select(x => tagGroup + ":" + x));
-
-                tagQuery.HasAny = tags;
+                //use raw query looking for newly indexed field(in look 0.33.0)
+                // TODO: update look to handle tags like "colour:*"
+                lookQuery.RawQuery = "Look_TagGroup_" + tagGroup + ":1"; 
             }
             else if (!string.IsNullOrWhiteSpace(tagName)) // we have a specifc tag
             {
-                tagQuery.Has = new LookTag(tagGroup, tagName);
+                lookQuery.TagQuery.Has = new LookTag(tagGroup, tagName);
             }
-
-            lookQuery.TagQuery = tagQuery;
 
             QueryService.SetSort(lookQuery, sort);
 
