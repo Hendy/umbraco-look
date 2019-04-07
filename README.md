@@ -30,7 +30,7 @@ public static class LookConfiguration
 {
 	/// <summary>
 	/// 'Hook indexing'
-	/// Get or set the names of all the Exmaine indexers to use.
+	/// Get or set the names of all the Examine indexers to use.
 	/// By default, all Umbraco Examine indexers will be used.
 	/// Set to null (or an empty array) not use any Examine indexers. 
 	/// </summary>
@@ -90,7 +90,7 @@ public class IndexingContext
 	public IPublishedContent HostItem { get; }
 
 	// When called, the indexing of the current IPublishedContent item will be cancelled.
-	// If using an Exmaine indexer, then Look will stop adding from the point of cancellation.
+	// If using an Exmaine indexer, then Look will stop adding data from the point of cancellation.
 	// If using a Look indexer, then full cancellation occurs and a Lucene document will not be created.
 	public void Cancel()
 }
@@ -100,7 +100,7 @@ public class IndexingContext
 ### Look Indexer
 
 A Look indexer is required to be able to index detached items (Examine Umbraco indexers only index Content/Media or Members).
-To use a Look indexer, the ExamineIndex.config and ExamineSettings.config files need to be updated:
+To use a Look indexer, the Examine configuration files need to be updated:
 
 /config/ExamineIndex.config
 ```xml
@@ -138,16 +138,19 @@ Searching is performed using an Examine Searcher and can be done using the Exmai
 
 ### Look API
 
+The Look API consists of defining the search critera via the setting of pre-described model properties. 
+This can be simplier to use than a fluent API, but complex queries can still be performed via the use of tags.
+
 The Look API can be used with all searchers. Eg.
 
 ```csharp
-var lookQuery = new LookQuery(); // use the default Examine searcher (usually "ExternalSearcher")
+var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalSearcher")
 ```
 
 or
 
 ```csharp
-var lookQuery = new LookQuery("MyLookSearcher"); // use a named Examine searcher
+var lookQuery = new LookQuery("MyLookSearcher"); // use a named searcher
 ```
 
 ```csharp
@@ -163,7 +166,7 @@ lookQuery.RawQuery = ...
 var results = lookQuery.Search();
 ```
 
-### Look Query types
+### Look Query Types
 
 All query types are optional, but when set, they become a required clause. 
 
@@ -386,6 +389,11 @@ public class LookResult : ISearchResults
 	/// Get the results enumerable as LookMatch objects
 	/// </summary>
 	public IEnumerable<LookMatch> Matches { get; }
+
+	/// <summary>
+	/// Efficient skipping of matches
+	/// </summary>
+	public IEnumerable<LookMatch> SkipMatches(int skip)
 
 	/// <summary>
 	/// Any returned facets
