@@ -1,13 +1,15 @@
 # Look (Beta) for Umbraco v7
 Look sits on top of Umbraco Examine adding support for:
 
-* Indexing all IPublishedContent items (each as a Lucene Document) be they: Umbraco Content, Media, Members or properties on them that return IPublishedContent, eg. Nested Content.
+* Indexing all IPublishedContent items (each as a Lucene Document) be they: Umbraco Content, Media, Members or properties on them that return IPublishedContent*, eg. Nested Content.
+
+* Tag querying & faceting - query on tags and return facet data for tags.
 
 * Text match highlighting - return fragments of contextual text relevant to the supplied search term.
 
 * Geospatial querying - boundary and location distance querying (this can also be used for filtering / sorting).
 
-* Tag querying & faceting - query on tags and return facet data for tags.
+*use PropertyValueConverters to return collections of IPublishedContent for any other data to be indexed.
 
 ## Installation
 
@@ -79,19 +81,32 @@ The indexing context model supplied:
 ```csharp
 public class IndexingContext
 {
-	// The name of the Examine indexer into which this item is being indexed
+	/// <summary>
+	/// The name of the Examine indexer into which this item is being indexed
+	/// </summary>
 	public string IndexerName { get; }
 
-	// The Content, Media, Member or Detached item being indexed (always has a value)
+	/// <summary>
+	/// The Content, Media, Member or Detached item being indexed (always has a value)
+	/// </summary>
 	public IPublishedContent Item { get; }
 
-	// When a detached item is being indexed, this property will be the hosting content, media or member 
-	// (this value will null when the item being indexed is not detached)
+	/// <summary>
+	/// When the item being indexed is 'detached', this is the IPublishedContent of the 'known' Content, Media or Member.
+	/// (this value will null when the item being indexed is not detached)
+	/// </summary>
 	public IPublishedContent HostItem { get; }
 
-	// When called, the indexing of the current IPublishedContent item will be cancelled.
-	// If using an Exmaine indexer, then Look will stop adding data from the point of cancellation.
-	// If using a Look indexer, then full cancellation occurs and a Lucene document will not be created.
+	/// <summary>
+	/// Convienience flag to indicate whether the item is a detached item
+	/// </summary>
+	public bool IsDetached => this.HostItem != null;
+
+	/// <summary>
+	/// When called, the indexing of the current item will be cancelled.
+	/// If using an Exmaine indexer, then Look will stop adding data from the point of cancellation.
+	/// If using a Look indexer, then full cancellation occurs and a Lucene document will not be created.
+	/// </summary>
 	public void Cancel()
 }
 ```
