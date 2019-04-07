@@ -23,8 +23,10 @@ There are two NuGet packages:
 
 Once installed, by default Look will 'hook' into all Umbraco Examine indexers, augmenting each indexed item with its Guid key and Culture and
 fields to enable case-insensitive searches on Name and sorting by UpdateDate, as well as for the node type and its alias. 
+
 This default indexing behaviour is so that the Look querying API can be used 'out of the box' without having to configure anything, 
-however all behaviour can all be configured via static properties on the LookConfiguration class.
+however all behaviour can all be configured via static properties on the LookConfiguration class. 
+(All classes for the API can be found in the Our.Umbraco.Look namespace)
 
 To configure a Look indexer, the Examine configuration files need to be updated:
 
@@ -108,17 +110,17 @@ The indexing context model:
 public class IndexingContext
 {
 	/// <summary>
-	/// The name of the Examine indexer into which this item is being indexed
+	/// The name of the indexer into which this item is being indexed.
 	/// </summary>
 	public string IndexerName { get; }
 
 	/// <summary>
-	/// The Content, Media, Member or Detached item being indexed (always has a value)
+	/// The Content, Media, Member or Detached item being indexed (always has a value).
 	/// </summary>
 	public IPublishedContent Item { get; }
 
 	/// <summary>
-	/// When the item being indexed is 'detached', this is the IPublishedContent of the 'known' Content, Media or Member.
+	/// When the item being indexed is 'detached', this is the hosting Content, Media or Member.
 	/// (this value will null when the item being indexed is not detached)
 	/// </summary>
 	public IPublishedContent HostItem { get; }
