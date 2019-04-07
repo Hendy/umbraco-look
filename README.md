@@ -1,7 +1,7 @@
 # Look (Beta) for Umbraco v7
 Look sits on top of Umbraco Examine adding support for:
 
-* Indexing all IPublishedContent items (each as a Lucene Document) be they: Umbraco Content, Media, Members or properties on them that return IPublishedContent, eg. Nested Content. 
+* Indexing all IPublishedContent items (each as a Lucene Document) be they: Umbraco Content, Media, Members or properties on them that return IPublishedContent, eg. Nested Content.
 
 * Text match highlighting - return fragments of contextual text relevant to the supplied search term.
 
@@ -30,15 +30,15 @@ public static class LookConfiguration
 {
 	/// <summary>
 	/// 'Hook indexing'
-	/// Get or set the indexer names of all the Exmaine indexers to hook into.
-	/// By default, all Umbraco Examine indexers are hooked into.
-	/// Set to null (or an empty array) to remove all hooks. 
+	/// Get or set the names of all the Exmaine indexers to use.
+	/// By default, all Umbraco Examine indexers will be used.
+	/// Set to null (or an empty array) not use any Examine indexers. 
 	/// </summary>
 	public static string[] ExamineIndexers { get; set; }
 
-    /// <summary>
-    /// (Optional) custom method that can be called before the indexing of each IPublishedContent item.
-    /// </summary>
+	/// <summary>
+	/// (Optional) custom method that can be called before the indexing of each IPublishedContent item.
+	/// </summary>
 	public static Action<IndexingContext> BeforeIndexing { set; }
 
 	/// <summary>
@@ -53,10 +53,10 @@ public static class LookConfiguration
 	/// </summary>
 	public static Func<IndexingContext, DateTime?> DateIndexer { set; }
 
-    /// <summary>
-    /// (Optional) Set a custom text indexer.
-    /// By default, no value is indexed.
-    /// </summary>
+	/// <summary>
+	/// (Optional) Set a custom text indexer.
+	/// By default, no value is indexed.
+	/// </summary>
 	public static Func<IndexingContext, string> TextIndexer { set; }
 
 	/// <summary>
@@ -89,19 +89,49 @@ public class IndexingContext
 	public IPublishedContent HostItem { get; }
 
 	// When called, the indexing of the current IPublishedContent item will be cancelled.
-	// If using an Exmaine Umbraco indexer, then Look will stop adding Look indexed data from the point of cancellation.
-	// If using a Look indexer, then full cancellation occurs and a Lucene document will not be created for the item being indexed.
+	// If using an Exmaine indexer, then Look will stop adding from the point of cancellation.
+	// If using a Look indexer, then full cancellation occurs and a Lucene document will not be created.
 	public void Cancel()
 }
 ```
 [Example Indexing Code](../../wiki/Example-Indexing)
 
+To use a Look indexer and searcher, the ExamineIndex.config and ExamineSettings.config files need to be updated:
 
+ExamineIndex.config
+```xml
+<ExamineLuceneIndexSets>
+
+	<IndexSet SetName="MyLookIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/MyLookIndexSet/" />
+
+</ExamineLuceneIndexSets>
+```
+
+ExamineSettings.config
+```xml
+<Examine RebuildOnAppStart="false">
+	<ExamineIndexProviders>
+		<providers>
+
+			<add name="MyLookIndexer" type="Our.Umbraco.Look.LookIndexer, Our.Umbraco.Look" />
+
+		</providers>
+	</ExamineIndexProviders>
+
+	<ExamineSearchProviders defaultProvider="ExternalSearcher">
+		<providers>
+
+			<add name="MyLookSearcher" type="Our.Umbraco.Look.LookSearcher, Our.Umbraco.Look" />
+
+		</providers>
+	</ExamineSearchProviders>
+</Examine>
+```
 
 
 ## Searching
 
-Searching is performed using an (Umbraco or Look) Examine Searcher and can be done using the Exmaine API, or with the Look API.
+Searching is performed using an Examine Searcher and can be done using the Exmaine API, or with the Look API.
 
 ### Look API
 
