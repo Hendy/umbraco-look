@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Our.Umbraco.Look.BackOffice</id>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
     <authors>Hendy Racher</authors>
     <owners>Hendy Racher</owners>
     <licenseUrl>https://github.com/Hendy/umbraco-look/blob/master/LICENSE</licenseUrl>
@@ -16,7 +16,7 @@
     <copyright>Copyright 2019</copyright>
     <tags>Umbraco</tags>
     <dependencies>
-      <dependency id="Our.Umbraco.Look" version="0.30.0" />
+      <dependency id="Our.Umbraco.Look" version="0.32.0" />
     </dependencies>
   </metadata>
   <files>

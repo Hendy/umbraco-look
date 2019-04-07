@@ -121,7 +121,7 @@ To use a Look indexer, the Examine configuration files need to be updated:
 
 		</providers>
 	</ExamineIndexProviders>
-	<ExamineSearchProviders defaultProvider="ExternalSearcher">
+	<ExamineSearchProviders>
 		<providers>
 
 			<add name="MyLookSearcher" type="Our.Umbraco.Look.LookSearcher, Our.Umbraco.Look" />
