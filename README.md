@@ -49,7 +49,8 @@ public static class LookConfiguration
 
 	/// <summary>
 	/// (Optional) Set a custom date indexer.
-	/// By default, the IPublishedContent.UpdateDate value will be indexed. (Detached items use their Host value)
+	/// By default, the IPublishedContent.UpdateDate value will be indexed. 
+	/// (Detached items use value from their Host)
 	/// </summary>
 	public static Func<IndexingContext, DateTime?> DateIndexer { set; }
 
@@ -96,9 +97,12 @@ public class IndexingContext
 ```
 [Example Indexing Code](../../wiki/Example-Indexing)
 
-To use a Look indexer and searcher, the ExamineIndex.config and ExamineSettings.config files need to be updated:
+### Look Indexer
 
-ExamineIndex.config
+A Look indexer is required to be able to index detached items (Examine Umbraco indexers only index Content/Media or Members).
+To use a Look indexer, the ExamineIndex.config and ExamineSettings.config files need to be updated:
+
+/config/ExamineIndex.config
 ```xml
 <ExamineLuceneIndexSets>
 
@@ -107,9 +111,9 @@ ExamineIndex.config
 </ExamineLuceneIndexSets>
 ```
 
-ExamineSettings.config
+/config/ExamineSettings.config
 ```xml
-<Examine RebuildOnAppStart="false">
+<Examine>
 	<ExamineIndexProviders>
 		<providers>
 
@@ -117,7 +121,6 @@ ExamineSettings.config
 
 		</providers>
 	</ExamineIndexProviders>
-
 	<ExamineSearchProviders defaultProvider="ExternalSearcher">
 		<providers>
 
