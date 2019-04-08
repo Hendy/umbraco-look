@@ -401,7 +401,7 @@ public class LookResult : Examine.ISearchResults
 	/// <summary>
 	/// Efficient skipping of matches
 	/// </summary>
-	public IEnumerable<LookMatch> SkipMatches(int skip)
+	public IEnumerable<LookMatch> SkipMatches(int skip) { }
 
 	/// <summary>
 	/// Any returned facets
@@ -416,7 +416,7 @@ public class LookMatch : Examine.SearchResult
 	/// <summary>
 	/// Lazy evaluation of item for the content, media, member or detached item (always has a value)
 	/// </summary>
-	public IPublishedContent Item => { get; }
+	public IPublishedContent Item { get; }
 
 	/// <summary>
 	/// Lazy evaluation of the host item (if the item is detached) otherwize this will be null
