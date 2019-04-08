@@ -37,11 +37,12 @@ namespace Our.Umbraco.Look.Tests
         }
 
         /// <summary>
-        /// Add supplied collection into the test index
+        /// Index the supplied things
         /// </summary>
-        /// <param name="things">The POCOs of things to add into the index</param>
-        /// <param name="beforeIndexing">optional action to call before indexing</param>
-        internal static void IndexThings(IEnumerable<Thing> things, Action<IndexingContext> beforeIndexing = null)
+        /// <param name="things">The things to add into the index</param>
+        /// <param name="beforeIndexing">optional action to call before indexing each thing</param>
+        /// <param name="afterIndexing">optional acton to call after indexing each thing</param>
+        internal static void IndexThings(IEnumerable<Thing> things, Action<IndexingContext> beforeIndexing = null, Action<IndexingContext> afterIndexing = null)
         {
             var nameStack = new Stack<string>(things.Select(x => x.Name));
             var dateStack = new Stack<DateTime?>(things.Select(x => x.Date));
@@ -50,8 +51,9 @@ namespace Our.Umbraco.Look.Tests
             var locationStack = new Stack<Location>(things.Select(x => x.Location));
 
             // use supplied, or do nothing
-            LookConfiguration.BeforeIndexing = beforeIndexing ?? new Action<IndexingContext>(x => { });
-            
+            LookConfiguration.BeforeIndexing = beforeIndexing;
+            LookConfiguration.AfterIndexing = afterIndexing;
+
             // setup indexers
             LookConfiguration.NameIndexer = x => nameStack.Pop();
             LookConfiguration.DateIndexer = x => dateStack.Pop();
@@ -75,7 +77,10 @@ namespace Our.Umbraco.Look.Tests
                 }                
             }
 
-            // reset indexers
+            //reset
+            LookConfiguration.BeforeIndexing = null;
+            LookConfiguration.AfterIndexing = null;
+
             LookConfiguration.NameIndexer = null;
             LookConfiguration.DateIndexer = null;
             LookConfiguration.TextIndexer = null;

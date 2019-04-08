@@ -6,7 +6,7 @@ namespace Our.Umbraco.Look.Services
     {
         internal static Action<IndexingContext> GetBeforeIndexing()
         {
-            return LookService.Instance._beforeIndexing;
+            return LookService.Instance._beforeIndexing ?? new Action<IndexingContext>(x => { });
         }
     }
 }

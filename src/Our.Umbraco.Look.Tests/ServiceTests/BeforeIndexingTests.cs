@@ -1,12 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Our.Umbraco.Look.Tests.ServiceTests
 {
     [TestClass]
-    public class ServiceTests
+    public class BeforeIndexingTests
     {
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)

@@ -23,7 +23,7 @@ namespace Our.Umbraco.Look.Services
             }
             catch (Exception exception)
             {
-                LogHelper.WarnWithException(typeof(LookService), "Error in before indexing", exception);
+                LogHelper.WarnWithException(typeof(LookService), "Error in BeforeIndexing", exception);
             }
 
             LookService.IndexNode(indexingContext, document);
@@ -37,6 +37,15 @@ namespace Our.Umbraco.Look.Services
             LookService.IndexTags(indexingContext, document);
 
             LookService.IndexLocation(indexingContext, document);
+
+            try
+            {
+                LookService.GetAfterIndexing()(indexingContext);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.WarnWithException(typeof(LookService), "Error in AfterIndexing", exception);
+            }
 
             stopwatch.Stop();
             LogHelper.Debug(typeof(LookService), $"Building Lucene Document For '{ indexingContext.Item.GetGuidKey() }' Took { stopwatch.ElapsedMilliseconds }ms");

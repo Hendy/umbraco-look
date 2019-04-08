@@ -1,9 +1,9 @@
-﻿using Lucene.Net.Spatial.Tier.Projectors;
+﻿using Examine.LuceneEngine;
+using Lucene.Net.Spatial.Tier.Projectors;
 using Lucene.Net.Store;
 using System;
 using System.Collections.Generic;
 using Umbraco.Web;
-using Examine.LuceneEngine;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -40,7 +40,7 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Function called before indexing
         /// </summary>
-        private Action<IndexingContext> _beforeIndexing = IndexingContext => { };
+        private Action<IndexingContext> _beforeIndexing;
 
         /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
@@ -66,6 +66,11 @@ namespace Our.Umbraco.Look.Services
         /// Function to get a location for the IPublishedContent being indexed
         /// </summary>
         private Func<IndexingContext, Location> _locationIndexer;
+
+        /// <summary>
+        /// Function called after indexing
+        /// </summary>
+        private Action<IndexingContext> _afterIndexing;
 
         /// <summary>
         /// Collection of cartesian tier plotters

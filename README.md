@@ -67,12 +67,12 @@ public static class LookConfiguration
 	public static string[] ExamineIndexers { get; set; }
 
 	/// <summary>
-	/// (Optional) custom method that can be called before the indexing of each IPublishedContent item.
+	/// (Optional) Custom method that can be called before the indexing of each IPublishedContent item.
 	/// </summary>
 	public static Action<IndexingContext> BeforeIndexing { set; }
 
 	/// <summary>
-	/// (Optional) set a custom name indexer.
+	/// (Optional) Set a custom name indexer.
 	/// By default, the IPublishedContent.Name value will be indexed.
 	/// </summary>
 	public static Func<IndexingContext, string> NameIndexer { set; }
@@ -101,6 +101,11 @@ public static class LookConfiguration
 	/// By default, no value is indexed.
 	/// </summary>
 	public static Func<IndexingContext, Location> LocationIndexer { set; }
+
+	/// <summary>
+	/// (Optional) Custom method that can be called after the indexing of each IPublishedContent item.
+	/// </summary>
+	public static Action<IndexingContext> AfterIndexing { set; }
 }
 ```
 

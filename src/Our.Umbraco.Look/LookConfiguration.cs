@@ -52,6 +52,11 @@ namespace Our.Umbraco.Look
         public static Func<IndexingContext, Location> LocationIndexer { set { LookService.SetLocationIndexer(value); } }
 
         /// <summary>
+        /// (Optional) custom method that can be called after the indexing of each IPublishedContent item.
+        /// </summary>
+        public static Action<IndexingContext> AfterIndexing { set { LookService.SetAfterIndexing(value); } }
+
+        /// <summary>
         /// Flag to indicate whether a name indexer is enabled
         /// </summary>
         public static bool NameIndexerIsSet => LookService.GetNameIndexer() != null;
