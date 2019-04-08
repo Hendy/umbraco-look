@@ -9,7 +9,7 @@ Look sits on top of Umbraco Examine adding support for:
 
 * Geospatial querying - boundary and location distance querying (this can also be used for filtering / sorting).
 
-*use PropertyValueConverters to return collections of IPublishedContent for any other data to be indexed.
+*use [PropertyValueConverters](https://our.umbraco.com/documentation/Extending/Property-Editors/value-converters) to return collections of IPublishedContent for any other data to be indexed.
 
 ## Installation
 
