@@ -14,7 +14,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="lookQuery">A LookQuery model for the search criteria</param>
         /// <returns>A LookResult model for the search response</returns>
-        public static LookResult Search(LookQuery lookQuery)
+        internal static LookResult Search(LookQuery lookQuery)
         {
             if (lookQuery == null)
             {
