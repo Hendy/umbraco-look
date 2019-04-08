@@ -21,7 +21,7 @@
         apiService.getViewDataForSearcher($scope.searcherName)
             .then(function (response) { $scope.viewData = response.data; });
 
-        // matches - WIRE THIS UP
+        // matches
         $scope.getMatches = function (sort, skip, take) {
 
             var q = $q.defer();

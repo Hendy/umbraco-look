@@ -3,7 +3,6 @@ using Lucene.Net.Index;
 using Our.Umbraco.Look.Services;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Umbraco.Core;
 using Umbraco.Core.Events;
 using Umbraco.Core.Models;
@@ -52,9 +51,10 @@ namespace Our.Umbraco.Look
 
                 LookService.Initialize(this._umbracoHelper);
 
-                var lookIndexersToBuild = this._lookIndexers.Where(x => !x.IndexExists());
-
-                Parallel.ForEach(lookIndexersToBuild, x => x.RebuildIndex());
+                foreach (var lookIndexer in this._lookIndexers.Where(x => !x.IndexExists()))
+                {
+                    lookIndexer.RebuildIndex();
+                }
                 
                 ContentService.Published += ContentService_Published;
                 MediaService.Saved += this.MediaService_Saved;
