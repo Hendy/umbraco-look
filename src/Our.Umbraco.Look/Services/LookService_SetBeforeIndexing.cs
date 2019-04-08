@@ -11,14 +11,7 @@ namespace Our.Umbraco.Look.Services
         /// <param name="beforeIndexing">Your custom function to determine if indexing should occur</param>
         internal static void SetBeforeIndexing(Action<IndexingContext> beforeIndexing)
         {
-            if (LookService.Instance._beforeIndexing == null)
-            {
-                LogHelper.Info(typeof(LookService), "BeforeIndexing function set");
-            }
-            else
-            {
-                LogHelper.Warn(typeof(LookService), "BeforeIndexing function replaced");
-            }
+            LogHelper.Info(typeof(LookService), "BeforeIndexing function set");
 
             LookService.Instance._beforeIndexing = beforeIndexing;
         }
