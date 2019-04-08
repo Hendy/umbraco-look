@@ -49,7 +49,15 @@ namespace Our.Umbraco.Look
             {
                 this._umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
 
-                LookService.Initialize(this._umbracoHelper); 
+                LookService.Initialize(this._umbracoHelper);
+
+                foreach (var lookIndexer in this._lookIndexers)
+                {
+                    if (!lookIndexer.IndexExists())
+                    {
+                        lookIndexer.RebuildIndex();
+                    }
+                }
 
                 ContentService.Published += ContentService_Published;
                 MediaService.Saved += this.MediaService_Saved;
