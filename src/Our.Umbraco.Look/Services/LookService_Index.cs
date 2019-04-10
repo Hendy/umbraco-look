@@ -48,7 +48,11 @@ namespace Our.Umbraco.Look.Services
             }
 
             stopwatch.Stop();
-            LogHelper.Debug(typeof(LookService), $"Building Lucene Document For '{ indexingContext.Item.GetGuidKey() }' Took { stopwatch.ElapsedMilliseconds }ms");
+
+            if (!indexingContext.Cancelled)
+            {
+                LogHelper.Debug(typeof(LookService), $"Building Lucene Document For '{ indexingContext.Item.GetGuidKey() }' Took { stopwatch.ElapsedMilliseconds }ms");
+            }
         }
     }
 }
