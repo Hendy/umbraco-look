@@ -231,23 +231,30 @@ namespace Our.Umbraco.Look
                     indexWriter.AddDocument(document);
                 }
 
-                foreach (var detachedNode in node.GetDetachedDescendants())
+                try // SEOChecker prior to 2.2 doesn't handle IPublishedContent without an ID
                 {
-                    indexingContext = new IndexingContext(
-                                            hostNode: node,
-                                            node: detachedNode,
-                                            indexerName: this.Name);
-
-                    document = new Document();
-
-                    LookService.Index(indexingContext, document);
-
-                    if (!indexingContext.Cancelled)
+                    foreach (var detachedNode in node.GetDetachedDescendants())
                     {
-                        counter++;
+                        indexingContext = new IndexingContext(
+                                                hostNode: node,
+                                                node: detachedNode,
+                                                indexerName: this.Name);
 
-                        indexWriter.AddDocument(document); // index each detached item
+                        document = new Document();
+
+                        LookService.Index(indexingContext, document);
+
+                        if (!indexingContext.Cancelled)
+                        {
+                            counter++;
+
+                            indexWriter.AddDocument(document); // index each detached item
+                        }
                     }
+                }
+                catch (Exception exception)
+                {
+                    LogHelper.WarnWithException(typeof(LookIndexer), "Error handling Detached items", exception);
                 }
             }
 
