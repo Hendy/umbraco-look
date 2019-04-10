@@ -112,7 +112,8 @@ namespace Our.Umbraco.Look
                 }
                 catch (Exception exception)
                 {
-                    LogHelper.WarnWithException(typeof(LookIndexer), "Error handling Detached items", exception);
+                    //LogHelper.WarnWithException(typeof(LookIndexer), "Error handling Detached items", exception);
+                    LogHelper.Debug(typeof(LookIndexer), "Error handling detached items");
                 }
             }
 
