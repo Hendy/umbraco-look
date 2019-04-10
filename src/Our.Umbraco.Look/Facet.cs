@@ -3,7 +3,7 @@
     public class Facet
     {
         /// <summary>
-        /// The tags that would be added into the TagQuery.All clause
+        /// The tags that would be added into the TagQuery.HasAll clause
         /// </summary>
         public LookTag[] Tags { get; internal set; }
 
