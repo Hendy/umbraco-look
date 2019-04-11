@@ -13,7 +13,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="lookQuery">The query to parse</param>
         /// <param name="parsingContext"></param>
-        private static void ParseNameQuery(LookQuery lookQuery, ParsingContext parsingContext)
+        private static void ParseNameQuery(ParsingContext parsingContext, LookQuery lookQuery)
         {
             // handle sorting first, as name query clause not required for a name sort
             if (lookQuery.SortOn == SortOn.Name) // a -> z

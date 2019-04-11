@@ -38,21 +38,21 @@ namespace Our.Umbraco.Look.Services
 
                 try
                 {
-                    LookService.ParseRawQuery(lookQuery, parsingContext);
+                    LookService.ParseRawQuery(parsingContext, lookQuery);
 
-                    LookService.ParseExamineQuery(lookQuery, parsingContext);
+                    LookService.ParseExamineQuery(parsingContext, lookQuery);
 
-                    LookService.ParseNodeQuery(lookQuery, parsingContext);
+                    LookService.ParseNodeQuery(parsingContext, lookQuery);
 
-                    LookService.ParseNameQuery(lookQuery, parsingContext);
+                    LookService.ParseNameQuery(parsingContext, lookQuery);
 
-                    LookService.ParseDateQuery(lookQuery, parsingContext);
+                    LookService.ParseDateQuery(parsingContext, lookQuery);
 
-                    LookService.ParseTextQuery(lookQuery, parsingContext);
+                    LookService.ParseTextQuery(parsingContext, lookQuery);
 
-                    LookService.ParseTagQuery(lookQuery, parsingContext);
+                    LookService.ParseTagQuery(parsingContext, lookQuery);
 
-                    LookService.ParseLocationQuery(lookQuery, parsingContext);
+                    LookService.ParseLocationQuery(parsingContext, lookQuery);
                 }
                 catch (ParsingException parsingException)
                 {

@@ -14,7 +14,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="lookQuery">The query to parse</param>
         /// <param name="parsingContext"></param>
-        private static void ParseDateQuery(LookQuery lookQuery, ParsingContext parsingContext)
+        private static void ParseDateQuery(ParsingContext parsingContext, LookQuery lookQuery)
         {
             // handle sorting first, as date query clause not required for a date sort
             switch (lookQuery.SortOn)

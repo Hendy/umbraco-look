@@ -11,7 +11,7 @@ namespace Our.Umbraco.Look.Services
         /// </summary>
         /// <param name="lookQuery">The query to parse</param>
         /// <param name="parsingContext"></param>
-        private static void ParseExamineQuery(LookQuery lookQuery, ParsingContext parsingContext)
+        private static void ParseExamineQuery(ParsingContext parsingContext, LookQuery lookQuery)
         {
             if (lookQuery.ExamineQuery == null) return;
 
