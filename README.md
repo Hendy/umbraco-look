@@ -148,9 +148,6 @@ public class IndexingContext
 ## Searching
 
 Searching is performed using an Examine Searcher and can be done using the Exmaine API, or with the Look API.
-
-### Look API
-
 The Look API consists of defining the search critera via the setting of pre-described model properties. 
 This can be simplier to use than a fluent API, but complex queries can still be performed via the use of tags.
 
@@ -189,31 +186,60 @@ A node query is used to specify search criteria based on common properties of IP
 
 ```csharp
 lookQuery.NodeQuery = new NodeQuery() {
+
+	// must be of this type
 	Type = PublishedItemType.Content,
+	
+	// can be any of these types (the condition above means it must be content)
 	TypeAny = new [] { 
 		PublishedItemType.Content, 
 		PublishedItemType.Media, 
 		PublishedItemType.Member 
 	},
-	DetachedQuery = DetachedQuery.IncludeDetached, // enum options
+	
+	// options: 
+	// IncludeDetached (default - no filtering occurs)
+	// ExcludeDetached
+	// OnlyDetached
+	DetachedQuery = DetachedQuery.IncludeDetached,
+	
+	// must be of this culture
 	Culture = new CultureInfo("fr"),
+	
+	// can be any of these cultures
 	CultureAny = new [] {
 		new CultureInfo("fr")	
 	},
+	
+	// must be of this docType/mediaType/memberType alias
 	Alias = "myDocTypeAlias",
+	
+	// can be any of these docType/mediaType/memberType aliases
 	AliasAny = new [] { 
 		"myDocTypeAlias", 
 		"myMediaTypeAlias",
 		"myMemberTypeAlias"
 	},
+	
+	// must have any of these ids
 	Ids = new [] { 1, 2 },
+	
+	// must have any of these keys
 	Keys = new [] { 
 		Guid.Parse("dc890492-4571-4701-8085-b874837d597a"), 
 		Guid.Parse("9f60f10f-74ea-4323-98bb-13b6f6423ad6"),
 	}
+	
+	// must not have this id
 	NotId = 3, // (eg. exclude current page)
+	
+	// must not have any of these ids
 	NotIds = new [] { 4, 5 },
+	
+	// must not have this key
 	NotKey = Guid.Parse("3e919e10-b702-4478-87ed-4a42ec52b337"),
+	
+	// must not have any of these keys
 	NotKeys = new [] { 
 		Guid.Parse("6bb24ed2-9466-422f-a9d4-27a805db2d47"), 
 		Guid.Parse("88a9e4e3-d4cb-4641-aff3-8579f1d60399")
@@ -231,7 +257,9 @@ lookQuery.NameQuery = new NameQuery() {
 	StartsWith = "Abc",
 	Contains = "123",
 	EndsWith = "Xyz",
-	CaseSensitive = true // applies to all: Is, StartsWith, Contains & EndsWith
+	
+	// applies to all: Is, StartsWith, Contains & EndsWith
+	CaseSensitive = true 
 };
 ```
 
@@ -244,6 +272,12 @@ If a date query is set (ie, not null), then results must have a date value.
 lookQuery.DateQuery = new DateQuery() {
 	After = new DateTime(2005, 02, 16),
 	Before = null,
+	
+	// options:
+	// Inclusive (default)
+	// Exclusive
+	// BeforeInclusiveAfterExclusive
+	// BeforeExclusiveAfterInclusive
 	Boundary = DateBoundary.Inclusive
 }
 ```
@@ -256,8 +290,12 @@ are optional).
 
 ```csharp
 lookQuery.TextQuery = new TextQuery() {
+
+	// query text
 	SearchText = "some text to search for",
-	GetHighlight = true // return highlight extract from the text field containing the search text
+	
+	// flag to indicate whether highlight text should be extracted
+	GetHighlight = true
 }
 ```
 
