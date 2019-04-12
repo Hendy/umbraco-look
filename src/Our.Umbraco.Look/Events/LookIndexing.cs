@@ -114,7 +114,7 @@ namespace Our.Umbraco.Look
 
             foreach(var lookIndexer in this._lookIndexers)
             {
-                var indexerConfiguration = LookConfiguration.IndexerConfiguration[lookIndexer.Name] ?? new IndexerConfiguration(true);
+                var indexerConfiguration = LookService.GetIndexerConfiguration(lookIndexer.Name);
 
                 var indexItem = publishedItemType == PublishedItemType.Content && indexerConfiguration.IndexContent
                                 || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexMedia

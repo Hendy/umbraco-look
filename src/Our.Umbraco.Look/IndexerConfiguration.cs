@@ -37,6 +37,7 @@
 
         /// <summary>
         /// Constructor
+        /// When an IndexerConfiguration is set, all features are disabled by default - set properties to enable
         /// </summary>
         public IndexerConfiguration()
         {
@@ -49,7 +50,8 @@
         }
 
         /// <summary>
-        /// Constructor (internal use for when consumer has not set an indexer configuration)
+        /// Constructor
+        /// Internal use for when IndexerConfiguration is not net, all features are enabled by default
         /// </summary>
         /// <param name="notSet"></param>
         internal IndexerConfiguration(bool notSet)

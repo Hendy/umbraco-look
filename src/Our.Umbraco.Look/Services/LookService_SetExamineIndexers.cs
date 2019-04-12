@@ -95,7 +95,7 @@ namespace Our.Umbraco.Look.Services
         {
             IPublishedContent publishedContent = null;
 
-            var indexerConfiguration = LookConfiguration.IndexerConfiguration[indexerName] ?? new IndexerConfiguration(true);
+            var indexerConfiguration = LookService.GetIndexerConfiguration(indexerName);
 
             if (indexerConfiguration.IndexContent) // attempt to get content
             {

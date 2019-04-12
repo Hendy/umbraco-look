@@ -41,7 +41,7 @@ namespace Our.Umbraco.Look
         /// </summary>
         protected override void PerformIndexRebuild()
         {
-            var indexerConfiguration = LookConfiguration.IndexerConfiguration[this.Name] ?? new IndexerConfiguration(true);
+            var indexerConfiguration = LookService.GetIndexerConfiguration(this.Name);
                                                                                             
             if (indexerConfiguration.IndexContent || indexerConfiguration.IndexDetachedContent)
             {
@@ -97,7 +97,7 @@ namespace Our.Umbraco.Look
         /// <param name="indexDetached">when true, indicates the detached items for each node should be indexed</param>
         internal void Index(IEnumerable<IPublishedContent> nodes, bool indexItem, bool indexDetached)
         {
-            if (!indexItem && !indexDetached) return;
+            if (!indexItem && !indexDetached) return; // possible 
 
             var stopwatch = Stopwatch.StartNew();
             var counter = 0;
