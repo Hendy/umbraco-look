@@ -67,6 +67,11 @@ public static class LookConfiguration
 	public static string[] ExamineIndexers { get; set; }
 
 	/// <summary>
+	/// Set configuration for indexer by name
+	/// </summary>
+	public static Dictionary<string, IndexerConfiguration> IndexerConfiguration { get; }
+
+	/// <summary>
 	/// (Optional) Custom method that can be called before the indexing of each IPublishedContent item.
 	/// </summary>
 	public static Action<IndexingContext> BeforeIndexing { set; }
