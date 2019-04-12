@@ -9,7 +9,7 @@
         /// <returns></returns>
         internal static IndexerConfiguration GetIndexerConfiguration(string indexerName)
         {
-            if (LookConfiguration.IndexerConfiguration.ContainsKey(indexerName))
+            if (indexerName != null && LookConfiguration.IndexerConfiguration.ContainsKey(indexerName))
             {
                 return LookConfiguration.IndexerConfiguration[indexerName];
             }

@@ -15,6 +15,14 @@ namespace Our.Umbraco.Look.Services
         /// <param name="document"></param>
         internal static void Index(IndexingContext indexingContext, Document document)
         {
+            var indexerConfiguration = LookService.GetIndexerConfiguration(indexingContext.IndexerName);
+
+            if (!indexerConfiguration.IndexAlias(indexingContext.Item?.DocumentTypeAlias))
+            {
+                indexingContext.Cancel();
+                return;
+            }
+
             var stopwatch = Stopwatch.StartNew();
 
             try

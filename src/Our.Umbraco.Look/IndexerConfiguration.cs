@@ -18,12 +18,10 @@ namespace Our.Umbraco.Look
                                                     ItemType.Member,
                                                     ItemType.DetachedMember };
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public string[] Aliases { get; set; }
-
-        //public IndexerType[] Indexers = new [] { IndexerType.Name, IndexerType.Date, IndexerType.Text, IndexerType.Tag, IndexerType.Location  }
+        /// <summary>
+        /// null = no filtering, otherwize only index items with a docType, mediaType or memberType in this array
+        /// </summary>
+        public string[] Aliases { get; set; } = null;
 
         /// <summary>
         /// Flag to indicate whether content should be indexed
@@ -54,5 +52,12 @@ namespace Our.Umbraco.Look
         /// Flag to indicate whether detached items on content members be indexed
         /// </summary>
         internal bool IndexDetachedMembers => this.ItemTypes != null && this.ItemTypes.Contains(ItemType.DetachedMember);
+
+        /// <summary>
+        /// Helper method to check to see if a given docType, mediaType or memberType alias should be indexed
+        /// </summary>
+        /// <param name="alias"></param>
+        /// <returns></returns>
+        internal bool IndexAlias(string alias) => this.Aliases == null || alias != null && this.Aliases.Contains(alias);
     }
 }

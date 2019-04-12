@@ -13,7 +13,7 @@ namespace Our.Umbraco.Look
         public string IndexerName { get; }
 
         /// <summary>
-        /// The Content, Media, Member or Detached item being indexed (always has a value)
+        /// The Content, Media, Member or Detached item being indexed (always has a value (unless unit testing)
         /// </summary>
         public IPublishedContent Item { get; }
 
