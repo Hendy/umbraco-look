@@ -251,6 +251,7 @@
     <Compile Include="Extensions\IPublishedContentExtensions\YieldDetachedProperties.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\YieldDetachedDescendants.cs" />
     <Compile Include="IndexerConfiguration.cs" />
+    <Compile Include="ItemType.cs" />
     <Compile Include="LocationBoundary.cs" />
     <Compile Include="Events\LookIndexing.cs" />
     <Compile Include="Events\HookIndexing.cs" />

@@ -14,7 +14,7 @@
                 return LookConfiguration.IndexerConfiguration[indexerName];
             }
 
-            return new IndexerConfiguration(true);
+            return new IndexerConfiguration();
         }
     }
 }
