@@ -86,7 +86,7 @@ namespace Our.Umbraco.Look.Services
         }
 
         /// <summary>
-        /// TODO: revist to make more efficient
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -94,56 +94,31 @@ namespace Our.Umbraco.Look.Services
         private static void DocumentWriting(object sender, DocumentWritingEventArgs e, string indexerName)
         {
             IPublishedContent publishedContent = null;
-            PublishedItemType? publishedItemType = null;
 
-            if (LookService.Instance._umbracoHelper == null)
+            var indexerConfiguration = LookConfiguration.IndexerConfiguration[indexerName] ?? new IndexerConfiguration(true);
+
+            if (indexerConfiguration.IndexContent) // attempt to get content
             {
-                throw new Exception("Unexpected null value for UmbracoHelper - Look not initialized");
+                publishedContent = LookService.Instance._umbracoHelper.TypedContent(e.NodeId);
             }
 
-            publishedContent = LookService.Instance._umbracoHelper.TypedContent(e.NodeId);
-
-            if (publishedContent != null)
+            if (publishedContent == null && indexerConfiguration.IndexMedia) // attempt to get as media
             {
-                publishedItemType = PublishedItemType.Content;
-            }
-            else // attempt to get as media
-            {                
                 publishedContent = LookService.Instance._umbracoHelper.TypedMedia(e.NodeId);
+            }
 
-                if (publishedContent != null)
-                {
-                    publishedItemType = PublishedItemType.Media;
-                }
-                else // attempt to get as member
-                {                    
-                    publishedContent = LookService.Instance._umbracoHelper.SafeTypedMember(e.NodeId);
-
-                    if (publishedContent != null)
-                    {
-                        publishedItemType = PublishedItemType.Member;
-                    }
-                }
+            if (publishedContent == null && indexerConfiguration.IndexMembers) // attempt to get as member
+            {
+                publishedContent = LookService.Instance._umbracoHelper.SafeTypedMember(e.NodeId);
             }
 
             if (publishedContent != null)
             {
-                var indexerConfiguration = LookConfiguration.IndexerConfiguration[indexerName] ?? new IndexerConfiguration(true);
+                var indexingContext = new IndexingContext(null, publishedContent, indexerName);
 
-                if (publishedItemType == PublishedItemType.Content && indexerConfiguration.IndexContent
-                    || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexMedia
-                    || publishedItemType == PublishedItemType.Member && indexerConfiguration.IndexMembers)
+                LookService.EnsureContext();
 
-                {
-                    var indexingContext = new IndexingContext(
-                            hostNode: null,
-                            node: publishedContent,
-                            indexerName: indexerName);
-
-                    LookService.EnsureContext();
-
-                    LookService.Index(indexingContext, e.Document);
-                }
+                LookService.Index(indexingContext, e.Document);
             }
         }
     }
