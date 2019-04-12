@@ -47,21 +47,37 @@ namespace Our.Umbraco.Look
             {
                 var content = this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]");
 
-                this.Index(content, indexerConfiguration.IndexContent, indexerConfiguration.IndexDetachedContent);
+                this.Index(
+                        content, 
+                        indexerConfiguration.IndexContent, 
+                        indexerConfiguration.IndexDetachedContent);
             }
 
             if (indexerConfiguration.IndexMedia || indexerConfiguration.IndexDetachedMedia)
             {
-                var media = this.UmbracoHelper.TypedMediaAtRoot().SelectMany(x => x.DescendantsOrSelf());
+                var media = this.UmbracoHelper
+                                .TypedMediaAtRoot()
+                                .SelectMany(x => x.DescendantsOrSelf());
 
-                this.Index(media, indexerConfiguration.IndexMedia, indexerConfiguration.IndexDetachedMedia);
+                this.Index(
+                        media, 
+                        indexerConfiguration.IndexMedia, 
+                        indexerConfiguration.IndexDetachedMedia);
             }
 
             if (indexerConfiguration.IndexMembers || indexerConfiguration.IndexDetachedMembers)
             {
-                var members = ApplicationContext.Current.Services.MemberService.GetAll(0, int.MaxValue, out int totalRecords).Select(x => this.UmbracoHelper.TypedMember(x.Id));
+                var members = ApplicationContext
+                                .Current
+                                .Services
+                                .MemberService
+                                .GetAll(0, int.MaxValue, out int totalRecords)
+                                .Select(x => this.UmbracoHelper.TypedMember(x.Id));
 
-                this.Index(members, indexerConfiguration.IndexMembers, indexerConfiguration.IndexDetachedMembers);
+                this.Index(
+                        members, 
+                        indexerConfiguration.IndexMembers, 
+                        indexerConfiguration.IndexDetachedMembers);
             }
 
             this.GetIndexWriter().Optimize();
@@ -95,10 +111,7 @@ namespace Our.Umbraco.Look
 
                 if (indexItem)
                 {
-                    indexingContext = new IndexingContext(
-                                                    hostNode: null,
-                                                    node: node,
-                                                    indexerName: this.Name);
+                    indexingContext = new IndexingContext(null, node, this.Name);
 
                     document = new Document();
 
@@ -131,10 +144,7 @@ namespace Our.Umbraco.Look
                         {
                             foreach (var detachedNode in detachedNodes)
                             {
-                                indexingContext = new IndexingContext(
-                                                        hostNode: node,
-                                                        node: detachedNode,
-                                                        indexerName: this.Name);
+                                indexingContext = new IndexingContext(node, detachedNode, this.Name);
 
                                 document = new Document();
 

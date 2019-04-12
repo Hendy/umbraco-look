@@ -68,17 +68,23 @@ namespace Our.Umbraco.Look
 
         private void ContentService_Published(IPublishingStrategy sender, PublishEventArgs<IContent> e)
         {
-            this.Update(e.PublishedEntities.Select(x => this._umbracoHelper.TypedContent(x.Id)).ToArray(), PublishedItemType.Content);
+            this.Update(
+                    e.PublishedEntities.Select(x => this._umbracoHelper.TypedContent(x.Id)).ToArray(), 
+                    PublishedItemType.Content);
         }
 
         private void MediaService_Saved(IMediaService sender, SaveEventArgs<IMedia> e)
         {
-            this.Update(e.SavedEntities.Select(x => this._umbracoHelper.TypedMedia(x.Id)).ToArray(), PublishedItemType.Media);
+            this.Update(
+                    e.SavedEntities.Select(x => this._umbracoHelper.TypedMedia(x.Id)).ToArray(), 
+                    PublishedItemType.Media);
         }
 
         private void MemberService_Saved(IMemberService sender, SaveEventArgs<IMember> e)
         {
-            this.Update(e.SavedEntities.Select(x => this._umbracoHelper.TypedMember(x.Id)).ToArray(), PublishedItemType.Member);
+            this.Update(
+                    e.SavedEntities.Select(x => this._umbracoHelper.TypedMember(x.Id)).ToArray(), 
+                    PublishedItemType.Member);
         }
 
         private void ContentService_UnPublished(IPublishingStrategy sender, PublishEventArgs<IContent> e)
