@@ -18,7 +18,7 @@ namespace Our.Umbraco.Look
         public static string[] ExamineIndexers { get { return LookService.GetExamineIndexers(); } set { LookService.SetExamineIndexers(value); } }
 
         /// <summary>
-        /// Set confifuration behaviour on a per indexer basis (if not set, then all items will be handled)
+        /// Set configuration behaviour on a per indexer basis.
         /// </summary>
         public static Dictionary<string, IndexerConfiguration> IndexerConfiguration => LookService.GetIndexerConfigurations();
 

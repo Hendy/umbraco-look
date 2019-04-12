@@ -108,13 +108,17 @@ namespace Our.Umbraco.Look
 
             foreach(var lookIndexer in this._lookIndexers)
             {
-                var indexerConfiguration = LookConfiguration.IndexerConfiguration[lookIndexer.Name] ?? IndexerConfiguration.GetDefaultIndexerConfiguration();
+                var indexerConfiguration = LookConfiguration.IndexerConfiguration[lookIndexer.Name] ?? new IndexerConfiguration(true);
 
-                var indexDetached = publishedItemType == PublishedItemType.Content && indexerConfiguration.IndexContentDetached
-                                    || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexMediaDetached
-                                    || publishedItemType == PublishedItemType.Member && indexerConfiguration.IndexMembersDetached;
+                var indexItem = publishedItemType == PublishedItemType.Content && indexerConfiguration.IndexContent
+                                || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexMedia
+                                || publishedItemType == PublishedItemType.Member && indexerConfiguration.IndexMembers;
 
-                lookIndexer.Index(publishedContentItems, indexDetached);
+                var indexDetached = publishedItemType == PublishedItemType.Content && indexerConfiguration.IndexDetachedContent
+                                    || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexDetachedMedia
+                                    || publishedItemType == PublishedItemType.Member && indexerConfiguration.IndexDetachedMembers;
+
+                lookIndexer.Index(publishedContentItems, indexItem, indexDetached);
             }
         }
 

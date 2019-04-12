@@ -128,7 +128,7 @@ namespace Our.Umbraco.Look.Services
 
             if (publishedContent != null)
             {
-                var indexerConfiguration = LookConfiguration.IndexerConfiguration[indexerName] ?? IndexerConfiguration.GetDefaultIndexerConfiguration();
+                var indexerConfiguration = LookConfiguration.IndexerConfiguration[indexerName] ?? new IndexerConfiguration(true);
 
                 if (publishedItemType == PublishedItemType.Content && indexerConfiguration.IndexContent
                     || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexMedia

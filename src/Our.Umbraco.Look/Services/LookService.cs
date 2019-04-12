@@ -33,7 +33,7 @@ namespace Our.Umbraco.Look.Services
         private Dictionary<string, EventHandler<DocumentWritingEventArgs>> _examineDocumentWritingEvents = new Dictionary<string, EventHandler<DocumentWritingEventArgs>>();
 
         /// <summary>
-        /// 
+        /// Collection of indexer configuration models, keyed by indexer name.
         /// </summary>
         private Dictionary<string, IndexerConfiguration> _indexerConfigurations = new Dictionary<string, IndexerConfiguration>();
 

@@ -41,28 +41,27 @@ namespace Our.Umbraco.Look
         /// </summary>
         protected override void PerformIndexRebuild()
         {
-            // attmept to get indexer configuration, if not specified, then fallback to assuming all content, media, members and detached items should be handled
-            var indexerConfiguration = LookConfiguration.IndexerConfiguration[this.Name] ?? IndexerConfiguration.GetDefaultIndexerConfiguration();
+            var indexerConfiguration = LookConfiguration.IndexerConfiguration[this.Name] ?? new IndexerConfiguration(true);
                                                                                             
-            if (indexerConfiguration.IndexContent || indexerConfiguration.IndexContentDetached)
+            if (indexerConfiguration.IndexContent || indexerConfiguration.IndexDetachedContent)
             {
                 var content = this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]");
 
-                this.Index(content, indexerConfiguration.IndexContentDetached);
+                this.Index(content, indexerConfiguration.IndexContent, indexerConfiguration.IndexDetachedContent);
             }
 
-            if (indexerConfiguration.IndexMedia || indexerConfiguration.IndexMediaDetached)
+            if (indexerConfiguration.IndexMedia || indexerConfiguration.IndexDetachedMedia)
             {
                 var media = this.UmbracoHelper.TypedMediaAtRoot().SelectMany(x => x.DescendantsOrSelf());
 
-                this.Index(media, indexerConfiguration.IndexMediaDetached);
+                this.Index(media, indexerConfiguration.IndexMedia, indexerConfiguration.IndexDetachedMedia);
             }
 
-            if (indexerConfiguration.IndexMembers || indexerConfiguration.IndexMembersDetached)
+            if (indexerConfiguration.IndexMembers || indexerConfiguration.IndexDetachedMembers)
             {
                 var members = ApplicationContext.Current.Services.MemberService.GetAll(0, int.MaxValue, out int totalRecords).Select(x => this.UmbracoHelper.TypedMember(x.Id));
 
-                this.Index(members, indexerConfiguration.IndexMembersDetached);
+                this.Index(members, indexerConfiguration.IndexMembers, indexerConfiguration.IndexDetachedMembers);
             }
 
             this.GetIndexWriter().Optimize();
@@ -78,9 +77,12 @@ namespace Our.Umbraco.Look
         /// index all supplied nodes (and their detached content)
         /// </summary>
         /// <param name="nodes">collection of nodes conent/media/member nodes to be indexed</param>
-        /// <param name="indexDetached">flag to indicate whether detached items (for each of the supplied nodes) should atttemp to be indexed</param>
-        internal void Index(IEnumerable<IPublishedContent> nodes, bool indexDetached)
+        /// <param name="indexItem">when true, indicates the IPublishedContent nodes should be indexed</param>
+        /// <param name="indexDetached">when true, indicates the detached items for each node should be indexed</param>
+        internal void Index(IEnumerable<IPublishedContent> nodes, bool indexItem, bool indexDetached)
         {
+            if (!indexItem && !indexDetached) return;
+
             var stopwatch = Stopwatch.StartNew();
             var counter = 0;
 
@@ -88,20 +90,26 @@ namespace Our.Umbraco.Look
 
             foreach(var node in nodes)
             {
-                var indexingContext = new IndexingContext(
-                                                hostNode: null,
-                                                node: node,
-                                                indexerName: this.Name);
+                IndexingContext indexingContext;
+                Document document;
 
-                var document = new Document();
-
-                LookService.Index(indexingContext, document);
-
-                if (!indexingContext.Cancelled)
+                if (indexItem)
                 {
-                    counter++;
+                    indexingContext = new IndexingContext(
+                                                    hostNode: null,
+                                                    node: node,
+                                                    indexerName: this.Name);
 
-                    indexWriter.AddDocument(document);
+                    document = new Document();
+
+                    LookService.Index(indexingContext, document);
+
+                    if (!indexingContext.Cancelled)
+                    {
+                        counter++;
+
+                        indexWriter.AddDocument(document);
+                    }
                 }
 
                 if (indexDetached)
