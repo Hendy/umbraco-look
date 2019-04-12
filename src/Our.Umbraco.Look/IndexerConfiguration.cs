@@ -8,32 +8,32 @@
         /// <summary>
         /// Flag to indicate whether content should be indexed
         /// </summary>
-        public bool IndexContent { get; set; } = false;
+        public bool IndexContent { get; set; }
 
         /// <summary>
         /// Flag to indicate whether media should be indexed
         /// </summary>
-        public bool IndexMedia { get; set; } = false;
+        public bool IndexMedia { get; set; }
 
         /// <summary>
         /// Flag to indicate whether members should be indexed
         /// </summary>
-        public bool IndexMembers { get; set; } = false;
+        public bool IndexMembers { get; set; }
 
         /// <summary>
         /// Flag to indicate whether detached items on content should be indexed
         /// </summary>
-        public bool IndexDetachedContent { get; set; } = false;
+        public bool IndexDetachedContent { get; set; }
 
         /// <summary>
         /// Flag to indicate whether detached items on media should be indexed
         /// </summary>
-        public bool IndexDetachedMedia { get; set; } = false;
+        public bool IndexDetachedMedia { get; set; }
 
         /// <summary>
         /// Flag to indicate whether detached items on content members be indexed
         /// </summary>
-        public bool IndexDetachedMembers { get; set; } = false;
+        public bool IndexDetachedMembers { get; set; }
 
         /// <summary>
         /// Constructor
