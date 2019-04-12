@@ -41,15 +41,29 @@ namespace Our.Umbraco.Look
         /// </summary>
         protected override void PerformIndexRebuild()
         {
-            var content = this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]");
+            // attmept to get indexer configuration, if not specified, then fallback to assuming all content, media, members and detached items should be handled
+            var indexerConfiguration = LookConfiguration.IndexerConfiguration[this.Name] ?? IndexerConfiguration.GetDefaultIndexerConfiguration();
+                                                                                            
+            if (indexerConfiguration.IndexContent || indexerConfiguration.IndexContentDetached)
+            {
+                var content = this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]");
 
-            var media = this.UmbracoHelper.TypedMediaAtRoot().SelectMany(x => x.DescendantsOrSelf());
+                this.Index(content, indexerConfiguration.IndexContentDetached);
+            }
 
-            var members = ApplicationContext.Current.Services.MemberService.GetAll(0, int.MaxValue, out int totalRecords).Select(x => this.UmbracoHelper.TypedMember(x.Id));
+            if (indexerConfiguration.IndexMedia || indexerConfiguration.IndexMediaDetached)
+            {
+                var media = this.UmbracoHelper.TypedMediaAtRoot().SelectMany(x => x.DescendantsOrSelf());
 
-            this.Index(content);
-            this.Index(media);
-            this.Index(members);
+                this.Index(media, indexerConfiguration.IndexMediaDetached);
+            }
+
+            if (indexerConfiguration.IndexMembers || indexerConfiguration.IndexMembersDetached)
+            {
+                var members = ApplicationContext.Current.Services.MemberService.GetAll(0, int.MaxValue, out int totalRecords).Select(x => this.UmbracoHelper.TypedMember(x.Id));
+
+                this.Index(members, indexerConfiguration.IndexMembersDetached);
+            }
 
             this.GetIndexWriter().Optimize();
 
@@ -64,7 +78,8 @@ namespace Our.Umbraco.Look
         /// index all supplied nodes (and their detached content)
         /// </summary>
         /// <param name="nodes">collection of nodes conent/media/member nodes to be indexed</param>
-        internal void Index(IEnumerable<IPublishedContent> nodes)
+        /// <param name="indexDetached">flag to indicate whether detached items (for each of the supplied nodes) should atttemp to be indexed</param>
+        internal void Index(IEnumerable<IPublishedContent> nodes, bool indexDetached)
         {
             var stopwatch = Stopwatch.StartNew();
             var counter = 0;
@@ -89,31 +104,33 @@ namespace Our.Umbraco.Look
                     indexWriter.AddDocument(document);
                 }
 
-                try // SEOChecker prior to 2.2 doesn't handle IPublishedContent without an ID
+                if (indexDetached)
                 {
-                    foreach (var detachedNode in node.GetDetachedDescendants())
+                    try // SEOChecker prior to 2.2 doesn't handle IPublishedContent without an ID
                     {
-                        indexingContext = new IndexingContext(
-                                                hostNode: node,
-                                                node: detachedNode,
-                                                indexerName: this.Name);
-
-                        document = new Document();
-
-                        LookService.Index(indexingContext, document);
-
-                        if (!indexingContext.Cancelled)
+                        foreach (var detachedNode in node.GetDetachedDescendants())
                         {
-                            counter++;
+                            indexingContext = new IndexingContext(
+                                                    hostNode: node,
+                                                    node: detachedNode,
+                                                    indexerName: this.Name);
 
-                            indexWriter.AddDocument(document); // index each detached item
+                            document = new Document();
+
+                            LookService.Index(indexingContext, document);
+
+                            if (!indexingContext.Cancelled)
+                            {
+                                counter++;
+
+                                indexWriter.AddDocument(document); // index each detached item
+                            }
                         }
                     }
-                }
-                catch (Exception exception)
-                {
-                    //LogHelper.WarnWithException(typeof(LookIndexer), "Error handling Detached items", exception);
-                    LogHelper.Debug(typeof(LookIndexer), "Error handling detached items");
+                    catch (Exception exception)
+                    {
+                        LogHelper.WarnWithException(typeof(LookIndexer), "Error handling Detached items", exception);                       
+                    }
                 }
             }
 

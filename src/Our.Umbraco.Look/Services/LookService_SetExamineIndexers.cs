@@ -86,7 +86,7 @@ namespace Our.Umbraco.Look.Services
         }
 
         /// <summary>
-        /// 
+        /// TODO: revist to make more efficient
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -94,6 +94,7 @@ namespace Our.Umbraco.Look.Services
         private static void DocumentWriting(object sender, DocumentWritingEventArgs e, string indexerName)
         {
             IPublishedContent publishedContent = null;
+            PublishedItemType? publishedItemType = null;
 
             if (LookService.Instance._umbracoHelper == null)
             {
@@ -102,28 +103,47 @@ namespace Our.Umbraco.Look.Services
 
             publishedContent = LookService.Instance._umbracoHelper.TypedContent(e.NodeId);
 
-            if (publishedContent == null)
+            if (publishedContent != null)
             {
-                // attempt to get as media
+                publishedItemType = PublishedItemType.Content;
+            }
+            else // attempt to get as media
+            {                
                 publishedContent = LookService.Instance._umbracoHelper.TypedMedia(e.NodeId);
 
-                if (publishedContent == null)
+                if (publishedContent != null)
                 {
-                    // attempt to get as member
+                    publishedItemType = PublishedItemType.Media;
+                }
+                else // attempt to get as member
+                {                    
                     publishedContent = LookService.Instance._umbracoHelper.SafeTypedMember(e.NodeId);
+
+                    if (publishedContent != null)
+                    {
+                        publishedItemType = PublishedItemType.Member;
+                    }
                 }
             }
 
             if (publishedContent != null)
             {
-                var indexingContext = new IndexingContext(
-                                            hostNode: null,
-                                            node: publishedContent,
-                                            indexerName: indexerName);
+                var indexerConfiguration = LookConfiguration.IndexerConfiguration[indexerName] ?? IndexerConfiguration.GetDefaultIndexerConfiguration();
 
-                LookService.EnsureContext();
+                if (publishedItemType == PublishedItemType.Content && indexerConfiguration.IndexContent
+                    || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexMedia
+                    || publishedItemType == PublishedItemType.Member && indexerConfiguration.IndexMembers)
 
-                LookService.Index(indexingContext, e.Document);
+                {
+                    var indexingContext = new IndexingContext(
+                            hostNode: null,
+                            node: publishedContent,
+                            indexerName: indexerName);
+
+                    LookService.EnsureContext();
+
+                    LookService.Index(indexingContext, e.Document);
+                }
             }
         }
     }

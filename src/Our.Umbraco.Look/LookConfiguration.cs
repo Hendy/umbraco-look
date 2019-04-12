@@ -1,5 +1,6 @@
 ﻿using Our.Umbraco.Look.Services;
 using System;
+using System.Collections.Generic;
 
 namespace Our.Umbraco.Look
 {
@@ -15,6 +16,11 @@ namespace Our.Umbraco.Look
         /// Set to null (or an empty array) to remove all hooks. 
         /// </summary>
         public static string[] ExamineIndexers { get { return LookService.GetExamineIndexers(); } set { LookService.SetExamineIndexers(value); } }
+
+        /// <summary>
+        /// Set confifuration behaviour on a per indexer basis (if not set, then all items will be handled)
+        /// </summary>
+        public static Dictionary<string, IndexerConfiguration> IndexerConfiguration => LookService.GetIndexerConfigurations();
 
         /// <summary>
         /// (Optional) custom method that can be called before the indexing of each IPublishedContent item.

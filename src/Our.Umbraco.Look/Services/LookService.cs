@@ -33,6 +33,11 @@ namespace Our.Umbraco.Look.Services
         private Dictionary<string, EventHandler<DocumentWritingEventArgs>> _examineDocumentWritingEvents = new Dictionary<string, EventHandler<DocumentWritingEventArgs>>();
 
         /// <summary>
+        /// 
+        /// </summary>
+        private Dictionary<string, IndexerConfiguration> _indexerConfigurations = new Dictionary<string, IndexerConfiguration>();
+
+        /// <summary>
         /// Lucene directory representations for each of the Examine index sets
         /// </summary>
         private Dictionary<string, Directory> _indexSetDirectories;

@@ -68,17 +68,17 @@ namespace Our.Umbraco.Look
 
         private void ContentService_Published(IPublishingStrategy sender, PublishEventArgs<IContent> e)
         {
-            this.Update(e.PublishedEntities.Select(x => this._umbracoHelper.TypedContent(x.Id)).ToArray());
+            this.Update(e.PublishedEntities.Select(x => this._umbracoHelper.TypedContent(x.Id)).ToArray(), PublishedItemType.Content);
         }
 
         private void MediaService_Saved(IMediaService sender, SaveEventArgs<IMedia> e)
         {
-            this.Update(e.SavedEntities.Select(x => this._umbracoHelper.TypedMedia(x.Id)).ToArray());
+            this.Update(e.SavedEntities.Select(x => this._umbracoHelper.TypedMedia(x.Id)).ToArray(), PublishedItemType.Media);
         }
 
         private void MemberService_Saved(IMemberService sender, SaveEventArgs<IMember> e)
         {
-            this.Update(e.SavedEntities.Select(x => this._umbracoHelper.TypedMember(x.Id)).ToArray());
+            this.Update(e.SavedEntities.Select(x => this._umbracoHelper.TypedMember(x.Id)).ToArray(), PublishedItemType.Member);
         }
 
         private void ContentService_UnPublished(IPublishingStrategy sender, PublishEventArgs<IContent> e)
@@ -100,7 +100,7 @@ namespace Our.Umbraco.Look
         /// Update the Lucene document in all indexes
         /// </summary>
         /// <param name="publishedContentItems"></param>
-        private void Update(IPublishedContent[] publishedContentItems)
+        private void Update(IPublishedContent[] publishedContentItems, PublishedItemType publishedItemType)
         {
             if (publishedContentItems == null || !publishedContentItems.Any()) return;
 
@@ -108,7 +108,13 @@ namespace Our.Umbraco.Look
 
             foreach(var lookIndexer in this._lookIndexers)
             {
-                lookIndexer.Index(publishedContentItems);
+                var indexerConfiguration = LookConfiguration.IndexerConfiguration[lookIndexer.Name] ?? IndexerConfiguration.GetDefaultIndexerConfiguration();
+
+                var indexDetached = publishedItemType == PublishedItemType.Content && indexerConfiguration.IndexContentDetached
+                                    || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexMediaDetached
+                                    || publishedItemType == PublishedItemType.Member && indexerConfiguration.IndexMembersDetached;
+
+                lookIndexer.Index(publishedContentItems, indexDetached);
             }
         }
 
