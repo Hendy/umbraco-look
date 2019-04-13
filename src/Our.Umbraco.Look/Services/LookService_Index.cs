@@ -77,7 +77,7 @@ namespace Our.Umbraco.Look.Services
 
             if (!indexingContext.Cancelled)
             {
-                LogHelper.Debug(typeof(LookService), $"Building Lucene Document for Id='{indexingContext.Item?.Id}', Key='{indexingContext.Item?.GetGuidKey()}', Name='{indexingContext.Item?.Name}' in Index '{ indexingContext.IndexerName }' Took { stopwatch.ElapsedMilliseconds }ms");
+                LogHelper.Debug(typeof(LookService), () => $"Building Lucene Document for Id='{indexingContext.Item.Id}', Key='{indexingContext.Item.GetGuidKey()}', Name='{indexingContext.Item.Name}' in Index '{ indexingContext.IndexerName }' Took { stopwatch.ElapsedMilliseconds }ms");
             }
         }
     }
