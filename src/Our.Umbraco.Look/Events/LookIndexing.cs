@@ -51,9 +51,9 @@ namespace Our.Umbraco.Look
 
                 LookService.Initialize(this._umbracoHelper);
 
-                foreach (var lookIndexer in this._lookIndexers.Where(x => !x.IndexExists()))
+                foreach (var lookIndexer in this._lookIndexers)
                 {
-                    lookIndexer.RebuildIndex();
+                    lookIndexer.EnsureIndex(false);
                 }
                 
                 ContentService.Published += ContentService_Published;

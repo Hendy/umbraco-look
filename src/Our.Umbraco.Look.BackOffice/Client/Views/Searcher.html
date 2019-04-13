@@ -18,18 +18,11 @@
             
             <div class="look-body">
                 <dl>
-                    <dt>Name</dt>
-                    <dd>{{ searcherName }}</dd>
-
-                    <dt>Description</dt>
-                    <dd>{{ viewData.searcherDescription }}</dd>
-
                     <dt>Type</dt>
                     <dd>{{ viewData.searcherType }}</dd>
                         
                     <dt>Look Indexing Enabled</dt>
-                    <dd>{{ viewData.lookIndexingEnabled }}</dd>
-                    
+                    <dd><span class="{{ viewData.lookIndexingEnabled ? 'icon-checkbox' : 'icon-checkbox-empty' }}">&nbsp;</span></dd>
                 </dl>
                 
                 <ng-include src="'/App_Plugins/Look/BackOffice/LookTree/Partials/Matches.html'"></ng-include>
