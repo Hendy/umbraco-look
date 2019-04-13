@@ -27,11 +27,20 @@ namespace Our.Umbraco.Look.Services
 
             try
             {
+                LookService.GetBeforeIndexing()(indexingContext);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.WarnWithException(typeof(LookService), "Error in global BeforeIndexing", exception);
+            }
+
+            try
+            {
                 LookService.GetBeforeIndexing(indexingContext.IndexerName)(indexingContext);
             }
             catch (Exception exception)
             {
-                LogHelper.WarnWithException(typeof(LookService), "Error in BeforeIndexing", exception);
+                LogHelper.WarnWithException(typeof(LookService), "Error in indexer BeforeIndexing", exception);
             }
 
             LookService.IndexNode(indexingContext, document);
@@ -52,7 +61,16 @@ namespace Our.Umbraco.Look.Services
             }
             catch (Exception exception)
             {
-                LogHelper.WarnWithException(typeof(LookService), "Error in AfterIndexing", exception);
+                LogHelper.WarnWithException(typeof(LookService), "Error in indexer AfterIndexing", exception);
+            }
+
+            try
+            {
+                LookService.GetAfterIndexing()(indexingContext);
+            }
+            catch (Exception exception)
+            {
+                LogHelper.WarnWithException(typeof(LookService), "Error in global AfterIndexing", exception);
             }
 
             stopwatch.Stop();
