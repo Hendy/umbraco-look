@@ -13,11 +13,13 @@ namespace Our.Umbraco.Look.Services
 
             DateTime? date = null;
 
-            if (LookService.GetDateIndexer() != null)
+            var dateIndexer = LookService.GetDateIndexer(indexingContext.IndexerName);
+
+            if (dateIndexer != null)
             {
                 try
                 {
-                    date = LookService.GetDateIndexer()(indexingContext);
+                    date = dateIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {

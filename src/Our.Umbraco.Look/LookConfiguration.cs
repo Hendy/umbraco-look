@@ -24,41 +24,48 @@ namespace Our.Umbraco.Look
 
         /// <summary>
         /// (Optional) custom method that can be called before the indexing of each IPublishedContent item.
+        /// TODO: rename to DefaultBeforeIndexing ?
         /// </summary>
         public static Action<IndexingContext> BeforeIndexing { set { LookService.SetBeforeIndexing(value); } }
 
         /// <summary>
         /// (Optional) set a custom name indexer.
         /// By default, the IPublishedContent.Name value will be indexed.
+        /// TODO: rename to DefaultNameIndexer ?
         /// </summary>
         public static Func<IndexingContext, string> NameIndexer { set { LookService.SetNameIndexer(value); } }
 
         /// <summary>
         /// (Optional) Set a custom date indexer.
         /// By default, the IPublishedContent.UpdateDate value will be indexed. (Detached items use their Host value)
+        /// TODO: rename to DefaultDateIndexer ?
         /// </summary>
         public static Func<IndexingContext, DateTime?> DateIndexer { set { LookService.SetDateIndexer(value); } }
 
         /// <summary>
         /// (Optional) Set a custom text indexer.
         /// By default, no value is indexed.
+        /// TODO: rename to DefaultTextIndexer ?
         /// </summary>
         public static Func<IndexingContext, string> TextIndexer { set { LookService.SetTextIndexer(value); } }
 
         /// <summary>
         /// (Optional) Set a custom tag indexer.
         /// By default, no value is indexed.
+        /// TODO: rename to DefaultTagIndexer ?
         /// </summary>
         public static Func<IndexingContext, LookTag[]> TagIndexer { set { LookService.SetTagIndexer(value); } }
 
         /// <summary>
         /// (Optional) Set a custom location indexer.
         /// By default, no value is indexed.
+        /// TODO: rename to DefaultLocationIndexer ?
         /// </summary>
         public static Func<IndexingContext, Location> LocationIndexer { set { LookService.SetLocationIndexer(value); } }
 
         /// <summary>
         /// (Optional) custom method that can be called after the indexing of each IPublishedContent item.
+        /// TODO: rename to DefaultAfterIndexing ?
         /// </summary>
         public static Action<IndexingContext> AfterIndexing { set { LookService.SetAfterIndexing(value); } }
 

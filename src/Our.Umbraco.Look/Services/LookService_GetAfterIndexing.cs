@@ -4,9 +4,11 @@ namespace Our.Umbraco.Look.Services
 {
     internal partial class LookService
     {
-        internal static Action<IndexingContext> GetAfterIndexing()
+        internal static Action<IndexingContext> GetAfterIndexing(string indexerName)
         {
-            return LookService.Instance._afterIndexing ?? new Action<IndexingContext>(x => { });
+            return LookService.GetIndexerConfiguration(indexerName).AfterIndexing
+                ?? LookService.Instance._afterIndexing 
+                ?? new Action<IndexingContext>(x => { });
         }
     }
 }

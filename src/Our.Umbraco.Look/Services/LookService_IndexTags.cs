@@ -11,13 +11,15 @@ namespace Our.Umbraco.Look.Services
         {
             if (indexingContext.Cancelled) return;
 
-            if (LookService.GetTagIndexer() != null)
+            var tagIndexer = LookService.GetTagIndexer(indexingContext.IndexerName);
+
+            if (tagIndexer != null)
             {
                 LookTag[] tags = null;
 
                 try
                 {
-                    tags = LookService.GetTagIndexer()(indexingContext);
+                    tags = tagIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {

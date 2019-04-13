@@ -13,11 +13,13 @@ namespace Our.Umbraco.Look.Services
 
             string name = null;
 
-            if (LookService.GetNameIndexer() != null)
+            var nameIndexer = LookService.GetNameIndexer(indexingContext.IndexerName);
+
+            if (nameIndexer != null)
             {
                 try
                 {
-                    name = LookService.GetNameIndexer()(indexingContext);
+                    name = nameIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {

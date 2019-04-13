@@ -11,13 +11,15 @@ namespace Our.Umbraco.Look.Services
         {
             if (indexingContext.Cancelled) return;
 
-            if (LookService.GetLocationIndexer() != null)
+            var locationIndexer = LookService.GetLocationIndexer(indexingContext.IndexerName);
+
+            if (locationIndexer != null)
             {
                 Location location = null;
 
                 try
                 {
-                    location = LookService.GetLocationIndexer()(indexingContext);
+                    location = locationIndexer(indexingContext);
                 }
                 catch (Exception exception)
                 {

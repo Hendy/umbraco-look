@@ -27,7 +27,7 @@ namespace Our.Umbraco.Look.Services
 
             try
             {
-                LookService.GetBeforeIndexing()(indexingContext);
+                LookService.GetBeforeIndexing(indexingContext.IndexerName)(indexingContext);
             }
             catch (Exception exception)
             {
@@ -48,7 +48,7 @@ namespace Our.Umbraco.Look.Services
 
             try
             {
-                LookService.GetAfterIndexing()(indexingContext);
+                LookService.GetAfterIndexing(indexingContext.IndexerName)(indexingContext);
             }
             catch (Exception exception)
             {
