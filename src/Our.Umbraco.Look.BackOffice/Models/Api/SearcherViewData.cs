@@ -36,35 +36,5 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
         /// </summary>
         [JsonProperty("lookIndexingEnabled")]
         public bool LookIndexingEnabled { get; set; }
-
-        /// <summary>
-        /// should default to true when indexing enabled (as default indexing behaviour will be to index the IPublishedContent.Name property)
-        /// </summary>
-        [JsonProperty("nameIndexerIsSet")]
-        public bool NameIndexerIsSet { get; set; }
-
-        /// <summary>
-        /// should default to true when indexing enabled (as default indexing behaviour will be to index the IPublishedContent.UpdateDate property)
-        /// </summary>
-        [JsonProperty("dateIndexerIsSet")]
-        public bool DateIndexerIsSet { get; set; }
-
-        /// <summary>
-        /// Flag to indicate whether a custom indexer has been set
-        /// </summary>
-        [JsonProperty("textIndexerIsSet")]
-        public bool TextIndexerIsSet { get; set; }
-
-        /// <summary>
-        /// Flag to indicate whether a custom indexer has been set
-        /// </summary>
-        [JsonProperty("tagIndexerIsSet")]
-        public bool TagIndexerIsSet { get; set; }
-
-        /// <summary>
-        /// Flag to indicate whether a custom indexer has been set
-        /// </summary>
-        [JsonProperty("locationIndexerIsSet")]
-        public bool LocationIndexerIsSet { get; set; }
     }
 }

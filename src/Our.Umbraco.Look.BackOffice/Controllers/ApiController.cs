@@ -31,11 +31,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             viewData.SearcherType = searcher is LookSearcher ? "Look" : "Examine";
             viewData.Icon = IconService.GetSearcherIcon(searcher);
             viewData.LookIndexingEnabled = searcher is LookSearcher || LookConfiguration.ExamineIndexers.Contains(searcher.Name.TrimEnd("Searcher") + "Indexer");
-            viewData.NameIndexerIsSet = viewData.LookIndexingEnabled && LookConfiguration.NameIndexerIsSet;
-            viewData.DateIndexerIsSet = viewData.LookIndexingEnabled && LookConfiguration.DateIndexerIsSet;
-            viewData.TextIndexerIsSet = viewData.LookIndexingEnabled && LookConfiguration.TextIndexerIsSet;
-            viewData.TagIndexerIsSet = viewData.LookIndexingEnabled && LookConfiguration.TagIndexerIsSet;
-            viewData.LocationIndexerIsSet = viewData.LookIndexingEnabled && LookConfiguration.LocationIndexerIsSet;
 
             // TODO: 
             //number of documents in index

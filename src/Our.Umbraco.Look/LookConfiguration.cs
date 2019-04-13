@@ -63,36 +63,6 @@ namespace Our.Umbraco.Look
         public static Action<IndexingContext> AfterIndexing { set { LookService.SetAfterIndexing(value); } }
 
         /// <summary>
-        /// Flag to indicate whether a name indexer is enabled
-        /// </summary>
-        [Obsolete]
-        public static bool NameIndexerIsSet => LookService.GetNameIndexer() != null;
-
-        /// <summary>
-        /// Flag to indicate whether a date indexer is enabled
-        /// </summary>
-        [Obsolete]
-        public static bool DateIndexerIsSet => LookService.GetDateIndexer() != null;
-
-        /// <summary>
-        /// Flag to indicate whether a text indexer is enabled
-        /// </summary>
-        [Obsolete]
-        public static bool TextIndexerIsSet => LookService.GetTextIndexer() != null;
-
-        /// <summary>
-        /// Flag to indicate whether a tag indexer is enabled
-        /// </summary>
-        [Obsolete]
-        public static bool TagIndexerIsSet => LookService.GetTagIndexer() != null;
-
-        /// <summary>
-        /// Flag to indicate whether a location indexer is enabled
-        /// </summary>
-        [Obsolete]
-        public static bool LocationIndexerIsSet => LookService.GetLocationIndexer() != null;
-
-        /// <summary>
         /// Specify which fields to return in the result set.
         /// Defaults to AllFields which will return all Lucene fields for each document, making it fully populate the Fields dictionary property on the SearchResult.
         /// Setting it to LookFieldsOnly reduces the number of Lucene fields returned to the min required to inflate a LookMatch object.
