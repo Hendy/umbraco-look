@@ -12,7 +12,7 @@ namespace Our.Umbraco.Look.Services
         internal static Func<IndexingContext, string> GetNameIndexer(string indexerName)
         {
             return LookService.GetIndexerConfiguration(indexerName).NameIndexer 
-                ?? LookService.Instance._nameIndexer;
+                ?? LookService.Instance._defaultNameIndexer;
         }
     }
 }

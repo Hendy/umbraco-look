@@ -7,7 +7,7 @@ namespace Our.Umbraco.Look.Services
         internal static Func<IndexingContext, LookTag[]> GetTagIndexer(string indexerName)
         {
             return LookService.GetIndexerConfiguration(indexerName).TagIndexer
-                ?? LookService.Instance._tagIndexer;
+                ?? LookService.Instance._defaultTagIndexer;
         }
     }
 }

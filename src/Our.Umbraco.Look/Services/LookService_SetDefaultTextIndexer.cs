@@ -9,11 +9,11 @@ namespace Our.Umbraco.Look.Services
         /// Register consumer code to perform when indexing text
         /// </summary>
         /// <param name="textIndexer">Your custom text indexing function</param>
-        internal static void SetTextIndexer(Func<IndexingContext, string> textIndexer)
+        internal static void SetDefaultTextIndexer(Func<IndexingContext, string> textIndexer)
         {
             LogHelper.Info(typeof(LookService), "Text indexing function set");
             
-            LookService.Instance._textIndexer = textIndexer;
+            LookService.Instance._defaultTextIndexer = textIndexer;
         }
     }
 }

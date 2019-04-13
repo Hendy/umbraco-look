@@ -55,11 +55,11 @@ namespace Our.Umbraco.Look.Tests
             LookConfiguration.AfterIndexing = afterIndexing;
 
             // setup indexers
-            LookConfiguration.NameIndexer = x => nameStack.Pop();
-            LookConfiguration.DateIndexer = x => dateStack.Pop();
-            LookConfiguration.TextIndexer = x => textStack.Pop();
-            LookConfiguration.TagIndexer = x => tagStack.Pop();
-            LookConfiguration.LocationIndexer = x => locationStack.Pop();
+            LookConfiguration.DefaultNameIndexer = x => nameStack.Pop();
+            LookConfiguration.DefaultDateIndexer = x => dateStack.Pop();
+            LookConfiguration.DefaultTextIndexer = x => textStack.Pop();
+            LookConfiguration.DefaultTagIndexer = x => tagStack.Pop();
+            LookConfiguration.DefaultLocationIndexer = x => locationStack.Pop();
 
             List<Document> documents = new List<Document>();
 
@@ -81,11 +81,11 @@ namespace Our.Umbraco.Look.Tests
             LookConfiguration.BeforeIndexing = null;
             LookConfiguration.AfterIndexing = null;
 
-            LookConfiguration.NameIndexer = null;
-            LookConfiguration.DateIndexer = null;
-            LookConfiguration.TextIndexer = null;
-            LookConfiguration.TagIndexer = null;
-            LookConfiguration.LocationIndexer = null;
+            LookConfiguration.DefaultNameIndexer = null;
+            LookConfiguration.DefaultDateIndexer = null;
+            LookConfiguration.DefaultTextIndexer = null;
+            LookConfiguration.DefaultTagIndexer = null;
+            LookConfiguration.DefaultLocationIndexer = null;
 
             TestHelper.IndexDocuments(documents);
         }

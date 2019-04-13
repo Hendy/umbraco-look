@@ -329,13 +329,13 @@
     <Compile Include="Services\LookService_Index.cs" />
     <Compile Include="Services\LookService_Search.cs" />
     <Compile Include="Services\LookService_Initialize.cs" />
-    <Compile Include="Services\LookService_SetDateIndexer.cs" />
-    <Compile Include="Services\LookService_SetLocationIndexer.cs" />
-    <Compile Include="Services\LookService_SetNameIndexer.cs" />
+    <Compile Include="Services\LookService_SetDefaultDateIndexer.cs" />
+    <Compile Include="Services\LookService_SetDefaultLocationIndexer.cs" />
+    <Compile Include="Services\LookService_SetDefaultNameIndexer.cs" />
     <Compile Include="Services\LookService_SetExamineIndexers.cs" />
-    <Compile Include="Services\LookService_SetTagIndexer.cs" />
+    <Compile Include="Services\LookService_SetDefaultTagIndexer.cs" />
     <Compile Include="Services\LookService_SetRequestFields.cs" />
-    <Compile Include="Services\LookService_SetTextIndexer.cs" />
+    <Compile Include="Services\LookService_SetDefaultTextIndexer.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

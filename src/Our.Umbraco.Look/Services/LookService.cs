@@ -50,27 +50,27 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, string> _nameIndexer;
+        private Func<IndexingContext, string> _defaultNameIndexer;
 
         /// <summary>
         /// Function to get the date for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, DateTime?> _dateIndexer;
+        private Func<IndexingContext, DateTime?> _defaultDateIndexer;
 
         /// <summary>
         /// Function to get text for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, string> _textIndexer;
+        private Func<IndexingContext, string> _defaultTextIndexer;
 
         /// <summary>
         /// Function to get the tags for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, LookTag[]> _tagIndexer;
+        private Func<IndexingContext, LookTag[]> _defaultTagIndexer;
 
         /// <summary>
         /// Function to get a location for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, Location> _locationIndexer;
+        private Func<IndexingContext, Location> _defaultLocationIndexer;
 
         /// <summary>
         /// Function called after indexing

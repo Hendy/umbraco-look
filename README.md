@@ -80,32 +80,32 @@ public static class LookConfiguration
 	/// (Optional) Set a custom name indexer.
 	/// By default, the IPublishedContent.Name value will be indexed.
 	/// </summary>
-	public static Func<IndexingContext, string> NameIndexer { set; }
+	public static Func<IndexingContext, string> DefaultNameIndexer { set; }
 
 	/// <summary>
 	/// (Optional) Set a custom date indexer.
 	/// By default, the IPublishedContent.UpdateDate value will be indexed. 
 	/// (Detached items use value from their Host)
 	/// </summary>
-	public static Func<IndexingContext, DateTime?> DateIndexer { set; }
+	public static Func<IndexingContext, DateTime?> DefaultDateIndexer { set; }
 
 	/// <summary>
 	/// (Optional) Set a custom text indexer.
 	/// By default, no value is indexed.
 	/// </summary>
-	public static Func<IndexingContext, string> TextIndexer { set; }
+	public static Func<IndexingContext, string> DefaultTextIndexer { set; }
 
 	/// <summary>
 	/// (Optional) Set a custom tag indexer.
 	/// By default, no value is indexed.
 	/// </summary>
-	public static Func<IndexingContext, LookTag[]> TagIndexer { set; }
+	public static Func<IndexingContext, LookTag[]> DefaultTagIndexer { set; }
 
 	/// <summary>
 	/// (Optional) Set a custom location indexer.
 	/// By default, no value is indexed.
 	/// </summary>
-	public static Func<IndexingContext, Location> LocationIndexer { set; }
+	public static Func<IndexingContext, Location> DefaultLocationIndexer { set; }
 
 	/// <summary>
 	/// (Optional) Custom method that can be called after the indexing of each IPublishedContent item.
