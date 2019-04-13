@@ -67,7 +67,7 @@ namespace Our.Umbraco.Look.Tests
             {
                 var document = new Document();
                 
-                var indexingContext = new IndexingContext(null, null, null); // null for IPublishedContent as not required
+                var indexingContext = new IndexingContext(null, null, "UnitTestIndexer"); // null for IPublishedContent as not required
 
                 LookService.Index(indexingContext, document);
 
