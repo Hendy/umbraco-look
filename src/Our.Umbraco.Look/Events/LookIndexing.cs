@@ -106,6 +106,7 @@ namespace Our.Umbraco.Look
         /// Update the Lucene document in all indexes
         /// </summary>
         /// <param name="publishedContentItems"></param>
+        /// <param name="publishedItemType"></param>
         private void Update(IPublishedContent[] publishedContentItems, PublishedItemType publishedItemType)
         {
             if (publishedContentItems == null || !publishedContentItems.Any()) return;
@@ -124,7 +125,7 @@ namespace Our.Umbraco.Look
                                     || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexDetachedMedia
                                     || publishedItemType == PublishedItemType.Member && indexerConfiguration.IndexDetachedMembers;
 
-                lookIndexer.Index(publishedContentItems, indexItem, indexDetached);
+                lookIndexer.Index(publishedContentItems, indexItem, indexDetached); // both flags could be false (indicating no indexing shoudl take place)
             }
         }
 

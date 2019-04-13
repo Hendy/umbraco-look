@@ -65,26 +65,31 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Flag to indicate whether a name indexer is enabled
         /// </summary>
+        [Obsolete]
         public static bool NameIndexerIsSet => LookService.GetNameIndexer() != null;
 
         /// <summary>
         /// Flag to indicate whether a date indexer is enabled
         /// </summary>
+        [Obsolete]
         public static bool DateIndexerIsSet => LookService.GetDateIndexer() != null;
 
         /// <summary>
         /// Flag to indicate whether a text indexer is enabled
         /// </summary>
+        [Obsolete]
         public static bool TextIndexerIsSet => LookService.GetTextIndexer() != null;
 
         /// <summary>
         /// Flag to indicate whether a tag indexer is enabled
         /// </summary>
+        [Obsolete]
         public static bool TagIndexerIsSet => LookService.GetTagIndexer() != null;
 
         /// <summary>
         /// Flag to indicate whether a location indexer is enabled
         /// </summary>
+        [Obsolete]
         public static bool LocationIndexerIsSet => LookService.GetLocationIndexer() != null;
 
         /// <summary>

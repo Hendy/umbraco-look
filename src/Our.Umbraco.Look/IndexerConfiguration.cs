@@ -23,6 +23,8 @@ namespace Our.Umbraco.Look
         /// </summary>
         public string[] Aliases { get; set; } = null;
 
+        // TODO: BeforeIndexing, NameIndexer, DateIndexer, TextIndexer, TagIndexer, LoccationIndexer, AfterIndexing
+
         /// <summary>
         /// Flag to indicate whether content should be indexed
         /// </summary>
