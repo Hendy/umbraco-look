@@ -246,9 +246,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ParsingException.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\GetDetachedDescendant.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\YieldDetachedProperties.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\YieldDetachedDescendants.cs" />
+    <Compile Include="IndexerConfiguration.cs" />
+    <Compile Include="ItemType.cs" />
     <Compile Include="LocationBoundary.cs" />
     <Compile Include="Events\LookIndexing.cs" />
     <Compile Include="Events\HookIndexing.cs" />
@@ -278,6 +281,7 @@
     <Compile Include="Models\LookQueryCompiled.cs" />
     <Compile Include="LookResult.cs" />
     <Compile Include="LookSearchCriteria.cs" />
+    <Compile Include="Models\ParsingContext.cs" />
     <Compile Include="NameQuery.cs" />
     <Compile Include="NodeQuery.cs" />
     <Compile Include="LookMatch.cs" />
@@ -286,12 +290,32 @@
     <Compile Include="Models\SearchingContext.cs" />
     <Compile Include="Services\LookService_EnsureContext.cs" />
     <Compile Include="Services\LookService_ExamineIndexersConfigured.cs" />
+    <Compile Include="Services\LookService_GetAfterIndexing.cs" />
+    <Compile Include="Services\LookService_GetBeforeIndexing.cs" />
+    <Compile Include="Services\LookService_GetIndexerConfiguration.cs" />
+    <Compile Include="Services\LookService_GetIndexerConfigurations.cs" />
     <Compile Include="Services\LookService_GetLocationIndexer.cs" />
     <Compile Include="Services\LookService_GetTagIndexer.cs" />
     <Compile Include="Services\LookService_GetTextIndexer.cs" />
     <Compile Include="Services\LookService_GetDateIndexer.cs" />
     <Compile Include="Services\LookService_GetNameIndexer.cs" />
     <Compile Include="Services\LookService_GetRequestFields.cs" />
+    <Compile Include="Services\LookService_IndexDate.cs" />
+    <Compile Include="Services\LookService_IndexLocation.cs" />
+    <Compile Include="Services\LookService_IndexTags.cs" />
+    <Compile Include="Services\LookService_IndexText.cs" />
+    <Compile Include="Services\LookService_IndexName.cs" />
+    <Compile Include="Services\LookService_IndexNode.cs" />
+    <Compile Include="Services\LookService_ParseExamineQuery.cs" />
+    <Compile Include="Services\LookService_ParseNodeQuery.cs" />
+    <Compile Include="Services\LookService_ParseNameQuery.cs" />
+    <Compile Include="Services\LookService_ParseDateQuery.cs" />
+    <Compile Include="Services\LookService_ParseTextQuery.cs" />
+    <Compile Include="Services\LookService_ParseTagQuery.cs" />
+    <Compile Include="Services\LookService_ParseLocationQuery.cs" />
+    <Compile Include="Services\LookService_ParseRawQuery.cs" />
+    <Compile Include="Services\LookService_SetAfterIndexing.cs" />
+    <Compile Include="Services\LookService_SetBeforeIndexing.cs" />
     <Compile Include="SortOn.cs" />
     <Compile Include="LookTag.cs" />
     <Compile Include="TagFacetQuery.cs" />
@@ -305,13 +329,13 @@
     <Compile Include="Services\LookService_Index.cs" />
     <Compile Include="Services\LookService_Search.cs" />
     <Compile Include="Services\LookService_Initialize.cs" />
-    <Compile Include="Services\LookService_SetDateIndexer.cs" />
-    <Compile Include="Services\LookService_SetLocationIndexer.cs" />
-    <Compile Include="Services\LookService_SetNameIndexer.cs" />
+    <Compile Include="Services\LookService_SetDefaultDateIndexer.cs" />
+    <Compile Include="Services\LookService_SetDefaultLocationIndexer.cs" />
+    <Compile Include="Services\LookService_SetDefaultNameIndexer.cs" />
     <Compile Include="Services\LookService_SetExamineIndexers.cs" />
-    <Compile Include="Services\LookService_SetTagIndexer.cs" />
+    <Compile Include="Services\LookService_SetDefaultTagIndexer.cs" />
     <Compile Include="Services\LookService_SetRequestFields.cs" />
-    <Compile Include="Services\LookService_SetTextIndexer.cs" />
+    <Compile Include="Services\LookService_SetDefaultTextIndexer.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

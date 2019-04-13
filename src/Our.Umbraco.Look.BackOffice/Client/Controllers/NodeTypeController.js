@@ -18,7 +18,6 @@
         treeService.update([
             '-1',
             'searcher-' + $scope.searcherName,
-            'nodes-' + $scope.searcherName,
             'nodeType-' + $scope.searcherName + '|' + $scope.nodeType
         ]);
 

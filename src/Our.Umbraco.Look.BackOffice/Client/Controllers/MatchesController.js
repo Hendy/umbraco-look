@@ -67,7 +67,7 @@
             var enableNameBreaker = false;
 
             if (sortService.sortOn === 'Name') {
-                if (angular.isUndefined(lastMatch)) { // this is the first match, so show name breaker
+                if (angular.isUndefined(lastMatch)) { // first match
                     enableNameBreaker = true;
                 } else {
                     enableNameBreaker = currentMatch.name.charAt(0).toLowerCase() !== lastMatch.name.charAt(0).toLowerCase();
@@ -75,6 +75,28 @@
             }
 
             return enableNameBreaker;
+        };
+
+        $scope.dateBreaker = function (currentMatch, lastMatch) {
+
+            var enableDateBreaker = false;
+
+            if (sortService.sortOn === 'Date') {
+                if (angular.isUndefined(lastMatch)) { // first match
+                    enableDateBreaker = true;
+                } else {
+
+                    var currentDate = new Date(currentMatch.date);
+                    var currentDay = currentDate.getDate() + currentDate.getMonth() + currentDate.getFullYear();
+
+                    var lastDate = new Date(lastMatch.date);
+                    var lastDay = lastDate.getDate() + lastDate.getMonth() + lastDate.getFullYear();
+
+                    enableDateBreaker = currentDay !== lastDay;
+                }
+            }
+
+            return enableDateBreaker;
         };
 
         $scope.showDetails = function (match) {
@@ -85,7 +107,11 @@
                 template: '/App_Plugins/Look/BackOffice/LookTree/Partials/Details.html',
                 show: true
             });
-        };
+      };
+
+      $scope.isActive = function (match) {
+        return match === matchService.selectedMatch;
+      };
 
 
         $scope.reload = function () {

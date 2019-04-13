@@ -256,6 +256,8 @@
     <Compile Include="ModelTests\LookTagConstructorTests.cs" />
     <Compile Include="ModelTests\MakeTagsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceTests\AfterIndexingTests.cs" />
+    <Compile Include="ServiceTests\BeforeIndexingTests.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="Thing.cs" />
     <Compile Include="QueryTests\NameQueryTests.cs" />

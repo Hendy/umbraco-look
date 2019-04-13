@@ -1,11 +1,9 @@
 ﻿using Our.Umbraco.Look.BackOffice.Models.Api;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Models;
-using Umbraco.Core.Services;
 
 namespace Our.Umbraco.Look.BackOffice.Services
 {
@@ -48,10 +46,8 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// </summary>
         /// <param name="searcherName"></param>
         /// <returns></returns>
-        internal static string[] GetTagGroups(string searcherName) //TODO: change to Dictionary<string, int> (to assoicate a count)
+        internal static string[] GetTagGroups(string searcherName)
         {
-            // TODO: return useage count for each (need new field)
-
             return new LookQuery(searcherName) { TagQuery = new TagQuery() }
                         .Search()
                         .Matches
@@ -62,19 +58,25 @@ namespace Our.Umbraco.Look.BackOffice.Services
         }
 
         /// <summary>
-        /// get all tags in group and gives each a count
+        /// get all tags in group
         /// </summary>
         /// <param name="searcherName"></param>
         /// <param name="tagGroup"></param>
         /// <returns></returns>
-        internal static Dictionary<LookTag, int> GetTags(string searcherName, string tagGroup) //TODO: change to Dictionary<LookTag, int> (to assoicate a count)
+        internal static string[] GetTagNames(string searcherName, string tagGroup)
         {
-            return new LookQuery(searcherName) { TagQuery = new TagQuery() { FacetOn = new TagFacetQuery(tagGroup) } }
-                                .Search()
-                                .Facets
-                                .Select(x => new Tuple<LookTag, int>(x.Tags.Single(), x.Count))
-                                .OrderBy(x => x.Item1.Name)
-                                .ToDictionary(x => x.Item1, x => x.Item2);
+            return new LookQuery(searcherName)
+                            {
+                                TagQuery = new TagQuery(),
+                                RawQuery = "Look_TagGroup_" + tagGroup + ":1"
+                            }
+                            .Search()
+                            .Matches
+                            .SelectMany(x => x.Tags.Where(y => y.Group == tagGroup))
+                            .Select(x => x.Name)
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToArray();
         }
 
         #region Get Matches
@@ -172,45 +174,6 @@ namespace Our.Umbraco.Look.BackOffice.Services
         }
 
         /// <summary>
-        /// Get matches by culture - all content has a culture set in Umbraco
-        /// </summary>
-        /// <param name="searcherName"></param>
-        /// <param name="lcid"></param>
-        /// <param name="sort"></param>
-        /// <param name="skip"></param>
-        /// <param name="take"></param>
-        /// <returns></returns>
-        internal static MatchesResult GetCultureMatches(string searcherName, int? lcid, string sort, int skip, int take)
-        {
-            var matchesResult = new MatchesResult();
-
-            var lookQuery = new LookQuery(searcherName) { NodeQuery = new NodeQuery() };
-
-            if (lcid.HasValue)
-            {
-                lookQuery.NodeQuery.Culture = new CultureInfo(lcid.Value);
-            }
-            else // no culture suppled, so get all content
-            {
-                lookQuery.NodeQuery.Type = PublishedItemType.Content;
-            }
-            
-            QueryService.SetSort(lookQuery, sort);
-
-            var lookResult = lookQuery.Search();
-
-            matchesResult.TotalItemCount = lookResult.TotalItemCount;
-            matchesResult.Matches = lookResult
-                                        .Matches
-                                        .Skip(skip)
-                                        .Take(take)
-                                        .Select(x => (MatchesResult.Match)x)
-                                        .ToArray();
-
-            return matchesResult;
-        }
-
-        /// <summary>
         /// get a chunk of matches
         /// </summary>
         /// <param name="searcherName"></param>
@@ -222,23 +185,18 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var matchesResult = new MatchesResult();
 
-            var lookQuery = new LookQuery(searcherName);
-            var tagQuery = new TagQuery(); // setting a tag query, means only items that have tags will be returned
+            var lookQuery = new LookQuery(searcherName) { TagQuery = new TagQuery() };
 
             if (!string.IsNullOrWhiteSpace(tagGroup) && string.IsNullOrWhiteSpace(tagName)) // only have the group to query
             {
-                // TODO: add a new field into the lucene index (would avoid additional query to first look up the tags in this group)
-                var tagsInGroup = QueryService.GetTags(searcherName, tagGroup).Select(x => x.Key).ToArray();
-
-                tagQuery.HasAny = tagsInGroup;
-
+                //use raw query looking for newly indexed field(in look 0.33.0)
+                // TODO: update look to handle tags like "colour:*"
+                lookQuery.RawQuery = "Look_TagGroup_" + tagGroup + ":1"; 
             }
             else if (!string.IsNullOrWhiteSpace(tagName)) // we have a specifc tag
             {
-                tagQuery.Has = new LookTag(tagGroup, tagName);
+                lookQuery.TagQuery.Has = new LookTag(tagGroup, tagName);
             }
-
-            lookQuery.TagQuery = tagQuery;
 
             QueryService.SetSort(lookQuery, sort);
 

@@ -17,6 +17,10 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         private static LookTag _indigo = new LookTag(_colour, "indigo");
         private static LookTag _violet = new LookTag(_colour, "violet");
 
+        /// <summary>
+        /// Index all colour tags
+        /// </summary>
+        /// <param name="testContext"></param>
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {

@@ -28,19 +28,19 @@ namespace Our.Umbraco.Look
         public string SearcherName { get; }
 
         /// <summary>
+        /// Lazy evaluation of item for the content, media, member or detached item (always has a value)
+        /// </summary>
+        [JsonIgnore]
+        public IPublishedContent Item => this._item.Value;
+
+        /// <summary>
         /// Lazy evaluation of the host item (if the item is detached) otherwize this will be null
         /// </summary>
         [JsonIgnore]
         public IPublishedContent HostItem => this._hostItem.Value;
 
         /// <summary>
-        /// Lazy evaluation of Item for IPublishedContent of the content, media, member or detached item
-        /// </summary>
-        [JsonIgnore]
-        public IPublishedContent Item => this._item.Value;
-
-        /// <summary>
-        /// Culture in Umbraco associate with this node
+        /// Culture in Umbraco this item is associated with
         /// </summary>
         public CultureInfo CultureInfo { get; set; }
 
@@ -80,7 +80,7 @@ namespace Our.Umbraco.Look
         public IHtmlString Highlight { get; }
 
         /// <summary>
-        /// Tag collection (only returned if specified)
+        /// All tags associated with this item
         /// </summary>
         public LookTag[] Tags { get; }
 
@@ -90,12 +90,13 @@ namespace Our.Umbraco.Look
         public Location Location { get; }
 
         /// <summary>
-        /// Temp field for calculated results
+        /// Result field for calculated distance
+        /// (only used when a location query is set)
         /// </summary>
         public double? Distance { get; }
 
         /// <summary>
-        /// The contextual type: content, media or member (a detached item belongs to one of these)
+        /// The contextual type: content, media or member (a detached item belongs to its host one of these)
         /// </summary>
         public PublishedItemType PublishedItemType { get; }
 

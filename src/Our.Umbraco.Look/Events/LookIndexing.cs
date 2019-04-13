@@ -49,8 +49,13 @@ namespace Our.Umbraco.Look
             {
                 this._umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
 
-                LookService.Initialize(this._umbracoHelper); 
+                LookService.Initialize(this._umbracoHelper);
 
+                foreach (var lookIndexer in this._lookIndexers)
+                {
+                    lookIndexer.EnsureIndex(false);
+                }
+                
                 ContentService.Published += ContentService_Published;
                 MediaService.Saved += this.MediaService_Saved;
                 MemberService.Saved += this.MemberService_Saved;
@@ -63,17 +68,23 @@ namespace Our.Umbraco.Look
 
         private void ContentService_Published(IPublishingStrategy sender, PublishEventArgs<IContent> e)
         {
-            this.Update(e.PublishedEntities.Select(x => this._umbracoHelper.TypedContent(x.Id)).ToArray());
+            this.Update(
+                    e.PublishedEntities.Select(x => this._umbracoHelper.TypedContent(x.Id)).ToArray(), 
+                    PublishedItemType.Content);
         }
 
         private void MediaService_Saved(IMediaService sender, SaveEventArgs<IMedia> e)
         {
-            this.Update(e.SavedEntities.Select(x => this._umbracoHelper.TypedMedia(x.Id)).ToArray());
+            this.Update(
+                    e.SavedEntities.Select(x => this._umbracoHelper.TypedMedia(x.Id)).ToArray(), 
+                    PublishedItemType.Media);
         }
 
         private void MemberService_Saved(IMemberService sender, SaveEventArgs<IMember> e)
         {
-            this.Update(e.SavedEntities.Select(x => this._umbracoHelper.TypedMember(x.Id)).ToArray());
+            this.Update(
+                    e.SavedEntities.Select(x => this._umbracoHelper.TypedMember(x.Id)).ToArray(), 
+                    PublishedItemType.Member);
         }
 
         private void ContentService_UnPublished(IPublishingStrategy sender, PublishEventArgs<IContent> e)
@@ -95,7 +106,8 @@ namespace Our.Umbraco.Look
         /// Update the Lucene document in all indexes
         /// </summary>
         /// <param name="publishedContentItems"></param>
-        private void Update(IPublishedContent[] publishedContentItems)
+        /// <param name="publishedItemType"></param>
+        private void Update(IPublishedContent[] publishedContentItems, PublishedItemType publishedItemType)
         {
             if (publishedContentItems == null || !publishedContentItems.Any()) return;
 
@@ -103,7 +115,17 @@ namespace Our.Umbraco.Look
 
             foreach(var lookIndexer in this._lookIndexers)
             {
-                lookIndexer.Index(publishedContentItems);
+                var indexerConfiguration = LookService.GetIndexerConfiguration(lookIndexer.Name);
+
+                var indexItem = publishedItemType == PublishedItemType.Content && indexerConfiguration.ShouldIndexContent
+                                || publishedItemType == PublishedItemType.Media && indexerConfiguration.ShouldIndexMedia
+                                || publishedItemType == PublishedItemType.Member && indexerConfiguration.ShouldIndexMembers;
+
+                var indexDetached = publishedItemType == PublishedItemType.Content && indexerConfiguration.ShouldIndexDetachedContent
+                                    || publishedItemType == PublishedItemType.Media && indexerConfiguration.ShouldIndexDetachedMedia
+                                    || publishedItemType == PublishedItemType.Member && indexerConfiguration.ShouldIndexDetachedMembers;
+
+                lookIndexer.Index(publishedContentItems, indexItem, indexDetached); // both flags could be false (indicating no indexing shoudl take place)
             }
         }
 

@@ -25,17 +25,17 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
         public override ILookTreeNode[] GetChildren()
         {
-            var tags = QueryService.GetTags(this.SearcherName, this.TagGroup);
+            var tagNames = QueryService.GetTagNames(this.SearcherName, this.TagGroup);
 
             var children = new List<TagTreeNode>();
 
-            foreach (var tag in tags)
+            foreach (var tagName in tagNames)
             {
                 base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
                 base.QueryStrings.ReadAsNameValueCollection()["tagGroup"] = this.TagGroup;
-                base.QueryStrings.ReadAsNameValueCollection()["tagName"] = tag.Key.Name;
+                base.QueryStrings.ReadAsNameValueCollection()["tagName"] = tagName;
 
-                children.Add(new TagTreeNode(base.QueryStrings, tag.Value)); // create tag node with count
+                children.Add(new TagTreeNode(base.QueryStrings)); 
             }
 
             return children.ToArray();

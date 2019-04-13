@@ -80,13 +80,13 @@ namespace Our.Umbraco.Look.Services
 
                     examineIndexers[examineIndexer.Key].DocumentWriting += addEvent;
                 }
-            }
 
-            LogHelper.Info(typeof(LookService), $"Hooking into Examine indexers '{ string.Join(", ", examineIndexerNames) }'");
+                LogHelper.Info(typeof(LookService), $"Hooking into Examine indexer '{ examineIndexer.Key }'");
+            }
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -95,31 +95,26 @@ namespace Our.Umbraco.Look.Services
         {
             IPublishedContent publishedContent = null;
 
-            if (LookService.Instance._umbracoHelper == null)
+            var indexerConfiguration = LookService.GetIndexerConfiguration(indexerName);
+
+            if (indexerConfiguration.ShouldIndexContent) // attempt to get content
             {
-                throw new Exception("Unexpected null value for UmbracoHelper - Look not initialized");
+                publishedContent = LookService.Instance._umbracoHelper.TypedContent(e.NodeId);
             }
 
-            publishedContent = LookService.Instance._umbracoHelper.TypedContent(e.NodeId);
-
-            if (publishedContent == null)
+            if (publishedContent == null && indexerConfiguration.ShouldIndexMedia) // attempt to get as media
             {
-                // attempt to get as media
                 publishedContent = LookService.Instance._umbracoHelper.TypedMedia(e.NodeId);
+            }
 
-                if (publishedContent == null)
-                {
-                    // attempt to get as member
-                    publishedContent = LookService.Instance._umbracoHelper.SafeTypedMember(e.NodeId);
-                }
+            if (publishedContent == null && indexerConfiguration.ShouldIndexMembers) // attempt to get as member
+            {
+                publishedContent = LookService.Instance._umbracoHelper.SafeTypedMember(e.NodeId);
             }
 
             if (publishedContent != null)
             {
-                var indexingContext = new IndexingContext(
-                                            hostNode: null,
-                                            node: publishedContent,
-                                            indexerName: indexerName);
+                var indexingContext = new IndexingContext(null, publishedContent, indexerName);
 
                 LookService.EnsureContext();
 

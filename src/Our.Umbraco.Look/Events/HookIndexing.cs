@@ -20,7 +20,7 @@ namespace Our.Umbraco.Look
         {
             LookService.Initialize(new UmbracoHelper(UmbracoContext.Current));
 
-            // if consumer hasn't (yet) set the examine indexers, then register them all
+            // if consumer hasn't (yet) set the examine indexers, then register them all (the consumer can always change them again)
             if (!LookService.ExamineIndexersConfigured)
             {
                 // register all

@@ -78,9 +78,14 @@
         internal static string HasTagsField => "Look_HasTags";
 
         /// <summary>
-        /// Single field used to store 'group and name' for each tag, so can get all tags without first testing for field names prefixed with x / maintaining a memory state cache
+        /// Single field used to store 'group and name' for each tag, so can get all tags from a single field
         /// </summary>
         internal static string AllTagsField => "Look_AllTags";
+
+        /// <summary>
+        /// Prefix to fields for the tag group flag
+        /// </summary>
+        internal static string TagGroupField => "Look_TagGroup_";
 
         /// <summary>
         /// Gets the field name to use for the tags - this field will contain space delimited non-tokenizable strings

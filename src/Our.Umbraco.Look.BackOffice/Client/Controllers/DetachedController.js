@@ -17,7 +17,6 @@
         treeService.update([
             '-1',
             'searcher-' + $scope.searcherName,
-            'nodes-' + $scope.searcherName,
             'nodeType-' + $scope.searcherName + '|' + $scope.nodeType, // (this whole tree path patttern needs to be refactored)
             'detached-' + $scope.searcherName + '|' + $scope.nodeType
         ]);

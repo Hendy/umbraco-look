@@ -10,7 +10,7 @@ namespace Our.Umbraco.Look
         public LocationBoundary Boundary { get; set; } = null;
 
         /// <summary>
-        /// The location to calculate distance from - when null = feature disabled
+        /// The location to calculate distance from
         /// </summary>
         public Location Location { get; set; } = null;
 

@@ -1,99 +1,171 @@
 # Look (Beta) for Umbraco v7
 Look sits on top of Umbraco Examine adding support for:
 
-* Indexing all IPublishedContent items (each as a Lucene Document) be they: Umbraco Content, Media, Members or properties on them that return IPublishedContent, eg. Nested Content. 
+* Indexing all IPublishedContent items (each as a Lucene Document) be they: Umbraco Content, Media, Members or properties on them that return IPublishedContent*, eg. Nested Content.
+
+* Tag querying & faceting - query on tags and return facet data for tags.
 
 * Text match highlighting - return fragments of contextual text relevant to the supplied search term.
 
 * Geospatial querying - boundary and location distance querying (this can also be used for filtering / sorting).
 
-* Tag querying & faceting - query on tags and return facet data for tags.
+*use [PropertyValueConverters](https://our.umbraco.com/documentation/Extending/Property-Editors/value-converters) to return collections of IPublishedContent for any other data to be indexed.
 
 ## Installation
 
 There are two NuGet packages:
 
-[Our.Umbraco.Look](https://www.nuget.org/packages/Our.Umbraco.Look) installs a single assembly _Our.Umbraco.Look.dll_ with dependencies on: 
+[Our.Umbraco.Look](https://www.nuget.org/packages/Our.Umbraco.Look) (Required) the core Look indexer & searcher.
 
-  * Umbraco 7.3.0 (min)
-  * Examine 0.1.70 (min)
-  * Lucene.Net.Contrib 2.9.4.1 (min)
+[Our.Umbraco.Look.BackOffice](https://www.nuget.org/packages/Our.Umbraco.Look.BackOffice) (Optional) index viewer for back office.
 
-[Our.Umbraco.Look.BackOffice](https://www.nuget.org/packages/Our.Umbraco.Look.BackOffice) installs an assembly _Our.Umbraco.Look.BackOffice.dll_ and files in App_Plugins/Look with a dependency on:
+## Configuration
 
-  * Our.Umbraco.Look
+Once installed, by default Look will 'hook' into all Umbraco Examine indexers, augmenting each indexed item with its Guid key and Culture and
+fields to enable case-insensitive searches on Name and sorting by UpdateDate, as well as for the node type and its alias. 
 
- ## Indexing
+This default indexing behaviour is so that the Look querying API can be used 'out of the box' without having to configure anything, 
+however all behaviour can all be configured via static properties on the LookConfiguration class. 
+(All classes for the API can be found in the Our.Umbraco.Look namespace)
 
-Look can be used index additional `name`, `date`, `text`, `tag` and `location` fields item into existing Examine Lucene indexes (no config file changes required) and/or a Look Examine indexer
-can be configured which will also index 'detached' IPublsihedContent.
+To configure a Look indexer, the Examine configuration files need to be updated:
 
-To implement indexing behaviour, functions can be set via static methods on the LookConfiguration class (all are optional).
+/config/ExamineIndex.config
+```xml
+<ExamineLuceneIndexSets>
+	<IndexSet SetName="MyLookIndexSet" IndexPath="~/App_Data/TEMP/ExamineIndexes/MyLookIndexSet/" />
+</ExamineLuceneIndexSets>
+```
+
+/config/ExamineSettings.config
+```xml
+<Examine>
+	<ExamineIndexProviders>
+		<providers>
+			<add name="MyLookIndexer" type="Our.Umbraco.Look.LookIndexer, Our.Umbraco.Look" />
+		</providers>
+	</ExamineIndexProviders>
+	<ExamineSearchProviders>
+		<providers>
+			<add name="MyLookSearcher" type="Our.Umbraco.Look.LookSearcher, Our.Umbraco.Look" />
+		</providers>
+	</ExamineSearchProviders>
+</Examine>
+```
+
+The static class where the indexing behaviour can be set:
 
 ```csharp
 public static class LookConfiguration
 {
-	// specify which Examine indexers to hook into (if not set, then all will be used by default)
+	/// <summary>
+	/// 'Hook indexing'
+	/// Get or set the names of all the Examine indexers to use.
+	/// By default, all Umbraco Examine indexers will be used.
+	/// Set to null (or an empty array) not use any Examine indexers. 
+	/// </summary>
 	public static string[] ExamineIndexers { get; set; }
 
-	// creates case sensitive and case insensitive fields (not analyzed) - for use with NameQuery
-	public static Func<IndexingContext, string> NameIndexer { set; }
+	/// <summary>
+	/// Set configuration for indexer by name
+	/// </summary>
+	public static Dictionary<string, IndexerConfiguration> IndexerConfiguration { get; }
 
-	// creates a date & sorting fields - for use with DateQuery
-	public static Func<IndexingContext, DateTime?> DateIndexer { set; }
+	/// <summary>
+	/// (Optional) Custom method that can be called before the indexing of each IPublishedContent item.
+	/// </summary>
+	public static Action<IndexingContext> BeforeIndexing { set; }
 
-	// creates a text field (analyzed) - for use with TextQuery
-	public static Func<IndexingContext, string> TextIndexer { set; }
+	/// <summary>
+	/// (Optional) Set a custom name indexer.
+	/// By default, the IPublishedContent.Name value will be indexed.
+	/// </summary>
+	public static Func<IndexingContext, string> DefaultNameIndexer { set; }
 
-	// creates a tag field for each tag group - for use with TagQuery
-	public static Func<IndexingContext, LookTag[]> TagIndexer { set; }
+	/// <summary>
+	/// (Optional) Set a custom date indexer.
+	/// By default, the IPublishedContent.UpdateDate value will be indexed. 
+	/// (Detached items use value from their Host)
+	/// </summary>
+	public static Func<IndexingContext, DateTime?> DefaultDateIndexer { set; }
 
-	// creates multple fields - for use with LocationQuery
-	public static Func<IndexingContext, Location> LocationIndexer { set; }
+	/// <summary>
+	/// (Optional) Set a custom text indexer.
+	/// By default, no value is indexed.
+	/// </summary>
+	public static Func<IndexingContext, string> DefaultTextIndexer { set; }
+
+	/// <summary>
+	/// (Optional) Set a custom tag indexer.
+	/// By default, no value is indexed.
+	/// </summary>
+	public static Func<IndexingContext, LookTag[]> DefaultTagIndexer { set; }
+
+	/// <summary>
+	/// (Optional) Set a custom location indexer.
+	/// By default, no value is indexed.
+	/// </summary>
+	public static Func<IndexingContext, Location> DefaultLocationIndexer { set; }
+
+	/// <summary>
+	/// (Optional) Custom method that can be called after the indexing of each IPublishedContent item.
+	/// </summary>
+	public static Action<IndexingContext> AfterIndexing { set; }
 }
 ```
 
-The model supplied to the indexing functions:
+The indexing context model:
 
 ```csharp
 public class IndexingContext
 {
 	/// <summary>
-	/// The name of the Examine indexer into which this item is being indexed
+	/// The name of the indexer into which this item is being indexed.
 	/// </summary>
 	public string IndexerName { get; }
 
 	/// <summary>
-	/// The Content, Media, Member or Detached item being indexed (always has a value)
+	/// The Content, Media, Member or Detached item being indexed (always has a value).
 	/// </summary>
 	public IPublishedContent Item { get; }
 
 	/// <summary>
-	/// When a detached item is being indexed, this property will be the hosting content, media or member 
-	/// (this value will null when the item being indexed is not Detached)
+	/// When the item being indexed is 'detached', this is the hosting Content, Media or Member.
+	/// (this value will null when the item being indexed is not detached)
 	/// </summary>
 	public IPublishedContent HostItem { get; }
+
+	/// <summary>
+	/// Convienience flag to indicate whether the item is a detached item
+	/// </summary>
+	public bool IsDetached => this.HostItem != null;
+
+	/// <summary>
+	/// When called, the indexing of the current item will be cancelled.
+	/// If using an Exmaine indexer, then Look will stop adding data from the point of cancellation.
+	/// If using a Look indexer, then full cancellation occurs and a Lucene document will not be created.
+	/// </summary>
+	public void Cancel()
 }
 ```
 [Example Indexing Code](../../wiki/Example-Indexing)
 
-
 ## Searching
 
-Searching is performed using an (Umbraco or Look) Examine Searcher and can be done using the Exmaine API, or with the Look API.
-
-### Look API
+Searching is performed using an Examine Searcher and can be done using the Exmaine API, or with the Look API.
+The Look API consists of defining the search critera via the setting of pre-described model properties. 
+This can be simplier to use than a fluent API, but complex queries can still be performed via the use of tags.
 
 The Look API can be used with all searchers. Eg.
 
 ```csharp
-var lookQuery = new LookQuery(); // use the default Examine searcher (usually "ExternalSearcher")
+var lookQuery = new LookQuery(); // use the default searcher (usually "ExternalSearcher")
 ```
 
 or
 
 ```csharp
-var lookQuery = new LookQuery("MyLookSearcher"); // use a named Examine searcher
+var lookQuery = new LookQuery("MyLookSearcher"); // use a named searcher
 ```
 
 ```csharp
@@ -109,7 +181,7 @@ lookQuery.RawQuery = ...
 var results = lookQuery.Search();
 ```
 
-### Look Query types
+### Look Query Types
 
 All query types are optional, but when set, they become a required clause. 
 
@@ -119,31 +191,60 @@ A node query is used to specify search criteria based on common properties of IP
 
 ```csharp
 lookQuery.NodeQuery = new NodeQuery() {
+
+	// must be of this type
 	Type = PublishedItemType.Content,
+	
+	// can be any of these types (the condition above means it must be content)
 	TypeAny = new [] { 
 		PublishedItemType.Content, 
 		PublishedItemType.Media, 
 		PublishedItemType.Member 
 	},
-	DetachedQuery = DetachedQuery.IncludeDetached, // enum options
+	
+	// options: 
+	// IncludeDetached (default - no filtering occurs)
+	// ExcludeDetached
+	// OnlyDetached
+	DetachedQuery = DetachedQuery.IncludeDetached,
+	
+	// must be of this culture
 	Culture = new CultureInfo("fr"),
+	
+	// can be any of these cultures
 	CultureAny = new [] {
 		new CultureInfo("fr")	
 	},
+	
+	// must be of this docType/mediaType/memberType alias
 	Alias = "myDocTypeAlias",
+	
+	// can be any of these docType/mediaType/memberType aliases
 	AliasAny = new [] { 
 		"myDocTypeAlias", 
 		"myMediaTypeAlias",
 		"myMemberTypeAlias"
 	},
+	
+	// must have any of these ids
 	Ids = new [] { 1, 2 },
+	
+	// must have any of these keys
 	Keys = new [] { 
 		Guid.Parse("dc890492-4571-4701-8085-b874837d597a"), 
 		Guid.Parse("9f60f10f-74ea-4323-98bb-13b6f6423ad6"),
 	}
+	
+	// must not have this id
 	NotId = 3, // (eg. exclude current page)
+	
+	// must not have any of these ids
 	NotIds = new [] { 4, 5 },
+	
+	// must not have this key
 	NotKey = Guid.Parse("3e919e10-b702-4478-87ed-4a42ec52b337"),
+	
+	// must not have any of these keys
 	NotKeys = new [] { 
 		Guid.Parse("6bb24ed2-9466-422f-a9d4-27a805db2d47"), 
 		Guid.Parse("88a9e4e3-d4cb-4641-aff3-8579f1d60399")
@@ -161,7 +262,9 @@ lookQuery.NameQuery = new NameQuery() {
 	StartsWith = "Abc",
 	Contains = "123",
 	EndsWith = "Xyz",
-	CaseSensitive = true // applies to all: Is, StartsWith, Contains & EndsWith
+	
+	// applies to all: Is, StartsWith, Contains & EndsWith
+	CaseSensitive = true 
 };
 ```
 
@@ -174,6 +277,12 @@ If a date query is set (ie, not null), then results must have a date value.
 lookQuery.DateQuery = new DateQuery() {
 	After = new DateTime(2005, 02, 16),
 	Before = null,
+	
+	// options:
+	// Inclusive (default)
+	// Exclusive
+	// BeforeInclusiveAfterExclusive
+	// BeforeExclusiveAfterInclusive
 	Boundary = DateBoundary.Inclusive
 }
 ```
@@ -186,8 +295,12 @@ are optional).
 
 ```csharp
 lookQuery.TextQuery = new TextQuery() {
+
+	// query text
 	SearchText = "some text to search for",
-	GetHighlight = true // return highlight extract from the text field containing the search text
+	
+	// flag to indicate whether highlight text should be extracted
+	GetHighlight = true
 }
 ```
 
@@ -245,7 +358,7 @@ LookTag(string group, string name)
 or from a raw string value:
 
 ```csharp
-LokTag(string value)
+LookTag(string value)
 ````
 
 When constructing from a raw string value, the first colon char ':' is used as an optional delimiter between a group and tag.
@@ -316,10 +429,10 @@ When the search is performed, the source LookQuery model is compiled (such that 
 The LookResult model returned implements Examine.ISearchResults, but extends it with a Matches property that will return the results enumerated as strongly typed LookMatch objects (useful for lazy access to the assocated IPublishedContent item and other data) and a Facets property for any facet results.
 
 ```csharp
-public class LookResult : ISearchResults
+public class LookResult : Examine.ISearchResults
 {
 	/// <summary>
-	/// When true, indicates the Look Query was parsed and executed correctly
+	/// When true, indicates the query was parsed and executed correctly
 	/// </summary>
 	public bool Success { get; }
 	
@@ -334,8 +447,89 @@ public class LookResult : ISearchResults
 	public IEnumerable<LookMatch> Matches { get; }
 
 	/// <summary>
+	/// Efficient skipping of matches
+	/// </summary>
+	public IEnumerable<LookMatch> SkipMatches(int skip) { }
+
+	/// <summary>
 	/// Any returned facets
 	/// </summary>
 	public Facet[] Facets { get; }
+}
+```
+
+```csharp
+public class LookMatch : Examine.SearchResult
+{
+	/// <summary>
+	/// Lazy evaluation of item for the content, media, member or detached item (always has a value)
+	/// </summary>
+	public IPublishedContent Item { get; }
+
+	/// <summary>
+	/// Lazy evaluation of the host item (if the item is detached) otherwize this will be null
+	/// </summary>
+	public IPublishedContent HostItem { get; }
+
+	/// <summary>
+	/// Culture in Umbraco this item is associated with
+	/// </summary>
+	public CultureInfo CultureInfo { get; set; }
+
+	/// <summary>
+	/// Flag to indicate whether this result is a detached item
+	/// </summary>
+	public bool IsDetached { get; }
+
+	/// <summary>
+	/// Guid key of the Content, media, member or detached item
+	/// </summary>
+	public Guid Key { get; }
+
+	/// <summary>
+	/// The docType, mediaType or memberType alias
+	/// </summary>
+	public string Alias { get; set; }
+
+	/// <summary>
+	/// The custom name field
+	/// </summary>
+	public string Name { get; }
+
+	/// <summary>
+	/// The custom date field
+	/// </summary>
+	public DateTime? Date { get; }
+
+	/// <summary>
+	/// The full text (only returned if specified)
+	/// </summary>
+	public string Text { get; }
+
+	/// <summary>
+	/// Highlight text (containing search text) extracted from from the full text
+	/// </summary>
+	public IHtmlString Highlight { get; }
+
+	/// <summary>
+	/// All tags associated with this item
+	/// </summary>
+	public LookTag[] Tags { get; }
+
+	/// <summary>
+	/// The custom location (lat|lng) field
+	/// </summary>
+	public Location Location { get; }
+
+	/// <summary>
+	/// Result field for calculated distance
+	/// (only used when a location query is set)
+	/// </summary>
+	public double? Distance { get; }
+
+	/// <summary>
+	/// The contextual type: content, media or member (a detached item belongs to its host one of these)
+	/// </summary>
+	public PublishedItemType PublishedItemType { get; }
 }
 ```

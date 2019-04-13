@@ -4,7 +4,6 @@ using Our.Umbraco.Look;
 using Our.Umbraco.Look.BackOffice.Attributes;
 using Our.Umbraco.Look.BackOffice.Models.Api;
 using Our.Umbraco.Look.BackOffice.Services;
-using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using Umbraco.Core;
@@ -32,11 +31,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             viewData.SearcherType = searcher is LookSearcher ? "Look" : "Examine";
             viewData.Icon = IconService.GetSearcherIcon(searcher);
             viewData.LookIndexingEnabled = searcher is LookSearcher || LookConfiguration.ExamineIndexers.Contains(searcher.Name.TrimEnd("Searcher") + "Indexer");
-            viewData.NameIndexerIsSet = viewData.LookIndexingEnabled && LookConfiguration.NameIndexerIsSet;
-            viewData.DateIndexerIsSet = viewData.LookIndexingEnabled && LookConfiguration.DateIndexerIsSet;
-            viewData.TextIndexerIsSet = viewData.LookIndexingEnabled && LookConfiguration.TextIndexerIsSet;
-            viewData.TagIndexerIsSet = viewData.LookIndexingEnabled && LookConfiguration.TagIndexerIsSet;
-            viewData.LocationIndexerIsSet = viewData.LookIndexingEnabled && LookConfiguration.LocationIndexerIsSet;
 
             // TODO: 
             //number of documents in index
@@ -66,20 +60,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
                 viewData.IndexerName = indexer.Name;
             }
             
-            return this.Ok(viewData);
-        }
-
-        /// <summary>
-        /// Get the view model for the top level 'Tags' tree node (for a searcher)
-        /// </summary>
-        /// <param name="searcherName"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [ValidateSearcher]
-        public IHttpActionResult GetViewDataForNodes([FromUri]string searcherName)
-        {
-            var viewData = new NodesViewData();
-
             return this.Ok(viewData);
         }
 
@@ -147,7 +127,7 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         {
             var viewData = new TagGroupViewData();
 
-            viewData.Tags = QueryService.GetTags(searcherName, tagGroup);
+            viewData.TagNames = QueryService.GetTagNames(searcherName, tagGroup);
 
             return this.Ok(viewData);
         }
@@ -219,18 +199,6 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
             [FromUri]int take)
         {
             return this.Ok(QueryService.GetDetachedMatches(searcherName, nodeType, sort, skip, take));
-        }
-
-        [HttpGet]
-        [ValidateSearcher]
-        public IHttpActionResult GetCultureMatches(
-            [FromUri]string searcherName,
-            [FromUri]int lcid,
-            [FromUri]string sort,
-            [FromUri]int skip,
-            [FromUri]int take)
-        {
-            return this.Ok(QueryService.GetCultureMatches(searcherName, lcid > 0 ? (int?)lcid : null, sort, skip, take));
         }
 
         /// <summary>

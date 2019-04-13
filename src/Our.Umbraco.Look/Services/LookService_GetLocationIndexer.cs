@@ -4,9 +4,10 @@ namespace Our.Umbraco.Look.Services
 {
     internal partial class LookService
     {
-        internal static Func<IndexingContext, Location> GetLocationIndexer()
+        internal static Func<IndexingContext, Location> GetLocationIndexer(string indexerName)
         {
-            return LookService.Instance._locationIndexer;
+            return LookService.GetIndexerConfiguration(indexerName).LocationIndexer
+                ?? LookService.Instance._defaultLocationIndexer;
         }
     }
 }

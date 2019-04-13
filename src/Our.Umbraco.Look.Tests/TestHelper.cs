@@ -36,16 +36,13 @@ namespace Our.Umbraco.Look.Tests
             };
         }
 
-        //internal static void GenerateTestData()
-        //{
-        //    // generate a load of random test data, just to bulk it out
-        //}
-
         /// <summary>
-        /// Add supplied collection into the test index
+        /// Index the supplied things
         /// </summary>
-        /// <param name="things"></param>
-        internal static void IndexThings(IEnumerable<Thing> things)
+        /// <param name="things">The things to add into the index</param>
+        /// <param name="beforeIndexing">optional action to call before indexing each thing</param>
+        /// <param name="afterIndexing">optional acton to call after indexing each thing</param>
+        internal static void IndexThings(IEnumerable<Thing> things, Action<IndexingContext> beforeIndexing = null, Action<IndexingContext> afterIndexing = null)
         {
             var nameStack = new Stack<string>(things.Select(x => x.Name));
             var dateStack = new Stack<DateTime?>(things.Select(x => x.Date));
@@ -53,33 +50,42 @@ namespace Our.Umbraco.Look.Tests
             var tagStack = new Stack<LookTag[]>(things.Select(x => x.Tags));
             var locationStack = new Stack<Location>(things.Select(x => x.Location));
 
-            // setup indexers
-            LookConfiguration.NameIndexer = x => nameStack.Pop();
-            LookConfiguration.DateIndexer = x => dateStack.Pop();
-            LookConfiguration.TextIndexer = x => textStack.Pop();
-            LookConfiguration.TagIndexer = x => tagStack.Pop();
-            LookConfiguration.LocationIndexer = x => locationStack.Pop();
+            // use supplied, or do nothing
+            LookConfiguration.BeforeIndexing = beforeIndexing;
+            LookConfiguration.AfterIndexing = afterIndexing;
 
-            // null for IPublishedContent as not required
-            var indexingContext = new IndexingContext(null, null, null);
+            // setup indexers
+            LookConfiguration.DefaultNameIndexer = x => nameStack.Pop();
+            LookConfiguration.DefaultDateIndexer = x => dateStack.Pop();
+            LookConfiguration.DefaultTextIndexer = x => textStack.Pop();
+            LookConfiguration.DefaultTagIndexer = x => tagStack.Pop();
+            LookConfiguration.DefaultLocationIndexer = x => locationStack.Pop();
 
             List<Document> documents = new List<Document>();
 
             foreach (var thing in things)
             {
                 var document = new Document();
+                
+                var indexingContext = new IndexingContext(null, null, "UnitTestIndexer"); // null for IPublishedContent as not required
 
                 LookService.Index(indexingContext, document);
 
-                documents.Add(document);
+                if (!indexingContext.Cancelled)
+                {
+                    documents.Add(document);
+                }                
             }
 
-            // reset indexers
-            LookConfiguration.NameIndexer = null;
-            LookConfiguration.DateIndexer = null;
-            LookConfiguration.TextIndexer = null;
-            LookConfiguration.TagIndexer = null;
-            LookConfiguration.LocationIndexer = null;
+            //reset
+            LookConfiguration.BeforeIndexing = null;
+            LookConfiguration.AfterIndexing = null;
+
+            LookConfiguration.DefaultNameIndexer = null;
+            LookConfiguration.DefaultDateIndexer = null;
+            LookConfiguration.DefaultTextIndexer = null;
+            LookConfiguration.DefaultTagIndexer = null;
+            LookConfiguration.DefaultLocationIndexer = null;
 
             TestHelper.IndexDocuments(documents);
         }

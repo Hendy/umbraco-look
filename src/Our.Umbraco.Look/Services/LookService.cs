@@ -1,9 +1,9 @@
-﻿using Lucene.Net.Spatial.Tier.Projectors;
+﻿using Examine.LuceneEngine;
+using Lucene.Net.Spatial.Tier.Projectors;
 using Lucene.Net.Store;
 using System;
 using System.Collections.Generic;
 using Umbraco.Web;
-using Examine.LuceneEngine;
 
 namespace Our.Umbraco.Look.Services
 {
@@ -33,34 +33,49 @@ namespace Our.Umbraco.Look.Services
         private Dictionary<string, EventHandler<DocumentWritingEventArgs>> _examineDocumentWritingEvents = new Dictionary<string, EventHandler<DocumentWritingEventArgs>>();
 
         /// <summary>
+        /// Collection of indexer configuration models, keyed by indexer name.
+        /// </summary>
+        private Dictionary<string, IndexerConfiguration> _indexerConfigurations = new Dictionary<string, IndexerConfiguration>();
+
+        /// <summary>
         /// Lucene directory representations for each of the Examine index sets
         /// </summary>
         private Dictionary<string, Directory> _indexSetDirectories;
 
         /// <summary>
+        /// Function called before indexing
+        /// </summary>
+        private Action<IndexingContext> _beforeIndexing;
+
+        /// <summary>
         /// Function to get the name for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, string> _nameIndexer;
+        private Func<IndexingContext, string> _defaultNameIndexer;
 
         /// <summary>
         /// Function to get the date for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, DateTime?> _dateIndexer;
+        private Func<IndexingContext, DateTime?> _defaultDateIndexer;
 
         /// <summary>
         /// Function to get text for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, string> _textIndexer;
+        private Func<IndexingContext, string> _defaultTextIndexer;
 
         /// <summary>
         /// Function to get the tags for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, LookTag[]> _tagIndexer;
+        private Func<IndexingContext, LookTag[]> _defaultTagIndexer;
 
         /// <summary>
         /// Function to get a location for the IPublishedContent being indexed
         /// </summary>
-        private Func<IndexingContext, Location> _locationIndexer;
+        private Func<IndexingContext, Location> _defaultLocationIndexer;
+
+        /// <summary>
+        /// Function called after indexing
+        /// </summary>
+        private Action<IndexingContext> _afterIndexing;
 
         /// <summary>
         /// Collection of cartesian tier plotters

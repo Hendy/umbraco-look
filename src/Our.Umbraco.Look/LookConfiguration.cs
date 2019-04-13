@@ -1,5 +1,6 @@
 ﻿using Our.Umbraco.Look.Services;
 using System;
+using System.Collections.Generic;
 
 namespace Our.Umbraco.Look
 {
@@ -10,70 +11,63 @@ namespace Our.Umbraco.Look
     {
         /// <summary>
         /// 'Hook indexing'
-        /// Get or set the index names of all the Exmaine indexes to hook into.
-        /// supplying a null or empty array means no examine indexers will be hooked into (by default if this isn't set, then all examine indexers will be hooked into)
+        /// Get or set the indexer names of all the Exmaine indexers to hook into.
+        /// By default, all Umbraco Examine indexers are hooked into.
+        /// Set to null (or an empty array) to remove all hooks. 
         /// </summary>
-        public static string[] ExamineIndexers
-        {
-            get
-            {
-                return LookService.GetExamineIndexers();
-            }
-            set
-            {
-                LookService.SetExamineIndexers(value);
-            }
-        }
+        public static string[] ExamineIndexers { get { return LookService.GetExamineIndexers(); } set { LookService.SetExamineIndexers(value); } }
 
         /// <summary>
-        /// Set a custom name indexer
+        /// Set configuration behaviour on a per indexer basis.
         /// </summary>
-        public static Func<IndexingContext, string> NameIndexer { set { LookService.SetNameIndexer(value); } }
+        public static Dictionary<string, IndexerConfiguration> IndexerConfiguration => LookService.GetIndexerConfigurations();
 
         /// <summary>
-        /// Set a custom date indexer
+        /// (Optional) custom method that can be called before the indexing of each IPublishedContent item.
+        /// TODO: rename to DefaultBeforeIndexing ?
         /// </summary>
-        public static Func<IndexingContext, DateTime?> DateIndexer { set { LookService.SetDateIndexer(value); } }
+        public static Action<IndexingContext> BeforeIndexing { set { LookService.SetBeforeIndexing(value); } }
 
         /// <summary>
-        /// Set a custom text indexer
+        /// (Optional) set a custom name indexer.
+        /// By default, the IPublishedContent.Name value will be indexed.
+        /// TODO: rename to DefaultNameIndexer ?
         /// </summary>
-        public static Func<IndexingContext, string> TextIndexer { set { LookService.SetTextIndexer(value); } }
+        public static Func<IndexingContext, string> DefaultNameIndexer { set { LookService.SetDefaultNameIndexer(value); } }
 
         /// <summary>
-        /// Set a custom tag indexer
+        /// (Optional) Set a custom date indexer.
+        /// By default, the IPublishedContent.UpdateDate value will be indexed. (Detached items use their Host value)
+        /// TODO: rename to DefaultDateIndexer ?
         /// </summary>
-        public static Func<IndexingContext, LookTag[]> TagIndexer { set { LookService.SetTagIndexer(value); } }
+        public static Func<IndexingContext, DateTime?> DefaultDateIndexer { set { LookService.SetDefaultDateIndexer(value); } }
 
         /// <summary>
-        /// Set a custom location indexer
+        /// (Optional) Set a custom text indexer.
+        /// By default, no value is indexed.
+        /// TODO: rename to DefaultTextIndexer ?
         /// </summary>
-        public static Func<IndexingContext, Location> LocationIndexer { set { LookService.SetLocationIndexer(value); } }
+        public static Func<IndexingContext, string> DefaultTextIndexer { set { LookService.SetDefaultTextIndexer(value); } }
 
         /// <summary>
-        /// Flag to indicate whether a name indexer is enabled
+        /// (Optional) Set a custom tag indexer.
+        /// By default, no value is indexed.
+        /// TODO: rename to DefaultTagIndexer ?
         /// </summary>
-        public static bool NameIndexerIsSet => LookService.GetNameIndexer() != null;
+        public static Func<IndexingContext, LookTag[]> DefaultTagIndexer { set { LookService.SetDefaultTagIndexer(value); } }
 
         /// <summary>
-        /// Flag to indicate whether a date indexer is enabled
+        /// (Optional) Set a custom location indexer.
+        /// By default, no value is indexed.
+        /// TODO: rename to DefaultLocationIndexer ?
         /// </summary>
-        public static bool DateIndexerIsSet => LookService.GetDateIndexer() != null;
+        public static Func<IndexingContext, Location> DefaultLocationIndexer { set { LookService.SetDefaultLocationIndexer(value); } }
 
         /// <summary>
-        /// Flag to indicate whether a text indexer is enabled
+        /// (Optional) custom method that can be called after the indexing of each IPublishedContent item.
+        /// TODO: rename to DefaultAfterIndexing ?
         /// </summary>
-        public static bool TextIndexerIsSet => LookService.GetTextIndexer() != null;
-
-        /// <summary>
-        /// Flag to indicate whether a tag indexer is enabled
-        /// </summary>
-        public static bool TagIndexerIsSet => LookService.GetTagIndexer() != null;
-
-        /// <summary>
-        /// Flag to indicate whether a location indexer is enabled
-        /// </summary>
-        public static bool LocationIndexerIsSet => LookService.GetLocationIndexer() != null;
+        public static Action<IndexingContext> AfterIndexing { set { LookService.SetAfterIndexing(value); } }
 
         /// <summary>
         /// Specify which fields to return in the result set.

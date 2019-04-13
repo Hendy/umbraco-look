@@ -6,13 +6,15 @@ namespace Our.Umbraco.Look.Tests.QueryTests
     [TestClass]
     public class NameQueryTests
     {
+        private static LookTag _unitTestTag = new LookTag("UnitTests", "NameQueryTests");
+
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
             TestHelper.IndexThings(new Thing[] {
-                new Thing() { Name = "123" },
-                new Thing() { Name = "xyz" },
-                new Thing() { Name = "ABC" }
+                new Thing() { Name = "123", Tags = new [] { _unitTestTag } },
+                new Thing() { Name = "xyz", Tags = new [] { _unitTestTag } },
+                new Thing() { Name = "ABC", Tags = new [] { _unitTestTag } }
             });
         }
 
@@ -108,5 +110,22 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.IsFalse(lookResult.Success);
         }
 
+        [TestMethod]
+        public void Sort_On_Name()
+        {
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.NameQuery = new NameQuery();
+            lookQuery.TagQuery = new TagQuery() { Has = _unitTestTag }; // to limit to name data created in this class
+
+            lookQuery.SortOn = SortOn.Name;
+
+            var lookResult = lookQuery.Search();
+
+            Assert.AreEqual("123", lookResult.SkipMatches(0).First().Name);
+            Assert.AreEqual("ABC", lookResult.SkipMatches(1).First().Name);
+            Assert.AreEqual("xyz", lookResult.SkipMatches(2).First().Name);
+
+        }
     }
 }

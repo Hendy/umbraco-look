@@ -8,24 +8,30 @@ namespace Our.Umbraco.Look
     public class IndexingContext
     {
         /// <summary>
-        /// When detached content is being indexed, this property will be the IPublishedContent of the content, media or member containing the detached item being indexed
+        /// The name of the Examine indexer into which this Item is being indexed
         /// </summary>
-        public IPublishedContent HostItem { get; }
+        public string IndexerName { get; }
 
         /// <summary>
-        /// The IPublishedContent representation of the Content, Media, Member or Detached item being indexed
+        /// The Content, Media, Member or Detached item being indexed (always has a value (unless unit testing)
         /// </summary>
         public IPublishedContent Item { get; }
 
         /// <summary>
-        /// Flag to indicate whether the Item is a detached item
+        /// When the item being indexed is 'detached', this is the IPublishedContent of the 'known' Content, Media or Member.
+        /// (this value will null when the item being indexed is not detached)
+        /// </summary>
+        public IPublishedContent HostItem { get; }
+
+        /// <summary>
+        /// Convienience flag to indicate whether the item is a detached item
         /// </summary>
         public bool IsDetached => this.HostItem != null;
 
         /// <summary>
-        /// The name of the Examine indexer into which this item is being indexed
+        /// Returns true if the Cancel method was called
         /// </summary>
-        public string IndexerName { get; }
+        internal bool Cancelled { get; private set; }
 
         /// <summary>
         /// Constructor
@@ -38,6 +44,16 @@ namespace Our.Umbraco.Look
             this.HostItem = hostNode;
             this.Item = node;
             this.IndexerName = indexerName;
+        }
+
+        /// <summary>
+        /// When called, the indexing of the current item will be cancelled.
+        /// If using an Exmaine indexer, then Look will stop adding data from the point of cancellation.
+        /// If using a Look indexer, then full cancellation occurs and a Lucene document will not be created.
+        /// </summary>
+        public void Cancel()
+        {
+            this.Cancelled = true;
         }
     }
 }

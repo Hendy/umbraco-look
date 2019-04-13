@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
@@ -40,21 +41,44 @@ namespace Our.Umbraco.Look
         /// </summary>
         protected override void PerformIndexRebuild()
         {
-            var nodes = new List<IPublishedContent>();
-
-            nodes.AddRange(this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]"));
-
-            foreach(var media in this.UmbracoHelper.TypedMediaAtRoot())
+            var indexerConfiguration = LookService.GetIndexerConfiguration(this.Name);
+                                                                                            
+            if (indexerConfiguration.ShouldIndexContent || indexerConfiguration.ShouldIndexDetachedContent)
             {
-                nodes.AddRange(media.DescendantsOrSelf());
+                var content = this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]");
+
+                this.Index(
+                        content, 
+                        indexerConfiguration.ShouldIndexContent, 
+                        indexerConfiguration.ShouldIndexDetachedContent);
             }
 
-            foreach (var member in ApplicationContext.Current.Services.MemberService.GetAll(0, int.MaxValue, out int totalRecords))
+            if (indexerConfiguration.ShouldIndexMedia || indexerConfiguration.ShouldIndexDetachedMedia)
             {
-                nodes.Add(this.UmbracoHelper.TypedMember(member.Id));
+                var media = this.UmbracoHelper
+                                .TypedMediaAtRoot()
+                                .SelectMany(x => x.DescendantsOrSelf());
+
+                this.Index(
+                        media, 
+                        indexerConfiguration.ShouldIndexMedia, 
+                        indexerConfiguration.ShouldIndexDetachedMedia);
             }
 
-            this.Index(nodes.ToArray()); // index all nodes
+            if (indexerConfiguration.ShouldIndexMembers || indexerConfiguration.ShouldIndexDetachedMembers)
+            {
+                var members = ApplicationContext
+                                .Current
+                                .Services
+                                .MemberService
+                                .GetAll(0, int.MaxValue, out int totalRecords)
+                                .Select(x => this.UmbracoHelper.TypedMember(x.Id));
+
+                this.Index(
+                        members, 
+                        indexerConfiguration.ShouldIndexMembers, 
+                        indexerConfiguration.ShouldIndexDetachedMembers);
+            }
 
             this.GetIndexWriter().Optimize();
 
@@ -65,192 +89,87 @@ namespace Our.Umbraco.Look
         {
         }
 
-        //protected override void AddDocument(Dictionary<string, string> fields, IndexWriter writer, int nodeId, string type)
-        //{
-        //    base.AddDocument(fields, writer, nodeId, type);
-        //}
-
-        //protected override void AddSingleNodeToIndex(XElement node, string type)
-        //{
-        //    base.AddSingleNodeToIndex(node, type);
-        //}
-
-        //protected override IndexWriter CreateIndexWriter()
-        //{
-        //    var debug = base.CreateIndexWriter();
-        //    return debug;
-        //}
-
-        //public override void DeleteFromIndex(string nodeId)
-        //{
-        //    base.DeleteFromIndex(nodeId);
-        //}
-
-        //protected override Dictionary<string, string> GetDataToIndex(XElement node, string type)
-        //{
-        //    var debug = base.GetDataToIndex(node, type);
-        //    return debug;
-        //}
-
-        //protected override IIndexCriteria GetIndexerData(IndexSet indexSet)
-        //{
-        //    var debug = base.GetIndexerData(indexSet);
-        //    return debug;
-        //}
-
-        //public override Directory GetLuceneDirectory()
-        //{
-        //    var debug = base.GetLuceneDirectory();
-        //    return debug;
-        //}
-
-        //protected override FieldIndexTypes GetPolicy(string fieldName)
-        //{
-        //    var debug = base.GetPolicy(fieldName);
-        //    return debug;
-        //}
-
-        //protected override Dictionary<string, string> GetSpecialFieldsToIndex(Dictionary<string, string> allValuesForIndexing)
-        //{
-        //    var debug = base.GetSpecialFieldsToIndex(allValuesForIndexing);
-        //    return debug;
-        //}
-
-        //public override void IndexAll(string type)
-        //{
-        //    base.IndexAll(type);
-        //}
-
-        //public override bool IndexExists()
-        //{
-        //    var debug = base.IndexExists();
-        //    return debug;
-        //}
-
-        //protected override void OnDocumentWriting(DocumentWritingEventArgs docArgs)
-        //{
-        //    base.OnDocumentWriting(docArgs);
-        //}
-
-        //protected override void OnDuplicateFieldWarning(int nodeId, string indexSetName, string fieldName)
-        //{
-        //    base.OnDuplicateFieldWarning(nodeId, indexSetName, fieldName);
-        //}
-
-        //protected override void OnGatheringFieldData(IndexingFieldDataEventArgs e)
-        //{
-        //    base.OnGatheringFieldData(e);
-        //}
-
-        //protected override void OnGatheringNodeData(IndexingNodeDataEventArgs e)
-        //{
-        //    base.OnGatheringNodeData(e);
-        //}
-
-        //protected override void OnIgnoringNode(IndexingNodeDataEventArgs e)
-        //{
-        //    base.OnIgnoringNode(e);
-        //}
-
-        //protected override void OnIndexDeleted(DeleteIndexEventArgs e)
-        //{
-        //    base.OnIndexDeleted(e);
-        //}
-
-        //protected override void OnIndexingError(IndexingErrorEventArgs e)
-        //{
-        //    base.OnIndexingError(e);
-        //}
-
-        //protected override void OnIndexOperationComplete(EventArgs e)
-        //{
-        //    base.OnIndexOperationComplete(e);
-        //}
-
-        //protected override void OnIndexOptimized(EventArgs e)
-        //{
-        //    base.OnIndexOptimized(e);
-        //}
-
-        //protected override void OnIndexOptimizing(EventArgs e)
-        //{
-        //    base.OnIndexOptimizing(e);
-        //}
-
-        //protected override void OnNodeIndexed(IndexedNodeEventArgs e)
-        //{
-        //    base.OnNodeIndexed(e);
-        //}
-
-        //protected override void OnNodeIndexing(IndexingNodeEventArgs e)
-        //{
-        //    base.OnNodeIndexing(e);
-        //}
-
-        //protected override void OnNodesIndexed(IndexedNodesEventArgs e)
-        //{
-        //    base.OnNodesIndexed(e);
-        //}
-
-        //protected override void OnNodesIndexing(IndexingNodesEventArgs e)
-        //{
-        //    base.OnNodesIndexing(e);
-        //}
-
-        //public override void ReIndexNode(XElement node, string type)
-        //{
-        //    base.ReIndexNode(node, type);
-        //}
-
-        //protected override bool ValidateDocument(XElement node)
-        //{
-        //    return base.ValidateDocument(node);
-        //}
-
         /// <summary>
         /// index all supplied nodes (and their detached content)
         /// </summary>
-        /// <param name="nodes">collection of nodes (and any detached content they may have) to be indexed</param>
-        internal void Index(IPublishedContent[] nodes)
+        /// <param name="nodes">collection of nodes conent/media/member nodes to be indexed</param>
+        /// <param name="indexItem">when true, indicates the IPublishedContent nodes should be indexed</param>
+        /// <param name="indexDetached">when true, indicates the detached items for each node should be indexed</param>
+        internal void Index(IEnumerable<IPublishedContent> nodes, bool indexItem, bool indexDetached)
         {
-#if DEBUG
+            if (!indexItem && !indexDetached) return; // possible 
+
             var stopwatch = Stopwatch.StartNew();
-#endif
+            var counter = 0;
+
             var indexWriter = this.GetIndexWriter();
 
             foreach(var node in nodes)
             {
-                var indexingContext = new IndexingContext(
-                                                hostNode: null,
-                                                node: node,
-                                                indexerName: this.Name);
+                IndexingContext indexingContext;
+                Document document;
 
-                var document = new Document();
-
-                LookService.Index(indexingContext, document);
-
-                indexWriter.AddDocument(document);
-
-                foreach (var detachedNode in node.GetDetachedDescendants())
+                if (indexItem)
                 {
-                    indexingContext = new IndexingContext(
-                                            hostNode: node,
-                                            node: detachedNode,
-                                            indexerName: this.Name);
+                    indexingContext = new IndexingContext(null, node, this.Name);
 
                     document = new Document();
 
                     LookService.Index(indexingContext, document);
 
-                    indexWriter.AddDocument(document); // index each detached item
+                    if (!indexingContext.Cancelled)
+                    {
+                        counter++;
+
+                        indexWriter.AddDocument(document);
+                    }
+                }
+
+                if (indexDetached)
+                {
+                    IPublishedContent[] detachedNodes = null;
+
+                    try 
+                    {
+                        // SEOChecker prior to 2.2 doesn't handle IPublishedContent without an ID
+                        detachedNodes = node.GetDetachedDescendants();
+                    }
+                    catch (Exception exception)
+                    {
+                        LogHelper.WarnWithException(typeof(LookIndexer), "Error handling Detached items", exception);                       
+                    }
+                    finally
+                    {
+                        if (detachedNodes != null)
+                        {
+                            foreach (var detachedNode in detachedNodes)
+                            {
+                                indexingContext = new IndexingContext(node, detachedNode, this.Name);
+
+                                document = new Document();
+
+                                LookService.Index(indexingContext, document);
+
+                                if (!indexingContext.Cancelled)
+                                {
+                                    counter++;
+
+                                    indexWriter.AddDocument(document); // index each detached item
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
             indexWriter.Commit();
-#if DEBUG
+
             stopwatch.Stop();
-            LogHelper.Debug(typeof(LookService), $"Indexing { nodes.Length } Item(s) Took { stopwatch.ElapsedMilliseconds }ms");
-#endif
+
+            if (counter > 0)
+            {
+                LogHelper.Debug(typeof(LookIndexer), $"Indexing { counter } Item(s) Took { stopwatch.ElapsedMilliseconds }ms");
+            }
         }
     }
 }
