@@ -17,7 +17,7 @@ namespace Our.Umbraco.Look.Services
         {
             var indexerConfiguration = LookService.GetIndexerConfiguration(indexingContext.IndexerName);
 
-            if (!indexerConfiguration.IndexAlias(indexingContext.Item?.DocumentTypeAlias))
+            if (!indexerConfiguration.ShouldIndexAlias(indexingContext.Item?.DocumentTypeAlias))
             {
                 indexingContext.Cancel();
                 return;

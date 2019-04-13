@@ -117,13 +117,13 @@ namespace Our.Umbraco.Look
             {
                 var indexerConfiguration = LookService.GetIndexerConfiguration(lookIndexer.Name);
 
-                var indexItem = publishedItemType == PublishedItemType.Content && indexerConfiguration.IndexContent
-                                || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexMedia
-                                || publishedItemType == PublishedItemType.Member && indexerConfiguration.IndexMembers;
+                var indexItem = publishedItemType == PublishedItemType.Content && indexerConfiguration.ShouldIndexContent
+                                || publishedItemType == PublishedItemType.Media && indexerConfiguration.ShouldIndexMedia
+                                || publishedItemType == PublishedItemType.Member && indexerConfiguration.ShouldIndexMembers;
 
-                var indexDetached = publishedItemType == PublishedItemType.Content && indexerConfiguration.IndexDetachedContent
-                                    || publishedItemType == PublishedItemType.Media && indexerConfiguration.IndexDetachedMedia
-                                    || publishedItemType == PublishedItemType.Member && indexerConfiguration.IndexDetachedMembers;
+                var indexDetached = publishedItemType == PublishedItemType.Content && indexerConfiguration.ShouldIndexDetachedContent
+                                    || publishedItemType == PublishedItemType.Media && indexerConfiguration.ShouldIndexDetachedMedia
+                                    || publishedItemType == PublishedItemType.Member && indexerConfiguration.ShouldIndexDetachedMembers;
 
                 lookIndexer.Index(publishedContentItems, indexItem, indexDetached); // both flags could be false (indicating no indexing shoudl take place)
             }

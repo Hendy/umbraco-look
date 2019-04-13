@@ -97,17 +97,17 @@ namespace Our.Umbraco.Look.Services
 
             var indexerConfiguration = LookService.GetIndexerConfiguration(indexerName);
 
-            if (indexerConfiguration.IndexContent) // attempt to get content
+            if (indexerConfiguration.ShouldIndexContent) // attempt to get content
             {
                 publishedContent = LookService.Instance._umbracoHelper.TypedContent(e.NodeId);
             }
 
-            if (publishedContent == null && indexerConfiguration.IndexMedia) // attempt to get as media
+            if (publishedContent == null && indexerConfiguration.ShouldIndexMedia) // attempt to get as media
             {
                 publishedContent = LookService.Instance._umbracoHelper.TypedMedia(e.NodeId);
             }
 
-            if (publishedContent == null && indexerConfiguration.IndexMembers) // attempt to get as member
+            if (publishedContent == null && indexerConfiguration.ShouldIndexMembers) // attempt to get as member
             {
                 publishedContent = LookService.Instance._umbracoHelper.SafeTypedMember(e.NodeId);
             }

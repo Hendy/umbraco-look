@@ -43,17 +43,17 @@ namespace Our.Umbraco.Look
         {
             var indexerConfiguration = LookService.GetIndexerConfiguration(this.Name);
                                                                                             
-            if (indexerConfiguration.IndexContent || indexerConfiguration.IndexDetachedContent)
+            if (indexerConfiguration.ShouldIndexContent || indexerConfiguration.ShouldIndexDetachedContent)
             {
                 var content = this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]");
 
                 this.Index(
                         content, 
-                        indexerConfiguration.IndexContent, 
-                        indexerConfiguration.IndexDetachedContent);
+                        indexerConfiguration.ShouldIndexContent, 
+                        indexerConfiguration.ShouldIndexDetachedContent);
             }
 
-            if (indexerConfiguration.IndexMedia || indexerConfiguration.IndexDetachedMedia)
+            if (indexerConfiguration.ShouldIndexMedia || indexerConfiguration.ShouldIndexDetachedMedia)
             {
                 var media = this.UmbracoHelper
                                 .TypedMediaAtRoot()
@@ -61,11 +61,11 @@ namespace Our.Umbraco.Look
 
                 this.Index(
                         media, 
-                        indexerConfiguration.IndexMedia, 
-                        indexerConfiguration.IndexDetachedMedia);
+                        indexerConfiguration.ShouldIndexMedia, 
+                        indexerConfiguration.ShouldIndexDetachedMedia);
             }
 
-            if (indexerConfiguration.IndexMembers || indexerConfiguration.IndexDetachedMembers)
+            if (indexerConfiguration.ShouldIndexMembers || indexerConfiguration.ShouldIndexDetachedMembers)
             {
                 var members = ApplicationContext
                                 .Current
@@ -76,8 +76,8 @@ namespace Our.Umbraco.Look
 
                 this.Index(
                         members, 
-                        indexerConfiguration.IndexMembers, 
-                        indexerConfiguration.IndexDetachedMembers);
+                        indexerConfiguration.ShouldIndexMembers, 
+                        indexerConfiguration.ShouldIndexDetachedMembers);
             }
 
             this.GetIndexWriter().Optimize();
