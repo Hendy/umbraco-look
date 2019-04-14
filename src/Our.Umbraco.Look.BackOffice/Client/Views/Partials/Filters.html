@@ -1,6 +1,27 @@
 ﻿<div ng-controller="Look.BackOffice.FiltersController" class="look-filters">
 
-    <p>Filters - {{ debug }}</p>
+    <label for="lookFilterAlias">Alias</label>
+
+    <!-- have to use ng-repeat as support for disabled & ng-options not in v1.1.5 -->
+    <select id="lookFilterAlias"
+            ng-model="alias"
+            ng-change="changeAlias()">
+
+        <option value=""></option>
+
+        <optgroup label="Document Types">
+            <option ng-repeat="x in filters.documentTypeAliases" ng-value="{{x.value}}" ng-disabled="{{x.disabled}}">{{x.label}}</option>
+        </optgroup>
+        <optgroup label="Media Types">
+            <option ng-repeat="x in filters.mediaTypeAliases" ng-value="{{x.value}}" ng-disabled="{{x.disabled}}">{{x.label}}</option>
+        </optgroup>
+        <optgroup label="Member Types">
+            <option ng-repeat="x in filters.memberTypeAliases" ng-value="{{x.value}}" ng-disabled="{{x.disabled}}">{{x.label}}</option>
+        </optgroup>
+
+    </select>
+
+    <p>a = {{ alias }}</p>
 
     <!-- 
         Alias : DropDown (grouped by content / media / member)

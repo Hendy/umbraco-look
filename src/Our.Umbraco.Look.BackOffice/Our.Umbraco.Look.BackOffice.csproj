@@ -232,6 +232,7 @@
     <Compile Include="Interfaces\ILookTreeNode.cs" />
     <Compile Include="Models\Api\ConfigurationData.cs" />
     <Compile Include="Models\Api\DetachedViewData.cs" />
+    <Compile Include="Models\Api\FiltersResult.cs" />
     <Compile Include="Models\Api\LocationsViewData.cs" />
     <Compile Include="Models\Api\MatchesResult.cs" />
     <Compile Include="Models\Api\NodeTypeViewData.cs" />

@@ -9,21 +9,23 @@
 
     function FiltersService() {
 
-        // alias dropdown could be Content / Media / Member
         var callbacks = [];
+        var alias = null; // could be any docType, mediaType or memberType alias
 
         return {
-            onChange: onChange
+            onChange: onChange,
+            change: change,
+            alias: alias
         };
 
         // register a callback to be triggered on change
         function onChange(callback) { callbacks.push(callback); }
 
-        //// when a change occurs
-        //function change(sort) {
-        //    angular.forEach(callbacks, function (callback) { callback(); });
-        //}
-
+        // when a change occurs
+        function change(alias) {
+            this.alias = alias;
+            angular.forEach(callbacks, function (callback) { callback(); });
+        }
     }
 
 })();

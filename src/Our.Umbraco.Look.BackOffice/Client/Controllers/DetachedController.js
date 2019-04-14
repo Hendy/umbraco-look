@@ -26,7 +26,18 @@
             .then(function (response) { $scope.viewData = response.data; });
 
         // filters
-        $scope.filters = {}; 
+        $scope.getFilters = function () {
+
+            var q = $q.defer();
+
+            apiService
+                .getDetachedFilters($scope.searcherName, $scope.nodeType)
+                .then(function (response) {
+                    q.resolve(response.data);
+                });
+
+            return q.promise;
+        };
 
         // matches
         $scope.getMatches = function (sort, skip, take) {

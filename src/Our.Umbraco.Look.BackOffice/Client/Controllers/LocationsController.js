@@ -25,7 +25,18 @@
             });
 
         // filters
-        $scope.filters = {}; 
+        $scope.getFilters = function () {
+
+            var q = $q.defer();
+
+            apiService
+                .getLocationFilters($scope.searcherName)
+                .then(function (response) {
+                    q.resolve(response.data);
+                });
+
+            return q.promise;
+        };
 
         // matches
         $scope.getMatches = function (sort, skip, take) {

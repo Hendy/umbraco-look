@@ -79,6 +79,45 @@ namespace Our.Umbraco.Look.BackOffice.Services
                             .ToArray();
         }
 
+        #region Get Filters
+
+        internal static FiltersResult GetFilters(string searcherName)
+        {
+            var filtersResult = new FiltersResult();
+
+            return filtersResult;
+        }
+
+        internal static FiltersResult GetNodeTypeFilters(string searcherName, PublishedItemType nodeType)
+        {
+            var filtersResult = new FiltersResult();
+
+            return filtersResult;
+        }
+
+        internal static FiltersResult GetDetachedFilters(string searcherName, PublishedItemType nodeType)
+        {
+            var filtersResult = new FiltersResult();
+
+            return filtersResult;
+        }
+
+        internal static FiltersResult GetTagFilters(string searcherName, string tagGroup, string tagName)
+        {
+            var filtersResult = new FiltersResult();
+
+            return filtersResult;
+        }
+
+        internal static FiltersResult GetLocationFilters(string searcherName)
+        {
+            var filtersResult = new FiltersResult();
+
+            return filtersResult;
+        }
+
+        #endregion
+
         #region Get Matches
 
         /// <summary>

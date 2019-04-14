@@ -6,10 +6,10 @@
         .module('umbraco')
         .controller('Look.BackOffice.MatchesController', MatchesController);
 
-    MatchesController.$inject = ['$scope', 'Look.BackOffice.SortService', '$q', 'dialogService', 'Look.BackOffice.MatchService'];
+    MatchesController.$inject = ['$scope', 'Look.BackOffice.FiltersService', 'Look.BackOffice.SortService', '$q', 'dialogService', 'Look.BackOffice.MatchService'];
 
     // this controller will handle paging for more results
-    function MatchesController($scope, sortService, $q, dialogService, matchService) {
+    function MatchesController($scope, filtersService, sortService, $q, dialogService, matchService) {
 
         dialogService.closeAll(); // close all on load
 
@@ -30,7 +30,7 @@
             if (!$scope.finishedLoading && !$scope.currentlyLoading) {
                 $scope.currentlyLoading = true;
 
-                getMatches(sortService.sortOn, skip, take)
+                getMatches(sortService.sortOn, skip, take) // TODO: pass in filters
                     .then(function (matches) { // success
 
                         var tryAgain = false;
@@ -107,12 +107,11 @@
                 template: '/App_Plugins/Look/BackOffice/LookTree/Partials/Details.html',
                 show: true
             });
-      };
+        };
 
-      $scope.isActive = function (match) {
+        $scope.isActive = function (match) {
         return match === matchService.selectedMatch;
-      };
-
+        };
 
         $scope.reload = function () {
             dialogService.closeAll();
@@ -122,9 +121,8 @@
         //$scope.lazyLoad(); // trigger the lazy load to start - wasn't ready here
 
         // clear data, then re-trigger lazy-load
-        sortService.onChange(function () {
-            reset();
-        });
+        sortService.onChange(function () { reset(); });
+        filtersService.onChange(function () { reset(); });
 
         function reset() {
             skip = 0;

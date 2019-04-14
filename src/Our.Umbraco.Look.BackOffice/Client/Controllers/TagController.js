@@ -30,7 +30,18 @@
             .then(function (response) { $scope.viewData = response.data; });
 
         // filters
-        $scope.filters = {}; 
+        $scope.getFilters = function () {
+
+            var q = $q.defer();
+
+            apiService
+                .getTagFilters($scope.searcherName, $scope.tagGroup, $scope.tagName)
+                .then(function (response) {
+                    q.resolve(response.data);
+                });
+
+            return q.promise;
+        };
 
         // matches
         $scope.getMatches = function (sort, skip, take) {

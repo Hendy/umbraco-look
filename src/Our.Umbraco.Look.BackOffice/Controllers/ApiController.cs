@@ -162,6 +162,56 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
 
         #endregion
 
+        #region Get Filters
+
+        [HttpGet]
+        [ValidateSearcher]
+        public IHttpActionResult GetFilters([FromUri]string searcherName)
+        {
+            var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
+            return this.Ok(QueryService.GetFilters(searcherName));
+        }
+
+        [HttpGet]
+        [ValidateSearcher]
+        public IHttpActionResult GetNodeTypeFilters(
+                    [FromUri]string searcherName, 
+                    [FromUri]PublishedItemType nodeType)
+        {
+            var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
+            return this.Ok(QueryService.GetNodeTypeFilters(searcherName, nodeType));
+        }
+
+        [HttpGet]
+        [ValidateSearcher]
+        public IHttpActionResult GetDetachedFilters(
+                    [FromUri]string searcherName, 
+                    [FromUri]PublishedItemType nodeType)
+        {
+            var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
+            return this.Ok(QueryService.GetDetachedFilters(searcherName, nodeType));
+        }
+
+        [HttpGet]
+        [ValidateSearcher]
+        public IHttpActionResult GetTagFilters(
+                    [FromUri]string searcherName,
+                    [FromUri]string tagGroup,
+                    [FromUri]string tagName)
+        {
+            var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
+            return this.Ok(QueryService.GetTagFilters(searcherName, tagGroup, tagName));
+        }
+
+        [HttpGet]
+        [ValidateSearcher]
+        public IHttpActionResult GetLocationFilters([FromUri]string searcherName)
+        {
+            var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
+            return this.Ok(QueryService.GetLocationFilters(searcherName));
+        }
+        #endregion
+
         #region Get Matches
 
         [HttpGet]
