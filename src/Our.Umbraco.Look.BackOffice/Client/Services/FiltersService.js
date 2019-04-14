@@ -10,20 +10,20 @@
     function FiltersService() {
 
         var callbacks = [];
-        var alias = null; // could be any docType, mediaType or memberType alias
+        var filterAlias = null; // could be any docType, mediaType or memberType alias
 
         return {
             onChange: onChange,
             change: change,
-            alias: alias
+            filterAlias: filterAlias
         };
 
         // register a callback to be triggered on change
         function onChange(callback) { callbacks.push(callback); }
 
         // when a change occurs
-        function change(alias) {
-            this.alias = alias;
+        function change(filterAlias) {
+            this.filterAlias = filterAlias;
             angular.forEach(callbacks, function (callback) { callback(); });
         }
     }

@@ -4,12 +4,14 @@
 
     <!-- have to use ng-repeat as support for disabled & ng-options not in v1.1.5 -->
     <select id="lookFilterAlias"
-            ng-model="alias"
+            ng-model="filterAlias"
             ng-change="changeAlias()">
 
         <option value=""></option>
 
-        <optgroup label="Document Types">
+        <option ng-repeat="x in filters.aliases" ng-value="{{x}}">{{x}}</option>
+
+        <!--<optgroup label="Document Types">
             <option ng-repeat="x in filters.documentTypeAliases" ng-value="{{x.value}}" ng-disabled="{{x.disabled}}">{{x.label}}</option>
         </optgroup>
         <optgroup label="Media Types">
@@ -17,20 +19,12 @@
         </optgroup>
         <optgroup label="Member Types">
             <option ng-repeat="x in filters.memberTypeAliases" ng-value="{{x.value}}" ng-disabled="{{x.disabled}}">{{x.label}}</option>
-        </optgroup>
+        </optgroup>-->
 
     </select>
 
-    <p>a = {{ alias }}</p>
-
     <!-- 
-        Alias : DropDown (grouped by content / media / member)
-
         Name : TextBox + dropdown for: starts with, conatains, ends with, + checkbox for case sensitivity
-
-
-    
-    
     -->
 
 </div>

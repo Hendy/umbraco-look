@@ -85,12 +85,30 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var filtersResult = new FiltersResult();
 
+            // TODO: extend Look to have a public NodeFacetQuery (this will facet on culture, alias and type, returning counts for each) ?
+
+            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() }
+                                        .Search()
+                                        .Matches
+                                        .Select(x => x.Alias)
+                                        .Distinct()
+                                        .OrderBy(x => x)
+                                        .ToArray();
+
             return filtersResult;
         }
 
         internal static FiltersResult GetNodeTypeFilters(string searcherName, PublishedItemType nodeType)
         {
             var filtersResult = new FiltersResult();
+
+            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType } }
+                            .Search()
+                            .Matches
+                            .Select(x => x.Alias)
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToArray();
 
             return filtersResult;
         }
@@ -99,6 +117,14 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var filtersResult = new FiltersResult();
 
+            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType, DetachedQuery = DetachedQuery.OnlyDetached } }
+                            .Search()
+                            .Matches
+                            .Select(x => x.Alias)
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToArray();
+
             return filtersResult;
         }
 
@@ -106,12 +132,41 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var filtersResult = new FiltersResult();
 
+            var lookQuery = new LookQuery(searcherName) { TagQuery = new TagQuery() };
+
+            if (!string.IsNullOrWhiteSpace(tagGroup) && string.IsNullOrWhiteSpace(tagName)) // only have the group to query
+            {
+                //use raw query looking for newly indexed field(in look 0.33.0)
+                // TODO: update look to handle tags like "colour:*"
+                lookQuery.RawQuery = "Look_TagGroup_" + tagGroup + ":1";
+            }
+            else if (!string.IsNullOrWhiteSpace(tagName)) // we have a specifc tag
+            {
+                lookQuery.TagQuery.Has = new LookTag(tagGroup, tagName);
+            }
+
+            filtersResult.Aliases = lookQuery
+                                    .Search()
+                                    .Matches
+                                    .Select(x => x.Alias)
+                                    .Distinct()
+                                    .OrderBy(x => x)
+                                    .ToArray();
+
             return filtersResult;
         }
 
         internal static FiltersResult GetLocationFilters(string searcherName)
         {
             var filtersResult = new FiltersResult();
+
+            filtersResult.Aliases = new LookQuery(searcherName) { LocationQuery = new LocationQuery() }
+                            .Search()
+                            .Matches
+                            .Select(x => x.Alias)
+                            .Distinct()
+                            .OrderBy(x => x)
+                            .ToArray();
 
             return filtersResult;
         }
