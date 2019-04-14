@@ -218,13 +218,14 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         [ValidateSearcher]
         public IHttpActionResult GetMatches(
             [FromUri]string searcherName,
+            [FromUri]string filter,
             [FromUri]string sort,
             [FromUri]int skip,
             [FromUri]int take)
         {
             var searcher = (BaseSearchProvider)this.RequestContext.RouteData.Values["searcher"];
 
-            return this.Ok(QueryService.GetMatches(searcherName, sort, skip, take));
+            return this.Ok(QueryService.GetMatches(searcherName, filter, sort, skip, take));
         }
 
         [HttpGet]
@@ -232,23 +233,25 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         public IHttpActionResult GetNodeTypeMatches(
             [FromUri]string searcherName,
             [FromUri]PublishedItemType nodeType,
+            [FromUri]string filter,
             [FromUri]string sort,
             [FromUri]int skip,
             [FromUri]int take)
         {
-            return this.Ok(QueryService.GetNodeTypeMatches(searcherName, nodeType, sort, skip, take));
+            return this.Ok(QueryService.GetNodeTypeMatches(searcherName, nodeType, filter, sort, skip, take));
         }
 
         [HttpGet]
         [ValidateSearcher]
-        public IHttpActionResult GetDetachedeMatches(
+        public IHttpActionResult GetDetachedMatches(
             [FromUri]string searcherName,
             [FromUri]PublishedItemType nodeType,
+            [FromUri]string filter,
             [FromUri]string sort,
             [FromUri]int skip,
             [FromUri]int take)
         {
-            return this.Ok(QueryService.GetDetachedMatches(searcherName, nodeType, sort, skip, take));
+            return this.Ok(QueryService.GetDetachedMatches(searcherName, nodeType, filter, sort, skip, take));
         }
 
         /// <summary>
@@ -264,14 +267,15 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         [HttpGet]
         [ValidateSearcher]
         public IHttpActionResult GetTagMatches(
-                    [FromUri]string searcherName, 
-                    [FromUri]string tagGroup, 
-                    [FromUri]string tagName,
-                    [FromUri]string sort,
-                    [FromUri]int skip,
-                    [FromUri]int take)
+            [FromUri]string searcherName, 
+            [FromUri]string tagGroup, 
+            [FromUri]string tagName,
+            [FromUri]string filter,
+            [FromUri]string sort,
+            [FromUri]int skip,
+            [FromUri]int take)
         {
-            return this.Ok(QueryService.GetTagMatches(searcherName, tagGroup, tagName, sort, skip, take));
+            return this.Ok(QueryService.GetTagMatches(searcherName, tagGroup, tagName, filter, sort, skip, take));
         }
 
         /// <summary>
@@ -286,11 +290,12 @@ namespace Our.Umbraco.AzureLogger.Core.Controllers
         [ValidateSearcher]
         public IHttpActionResult GetLocationMatches(
             [FromUri]string searcherName,
+            [FromUri]string filter,
             [FromUri]string sort,
             [FromUri]int skip,
             [FromUri]int take)
         {
-            return this.Ok(QueryService.GetLocationMatches(searcherName, sort, skip, take));
+            return this.Ok(QueryService.GetLocationMatches(searcherName, filter, sort, skip, take));
         }
 
         #endregion

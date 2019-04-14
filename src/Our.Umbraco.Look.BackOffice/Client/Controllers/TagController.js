@@ -44,12 +44,12 @@
         };
 
         // matches
-        $scope.getMatches = function (sort, skip, take) {
+        $scope.getMatches = function (filter, sort, skip, take) {
 
             var q = $q.defer();
 
             apiService
-                .getTagMatches($scope.searcherName, $scope.tagGroup, $scope.tagName, sort, skip, take)
+                .getTagMatches($scope.searcherName, $scope.tagGroup, $scope.tagName, filter, sort, skip, take)
                 .then(function (response) {
 
                     // remove link to this tag from all matches (no need to render link to self)

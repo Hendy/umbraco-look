@@ -198,9 +198,10 @@
 
         // get matches ----------------------------------------
 
-        function getMatches(searcherName, sort, skip, take) {
+        function getMatches(searcherName, filter, sort, skip, take) {
 
             if (angular.isUndefined(searcherName)) { searcherName = ''; }
+            if (angular.isUndefined(filter)) { filter = ''; }
             if (angular.isUndefined(sort)) { sort = ''; }
             if (angular.isUndefined(skip)) { skip = 0; }
             if (angular.isUndefined(take)) { take = 0; }
@@ -210,6 +211,7 @@
                 url: 'BackOffice/Look/Api/GetMatches',
                 params: {
                     'searcherName': searcherName,
+                    'filter': filter,
                     'sort': sort,
                     'skip': skip,
                     'take': take
@@ -219,10 +221,11 @@
             return matches;
         }
 
-        function getNodeTypeMatches(searcherName, nodeType, sort, skip, take) {
+        function getNodeTypeMatches(searcherName, nodeType, filter, sort, skip, take) {
 
             if (angular.isUndefined(searcherName)) { searcherName = ''; }
             if (angular.isUndefined(nodeType)) { { nodeType = ''; }}
+            if (angular.isUndefined(filter)) { filter = ''; }
             if (angular.isUndefined(sort)) { sort = ''; }
             if (angular.isUndefined(skip)) { skip = 0; }
             if (angular.isUndefined(take)) { take = 0; }
@@ -233,6 +236,7 @@
                 params: {
                     'searcherName': searcherName,
                     'nodeType': nodeType,
+                    'filter': filter,
                     'sort': sort,
                     'skip': skip,
                     'take': take
@@ -243,20 +247,22 @@
         }
 
 
-        function getDetachedMatches(searcherName, nodeType, sort, skip, take) {
+        function getDetachedMatches(searcherName, nodeType, filter, sort, skip, take) {
 
             if (angular.isUndefined(searcherName)) { searcherName = ''; }
             if (angular.isUndefined(nodeType)) { { nodeType = ''; } }
+            if (angular.isUndefined(filter)) { filter = ''; }
             if (angular.isUndefined(sort)) { sort = ''; }
             if (angular.isUndefined(skip)) { skip = 0; }
             if (angular.isUndefined(take)) { take = 0; }
 
             var matches = $http({
                 method: 'GET',
-                url: 'BackOffice/Look/Api/GetDetachedeMatches',
+                url: 'BackOffice/Look/Api/GetDetachedMatches',
                 params: {
                     'searcherName': searcherName,
                     'nodeType': nodeType,
+                    'filter': filter,
                     'sort': sort,
                     'skip': skip,
                     'take': take
@@ -266,11 +272,12 @@
             return matches;
         }
 
-        function getTagMatches(searcherName, tagGroup, tagName, sort, skip, take) {
+        function getTagMatches(searcherName, tagGroup, tagName, filter, sort, skip, take) {
 
             if (angular.isUndefined(searcherName)) { searcherName = ''; }
             if (angular.isUndefined(tagGroup)) { tagGroup = ''; }
             if (angular.isUndefined(tagName)) { tagName = ''; }
+            if (angular.isUndefined(filter)) { filter = ''; }
             if (angular.isUndefined(sort)) { sort = ''; }
             if (angular.isUndefined(skip)) { skip = 0; }
             if (angular.isUndefined(take)) { take = 0; }
@@ -282,6 +289,7 @@
                     'searcherName': searcherName,
                     'tagGroup': tagGroup,
                     'tagName': tagName,
+                    'filter': filter,
                     'sort': sort,
                     'skip': skip,
                     'take': take
@@ -291,9 +299,10 @@
             return matches;
         }
 
-        function getLocationMatches(searcherName, sort, skip, take) {
+        function getLocationMatches(searcherName, filter, sort, skip, take) {
 
             if (angular.isUndefined(searcherName)) { searcherName = ''; }
+            if (angular.isUndefined(filter)) { filter = ''; }
             if (angular.isUndefined(sort)) { sort = ''; }
             if (angular.isUndefined(skip)) { skip = 0; }
             if (angular.isUndefined(take)) { take = 0; }
@@ -303,6 +312,7 @@
                 url: 'BackOffice/Look/Api/GetLocationMatches',
                 params: {
                     'searcherName': searcherName,
+                    'filter': filter,
                     'sort': sort,
                     'skip': skip,
                     'take': take

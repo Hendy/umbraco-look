@@ -40,12 +40,12 @@
         };
 
         // matches
-        $scope.getMatches = function (sort, skip, take) {
+        $scope.getMatches = function (filter, sort, skip, take) {
 
             var q = $q.defer();
 
             apiService
-                .getDetachedMatches($scope.searcherName, $scope.nodeType, sort, skip, take)
+                .getDetachedMatches($scope.searcherName, $scope.nodeType, filter, sort, skip, take)
                 .then(function (response) {
                     q.resolve(response.data.matches);
                 });

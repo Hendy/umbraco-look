@@ -37,12 +37,12 @@
         };
 
         // matches
-        $scope.getMatches = function (sort, skip, take) {
+        $scope.getMatches = function (filter, sort, skip, take) {
 
             var q = $q.defer();
 
             apiService
-                .getTagMatches($scope.searcherName, undefined, undefined, sort, skip, take)
+                .getTagMatches($scope.searcherName, undefined, undefined, filter, sort, skip, take)
                 .then(function (response) {
                     q.resolve(response.data.matches);
                 });

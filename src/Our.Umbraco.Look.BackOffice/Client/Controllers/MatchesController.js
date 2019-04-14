@@ -30,7 +30,7 @@
             if (!$scope.finishedLoading && !$scope.currentlyLoading) {
                 $scope.currentlyLoading = true;
 
-                getMatches(sortService.sortOn, skip, take) // TODO: pass in filters
+                getMatches(filtersService.filterAlias, sortService.sortOn, skip, take) // TODO: pass in filters
                     .then(function (matches) { // success
 
                         var tryAgain = false;

@@ -10,7 +10,7 @@
     function FiltersService() {
 
         var callbacks = [];
-        var filterAlias = null; // could be any docType, mediaType or memberType alias
+        var filterAlias = undefined; // could be any docType, mediaType or memberType alias
 
         return {
             onChange: onChange,

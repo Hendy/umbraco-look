@@ -181,13 +181,13 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <param name="tagName"></param>
         /// <param name="sort"></param>
         /// <returns></returns>
-        internal static MatchesResult GetMatches(string searcherName, string sort, int skip, int take)
+        internal static MatchesResult GetMatches(string searcherName, string filter, string sort, int skip, int take)
         {
             var matchesResult = new MatchesResult();
 
             var lookQuery = new LookQuery(searcherName);
 
-            lookQuery.NodeQuery = new NodeQuery();
+            lookQuery.NodeQuery = new NodeQuery() { Alias = !string.IsNullOrWhiteSpace(filter) ? filter : null };
 
             QueryService.SetSort(lookQuery, sort);
 
@@ -211,7 +211,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <param name="skip"></param>
         /// <param name="take"></param>
         /// <returns></returns>
-        internal static MatchesResult GetNodeTypeMatches(string searcherName, PublishedItemType nodeType, string sort, int skip, int take)
+        internal static MatchesResult GetNodeTypeMatches(string searcherName, PublishedItemType nodeType, string filter, string sort, int skip, int take)
         {
             var matchesResult = new MatchesResult();
 
@@ -219,7 +219,8 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             lookQuery.NodeQuery = new NodeQuery()
             {
-                Type = nodeType
+                Type = nodeType,
+                Alias = !string.IsNullOrWhiteSpace(filter) ? filter : null
             };
 
             QueryService.SetSort(lookQuery, sort);
@@ -246,11 +247,19 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <param name="skip"></param>
         /// <param name="take"></param>
         /// <returns></returns>
-        internal static MatchesResult GetDetachedMatches(string searcherName, PublishedItemType nodeType, string sort, int skip, int take)
+        internal static MatchesResult GetDetachedMatches(string searcherName, PublishedItemType nodeType, string filter, string sort, int skip, int take)
         {
             var matchesResult = new MatchesResult();
 
-            var lookQuery = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType, DetachedQuery = DetachedQuery.OnlyDetached } };
+            var lookQuery = new LookQuery(searcherName)
+                            {
+                                NodeQuery = new NodeQuery()
+                                {
+                                    Type = nodeType,
+                                    Alias = !string.IsNullOrWhiteSpace(filter) ? filter : null,
+                                    DetachedQuery = DetachedQuery.OnlyDetached
+                                }
+                            };
 
             QueryService.SetSort(lookQuery, sort);
 
@@ -275,7 +284,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <param name="tagName"></param>
         /// <param name="sort"></param>
         /// <returns></returns>
-        internal static MatchesResult GetTagMatches(string searcherName, string tagGroup, string tagName, string sort, int skip, int take)
+        internal static MatchesResult GetTagMatches(string searcherName, string tagGroup, string tagName, string filter, string sort, int skip, int take)
         {
             var matchesResult = new MatchesResult();
 
@@ -290,6 +299,11 @@ namespace Our.Umbraco.Look.BackOffice.Services
             else if (!string.IsNullOrWhiteSpace(tagName)) // we have a specifc tag
             {
                 lookQuery.TagQuery.Has = new LookTag(tagGroup, tagName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                lookQuery.NodeQuery = new NodeQuery() { Alias = filter };
             }
 
             QueryService.SetSort(lookQuery, sort);
@@ -314,13 +328,18 @@ namespace Our.Umbraco.Look.BackOffice.Services
         /// <param name="skip"></param>
         /// <param name="take"></param>
         /// <returns></returns>
-        internal static MatchesResult GetLocationMatches(string searcherName, string sort, int skip, int take)
+        internal static MatchesResult GetLocationMatches(string searcherName, string filter, string sort, int skip, int take)
         {
             var matchesResult = new MatchesResult();
 
             var lookQuery = new LookQuery(searcherName);
 
             lookQuery.LocationQuery = new LocationQuery();
+
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                lookQuery.NodeQuery = new NodeQuery() { Alias = filter };
+            }
 
             QueryService.SetSort(lookQuery, sort);
 
