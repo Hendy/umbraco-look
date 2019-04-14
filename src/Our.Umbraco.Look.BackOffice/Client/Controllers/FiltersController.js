@@ -9,6 +9,8 @@
 
     function FiltersController($scope, filtersService) {
 
+        filtersService.filterAlias = undefined;
+
         $scope.filterAlias = "";
 
         $scope.filters = {};

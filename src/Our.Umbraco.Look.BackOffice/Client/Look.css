@@ -1,9 +1,13 @@
 ﻿
+
+
+.look-filters, 
 .look-sort {
     float: right;
     margin:15px;
 }
 
+.look-filters label,
 .look-sort label {
     display: block;
     font-size: small;
