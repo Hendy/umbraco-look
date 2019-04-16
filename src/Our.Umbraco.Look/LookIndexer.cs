@@ -80,12 +80,27 @@ namespace Our.Umbraco.Look
         }
 
         /// <summary>
-        /// Index the supplied nodes
+        /// Index all Umbraco nodes with the supplied Ids (can be content, media, members, or a mixture)
+        /// </summary>
+        /// <param name="ids"></param>
+        public void Index(IEnumerable<int> ids)
+        {
+            var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+
+            var nodes = ids
+                        .Select(x => umbracoHelper.GetIPublishedContent(x))
+                        .Where(x => x != null);
+
+            this.Index(nodes);
+        }
+
+        /// <summary>
+        /// Index the supplied nodes (can be content, media, members, or a mixture)
         /// </summary>
         /// <param name="nodes"></param>
         public void Index(IEnumerable<IPublishedContent> nodes)
         {
-            nodes = nodes.Where(x => x.Id > 0).ToArray(); // reject any detached
+            nodes = nodes.Where(x => x.Id > 0).ToArray(); // reject any detached & enumerate into array
 
             this.Index(
                 nodes.Where(x => x.ItemType == PublishedItemType.Content),
@@ -114,6 +129,8 @@ namespace Our.Umbraco.Look
         /// <param name="indexDetached">when true, indicates the detached items for each node should be indexed</param>
         internal void Index(IEnumerable<IPublishedContent> nodes, bool indexItem, bool indexDetached)
         {
+            if (!nodes.Any()) return;
+
             if (!indexItem && !indexDetached) return; // possible 
 
             var stopwatch = Stopwatch.StartNew();
