@@ -16,6 +16,11 @@ namespace Our.Umbraco.Look // NOTE: namespaced pushed down to root as it's in th
     /// </summary>
     public static partial class ExamineManagerExtensions
     {
+        /// <summary>
+        /// ReIndex the Umbraco content, media and members of the supplied ids in all Examine and Look indexes
+        /// </summary>
+        /// <param name="examineManager"></param>
+        /// <param name="ids"></param>
         public static void ReIndex(this ExamineManager examineManager, IEnumerable<int> ids)
         {
             var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
@@ -27,6 +32,11 @@ namespace Our.Umbraco.Look // NOTE: namespaced pushed down to root as it's in th
             examineManager.ReIndex(nodes);
         }
 
+        /// <summary>
+        /// ReIndex all the supplied nodes in all Examine and Look indexes
+        /// </summary>
+        /// <param name="examineManager"></param>
+        /// <param name="nodes"></param>
         public static void ReIndex(this ExamineManager examineManager, IEnumerable<IPublishedContent> nodes)
         {
             var examineIndexers = examineManager
@@ -64,7 +74,6 @@ namespace Our.Umbraco.Look // NOTE: namespaced pushed down to root as it's in th
             {
                 lookIndexer.ReIndex(nodes);
             }
-
         }
     }
 }
