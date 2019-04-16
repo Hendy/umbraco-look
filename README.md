@@ -150,6 +150,17 @@ public class IndexingContext
 ```
 [Example Indexing Code](../../wiki/Example-Indexing)
 
+There are two extension methods in the Our.Umbraco.Look namespace on the ExmaineManager class: (and the same type of methods can be found on the LookIndexer instance)
+
+```csharp
+ExamineManager.ReIndex(IEnumerable<int> ids) { }
+```
+
+```csharp
+ExamineManager.ReIndex(IEnumerable<IPublishedContent nodes) { }
+```
+
+
 ## Searching
 
 Searching is performed using an Examine Searcher and can be done using the Exmaine API, or with the Look API.
