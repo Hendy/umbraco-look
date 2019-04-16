@@ -16,6 +16,11 @@ namespace Our.Umbraco.Look
 {
     public class LookIndexer : LuceneIndexer
     {
+        /// <summary>
+        /// Get the configuration model for this indexer
+        /// </summary>
+        private IndexerConfiguration Configuration => LookService.GetIndexerConfiguration(this.Name); // multiple gets shouldn't be too slow
+
         public override void Initialize(string name, NameValueCollection config)
         {
             base.Initialize(name, config);
@@ -26,33 +31,31 @@ namespace Our.Umbraco.Look
         /// </summary>
         protected override void PerformIndexRebuild()
         {
-            var indexerConfiguration = LookService.GetIndexerConfiguration(this.Name);
-
             var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
 
-            if (indexerConfiguration.ShouldIndexContent || indexerConfiguration.ShouldIndexDetachedContent)
+            if (this.Configuration.ShouldIndexContent || this.Configuration.ShouldIndexDetachedContent)
             {
                 var content = umbracoHelper.TypedContentAtXPath("//*[@isDoc]");
 
                 this.Index(
-                        content, 
-                        indexerConfiguration.ShouldIndexContent, 
-                        indexerConfiguration.ShouldIndexDetachedContent);
+                        content,
+                        this.Configuration.ShouldIndexContent,
+                        this.Configuration.ShouldIndexDetachedContent);
             }
 
-            if (indexerConfiguration.ShouldIndexMedia || indexerConfiguration.ShouldIndexDetachedMedia)
+            if (this.Configuration.ShouldIndexMedia || this.Configuration.ShouldIndexDetachedMedia)
             {
                 var media = umbracoHelper
                                 .TypedMediaAtRoot()
                                 .SelectMany(x => x.DescendantsOrSelf());
 
                 this.Index(
-                        media, 
-                        indexerConfiguration.ShouldIndexMedia, 
-                        indexerConfiguration.ShouldIndexDetachedMedia);
+                        media,
+                        this.Configuration.ShouldIndexMedia,
+                        this.Configuration.ShouldIndexDetachedMedia);
             }
 
-            if (indexerConfiguration.ShouldIndexMembers || indexerConfiguration.ShouldIndexDetachedMembers)
+            if (this.Configuration.ShouldIndexMembers || this.Configuration.ShouldIndexDetachedMembers)
             {
                 var members = ApplicationContext
                                 .Current
@@ -62,9 +65,9 @@ namespace Our.Umbraco.Look
                                 .Select(x => umbracoHelper.TypedMember(x.Id));
 
                 this.Index(
-                        members, 
-                        indexerConfiguration.ShouldIndexMembers, 
-                        indexerConfiguration.ShouldIndexDetachedMembers);
+                        members,
+                        this.Configuration.ShouldIndexMembers,
+                        this.Configuration.ShouldIndexDetachedMembers);
             }
 
             this.GetIndexWriter().Optimize();
@@ -82,26 +85,24 @@ namespace Our.Umbraco.Look
         /// <param name="nodes"></param>
         public void Index(IEnumerable<IPublishedContent> nodes)
         {
-            var indexerConfiguration = LookService.GetIndexerConfiguration(this.Name);
-
             nodes = nodes.Where(x => x.Id > 0).ToArray(); // reject any detached
 
             this.Index(
                 nodes.Where(x => x.ItemType == PublishedItemType.Content),
-                indexerConfiguration.ShouldIndexContent,
-                indexerConfiguration.ShouldIndexDetachedContent
+                this.Configuration.ShouldIndexContent,
+                this.Configuration.ShouldIndexDetachedContent
             );
 
             this.Index(
                 nodes.Where(x => x.ItemType == PublishedItemType.Media),
-                indexerConfiguration.ShouldIndexMedia,
-                indexerConfiguration.ShouldIndexDetachedMedia
+                this.Configuration.ShouldIndexMedia,
+                this.Configuration.ShouldIndexDetachedMedia
             );
 
             this.Index(
                 nodes.Where(x => x.ItemType == PublishedItemType.Member),
-                indexerConfiguration.ShouldIndexMembers,
-                indexerConfiguration.ShouldIndexDetachedMembers
+                this.Configuration.ShouldIndexMembers,
+                this.Configuration.ShouldIndexDetachedMembers
             );
         }
 
