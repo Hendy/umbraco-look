@@ -247,6 +247,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\ParsingException.cs" />
+    <Compile Include="Extensions\ExamineManagerExtensions\ReIndex.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\GetDetachedDescendant.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\YieldDetachedProperties.cs" />
     <Compile Include="Extensions\IPublishedContentExtensions\YieldDetachedDescendants.cs" />

@@ -80,20 +80,20 @@ namespace Our.Umbraco.Look
         {
         }
 
-        ///// <summary>
-        ///// Index all Umbraco nodes with the supplied Ids (can be content, media, members, or a mixture)
-        ///// </summary>
-        ///// <param name="ids"></param>
-        //public void ReIndex(IEnumerable<int> ids)
-        //{
-        //    var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+        /// <summary>
+        /// Index all Umbraco nodes with the supplied Ids (can be content, media, members, or a mixture)
+        /// </summary>
+        /// <param name="ids"></param>
+        public void ReIndex(IEnumerable<int> ids)
+        {
+            var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
 
-        //    var nodes = ids
-        //                .Select(x => umbracoHelper.GetIPublishedContent(x))
-        //                .Where(x => x != null);
+            var nodes = ids
+                        .Select(x => umbracoHelper.GetIPublishedContent(x))
+                        .Where(x => x != null);
 
-        //    this.ReIndex(nodes);
-        //}
+            this.ReIndex(nodes);
+        }
 
         /// <summary>
         /// Index the supplied nodes (can be content, media, members, or a mixture)
