@@ -205,5 +205,24 @@ namespace Our.Umbraco.Look
                 LogHelper.Debug(typeof(LookIndexer), $"Indexing { counter } Item(s) Took { stopwatch.ElapsedMilliseconds }ms");
             }
         }
+
+        /// <summary>
+        /// remove all items & detached items for the Umbraco content, media or member ids
+        /// </summary>
+        /// <param name="ids"></param>
+        internal void Remove(int[] ids)
+        {
+            var indexWriter = this.GetIndexWriter();
+
+            foreach (var id in ids)
+            {
+                indexWriter.DeleteDocuments(new Term[] {
+                        new Term(LookConstants.NodeIdField, id.ToString()), // the actual item
+                        new Term(LookConstants.HostIdField, id.ToString()) // any detached items
+                    });
+            }
+
+            indexWriter.Commit();
+        }
     }
 }

@@ -111,10 +111,10 @@ namespace Our.Umbraco.Look
         {
             if (publishedContentItems == null || !publishedContentItems.Any()) return;
 
-            this.Remove(publishedContentItems.Select(x => x.Id).ToArray());
-
             foreach(var lookIndexer in this._lookIndexers)
             {
+                lookIndexer.Remove(publishedContentItems.Select(x => x.Id).ToArray());
+
                 var indexerConfiguration = LookService.GetIndexerConfiguration(lookIndexer.Name);
 
                 var indexItem = publishedItemType == PublishedItemType.Content && indexerConfiguration.ShouldIndexContent
@@ -138,17 +138,7 @@ namespace Our.Umbraco.Look
         {
             foreach (var lookIndexer in this._lookIndexers)
             {
-                var indexWriter = lookIndexer.GetIndexWriter();
-
-                foreach (var id in ids)
-                {
-                    indexWriter.DeleteDocuments(new Term[] {
-                        new Term(LookConstants.NodeIdField, id.ToString()), // the actual item
-                        new Term(LookConstants.HostIdField, id.ToString()) // any detached items
-                    });
-                }
-
-                indexWriter.Commit();
+                lookIndexer.Remove(ids);
             }
         }
     }
