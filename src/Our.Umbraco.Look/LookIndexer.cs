@@ -16,23 +16,6 @@ namespace Our.Umbraco.Look
 {
     public class LookIndexer : LuceneIndexer
     {
-        private UmbracoHelper _umbracoHelper = null;
-
-        private UmbracoHelper UmbracoHelper
-        {
-            get
-            {
-                if (this._umbracoHelper == null)
-                {
-                    this._umbracoHelper = new UmbracoHelper(UmbracoContext.Current);  
-                }
-
-                return this._umbracoHelper;
-            }
-        }
-
-        //private IndexerConfiguration IndexerConfiguration => LookService.GetIndexerConfiguration(this.Name);
-
         public override void Initialize(string name, NameValueCollection config)
         {
             base.Initialize(name, config);
@@ -44,10 +27,12 @@ namespace Our.Umbraco.Look
         protected override void PerformIndexRebuild()
         {
             var indexerConfiguration = LookService.GetIndexerConfiguration(this.Name);
-                                                                                            
+
+            var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+
             if (indexerConfiguration.ShouldIndexContent || indexerConfiguration.ShouldIndexDetachedContent)
             {
-                var content = this.UmbracoHelper.TypedContentAtXPath("//*[@isDoc]");
+                var content = umbracoHelper.TypedContentAtXPath("//*[@isDoc]");
 
                 this.Index(
                         content, 
@@ -57,7 +42,7 @@ namespace Our.Umbraco.Look
 
             if (indexerConfiguration.ShouldIndexMedia || indexerConfiguration.ShouldIndexDetachedMedia)
             {
-                var media = this.UmbracoHelper
+                var media = umbracoHelper
                                 .TypedMediaAtRoot()
                                 .SelectMany(x => x.DescendantsOrSelf());
 
@@ -74,7 +59,7 @@ namespace Our.Umbraco.Look
                                 .Services
                                 .MemberService
                                 .GetAll(0, int.MaxValue, out int totalRecords)
-                                .Select(x => this.UmbracoHelper.TypedMember(x.Id));
+                                .Select(x => umbracoHelper.TypedMember(x.Id));
 
                 this.Index(
                         members, 
