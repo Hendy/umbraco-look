@@ -1,5 +1,6 @@
 ﻿using Examine.LuceneEngine.Providers;
 using Lucene.Net.Documents;
+using Lucene.Net.Index;
 using Our.Umbraco.Look.Extensions;
 using Our.Umbraco.Look.Services;
 using System;
@@ -79,28 +80,31 @@ namespace Our.Umbraco.Look
         {
         }
 
-        /// <summary>
-        /// Index all Umbraco nodes with the supplied Ids (can be content, media, members, or a mixture)
-        /// </summary>
-        /// <param name="ids"></param>
-        public void Index(IEnumerable<int> ids)
-        {
-            var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+        ///// <summary>
+        ///// Index all Umbraco nodes with the supplied Ids (can be content, media, members, or a mixture)
+        ///// </summary>
+        ///// <param name="ids"></param>
+        //public void ReIndex(IEnumerable<int> ids)
+        //{
+        //    var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
 
-            var nodes = ids
-                        .Select(x => umbracoHelper.GetIPublishedContent(x))
-                        .Where(x => x != null);
+        //    var nodes = ids
+        //                .Select(x => umbracoHelper.GetIPublishedContent(x))
+        //                .Where(x => x != null);
 
-            this.Index(nodes);
-        }
+        //    this.ReIndex(nodes);
+        //}
 
         /// <summary>
         /// Index the supplied nodes (can be content, media, members, or a mixture)
         /// </summary>
         /// <param name="nodes"></param>
-        public void Index(IEnumerable<IPublishedContent> nodes)
+        public void ReIndex(IEnumerable<IPublishedContent> nodes)
         {
             nodes = nodes.Where(x => x.Id > 0).ToArray(); // reject any detached & enumerate into array
+
+            // remove all first
+            this.Remove(nodes.Select(x => x.Id).ToArray());
 
             this.Index(
                 nodes.Where(x => x.ItemType == PublishedItemType.Content),
