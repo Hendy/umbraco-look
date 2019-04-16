@@ -125,7 +125,7 @@ namespace Our.Umbraco.Look
                                     || publishedItemType == PublishedItemType.Media && indexerConfiguration.ShouldIndexDetachedMedia
                                     || publishedItemType == PublishedItemType.Member && indexerConfiguration.ShouldIndexDetachedMembers;
 
-                lookIndexer.Index(publishedContentItems, indexItem, indexDetached); // both flags could be false (indicating no indexing shoudl take place)
+                lookIndexer.Index(publishedContentItems, indexItem, indexDetached); // both flags could be false (indicating no indexing should take place)
             }
         }
 

@@ -16,7 +16,7 @@ namespace Our.Umbraco.Look
 {
     public class LookIndexer : LuceneIndexer
     {
-        UmbracoHelper _umbracoHelper = null;
+        private UmbracoHelper _umbracoHelper = null;
 
         private UmbracoHelper UmbracoHelper
         {
@@ -30,6 +30,8 @@ namespace Our.Umbraco.Look
                 return this._umbracoHelper;
             }
         }
+
+        //private IndexerConfiguration IndexerConfiguration => LookService.GetIndexerConfiguration(this.Name);
 
         public override void Initialize(string name, NameValueCollection config)
         {
@@ -87,6 +89,35 @@ namespace Our.Umbraco.Look
 
         protected override void PerformIndexAll(string type)
         {
+        }
+
+        /// <summary>
+        /// Index the supplied nodes
+        /// </summary>
+        /// <param name="nodes"></param>
+        public void Index(IEnumerable<IPublishedContent> nodes)
+        {
+            var indexerConfiguration = LookService.GetIndexerConfiguration(this.Name);
+
+            nodes = nodes.Where(x => x.Id > 0).ToArray(); // reject any detached
+
+            this.Index(
+                nodes.Where(x => x.ItemType == PublishedItemType.Content),
+                indexerConfiguration.ShouldIndexContent,
+                indexerConfiguration.ShouldIndexDetachedContent
+            );
+
+            this.Index(
+                nodes.Where(x => x.ItemType == PublishedItemType.Media),
+                indexerConfiguration.ShouldIndexMedia,
+                indexerConfiguration.ShouldIndexDetachedMedia
+            );
+
+            this.Index(
+                nodes.Where(x => x.ItemType == PublishedItemType.Member),
+                indexerConfiguration.ShouldIndexMembers,
+                indexerConfiguration.ShouldIndexDetachedMembers
+            );
         }
 
         /// <summary>
