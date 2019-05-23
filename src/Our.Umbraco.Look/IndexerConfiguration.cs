@@ -11,7 +11,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Set item types to include in the index, defaults to all item types
         /// </summary>
-        public ItemType[] ItemTypes { internal get; set; } = new[] {
+        public ItemType[] Types { internal get; set; } = new[] {
                                                                 ItemType.Content,
                                                                 ItemType.DetachedContent,
                                                                 ItemType.Media,
@@ -41,32 +41,32 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Helper to indicate whether content should be indexed
         /// </summary>
-        internal bool ShouldIndexContent => this.ItemTypes != null && this.ItemTypes.Contains(ItemType.Content);
+        internal bool ShouldIndexContent => this.Types != null && this.Types.Contains(ItemType.Content);
 
         /// <summary>
         /// Helper to indicate whether detached items on content should be indexed
         /// </summary>
-        internal bool ShouldIndexDetachedContent => this.ItemTypes != null && this.ItemTypes.Contains(ItemType.DetachedContent);
+        internal bool ShouldIndexDetachedContent => this.Types != null && this.Types.Contains(ItemType.DetachedContent);
 
         /// <summary>
         /// Helper to indicate whether media should be indexed
         /// </summary>
-        internal bool ShouldIndexMedia => this.ItemTypes != null && this.ItemTypes.Contains(ItemType.Media);
+        internal bool ShouldIndexMedia => this.Types != null && this.Types.Contains(ItemType.Media);
 
         /// <summary>
         /// Helper to indicate whether detached items on media should be indexed
         /// </summary>
-        internal bool ShouldIndexDetachedMedia => this.ItemTypes != null && this.ItemTypes.Contains(ItemType.DetachedMedia);
+        internal bool ShouldIndexDetachedMedia => this.Types != null && this.Types.Contains(ItemType.DetachedMedia);
 
         /// <summary>
         /// Helper to indicate whether members should be indexed
         /// </summary>
-        internal bool ShouldIndexMembers => this.ItemTypes != null && this.ItemTypes.Contains(ItemType.Member);
+        internal bool ShouldIndexMembers => this.Types != null && this.Types.Contains(ItemType.Member);
 
         /// <summary>
         /// Helper to indicate whether detached items on content members be indexed
         /// </summary>
-        internal bool ShouldIndexDetachedMembers => this.ItemTypes != null && this.ItemTypes.Contains(ItemType.DetachedMember);
+        internal bool ShouldIndexDetachedMembers => this.Types != null && this.Types.Contains(ItemType.DetachedMember);
 
         /// <summary>
         /// Helper method to check to see if a given docType, mediaType or memberType alias should be indexed
