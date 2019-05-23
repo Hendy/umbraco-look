@@ -25,14 +25,14 @@ namespace Our.Umbraco.Look
         public IPublishedContent HostItem { get; }
 
         /// <summary>
-        /// The Look ItemType for the item being indexed
+        /// The Look ItemType for the item being indexed (content, media or member and whether it's detached or not)
         /// </summary>
-        public ItemType Type { get; }
+        public ItemType ItemType { get; }
 
         /// <summary>
         /// Convienience flag to indicate whether the item is a detached item
         /// </summary>
-        public bool IsDetached => this.Type.IsDetached();
+        public bool IsDetached => this.ItemType.IsDetached();
 
         /// <summary>
         /// Returns true if the Cancel method was called
@@ -55,18 +55,18 @@ namespace Our.Umbraco.Look
             {
                 switch (hostNode.ItemType)
                 {
-                    case PublishedItemType.Content: this.Type = ItemType.DetachedContent; break;
-                    case PublishedItemType.Media: this.Type = ItemType.DetachedMedia; break;
-                    case PublishedItemType.Member: this.Type = ItemType.DetachedMember; break;
+                    case PublishedItemType.Content: this.ItemType = ItemType.DetachedContent; break;
+                    case PublishedItemType.Media: this.ItemType = ItemType.DetachedMedia; break;
+                    case PublishedItemType.Member: this.ItemType = ItemType.DetachedMember; break;
                 }
             }
-            else // not detached
+            else if (node != null) // safety check - not detached
             {
                 switch (node.ItemType)
                 {
-                    case PublishedItemType.Content: this.Type = ItemType.Content; break;
-                    case PublishedItemType.Media: this.Type = ItemType.Media; break;
-                    case PublishedItemType.Member: this.Type = ItemType.Member; break;
+                    case PublishedItemType.Content: this.ItemType = ItemType.Content; break;
+                    case PublishedItemType.Media: this.ItemType = ItemType.Media; break;
+                    case PublishedItemType.Member: this.ItemType = ItemType.Member; break;
                 }
             }
         }
