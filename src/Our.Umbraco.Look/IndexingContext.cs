@@ -1,4 +1,5 @@
-﻿using Umbraco.Core.Models;
+﻿using Our.Umbraco.Look.Extensions;
+using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look
 {
@@ -24,14 +25,14 @@ namespace Our.Umbraco.Look
         public IPublishedContent HostItem { get; }
 
         /// <summary>
-        /// Convienience flag to indicate whether the item is a detached item
-        /// </summary>
-        public bool IsDetached { get; }
-
-        /// <summary>
         /// The Look ItemType for the item being indexed
         /// </summary>
         public ItemType Type { get; }
+
+        /// <summary>
+        /// Convienience flag to indicate whether the item is a detached item
+        /// </summary>
+        public bool IsDetached => this.Type.IsDetached();
 
         /// <summary>
         /// Returns true if the Cancel method was called
@@ -49,7 +50,6 @@ namespace Our.Umbraco.Look
             this.HostItem = hostNode;
             this.Item = node;
             this.IndexerName = indexerName;
-            this.IsDetached = hostNode != null;
 
             if (hostNode != null) // we have detached content
             {
