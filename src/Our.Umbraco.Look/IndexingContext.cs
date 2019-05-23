@@ -1,4 +1,5 @@
-﻿using Umbraco.Core.Models;
+﻿using Our.Umbraco.Look.Extensions;
+using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look
 {
@@ -13,10 +14,10 @@ namespace Our.Umbraco.Look
         public string IndexerName { get; }
 
         /// <summary>
-        /// The Content, Media, Member or Detached item being indexed (always has a value (unless unit testing)
+        /// The Content, Media, Member or Detached item being indexed (always has a value (unless unit testing))
         /// </summary>
         public IPublishedContent Item { get; }
-
+        
         /// <summary>
         /// When the item being indexed is 'detached', this is the IPublishedContent of the 'known' Content, Media or Member.
         /// (this value will null when the item being indexed is not detached)
@@ -24,9 +25,14 @@ namespace Our.Umbraco.Look
         public IPublishedContent HostItem { get; }
 
         /// <summary>
+        /// The Look ItemType for the item being indexed
+        /// </summary>
+        public ItemType Type { get; }
+
+        /// <summary>
         /// Convienience flag to indicate whether the item is a detached item
         /// </summary>
-        public bool IsDetached => this.HostItem != null;
+        public bool IsDetached => this.Type.IsDetached();
 
         /// <summary>
         /// Returns true if the Cancel method was called
@@ -44,6 +50,25 @@ namespace Our.Umbraco.Look
             this.HostItem = hostNode;
             this.Item = node;
             this.IndexerName = indexerName;
+
+            if (hostNode != null) // we have detached content
+            {
+                switch (hostNode.ItemType)
+                {
+                    case PublishedItemType.Content: this.Type = ItemType.DetachedContent; break;
+                    case PublishedItemType.Media: this.Type = ItemType.DetachedMedia; break;
+                    case PublishedItemType.Member: this.Type = ItemType.DetachedMember; break;
+                }
+            }
+            else // not detached
+            {
+                switch (node.ItemType)
+                {
+                    case PublishedItemType.Content: this.Type = ItemType.Content; break;
+                    case PublishedItemType.Media: this.Type = ItemType.Media; break;
+                    case PublishedItemType.Member: this.Type = ItemType.Member; break;
+                }
+            }
         }
 
         /// <summary>
