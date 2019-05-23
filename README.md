@@ -136,9 +136,9 @@ public class IndexingContext
 	public IPublishedContent HostItem { get; }
 
 	/// <summary>
-	/// Convienience flag to indicate whether the item is a detached item
-	/// </summary>
-	public bool IsDetached => this.HostItem != null;
+    /// The Look ItemType for the item being indexed (content, media or member and whether it's detached or not)
+    /// </summary>
+    public ItemType ItemType { get; }
 
 	/// <summary>
 	/// When called, the indexing of the current item will be cancelled.
