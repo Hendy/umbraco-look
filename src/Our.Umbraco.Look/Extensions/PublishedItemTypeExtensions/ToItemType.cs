@@ -6,7 +6,7 @@ namespace Our.Umbraco.Look.Extensions
     internal static partial class PublishedItemTypeExtensions
     {
         /// <summary>
-        /// Helper to convert from an Umbraco PublishedItemType enum value to a local enum value (which adds detached options for each)
+        /// Helper to convert from an Umbraco PublishedItemType enum value to a local enum value
         /// </summary>
         /// <param name="value">The PublishedItemType value to convert from</param>
         /// <returns>The corresponding ItemType value</returns>
@@ -19,7 +19,7 @@ namespace Our.Umbraco.Look.Extensions
                 case PublishedItemType.Member: return ItemType.Member;
             }
 
-            throw new Exception("Unown PublishedItemType");
+            throw new Exception("Unkown PublishedItemType");
         }
     }
 }

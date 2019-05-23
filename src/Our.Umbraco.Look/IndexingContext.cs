@@ -1,4 +1,5 @@
 ﻿using Our.Umbraco.Look.Extensions;
+using System;
 using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look
@@ -14,16 +15,16 @@ namespace Our.Umbraco.Look
         public string IndexerName { get; }
 
         /// <summary>
-        /// The Content, Media, Member or Detached item being indexed (always has a value (unless unit testing))
-        /// </summary>
-        public IPublishedContent Item { get; }
-        
-        /// <summary>
         /// When the item being indexed is 'detached', this is the IPublishedContent of the 'known' Content, Media or Member.
         /// (this value will null when the item being indexed is not detached)
         /// </summary>
         public IPublishedContent HostItem { get; }
 
+        /// <summary>
+        /// The Content, Media, Member or Detached item being indexed (always has a value (unless unit testing))
+        /// </summary>
+        public IPublishedContent Item { get; }
+        
         /// <summary>
         /// The Look ItemType for the item being indexed (content, media or member and whether it's detached or not)
         /// </summary>
@@ -32,6 +33,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Convienience flag to indicate whether the item is a detached item
         /// </summary>
+        [Obsolete("use ItemType.IsDetached() extension method instead")]
         public bool IsDetached => this.ItemType.IsDetached();
 
         /// <summary>
@@ -47,11 +49,11 @@ namespace Our.Umbraco.Look
         /// <param name="indexerName">The name of the inder being used</param>
         internal IndexingContext(IPublishedContent hostNode, IPublishedContent node, string indexerName)
         {
+            this.IndexerName = indexerName;
             this.HostItem = hostNode;
             this.Item = node;
-            this.IndexerName = indexerName;
 
-            if (hostNode != null) // we have detached content
+            if (hostNode != null) // detached
             {
                 switch (hostNode.ItemType)
                 {
@@ -60,7 +62,7 @@ namespace Our.Umbraco.Look
                     case PublishedItemType.Member: this.ItemType = ItemType.DetachedMember; break;
                 }
             }
-            else if (node != null) // safety check - not detached
+            else if (node != null) // not detached
             {
                 switch (node.ItemType)
                 {

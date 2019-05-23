@@ -7,7 +7,7 @@ Look sits on top of Umbraco Examine adding support for:
 
 * Text match highlighting - return fragments of contextual text relevant to the supplied search term.
 
-* Geospatial querying - boundary and location distance querying (this can also be used for filtering / sorting).
+* Geospatial querying - boundary and location distance querying.
 
 *use [PropertyValueConverters](https://our.umbraco.com/documentation/Extending/Property-Editors/value-converters) to return collections of IPublishedContent for any other data to be indexed.
 

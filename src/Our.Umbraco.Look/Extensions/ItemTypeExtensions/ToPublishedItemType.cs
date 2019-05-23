@@ -6,7 +6,7 @@ namespace Our.Umbraco.Look.Extensions
     internal static partial class ItemTypeExtensions
     {
         /// <summary>
-        /// Get the primative Umbraco enum PublishedItemType corresponding to the Look ItemType
+        /// Get the Umbraco enum PublishedItemType corresponding to the Look ItemType (detached items return the type of their host)
         /// </summary>
         /// <param name="itemType">The Look ItemType</param>
         /// <returns>The corresponfing Umbraco PublishedItemType</returns>
