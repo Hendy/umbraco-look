@@ -1,6 +1,4 @@
-﻿using Our.Umbraco.Look.Extensions;
-using System;
-using Umbraco.Core.Models;
+﻿using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look
 {
@@ -37,12 +35,6 @@ namespace Our.Umbraco.Look
         public ItemType ItemType { get; }
 
         /// <summary>
-        /// Convienience flag to indicate whether the item is a detached item
-        /// </summary>
-        [Obsolete("use ItemType.IsDetached() extension method instead")]
-        public bool IsDetached => this.ItemType.IsDetached();
-
-        /// <summary>
         /// Returns true if the Cancel method was called
         /// </summary>
         internal bool Cancelled { get; private set; }
@@ -50,7 +42,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="hostNode">Only set when detached content ins being indexed</param>
+        /// <param name="hostNode">Only set when detached content is being indexed</param>
         /// <param name="node">The IPublishedContent representation of the thing being indexed (content, media, member or detached)</param>
         /// <param name="indexerName">The name of the inder being used</param>
         internal IndexingContext(IPublishedContent hostNode, IPublishedContent node, string indexerName)
@@ -68,7 +60,7 @@ namespace Our.Umbraco.Look
                     case PublishedItemType.Member: this.ItemType = ItemType.DetachedMember; break;
                 }
             }
-            else if (node != null) // not detached
+            else if (node != null) // not detached (null safety check for unit tests)
             {
                 switch (node.ItemType)
                 {
