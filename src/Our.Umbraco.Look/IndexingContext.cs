@@ -13,10 +13,10 @@ namespace Our.Umbraco.Look
         public string IndexerName { get; }
 
         /// <summary>
-        /// The Content, Media, Member or Detached item being indexed (always has a value (unless unit testing)
+        /// The Content, Media, Member or Detached item being indexed (always has a value (unless unit testing))
         /// </summary>
         public IPublishedContent Item { get; }
-
+        
         /// <summary>
         /// When the item being indexed is 'detached', this is the IPublishedContent of the 'known' Content, Media or Member.
         /// (this value will null when the item being indexed is not detached)
@@ -26,7 +26,7 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// Convienience flag to indicate whether the item is a detached item
         /// </summary>
-        public bool IsDetached => this.HostItem != null;
+        public bool IsDetached { get; }
 
         /// <summary>
         /// Returns true if the Cancel method was called
@@ -44,6 +44,7 @@ namespace Our.Umbraco.Look
             this.HostItem = hostNode;
             this.Item = node;
             this.IndexerName = indexerName;
+            this.IsDetached = hostNode != null;
         }
 
         /// <summary>
