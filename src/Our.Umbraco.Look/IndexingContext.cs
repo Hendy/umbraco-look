@@ -24,9 +24,15 @@ namespace Our.Umbraco.Look
         /// The Content, Media, Member or Detached item being indexed (always has a value (unless unit testing))
         /// </summary>
         public IPublishedContent Item { get; }
-        
+
         /// <summary>
-        /// The Look ItemType for the item being indexed (content, media or member and whether it's detached or not)
+        /// The ItemType enum for the item being indexed.
+        ///     Content
+        ///     DetachedContent
+        ///     Media
+        ///     DetachedMedia
+        ///     Member
+        ///     DetachedMember
         /// </summary>
         public ItemType ItemType { get; }
 

@@ -136,8 +136,14 @@ public class IndexingContext
 	public IPublishedContent HostItem { get; }
 
 	/// <summary>
-    /// The Look ItemType for the item being indexed (content, media or member and whether it's detached or not)
-    /// </summary>
+	/// The ItemType enum for the item being indexed.
+	///     Content
+	///     DetachedContent
+	///     Media
+	///     DetachedMedia
+	///     Member
+	///     DetachedMember
+	/// </summary>
     public ItemType ItemType { get; }
 
 	/// <summary>
