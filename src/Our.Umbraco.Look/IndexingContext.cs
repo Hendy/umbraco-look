@@ -29,6 +29,11 @@ namespace Our.Umbraco.Look
         public bool IsDetached { get; }
 
         /// <summary>
+        /// The Look ItemType for the item being indexed
+        /// </summary>
+        public ItemType Type { get; }
+
+        /// <summary>
         /// Returns true if the Cancel method was called
         /// </summary>
         internal bool Cancelled { get; private set; }
@@ -45,6 +50,25 @@ namespace Our.Umbraco.Look
             this.Item = node;
             this.IndexerName = indexerName;
             this.IsDetached = hostNode != null;
+
+            if (hostNode != null) // we have detached content
+            {
+                switch (hostNode.ItemType)
+                {
+                    case PublishedItemType.Content: this.Type = ItemType.DetachedContent; break;
+                    case PublishedItemType.Media: this.Type = ItemType.DetachedMedia; break;
+                    case PublishedItemType.Member: this.Type = ItemType.DetachedMember; break;
+                }
+            }
+            else // not detached
+            {
+                switch (node.ItemType)
+                {
+                    case PublishedItemType.Content: this.Type = ItemType.Content; break;
+                    case PublishedItemType.Media: this.Type = ItemType.Media; break;
+                    case PublishedItemType.Member: this.Type = ItemType.Member; break;
+                }
+            }
         }
 
         /// <summary>
