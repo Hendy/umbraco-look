@@ -13,8 +13,6 @@ namespace Our.Umbraco.Look.Services
 
             if (indexingContext.Item != null)
             {
-                var publishedItemType = indexingContext?.HostItem?.ItemType ?? indexingContext.Item.ItemType;
-
                 var hasNodeField = new Field(
                                             LookConstants.HasNodeField,
                                             "1",
@@ -35,7 +33,7 @@ namespace Our.Umbraco.Look.Services
 
                 var nodeTypeField = new Field(
                                             LookConstants.NodeTypeField,
-                                            publishedItemType.ToString(),
+                                            indexingContext.ItemType.ToString(),
                                             Field.Store.YES,
                                             Field.Index.NOT_ANALYZED,
                                             Field.TermVector.NO);
@@ -53,7 +51,7 @@ namespace Our.Umbraco.Look.Services
                 document.Add(nodeTypeField);
                 document.Add(nodeAliasField);
 
-                if (publishedItemType == PublishedItemType.Content)
+                if (indexingContext.ItemType.ToPublishedItemType() == PublishedItemType.Content)
                 {
                     var culture = indexingContext?.HostItem?.GetCulture() ?? indexingContext.Item.GetCulture();
 
