@@ -37,7 +37,16 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
         {
             var children = new List<ILookTreeNode>();
 
-            if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = this.NodeType.ToItemType(), DetachedQuery = DetachedQuery.OnlyDetached } }.Search().TotalItemCount > 0)
+            ItemType? detached = null;
+
+            switch (this.NodeType)
+            {
+                case PublishedItemType.Content: detached = ItemType.DetachedContent; break;
+                case PublishedItemType.Media: detached = ItemType.DetachedMedia; break;
+                case PublishedItemType.Member: detached = ItemType.DetachedMember; break;
+            }
+
+            if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = detached.Value } }.Search().TotalItemCount > 0)
             {
                 base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
                 base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = this.NodeType.ToString();

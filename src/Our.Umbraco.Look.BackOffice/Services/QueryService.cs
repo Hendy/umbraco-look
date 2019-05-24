@@ -220,7 +220,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             lookQuery.NodeQuery = new NodeQuery()
             {
-                Type = nodeType.ToItemType(),
+                TypeAny = new[] { nodeType.ToItemType(), nodeType.ToItemType(true) },
                 Alias = !string.IsNullOrWhiteSpace(filter) ? filter : null
             };
 
@@ -256,9 +256,8 @@ namespace Our.Umbraco.Look.BackOffice.Services
                             {
                                 NodeQuery = new NodeQuery()
                                 {
-                                    Type = nodeType.ToItemType(),
-                                    Alias = !string.IsNullOrWhiteSpace(filter) ? filter : null,
-                                    DetachedQuery = DetachedQuery.OnlyDetached
+                                    Type = nodeType.ToItemType(true),
+                                    Alias = !string.IsNullOrWhiteSpace(filter) ? filter : null
                                 }
                             };
 
