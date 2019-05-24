@@ -70,12 +70,6 @@ namespace Our.Umbraco.Look.Services
 
                 if (indexingContext.HostItem != null)
                 {
-                    var isDetachedField = new Field(
-                                                LookConstants.IsDetachedField,
-                                                "1",
-                                                Field.Store.NO,
-                                                Field.Index.NOT_ANALYZED);
-
                     // indexing detached item, so store the host context id so we can return the detached item
                     var hostIdField = new Field(
                                             LookConstants.HostIdField,
@@ -83,7 +77,6 @@ namespace Our.Umbraco.Look.Services
                                             Field.Store.YES,
                                             Field.Index.NOT_ANALYZED);
 
-                    document.Add(isDetachedField);
                     document.Add(hostIdField);
                 }
             }

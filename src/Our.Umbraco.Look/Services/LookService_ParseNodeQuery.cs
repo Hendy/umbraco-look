@@ -45,26 +45,6 @@ namespace Our.Umbraco.Look.Services
                 parsingContext.QueryAdd(nodeTypeQuery, BooleanClause.Occur.MUST);
             }
 
-            // Detached
-            switch (lookQuery.NodeQuery.DetachedQuery)
-            {
-                case DetachedQuery.ExcludeDetached:
-
-                    parsingContext.QueryAdd(
-                            new TermQuery(new Term(LookConstants.IsDetachedField, "1")),
-                            BooleanClause.Occur.MUST_NOT);
-
-                    break;
-
-                case DetachedQuery.OnlyDetached:
-
-                    parsingContext.QueryAdd(
-                        new TermQuery(new Term(LookConstants.IsDetachedField, "1")),
-                        BooleanClause.Occur.MUST);
-
-                    break;
-            }
-
             // HasCulture
             if (lookQuery.NodeQuery.Culture != null)
             {

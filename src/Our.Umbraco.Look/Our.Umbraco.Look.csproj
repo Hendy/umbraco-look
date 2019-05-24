@@ -276,7 +276,6 @@
     <Compile Include="LookSearcher.cs" />
     <Compile Include="DateBoundary.cs" />
     <Compile Include="DateQuery.cs" />
-    <Compile Include="DetachedQuery.cs" />
     <Compile Include="Distance.cs" />
     <Compile Include="DistanceUnit.cs" />
     <Compile Include="Facet.cs" />

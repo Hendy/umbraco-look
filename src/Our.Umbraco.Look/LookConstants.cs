@@ -18,7 +18,7 @@
         internal static string NodeKeyField => "Look_NodeKey";
 
         /// <summary>
-        /// Gets the field name to use for the node type (content || media || member)
+        /// Gets the field name to use for the node type (content || media || member || detachedContent || detachedMedia || detachedMember)
         /// </summary>
         internal static string NodeTypeField => "Look_NodeType";
 
@@ -31,11 +31,6 @@
         /// Gets the field name to use when setting a content node's culture info(s) (if available)
         /// </summary>
         internal static string CultureField => "Look_Culture";
-
-        /// <summary>
-        /// Field used as a flag to indicate if the document is detached
-        /// </summary>
-        internal static string IsDetachedField => "Look_IsDetached";
 
         /// <summary>
         /// id to the content media or member item hosting this detached item

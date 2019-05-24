@@ -20,11 +20,6 @@ namespace Our.Umbraco.Look
         public ItemType[] TypeAny { get; set; } = null;
 
         /// <summary>
-        /// Flags to indicate whether detached content should be returned
-        /// </summary>
-        public DetachedQuery DetachedQuery { get; set; } = DetachedQuery.IncludeDetached;
-
-        /// <summary>
         /// If set, then items returned must be of this culture (will take precedence over CultureAny)
         /// </summary>
         public CultureInfo Culture { get; set; } = null;
@@ -86,7 +81,6 @@ namespace Our.Umbraco.Look
             return nodeQuery != null
                 && nodeQuery.Type == this.Type
                 && nodeQuery.TypeAny.BothNullOrElementsEqual(this.TypeAny)
-                && nodeQuery.DetachedQuery == this.DetachedQuery
                 && nodeQuery.Culture == this.Culture
                 && nodeQuery.CultureAny.BothNullOrElementsEqual(this.CultureAny)
                 && nodeQuery.Alias == this.Alias
