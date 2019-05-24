@@ -24,7 +24,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
 
             lookQuery.NodeQuery = new NodeQuery();
-            lookQuery.NodeQuery.TypeAny = new PublishedItemType[] { PublishedItemType.Content };
+            lookQuery.NodeQuery.TypeAny = new ItemType[] { ItemType.Content };
 
             var lookResult = lookQuery.Search();
 

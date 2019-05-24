@@ -61,19 +61,19 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
 
                 var childTreeNodes = new List<ILookTreeNode>();
 
-                if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = PublishedItemType.Content } }.Search().TotalItemCount > 0)
+                if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { TypeAny = new[] { ItemType.Content, ItemType.DetachedContent } } }.Search().TotalItemCount > 0)
                 {
                     base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = PublishedItemType.Content.ToString();
                     childTreeNodes.Add(new NodeTypeTreeNode(base.QueryStrings));
                 }
 
-                if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = PublishedItemType.Media } }.Search().TotalItemCount > 0)
+                if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { TypeAny = new[] { ItemType.Media, ItemType.DetachedMedia } } }.Search().TotalItemCount > 0)
                 {
                     base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = PublishedItemType.Media.ToString();
                     childTreeNodes.Add(new NodeTypeTreeNode(base.QueryStrings));
                 }
 
-                if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = PublishedItemType.Member } }.Search().TotalItemCount > 0)
+                if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { TypeAny = new[] { ItemType.Member, ItemType.DetachedMember } } }.Search().TotalItemCount > 0)
                 {
                     base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = PublishedItemType.Member.ToString();
                     childTreeNodes.Add(new NodeTypeTreeNode(base.QueryStrings));

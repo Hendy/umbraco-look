@@ -1,7 +1,6 @@
 ﻿using Our.Umbraco.Look.Extensions;
 using System;
 using System.Globalization;
-using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look
 {
@@ -13,12 +12,12 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// If set, then items returned must be of this type (will take precedence over TypeAny)
         /// </summary>
-        public PublishedItemType? Type { get; set; } = null;
+        public ItemType? Type { get; set; } = null;
 
         /// <summary>
         /// If set, then items returned can be any of these types
         /// </summary>
-        public PublishedItemType[] TypeAny { get; set; } = null;
+        public ItemType[] TypeAny { get; set; } = null;
 
         /// <summary>
         /// Flags to indicate whether detached content should be returned

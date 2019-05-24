@@ -1,5 +1,6 @@
 ﻿using Our.Umbraco.Look.BackOffice.Interfaces;
 using Our.Umbraco.Look.BackOffice.Services;
+using Our.Umbraco.Look.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Formatting;
@@ -36,7 +37,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Tree
         {
             var children = new List<ILookTreeNode>();
 
-            if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = this.NodeType, DetachedQuery = DetachedQuery.OnlyDetached } }.Search().TotalItemCount > 0)
+            if (new LookQuery(this.SearcherName) { NodeQuery = new NodeQuery() { Type = this.NodeType.ToItemType(), DetachedQuery = DetachedQuery.OnlyDetached } }.Search().TotalItemCount > 0)
             {
                 base.QueryStrings.ReadAsNameValueCollection()["searcherName"] = this.SearcherName;
                 base.QueryStrings.ReadAsNameValueCollection()["nodeType"] = this.NodeType.ToString();

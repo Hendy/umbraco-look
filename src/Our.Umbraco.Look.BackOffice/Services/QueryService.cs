@@ -1,4 +1,5 @@
 ﻿using Our.Umbraco.Look.BackOffice.Models.Api;
+using Our.Umbraco.Look.Extensions;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -102,7 +103,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var filtersResult = new FiltersResult();
 
-            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType } }
+            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType.ToItemType() } }
                             .Search()
                             .Matches
                             .Select(x => x.Alias)
@@ -117,7 +118,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var filtersResult = new FiltersResult();
 
-            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType, DetachedQuery = DetachedQuery.OnlyDetached } }
+            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType.ToItemType(), DetachedQuery = DetachedQuery.OnlyDetached } }
                             .Search()
                             .Matches
                             .Select(x => x.Alias)
@@ -219,7 +220,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             lookQuery.NodeQuery = new NodeQuery()
             {
-                Type = nodeType,
+                Type = nodeType.ToItemType(),
                 Alias = !string.IsNullOrWhiteSpace(filter) ? filter : null
             };
 
@@ -255,7 +256,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
                             {
                                 NodeQuery = new NodeQuery()
                                 {
-                                    Type = nodeType,
+                                    Type = nodeType.ToItemType(),
                                     Alias = !string.IsNullOrWhiteSpace(filter) ? filter : null,
                                     DetachedQuery = DetachedQuery.OnlyDetached
                                 }

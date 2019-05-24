@@ -3,14 +3,14 @@ using Umbraco.Core.Models;
 
 namespace Our.Umbraco.Look.Extensions
 {
-    internal static partial class PublishedItemTypeExtensions
+    public static partial class PublishedItemTypeExtensions
     {
         /// <summary>
         /// Helper to convert from an Umbraco PublishedItemType enum value to a local enum value
         /// </summary>
         /// <param name="value">The PublishedItemType value to convert from</param>
         /// <returns>The corresponding ItemType value</returns>
-        internal static ItemType ToItemType(this PublishedItemType publishedItemType)
+        public static ItemType ToItemType(this PublishedItemType publishedItemType)
         {
             switch(publishedItemType)
             {
