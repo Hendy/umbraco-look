@@ -103,7 +103,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var filtersResult = new FiltersResult();
 
-            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType.ToItemType() } }
+            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { TypeAny = new[] { nodeType.ToItemType(), nodeType.ToItemType(true) } } }
                             .Search()
                             .Matches
                             .Select(x => x.Alias)
@@ -118,7 +118,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var filtersResult = new FiltersResult();
 
-            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType.ToItemType(), DetachedQuery = DetachedQuery.OnlyDetached } }
+            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType.ToItemType(true) } }
                             .Search()
                             .Matches
                             .Select(x => x.Alias)
