@@ -51,7 +51,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
 
             [JsonProperty("type")]
             [JsonConverter(typeof(StringEnumConverter))]
-            public PublishedItemType Type { get; set; }
+            public ItemType Type { get; set; }
 
             /// <summary>
             /// icon representing the type (content/media/member) and whether it's detached - TODO: rename to TypeIcon
@@ -171,7 +171,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 match.Key = lookMatch.Key;
                 match.Alias = lookMatch.Item.DocumentTypeAlias;
                 match.AliasIcon = IconService.GetAliasIcon(lookMatch.ItemType.ToPublishedItemType(), lookMatch.ItemType.IsDetached(), lookMatch.Alias);
-                match.Type = lookMatch.ItemType.ToPublishedItemType();
+                match.Type = lookMatch.ItemType;
                 match.Culture = lookMatch.CultureInfo?.Name;
                 match.Name = lookMatch.Name;
 

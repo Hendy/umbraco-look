@@ -103,7 +103,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var filtersResult = new FiltersResult();
 
-            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { TypeAny = new[] { nodeType.ToItemType(), nodeType.ToItemType(true) } } }
+            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { TypeAny = new[] { nodeType.ToItemType(), nodeType.ToItemTypeDetached() } } }
                             .Search()
                             .Matches
                             .Select(x => x.Alias)
@@ -118,7 +118,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
         {
             var filtersResult = new FiltersResult();
 
-            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType.ToItemType(true) } }
+            filtersResult.Aliases = new LookQuery(searcherName) { NodeQuery = new NodeQuery() { Type = nodeType.ToItemTypeDetached() } }
                             .Search()
                             .Matches
                             .Select(x => x.Alias)
@@ -220,7 +220,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
 
             lookQuery.NodeQuery = new NodeQuery()
             {
-                TypeAny = new[] { nodeType.ToItemType(), nodeType.ToItemType(true) },
+                TypeAny = new[] { nodeType.ToItemType(), nodeType.ToItemTypeDetached() },
                 Alias = !string.IsNullOrWhiteSpace(filter) ? filter : null
             };
 
@@ -256,7 +256,7 @@ namespace Our.Umbraco.Look.BackOffice.Services
                             {
                                 NodeQuery = new NodeQuery()
                                 {
-                                    Type = nodeType.ToItemType(true),
+                                    Type = nodeType.ToItemTypeDetached(),
                                     Alias = !string.IsNullOrWhiteSpace(filter) ? filter : null
                                 }
                             };

@@ -254,6 +254,7 @@
     <Compile Include="Extensions\ItemTypeExtensions\IsDetached.cs" />
     <Compile Include="Extensions\ItemTypeExtensions\ToPublishedItemType.cs" />
     <Compile Include="Extensions\PublishedItemTypeExtensions\ToItemType.cs" />
+    <Compile Include="Extensions\PublishedItemTypeExtensions\ToItemTypeDetached.cs" />
     <Compile Include="Extensions\UmbracoHelperExtensions\GetIPublishedContent.cs" />
     <Compile Include="IndexerConfiguration.cs" />
     <Compile Include="ItemType.cs" />
