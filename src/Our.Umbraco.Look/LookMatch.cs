@@ -28,26 +28,26 @@ namespace Our.Umbraco.Look
         public string SearcherName { get; }
 
         /// <summary>
-        /// Lazy evaluation of item for the content, media, member or detached item (always has a value)
-        /// </summary>
-        [JsonIgnore]
-        public IPublishedContent Item => this._item.Value;
-
-        /// <summary>
         /// Lazy evaluation of the host item (if the item is detached) otherwize this will be null
         /// </summary>
         [JsonIgnore]
         public IPublishedContent HostItem => this._hostItem.Value;
 
         /// <summary>
+        /// Lazy evaluation of item for the content, media, member or detached item (always has a value)
+        /// </summary>
+        [JsonIgnore]
+        public IPublishedContent Item => this._item.Value;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ItemType ItemType { get; }
+
+        /// <summary>
         /// Culture in Umbraco this item is associated with
         /// </summary>
         public CultureInfo CultureInfo { get; set; }
-
-        /// <summary>
-        /// Flag to indicate whether this result is a detached item
-        /// </summary>
-        public bool IsDetached { get; }
 
         /// <summary>
         /// Guid key of the Content, media, member or detached item
@@ -96,11 +96,6 @@ namespace Our.Umbraco.Look
         public double? Distance { get; }
 
         /// <summary>
-        /// The contextual type: content, media or member (a detached item belongs to its host one of these)
-        /// </summary>
-        public PublishedItemType PublishedItemType { get; }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="searcherName"></param>
@@ -136,7 +131,7 @@ namespace Our.Umbraco.Look
                     LookTag[] tags,
                     Location location,
                     double? distance,
-                    PublishedItemType publishedItemType,
+                    ItemType itemType,
                     UmbracoHelper umbracoHelper)
         {
             this.SearcherName = searcherName;
@@ -146,7 +141,6 @@ namespace Our.Umbraco.Look
             this.Key = itemGuid ?? Guid.Empty;
             this.Alias = alias;
             this.CultureInfo = cultureInfo;
-            this.IsDetached = hostId.HasValue;
             this.Name = name;
             this.Date = date;
             this.Text = text;
@@ -154,13 +148,13 @@ namespace Our.Umbraco.Look
             this.Tags = tags;
             this.Location = location;
             this.Distance = distance;
-            this.PublishedItemType = publishedItemType;
+            this.ItemType = itemType;
 
             this._hostItem = new Lazy<IPublishedContent>(() =>
             {
-                if (umbracoHelper != null && this.IsDetached)
+                if (umbracoHelper != null && hostId.HasValue)
                 {
-                    switch (publishedItemType)
+                    switch (itemType.ToPublishedItemType())
                     {
                         case PublishedItemType.Content: return umbracoHelper.TypedContent(hostId.Value); 
                         case PublishedItemType.Media: return umbracoHelper.TypedMedia(hostId.Value);
@@ -177,7 +171,7 @@ namespace Our.Umbraco.Look
                 {
                     if (this.HostItem == null) // not detached
                     {
-                        switch (publishedItemType)
+                        switch (itemType.ToPublishedItemType())
                         {
                             case PublishedItemType.Content: return umbracoHelper.TypedContent(itemId);
                             case PublishedItemType.Media: return umbracoHelper.TypedMedia(itemId);

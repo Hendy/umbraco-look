@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Our.Umbraco.Look.BackOffice.Services;
+using Our.Umbraco.Look.Extensions;
 using System;
 using System.Linq;
 using Umbraco.Web;
@@ -169,12 +170,12 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                 match.Id = lookMatch.Id;
                 match.Key = lookMatch.Key;
                 match.Alias = lookMatch.Item.DocumentTypeAlias;
-                match.AliasIcon = IconService.GetAliasIcon(lookMatch.PublishedItemType, lookMatch.IsDetached, lookMatch.Alias);
-                match.Type = lookMatch.PublishedItemType;
+                match.AliasIcon = IconService.GetAliasIcon(lookMatch.ItemType.ToPublishedItemType(), lookMatch.ItemType.IsDetached(), lookMatch.Alias);
+                match.Type = lookMatch.ItemType.ToPublishedItemType();
                 match.Culture = lookMatch.CultureInfo?.Name;
                 match.Name = lookMatch.Name;
 
-                var item = lookMatch.IsDetached ? lookMatch.HostItem : lookMatch.Item; // set it to be the non-detached
+                var item = lookMatch.ItemType.IsDetached() ? lookMatch.HostItem : lookMatch.Item; // set it to be the non-detached
                 var pathIds = item
                                 .Path
                                 .Split(',')
@@ -184,7 +185,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
 
                 var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
 
-                switch (lookMatch.PublishedItemType)
+                switch (lookMatch.ItemType.ToPublishedItemType())
                 {
                     case PublishedItemType.Content:                        
                         match.Icon = "icon-umb-content";
@@ -198,7 +199,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                         match.Icon = "icon-umb-media";
                         match.Path = pathIds.Any() ? string.Join("\\", pathIds.Select(x => umbracoHelper.TypedMedia(x).Name)) + "\\" : string.Empty;
                         match.PathItem = item.Name;
-                        match.Link = "#/media/media/edit/" + (lookMatch.IsDetached ? lookMatch.HostItem.Id : lookMatch.Item.Id);
+                        match.Link = "#/media/media/edit/" + (lookMatch.ItemType.IsDetached() ? lookMatch.HostItem.Id : lookMatch.Item.Id);
                         match.LinkText = item.Name;
                         break;
 
@@ -211,7 +212,7 @@ namespace Our.Umbraco.Look.BackOffice.Models.Api
                         break;
                 }
 
-                match.IsDetached = lookMatch.IsDetached;
+                match.IsDetached = lookMatch.ItemType.IsDetached();
                 match.Date = lookMatch.Date;
 
                 match.HasText = !string.IsNullOrWhiteSpace(lookMatch.Text);

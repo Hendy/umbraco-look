@@ -70,9 +70,9 @@ namespace Our.Umbraco.Look.Services
             });
 
             // there should always be a valid node type value to parse
-            var getNodeType = new Func<string, PublishedItemType>(x => 
+            var getNodeType = new Func<string, ItemType>(x => 
             {
-                Enum.TryParse(x, out PublishedItemType type); return type;
+                Enum.TryParse(x, out ItemType type); return type;
             });
             
             // helper to simplify call below
