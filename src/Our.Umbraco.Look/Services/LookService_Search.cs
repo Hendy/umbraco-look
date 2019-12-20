@@ -75,7 +75,7 @@ namespace Our.Umbraco.Look.Services
                                 .Search(
                                     lookQuery.Compiled.Query,
                                     lookQuery.Compiled.Filter,
-                                    LookService._maxLuceneResults,
+                                    lookQuery.MaxLuceneResults,
                                     lookQuery.Compiled.Sort);
 
             if (topDocs.TotalHits > 0)

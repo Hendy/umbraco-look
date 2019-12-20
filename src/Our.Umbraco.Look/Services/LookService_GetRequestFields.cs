@@ -10,5 +10,10 @@
         {
             return LookService.Instance._requestFields;
         }
+
+        internal static int GetMaxLuceneResults()
+        {
+            return LookService.Instance._maxLuceneResults;
+        }
     }
 }

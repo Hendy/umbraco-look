@@ -90,7 +90,7 @@ namespace Our.Umbraco.Look.Services
         /// <summary>
         /// max number of results to request for a lucene query
         /// </summary>
-        private static int _maxLuceneResults => 5000; // TODO: make configurable (maybe part of the SearchQuery obj)
+        private int _maxLuceneResults => 5000;
 
         /// <summary>
         /// Supplied by the initialization event (for re-use by the LookMatch)
