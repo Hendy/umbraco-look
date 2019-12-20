@@ -297,6 +297,7 @@
     <Compile Include="Services\LookService_GetIndexerConfiguration.cs" />
     <Compile Include="Services\LookService_GetIndexerConfigurations.cs" />
     <Compile Include="Services\LookService_GetLocationIndexer.cs" />
+    <Compile Include="Services\LookService_GetMaxLuceneResults.cs" />
     <Compile Include="Services\LookService_GetTagIndexer.cs" />
     <Compile Include="Services\LookService_GetTextIndexer.cs" />
     <Compile Include="Services\LookService_GetDateIndexer.cs" />

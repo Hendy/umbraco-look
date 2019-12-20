@@ -3,12 +3,12 @@
     internal partial class LookService
     {
         /// <summary>
-        /// Get the default request fields value
+        /// Get the default max lucene results value
         /// </summary>
         /// <returns></returns>
-        internal static RequestFields GetRequestFields()
+        internal static int GetMaxLuceneResults()
         {
-            return LookService.Instance._requestFields;
+            return LookService.Instance._maxLuceneResults;
         }
     }
 }
