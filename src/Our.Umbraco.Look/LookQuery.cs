@@ -22,6 +22,11 @@ namespace Our.Umbraco.Look
         public RequestFields RequestFields { get; set; } = LookService.GetRequestFields();
 
         /// <summary>
+        /// Property to override the default MaxResults behaviour (initially set to 5000)
+        /// </summary>
+        public int MaxResults { get; set; } = LookService.GetMaxResults();
+
+        /// <summary>
         /// (Optional) set a raw Lucene query
         /// </summary>
         public string RawQuery { get; set; }
