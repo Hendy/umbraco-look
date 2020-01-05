@@ -70,5 +70,10 @@ namespace Our.Umbraco.Look
         /// Setting it to LookFieldsOnly reduces the number of Lucene fields returned to the min required to inflate a LookMatch object.
         /// </summary>
         public static RequestFields RequestFields { set { LookService.SetRequestFields(value); } }
+
+        /// <summary>
+        /// (Optional) Specify the max number of results to return (defaults to 5000)
+        /// </summary>
+        public static int MaxResults { set { LookService.SetMaxResults(value); } }
     }
 }

@@ -118,6 +118,11 @@ public static class LookConfiguration
     /// Setting it to LookFieldsOnly reduces the number of Lucene fields returned to the min required to inflate a LookMatch object.
     /// </summary>
     public static RequestFields RequestFields { set; }
+
+	/// <summary>
+    /// (Optional) Specify the max number of results to return (defaults to 5000)
+    /// </summary>
+    public static int MaxResults { set { LookService.SetMaxResults(value); } }
 }
 ```
 

@@ -319,6 +319,7 @@
     <Compile Include="Services\LookService_ParseRawQuery.cs" />
     <Compile Include="Services\LookService_SetAfterIndexing.cs" />
     <Compile Include="Services\LookService_SetBeforeIndexing.cs" />
+    <Compile Include="Services\LookService_SetMaxResults.cs" />
     <Compile Include="SortOn.cs" />
     <Compile Include="LookTag.cs" />
     <Compile Include="TagFacetQuery.cs" />
