@@ -14,6 +14,8 @@ namespace Our.Umbraco.Look.Tests.QueryTests
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
+            TestHelper.ClearIndex();
+
             TestHelper.IndexThings(
                 Enumerable
                 .Range(1, 100)
@@ -59,7 +61,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);
-            Assert.AreEqual(5, lookResult.TotalItemCount);
+            Assert.AreEqual(100, lookResult.TotalItemCount);
             Assert.AreEqual(5, lookResult.Matches.Count());
         }
 
