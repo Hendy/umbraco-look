@@ -81,5 +81,22 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             Assert.AreEqual(100, lookResult.TotalItemCount);
             Assert.AreEqual(100, lookResult.Matches.Count());
         }
+
+        [TestMethod]
+        public void Max_Results_Configuration_Value_Valid()
+        {
+            LookConfiguration.MaxResults = 3; // set first so that new lookQuerys will default to using this value
+
+            var lookQuery = new LookQuery(TestHelper.GetSearchingContext());
+
+            lookQuery.NameQuery = new NameQuery(); // set a query clause so it's acutally executed
+
+            var lookResult = lookQuery.Search();
+
+            Assert.IsNotNull(lookResult);
+            Assert.IsTrue(lookResult.Success);
+            Assert.AreEqual(100, lookResult.TotalItemCount);
+            Assert.AreEqual(3, lookResult.Matches.Count());
+        }
     }
 }
