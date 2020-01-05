@@ -188,6 +188,7 @@ lookQuery.TagQuery = ...
 lookQuery.LocationQuery = ...
 lookQuery.ExamineQuery = ...
 lookQuery.RawQuery = ...
+lookQuery.MaxResults = ...
 
 var results = lookQuery.Search();
 ```
@@ -422,6 +423,10 @@ String property for any [Lucene raw query](http://www.lucenetutorial.com/lucene-
 ```csharp
 lookQuery.RawQuery = "+myField: myValue";
 ```
+
+#### MaxResults
+
+Defaults to 5000 if not set, but can be specified on a per query basis.
 
 #### SortOn
 
