@@ -31,35 +31,30 @@ namespace Our.Umbraco.Look
         /// <summary>
         /// (Optional) set a custom name indexer.
         /// By default, the IPublishedContent.Name value will be indexed.
-        /// TODO: rename to DefaultNameIndexer ?
         /// </summary>
         public static Func<IndexingContext, string> DefaultNameIndexer { set { LookService.SetDefaultNameIndexer(value); } }
 
         /// <summary>
         /// (Optional) Set a custom date indexer.
         /// By default, the IPublishedContent.UpdateDate value will be indexed. (Detached items use their Host value)
-        /// TODO: rename to DefaultDateIndexer ?
         /// </summary>
         public static Func<IndexingContext, DateTime?> DefaultDateIndexer { set { LookService.SetDefaultDateIndexer(value); } }
 
         /// <summary>
         /// (Optional) Set a custom text indexer.
         /// By default, no value is indexed.
-        /// TODO: rename to DefaultTextIndexer ?
         /// </summary>
         public static Func<IndexingContext, string> DefaultTextIndexer { set { LookService.SetDefaultTextIndexer(value); } }
 
         /// <summary>
         /// (Optional) Set a custom tag indexer.
         /// By default, no value is indexed.
-        /// TODO: rename to DefaultTagIndexer ?
         /// </summary>
         public static Func<IndexingContext, LookTag[]> DefaultTagIndexer { set { LookService.SetDefaultTagIndexer(value); } }
 
         /// <summary>
         /// (Optional) Set a custom location indexer.
         /// By default, no value is indexed.
-        /// TODO: rename to DefaultLocationIndexer ?
         /// </summary>
         public static Func<IndexingContext, Location> DefaultLocationIndexer { set { LookService.SetDefaultLocationIndexer(value); } }
 
