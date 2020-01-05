@@ -59,7 +59,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);
-            //Assert.AreEqual(5, lookResult.TotalItemCount);
+            Assert.AreEqual(5, lookResult.TotalItemCount);
             Assert.AreEqual(5, lookResult.Matches.Count());
         }
 
@@ -70,15 +70,14 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.NameQuery = new NameQuery(); // set a query clause so it's acutally executed
 
-            lookQuery.MaxResults = -1;
+            lookQuery.MaxResults = -1; // set an invalid valid - this should be ignored and default back to 5000
 
             var lookResult = lookQuery.Search();
 
             Assert.IsNotNull(lookResult);
             Assert.IsTrue(lookResult.Success);
-            //Assert.AreEqual(100, lookResult.TotalItemCount);
+            Assert.AreEqual(100, lookResult.TotalItemCount);
             Assert.AreEqual(100, lookResult.Matches.Count());
         }
-
     }
 }
