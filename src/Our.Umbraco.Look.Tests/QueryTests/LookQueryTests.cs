@@ -54,7 +54,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
             lookQuery.NameQuery = new NameQuery(); // set a query clause so it's acutally executed
             
             lookQuery.MaxResults = 5;
-
+            
             var lookResult = lookQuery.Search();
 
             Assert.IsNotNull(lookResult);
@@ -70,7 +70,7 @@ namespace Our.Umbraco.Look.Tests.QueryTests
 
             lookQuery.NameQuery = new NameQuery(); // set a query clause so it's acutally executed
 
-            lookQuery.MaxResults = -1; // set an invalid valid - this should be ignored and default back to 5000
+            lookQuery.MaxResults = -1; // set an invalid value - this should be ignored and default back to 5000
 
             var lookResult = lookQuery.Search();
 

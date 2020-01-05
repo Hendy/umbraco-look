@@ -17,14 +17,33 @@ namespace Our.Umbraco.Look
         private LookQueryCompiled _compiled = null;
 
         /// <summary>
+        /// Backing value for the MaxResults property
+        /// </summary>
+        private int _maxResults = LookService.GetMaxResults();
+
+        /// <summary>
         /// Property to override the default RequestFields behaviour (initially set to default)
         /// </summary>
         public RequestFields RequestFields { get; set; } = LookService.GetRequestFields();
 
         /// <summary>
-        /// Property to override the default MaxResults behaviour (initially set to 5000)
+        /// Property to override the default MaxResults behaviour (initially set to 5000) and validate any sets
         /// </summary>
-        public int MaxResults { get; set; } = LookService.GetMaxResults();
+        public int MaxResults
+        {
+            get
+            {
+                return this._maxResults;
+            }
+
+            set
+            {
+                if (value > 0)
+                {
+                    this._maxResults = value;
+                }
+            }
+        }
 
         /// <summary>
         /// (Optional) set a raw Lucene query
