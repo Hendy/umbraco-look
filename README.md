@@ -111,6 +111,13 @@ public static class LookConfiguration
 	/// (Optional) Custom method that can be called after the indexing of each IPublishedContent item.
 	/// </summary>
 	public static Action<IndexingContext> AfterIndexing { set; }
+
+	/// <summary>
+    /// Specify which fields to return in the result set.
+    /// Defaults to AllFields which will return all Lucene fields for each document, making it fully populate the Fields dictionary property on the SearchResult.
+    /// Setting it to LookFieldsOnly reduces the number of Lucene fields returned to the min required to inflate a LookMatch object.
+    /// </summary>
+    public static RequestFields RequestFields { set; }
 }
 ```
 
