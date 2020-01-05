@@ -453,7 +453,7 @@ public class LookResult : Examine.ISearchResults
 	public bool Success { get; }
 	
 	/// <summary>
-	/// Expected total number of results expected in the result enumerable
+	/// The total number of results that could be returned from Lucene
 	/// </summary>
 	public int TotalItemCount { get; }
 

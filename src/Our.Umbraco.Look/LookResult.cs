@@ -23,7 +23,7 @@ namespace Our.Umbraco.Look
         private bool _hasMatches = false;
 
         /// <summary>
-        /// Expected total number of results in the enumerable
+        /// The total number of results that could be returned from Lucene
         /// </summary>
         public int TotalItemCount { get; } = 0;
 
