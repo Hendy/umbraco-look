@@ -91,26 +91,39 @@ namespace Our.Umbraco.Look.Tests
         }
 
         /// <summary>
-        /// 
+        /// Add supplied documents into the index
         /// </summary>
         /// <param name="documents"></param>
         internal static void IndexDocuments(IEnumerable<Document> documents)
         {
-            var luceneDirectory = FSDirectory.Open(System.IO.Directory.CreateDirectory(TestHelper.DirectoryPath));
-            var analyzer = new WhitespaceAnalyzer();
-
-            var indexWriter = new IndexWriter(luceneDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
-
-            foreach (var document in documents)
+            using (var indexWriter = TestHelper.CreateIndexWriter())
             {
-                indexWriter.AddDocument(document);
+                foreach (var document in documents)
+                {
+                    indexWriter.AddDocument(document);
+                }
+
+                indexWriter.Optimize();
+
+                indexWriter.Commit();
+
+                indexWriter.Close();
             }
+        }
 
-            indexWriter.Optimize();
+        /// <summary>
+        /// Clear all documents out of the index
+        /// </summary>
+        internal static void ClearIndex()
+        {
+            using (var indexWriter = TestHelper.CreateIndexWriter())
+            {
+                indexWriter.DeleteAll();
 
-            indexWriter.Commit();
-            
-            indexWriter.Close();
+                indexWriter.Commit();
+
+                indexWriter.Close();
+            }
         }
 
         /// <summary>
@@ -122,6 +135,19 @@ namespace Our.Umbraco.Look.Tests
             {
                 System.IO.Directory.Delete(TestHelper.DirectoryPath, true);
             }
+        }
+
+        /// <summary>
+        /// Helper to create a new index writer
+        /// </summary>
+        /// <returns></returns>
+        private static IndexWriter CreateIndexWriter()
+        {
+            var luceneDirectory = FSDirectory.Open(System.IO.Directory.CreateDirectory(TestHelper.DirectoryPath));
+            var analyzer = new WhitespaceAnalyzer();
+            var indexWriter = new IndexWriter(luceneDirectory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
+
+            return indexWriter;
         }
     }
 }

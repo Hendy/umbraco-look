@@ -9,7 +9,7 @@ namespace Our.Umbraco.Look.Tests
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext testContext)
         {
-            // always start with an empty index
+            // always start with an empty filesystem
             TestHelper.DeleteIndex();
 
             // Wire up the location indexers
